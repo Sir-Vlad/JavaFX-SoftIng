@@ -8,6 +8,7 @@ public class HelloController {
     
     @FXML
     protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        var response = Connection.sendDataToBacked("Ciao Mondo", Connection.porta, "");
+        welcomeText.setText(response.toString());
     }
 }
