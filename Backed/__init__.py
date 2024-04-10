@@ -8,4 +8,5 @@ db = SQLAlchemy(app)
 from Backed import routes
 
 with app.app_context():
+    # creare tutte gli schemi delle tabelle che non esistono
     db.create_all()
