@@ -1,0 +1,3 @@
+.toggleLabel:selected {
+    -fx-fill: white;
+}
