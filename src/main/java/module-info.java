@@ -5,6 +5,7 @@ module it.prova.javafxsofting {
     requires org.jetbrains.annotations;
     requires atlantafx.base;
     requires MaterialFX;
+    requires jimObjModelImporterJFX;
     
     opens it.prova.javafxsofting to javafx.fxml;
     exports it.prova.javafxsofting;

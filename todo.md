@@ -1,0 +1,1 @@
+- Tutte le finestre si devono muovere insieme

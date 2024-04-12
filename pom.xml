@@ -65,6 +65,15 @@
             <artifactId>atlantafx-base</artifactId>
             <version>2.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.interactivemesh.jfx</groupId>
+            <artifactId>sample</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>
+                ${project.basedir}/lib/JFX3DModelImporters/jimObjModelImporterJFX.jar
+            </systemPath>
+        </dependency>
     </dependencies>
 
     <build>
@@ -88,7 +97,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                it.prova.javafxsofting/it.prova.javafxsofting.HelloApplication
+                                it.prova.javafxsofting/it.prova.javafxsofting.App
                             </mainClass>
                             <commandlineArgs>-Dport=${port}</commandlineArgs>
                             <launcher>app</launcher>
