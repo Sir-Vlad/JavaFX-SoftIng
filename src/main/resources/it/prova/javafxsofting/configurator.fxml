@@ -48,7 +48,7 @@
                         </VBox>
                     </children>
                 </HBox>
-                <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                <HBox fx:id="context" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <children>
                         <StackPane fx:id="modelVisualize" prefHeight="150.0" prefWidth="200.0"
                                    HBox.hgrow="ALWAYS"/>

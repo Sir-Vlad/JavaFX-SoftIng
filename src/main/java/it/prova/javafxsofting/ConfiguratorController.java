@@ -5,9 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -17,8 +20,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,10 +40,8 @@ public class ConfiguratorController implements Initializable {
     @FXML public SVGPath    symbolMenu;
     @FXML public VBox       account;
     @FXML public AnchorPane root;
-    private      boolean    isMenuAccountOpen = false;
-    private      boolean    isMenuStageOpen   = false;
-    private      Stage      menuStage         = null;
-    private      Stage      menuAccount       = null;
+    private boolean isMenuStageOpen   = false;
+    private boolean isMenuAccountOpen = false;
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,62 +57,6 @@ public class ConfiguratorController implements Initializable {
         imgAccount.setFill(new ImagePattern(
                 new Image(String.valueOf(getClass().getResource("immagini/fake-account.png")))));
         
-        account.setOnMouseClicked(mouseEvent -> {
-            if (!isMenuAccountOpen) {
-                Point2D point = menu.localToScreen(Point2D.ZERO);
-                menuAccount = new Stage();
-                
-                menuAccount.initOwner(root.getScene().getWindow());
-                menuAccount.initStyle(StageStyle.UNDECORATED);
-                
-                menuAccount.setScene(new Scene(new Pane()));
-                
-                // posiziono la finestra rispetto al bottone
-                double x = point.getX() -
-                           170; // fixme: da aggiustare appena mettere inserisco il layout
-                double y = point.getY() - 690;
-                
-                menuAccount.setX(x);
-                menuAccount.setY(y);
-                
-                menuAccount.show();
-                isMenuAccountOpen = true;
-            } else {
-                isMenuAccountOpen = false;
-                menuAccount.close();
-            }
-            
-        });
-        
-        menu.setOnMouseClicked(mouseEvent -> {
-            if (!isMenuStageOpen) {
-                Point2D point = menu.localToScreen(Point2D.ZERO);
-                menuStage = new Stage();
-                FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("menuOption.fxml"));
-                try {
-                    menuStage.setScene(new Scene(menuLoader.load()));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                menuStage.initStyle(StageStyle.UNDECORATED);
-                menuStage.initOwner(root.getScene().getWindow());
-                
-                // posiziono la finestra rispetto al bottone
-                double x = point.getX() - 190;
-                double y = point.getY() - 160;
-                
-                menuStage.setX(x);
-                menuStage.setY(y);
-                
-                menuStage.show();
-                
-                isMenuStageOpen = true;
-            } else {
-                isMenuStageOpen = false;
-                menuStage.close();
-            }
-        });
-        
         labelHome.setOnMouseClicked(mouseEvent -> {
             // todo: redirect alla home
         });
@@ -125,6 +69,86 @@ public class ConfiguratorController implements Initializable {
         modelVisualize.getChildren().add(new ImageView(
                 new Image(String.valueOf(getClass().getResource("immagini/fake-account.png")))));
         
+        ContextMenu contextMenu = createContextMenu();
+        
+        menu.setOnMouseClicked(actionEvent -> {
+            Point2D point = menu.localToScreen(Point2D.ZERO);
+            // posiziono la finestra rispetto al bottone
+            double x = point.getX() - 120;
+            double y = point.getY() - 150;
+            openContextMenu(actionEvent, contextMenu, isMenuStageOpen, x, y);
+            isMenuStageOpen = !isMenuStageOpen;
+            actionEvent.consume();
+        });
+        
+        ContextMenu contextMenuAccount = contextMenuAccount();
+        
+        account.setOnMouseClicked(mouseEvent -> {
+            Point2D point = account.localToScreen(Point2D.ZERO);
+            // posiziono la finestra rispetto al bottone
+            double x = point.getX() - 60;
+            double y = point.getY() + 50;
+            openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen, x, y);
+            isMenuAccountOpen = !isMenuAccountOpen;
+        });
+        
+    }
+    
+    private void openContextMenu(MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos,
+                                 double yPos) {
+        if (open) {
+            menu.hide();
+        } else {
+            menu.show(account, xPos, yPos);
+        }
+        mouseEvent.consume();
+    }
+    
+    private @NotNull ContextMenu createContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+        
+        MenuItem sommario = new MenuItem("Sommario");
+        sommario.setId("sommario");
+        sommario.setOnAction(actionEvent -> {
+            System.out.println("Sommario");
+            actionEvent.consume();
+        });
+        
+        MenuItem preventivo = new MenuItem("Preventivo");
+        preventivo.setId("preventivo");
+        preventivo.setOnAction(actionEvent -> {
+            System.out.println("Preventivo");
+            actionEvent.consume();
+        });
+        
+        MenuItem concessionari = new MenuItem("Concessionari");
+        concessionari.setId("concessionari");
+        concessionari.setOnAction(actionEvent -> {
+            System.out.println("Concessionari vicino a te");
+            actionEvent.consume();
+        });
+        
+        SeparatorMenuItem separator1 = new SeparatorMenuItem();
+        SeparatorMenuItem separator2 = new SeparatorMenuItem();
+        
+        contextMenu.getItems().addAll(sommario, separator1, preventivo, separator2, concessionari);
+        
+        return contextMenu;
+    }
+    
+    
+    private @NotNull ContextMenu contextMenuAccount() {
+        ContextMenu contextMenu = new ContextMenu();
+        
+        MenuItem profile = new MenuItem("Profilo");
+        profile.setId("profile");
+        
+        MenuItem signOut = new MenuItem("Sign Out");
+        profile.setId("signOut");
+        
+        contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), signOut);
+        
+        return contextMenu;
     }
     
     public void incrementaPrezzo() {
