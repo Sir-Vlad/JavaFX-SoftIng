@@ -1,3 +1,6 @@
-.toggleLabel:selected {
-    -fx-fill: white;
+.root {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-background-color: transparent;
+    -fx-border-radius: 40;
 }

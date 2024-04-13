@@ -94,6 +94,38 @@ public class ConfiguratorController implements Initializable {
         
     }
     
+    public void incrementaPrezzo() {
+        fieldPrezzoValue.setText(
+                Integer.parseInt(fieldPrezzoValue.getText().split(" ")[0]) + 10 + " €");
+    }
+    
+    public void decrementaPrezzo() {
+        fieldPrezzoValue.setText(
+                Integer.parseInt(fieldPrezzoValue.getText().split(" ")[0]) - 10 + " €");
+    }
+    
+    public void switchHome() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+        
+        root.getChildren().clear();
+        var content = (AnchorPane) loader.load();
+        
+        ((Pane) root.getParent()).getChildren().addAll(content);
+    }
+    
+    public void switchModelChange() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("chargeModel.fxml"));
+        
+        root.getChildren().clear();
+        var content = (AnchorPane) loader.load();
+        
+        ((Pane) root.getParent()).getChildren().addAll(content);
+    }
+    
+    public void goHome(MouseEvent mouseEvent) {}
+    
+    public void goModelChange(MouseEvent mouseEvent) {}
+    
     private void openContextMenu(MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos,
                                  double yPos) {
         if (open) {
@@ -136,7 +168,6 @@ public class ConfiguratorController implements Initializable {
         return contextMenu;
     }
     
-    
     private @NotNull ContextMenu contextMenuAccount() {
         ContextMenu contextMenu = new ContextMenu();
         
@@ -149,33 +180,5 @@ public class ConfiguratorController implements Initializable {
         contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), signOut);
         
         return contextMenu;
-    }
-    
-    public void incrementaPrezzo() {
-        fieldPrezzoValue.setText(
-                Integer.parseInt(fieldPrezzoValue.getText().split(" ")[0]) + 10 + " €");
-    }
-    
-    public void decrementaPrezzo() {
-        fieldPrezzoValue.setText(
-                Integer.parseInt(fieldPrezzoValue.getText().split(" ")[0]) - 10 + " €");
-    }
-    
-    public void goHome() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-        
-        root.getChildren().clear();
-        var content = (AnchorPane) loader.load();
-        
-        ((Pane) root.getParent()).getChildren().addAll(content);
-    }
-    
-    public void goModelChange() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("chargeModel.fxml"));
-        
-        root.getChildren().clear();
-        var content = (AnchorPane) loader.load();
-        
-        ((Pane) root.getParent()).getChildren().addAll(content);
     }
 }
