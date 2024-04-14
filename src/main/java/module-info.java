@@ -6,6 +6,9 @@ module it.prova.javafxsofting {
     requires atlantafx.base;
     requires MaterialFX;
     requires jimObjModelImporterJFX;
+    requires AnimateFX;
+    requires static lombok;
+    requires commons.validator;
     
     opens it.prova.javafxsofting to javafx.fxml;
     exports it.prova.javafxsofting;

@@ -1,9 +1,384 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.prova.javafxsofting.Registrazione">
+    <children>
+        <HBox prefHeight="800.0" prefWidth="1200.0">
+            <children>
+                <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                <VBox prefWidth="700.0">
+                    <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <VBox fx:id="wrapperRegistrazione" alignment="TOP_CENTER"
+                              prefHeight="700.0">
+                            <children>
+                                <Text fill="#ffdc64" fontSmoothingType="LCD" stroke="#d8a016"
+                                      strokeType="OUTSIDE" text="Registrazione"
+                                      textAlignment="CENTER">
+                                    <font>
+                                        <Font name="RACE1 Brannt Chiseled NCV" size="50.0"/>
+                                    </font>
+                                    <effect>
+                                        <Glow level="0.62"/>
+                                    </effect>
+                                </Text>
+                                <HBox VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <VBox alignment="CENTER_LEFT" prefWidth="300.0"
+                                              HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label fx:id="nomeLabel" text="Nome">
+                                                    <font>
+                                                        <Font name="RACE1 Brannt Chiseled NCV"
+                                                              size="25.0"/>
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets/>
+                                                    </VBox.margin>
+                                                </Label>
+                                                <MFXTextField fx:id="nomeField" alignment="CENTER"
+                                                              borderGap="0.0" floatMode="BORDER"
+                                                              maxWidth="1.7976931348623157E308"
+                                                              promptText="Inserisci il nome"
+                                                              VBox.vgrow="ALWAYS">
+                                                    <VBox.margin>
+                                                        <Insets/>
+                                                    </VBox.margin>
+                                                </MFXTextField>
+                                                <HBox alignment="CENTER">
+                                                    <children>
+                                                        <Label fx:id="validateNome"
+                                                               alignment="CENTER" textFill="RED">
+                                                            <font>
+                                                                <Font name="FiraCode Nerd Font Reg"
+                                                                      size="13.0"/>
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                        <Pane HBox.hgrow="ALWAYS"/>
+                                        <VBox alignment="CENTER_LEFT" prefWidth="300.0"
+                                              HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label fx:id="cognomeLabel" text="Cognome">
+                                                    <font>
+                                                        <Font name="RACE1 Brannt Chiseled NCV"
+                                                              size="25.0"/>
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets/>
+                                                    </VBox.margin>
+                                                </Label>
+                                                <MFXTextField fx:id="cognomeField"
+                                                              alignment="CENTER" borderGap="0.0"
+                                                              floatMode="BORDER"
+                                                              maxWidth="1.7976931348623157E308"
+                                                              promptText="Inserisci il cognome"
+                                                              VBox.vgrow="ALWAYS">
+                                                    <VBox.margin>
+                                                        <Insets/>
+                                                    </VBox.margin>
+                                                </MFXTextField>
+                                                <HBox alignment="CENTER">
+                                                    <children>
+                                                        <Label fx:id="validateCognome"
+                                                               alignment="CENTER" textFill="RED">
+                                                            <font>
+                                                                <Font name="FiraCode Nerd Font Reg"
+                                                                      size="13.0"/>
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </padding>
+                                </HBox>
+                                <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label fx:id="emailLabel" text="email">
+                                            <font>
+                                                <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets/>
+                                            </VBox.margin>
+                                        </Label>
+                                        <MFXTextField fx:id="emailField" alignment="CENTER"
+                                                      floatMode="BORDER"
+                                                      maxWidth="1.7976931348623157E308"
+                                                      promptText="Inserisci l'email"/>
+                                        <HBox alignment="CENTER">
+                                            <children>
+                                                <Label fx:id="validateEmail" alignment="CENTER"
+                                                       textFill="RED">
+                                                    <font>
+                                                        <Font name="FiraCode Nerd Font Reg"
+                                                              size="13.0"/>
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </padding>
+                                </VBox>
+                                <VBox VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER">
+                                            <children>
+                                                <VBox alignment="CENTER_LEFT" prefWidth="300.0"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label fx:id="passwordLabel"
+                                                               text="Password">
+                                                            <font>
+                                                                <Font name="RACE1 Brannt Chiseled NCV"
+                                                                      size="24.0"/>
+                                                            </font>
+                                                            <VBox.margin>
+                                                                <Insets/>
+                                                            </VBox.margin>
+                                                        </Label>
+                                                        <MFXPasswordField fx:id="passwordField"
+                                                                          alignment="CENTER"
+                                                                          floatMode="BORDER"
+                                                                          maxWidth="1.7976931348623157E308"
+                                                                          promptText="Inserisci la password"/>
+                                                    </children>
+                                                </VBox>
+                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                <VBox alignment="CENTER_LEFT" prefWidth="300.0"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label fx:id="confermaPasswordLabel"
+                                                               text="Conferma Passoword">
+                                                            <font>
+                                                                <Font name="RACE1 Brannt Chiseled NCV"
+                                                                      size="23.0"/>
+                                                            </font>
+                                                            <VBox.margin>
+                                                                <Insets/>
+                                                            </VBox.margin>
+                                                        </Label>
+                                                        <MFXPasswordField
+                                                                fx:id="confermaPasswordField"
+                                                                alignment="CENTER"
+                                                                floatMode="BORDER"
+                                                                maxWidth="1.7976931348623157E308"
+                                                                promptText="Inserisci la password"/>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0"
+                                                        top="10.0"/>
+                                            </padding>
+                                        </HBox>
+                                        <HBox alignment="CENTER">
+                                            <children>
+                                                <Label fx:id="validatePassword" alignment="CENTER"
+                                                       textFill="RED">
+                                                    <font>
+                                                        <Font name="FiraCode Nerd Font Reg"
+                                                              size="13.0"/>
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                                <Separator disable="true" prefWidth="200.0">
+                                    <opaqueInsets>
+                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                    </opaqueInsets>
+                                </Separator>
+                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              text="Metodo di Pagamento">
+                                            <font>
+                                                <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                                            </font>
+                                        </Text>
+                                        <VBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label fx:id="ibanLabel" text="Numero Carta">
+                                                    <font>
+                                                        <Font name="RACE1 Brannt Chiseled NCV"
+                                                              size="25.0"/>
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets/>
+                                                    </VBox.margin>
+                                                </Label>
+                                                <MFXTextField fx:id="ibanField" alignment="CENTER"
+                                                              floatMode="BORDER"
+                                                              maxWidth="1.7976931348623157E308"
+                                                              promptText="Inserisci il numero della carta"/>
+                                                <HBox alignment="CENTER">
+                                                    <children>
+                                                        <Label fx:id="validateIban"
+                                                               alignment="CENTER" textFill="RED">
+                                                            <font>
+                                                                <Font name="FiraCode Nerd Font Reg"
+                                                                      size="13.0"/>
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0"
+                                                        top="10.0"/>
+                                            </padding>
+                                        </VBox>
+                                        <HBox>
+                                            <children>
+                                                <VBox alignment="CENTER_LEFT" prefWidth="300.0"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label fx:id="dataScadenzaLabel"
+                                                               text="Data di Scadenza">
+                                                            <font>
+                                                                <Font name="RACE1 Brannt Chiseled NCV"
+                                                                      size="25.0"/>
+                                                            </font>
+                                                            <VBox.margin>
+                                                                <Insets/>
+                                                            </VBox.margin>
+                                                        </Label>
+                                                        <MFXDatePicker fx:id="dataScadenzaField"
+                                                                       alignment="CENTER"
+                                                                       floatMode="BORDER"
+                                                                       maxWidth="1.7976931348623157E308"
+                                                                       promptText="Inserisci la data di scadenza"/>
+                                                        <HBox alignment="CENTER">
+                                                            <children>
+                                                                <Label fx:id="validateDate"
+                                                                       alignment="CENTER"
+                                                                       textFill="RED">
+                                                                    <font>
+                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                              size="13.0"/>
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                <VBox alignment="CENTER_LEFT" prefWidth="300.0"
+                                                      HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label fx:id="cvcLabel"
+                                                               text="Security Code">
+                                                            <font>
+                                                                <Font name="RACE1 Brannt Chiseled NCV"
+                                                                      size="25.0"/>
+                                                            </font>
+                                                            <VBox.margin>
+                                                                <Insets/>
+                                                            </VBox.margin>
+                                                        </Label>
+                                                        <MFXTextField fx:id="cvcField"
+                                                                      alignment="CENTER"
+                                                                      borderGap="0.0"
+                                                                      floatMode="BORDER"
+                                                                      maxWidth="1.7976931348623157E308"
+                                                                      promptText="CVC"
+                                                                      VBox.vgrow="ALWAYS">
+                                                            <VBox.margin>
+                                                                <Insets/>
+                                                            </VBox.margin>
+                                                        </MFXTextField>
+                                                        <HBox alignment="CENTER">
+                                                            <children>
+                                                                <Label fx:id="validateCvc"
+                                                                       alignment="CENTER"
+                                                                       textFill="RED">
+                                                                    <font>
+                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                              size="13.0"/>
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0"
+                                                        top="10.0"/>
+                                            </padding>
+                                        </HBox>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </padding>
+                                </VBox>
+                                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308"
+                                      maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <MFXButton fx:id="createAccountBtn"
+                                                           buttonType="RAISED"
+                                                           computeRadiusMultiplier="false"
+                                                           maxWidth="1.7976931348623157E308"
+                                                           onAction="#createAccount"
+                                                           rippleAnimateShadow="true"
+                                                           rippleRadius="50.0"
+                                                           rippleRadiusMultiplier="6.0"
+                                                           text="Crea Account"
+                                                           textAlignment="CENTER">
+                                                    <font>
+                                                        <Font name="RACE1 Brannt Chiseled NCV"
+                                                              size="20.0"/>
+                                                    </font>
+                                                </MFXButton>
+                                            </children>
+                                            <HBox.margin>
+                                                <Insets/>
+                                            </HBox.margin>
+                                        </VBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </VBox.margin>
+                                </HBox>
+
+                            </children>
+                            <padding>
+                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                            </padding>
+                        </VBox>
+                        <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                    </children>
+                </VBox>
+                <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <effect>
+                        <DropShadow height="106.99" radius="44.099999999999994" spread="0.19"
+                                    width="71.41"/>
+                    </effect>
+                </Pane>
+            </children>
+        </HBox>
+
+    </children>
 
 </AnchorPane>

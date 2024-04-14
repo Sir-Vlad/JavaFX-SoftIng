@@ -26,7 +26,7 @@ public class App extends javafx.application.Application {
     
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("registrazione.fxml"));
         Pane root = new Pane();
         root.getChildren().addAll((Node) fxmlLoader.load());
         Scene scene = new Scene(root, 1200, 800);

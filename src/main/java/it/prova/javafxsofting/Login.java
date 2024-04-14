@@ -26,15 +26,16 @@ import java.util.ResourceBundle;
 public class Login implements Initializable {
     @FXML public AnchorPane       root;
     public       VBox             wrapperLogin;
-    public       MFXTextField     username;
-    public       MFXPasswordField password;
+    public MFXTextField     usernameField;
+    public MFXPasswordField passwordField;
     public       MFXCheckbox      rememberMe;
     public       MFXButton        logInBtn;
     public       Text             register;
     public       Text             textRegister;
-    public       Label            passwordField;
-    public       Label            usernameField;
+    public Label            passwordLabel;
+    public Label            usernameLabel;
     public       Label            forgotPasswordLabel;
+    public HBox             wrapperLogInBtn;
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,11 +65,45 @@ public class Login implements Initializable {
         wrapperLogin.setStyle(
                 "-fx-border-color: #6F6F6F80; -fx-border-width: 1px 1px 1px; -fx-border-radius: " +
                 "25; ");
+        
+        
     }
     
     
     public void logIn(ActionEvent actionEvent) {
-        NotImplemented.notImplemented();
+        //NotImplemented.notImplemented();
+        
+        String  username  = usernameField.getText();
+        String  password  = passwordField.getText();
+        boolean remember  = rememberMe.isSelected();
+        boolean validated = true;
+        
+        // validate dei campi
+        System.out.println(usernameField.getStylesheets());
+        if (username.isEmpty()) {
+            usernameField.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            new animatefx.animation.Shake(usernameField).play();
+            validated = false;
+        } else {
+            usernameField.setStyle(null);
+        }
+        if (password.isEmpty()) {
+            passwordField.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+            new animatefx.animation.Shake(passwordField).play();
+            validated = false;
+        } else {
+            passwordField.setStyle(null);
+        }
+        
+        // todo: check nel db
+        
+        if (!validated) {
+            return;
+        }
+        
+        // todo: redirect alla home
+        
+        System.out.println(username + " " + password);
         actionEvent.consume();
     }
     
@@ -81,4 +116,10 @@ public class Login implements Initializable {
         NotImplemented.notImplemented();
         mouseEvent.consume();
     }
+    
+    private String getUsername() {
+        return usernameField.getText();
+    }
+    
+    
 }
