@@ -12,7 +12,9 @@ import io.github.palexdev.mfxcore.utils.converters.DateStringConverter;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -79,9 +81,35 @@ public class Registrazione implements Initializable {
     // visualizzare nella data solo il mese e l'anno
     dataScadenzaField.setConverterSupplier(
         () -> new DateStringConverter("MM/yy", dataScadenzaField.getLocale()));
+    dataScadenzaField.setEditable(false);
 
     cvcField.setTextLimit(3);
-    ibanField.setTextLimit(16);
+
+    cvcField
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (!newValue.matches("\\d*")) {
+                cvcField.setText(newValue.replaceAll("\\D", ""));
+                updateField(cvcField.textProperty(), cvcField);
+              }
+            });
+
+    // 19 = 16 (numeri della carta) + 3 spazi
+    ibanField.setTextLimit(19);
+
+    ibanField
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              String newValueFormat = newValue;
+              if (!newValue.matches("\\d*")) {
+                newValueFormat = newValue.replaceAll("\\D", "");
+              }
+              newValueFormat = newValueFormat.replaceAll("(.{4})", "$1 ");
+              ibanField.setText(newValueFormat);
+              updateField(ibanField.textProperty(), ibanField);
+            });
 
     setValidateNome();
     setValidateCognome();
@@ -115,20 +143,43 @@ public class Registrazione implements Initializable {
     showError(dateConstr, dataScadenzaField, validateDate);
     showError(cvcConstr, cvcField, validateCvc);
 
-    if (fieldInvalid(nomeField)
-        || fieldInvalid(cognomeField)
-        || fieldInvalid(emailField)
-        || fieldInvalid(passwordField)
-        || fieldInvalid(confermaPasswordField)
-        || fieldInvalid(ibanField)
-        || fieldInvalid(dataScadenzaField)
-        || fieldInvalid(cvcField)) {
+    boolean isInvalidForm =
+        fieldInvalid(nomeField)
+            || fieldInvalid(cognomeField)
+            || fieldInvalid(emailField)
+            || fieldInvalid(passwordField)
+            || fieldInvalid(confermaPasswordField)
+            || fieldInvalid(ibanField)
+            || fieldInvalid(dataScadenzaField)
+            || fieldInvalid(cvcField);
+
+    if (isInvalidForm) {
       actionEvent.consume();
       return;
     }
 
+    Utente newUtente =
+        new Utente(
+            nomeField.getText(),
+            cognomeField.getText(),
+            emailField.getText(),
+            passwordField.getText(),
+            ibanField.getText(),
+            dataScadenzaField.getValue(),
+            cvcField.getText());
+
     System.out.println("Valido");
+    System.out.println(newUtente);
+    System.out.println(newUtente.getIban());
     actionEvent.consume();
+  }
+
+  private void updateField(StringProperty timeText, MFXTextField field) {
+    Platform.runLater(
+        () -> {
+          field.setText(timeText.getValue());
+          field.positionCaret(timeText.getValue().length());
+        });
   }
 
   private boolean fieldInvalid(MFXTextField field) {
