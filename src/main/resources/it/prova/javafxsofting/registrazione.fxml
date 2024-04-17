@@ -227,7 +227,8 @@
                                                     </VBox.margin>
                                                 </Label>
                                                 <MFXTextField fx:id="ibanField" alignment="CENTER"
-                                                              floatMode="BORDER"
+                                                              borderGap="3.0" floatMode="BORDER"
+                                                              graphicTextGap="3.0"
                                                               maxWidth="1.7976931348623157E308"
                                                               promptText="Inserisci il numero della carta"/>
                                                 <HBox alignment="CENTER">

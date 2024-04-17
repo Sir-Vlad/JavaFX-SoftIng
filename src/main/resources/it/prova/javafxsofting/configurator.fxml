@@ -16,13 +16,14 @@
                 <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: lightgray;">
                     <children>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity"
-                              onMouseClicked="#goHome" prefWidth="100.0">
+                              onMouseClicked="#switchHome" prefWidth="100.0">
                             <children>
                                 <Text fx:id="labelHome" fill="RED" strokeType="OUTSIDE"
                                       strokeWidth="0.0" text="Home" textAlignment="CENTER"/>
                             </children>
                         </VBox>
-                        <VBox alignment="CENTER" onMouseClicked="#goModelChange" prefWidth="150.0">
+                        <VBox alignment="CENTER" onMouseClicked="#switchModelChange"
+                              prefWidth="150.0">
                             <children>
                                 <Text fx:id="labelCambiaModello" strokeType="OUTSIDE"
                                       strokeWidth="0.0" text="Cambia Modello"/>
