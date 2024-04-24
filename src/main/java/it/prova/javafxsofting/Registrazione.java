@@ -60,6 +60,7 @@ public class Registrazione implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    // set immagine di background
     BackgroundImage bg =
         new BackgroundImage(
             new Image(String.valueOf(getClass().getResource("immagini/car.jpeg"))),
@@ -70,6 +71,7 @@ public class Registrazione implements Initializable {
 
     root.setBackground(new Background(bg));
 
+    // set background al wrapper della registrazione
     wrapperRegistrazione.setBackground(
         new Background(
             new BackgroundFill(Color.rgb(183, 180, 172, 0.85), new CornerRadii(25), Insets.EMPTY)));
@@ -83,8 +85,8 @@ public class Registrazione implements Initializable {
         () -> new DateStringConverter("MM/yy", dataScadenzaField.getLocale()));
     dataScadenzaField.setEditable(false);
 
+    // limitazione del campo cvc a 3 caratteri numerici
     cvcField.setTextLimit(3);
-
     cvcField
         .textProperty()
         .addListener(
@@ -95,9 +97,9 @@ public class Registrazione implements Initializable {
               }
             });
 
+    // limitazione del campo iban a 16 caratteri numerici
     // 19 = 16 (numeri della carta) + 3 spazi
     ibanField.setTextLimit(19);
-
     ibanField
         .textProperty()
         .addListener(
@@ -111,6 +113,7 @@ public class Registrazione implements Initializable {
               updateField(ibanField.textProperty(), ibanField);
             });
 
+    // set validazione dei campi
     setValidateNome();
     setValidateCognome();
     setValidateEmail();
@@ -125,7 +128,6 @@ public class Registrazione implements Initializable {
     List<Constraint> cognomeConstr = cognomeField.validate();
     List<Constraint> emailConstr = emailField.validate();
     List<Constraint> passwordConstr = passwordField.validate();
-    List<Constraint> confpwdConstr = confermaPasswordField.validate();
     List<Constraint> ibanConstr = ibanField.validate();
     List<Constraint> dateConstr = dataScadenzaField.validate();
     List<Constraint> cvcConstr = cvcField.validate();
@@ -144,14 +146,14 @@ public class Registrazione implements Initializable {
     showError(cvcConstr, cvcField, validateCvc);
 
     boolean isInvalidForm =
-        fieldInvalid(nomeField)
-            || fieldInvalid(cognomeField)
-            || fieldInvalid(emailField)
-            || fieldInvalid(passwordField)
-            || fieldInvalid(confermaPasswordField)
-            || fieldInvalid(ibanField)
-            || fieldInvalid(dataScadenzaField)
-            || fieldInvalid(cvcField);
+        isFieldInvalid(nomeField)
+            || isFieldInvalid(cognomeField)
+            || isFieldInvalid(emailField)
+            || isFieldInvalid(passwordField)
+            || isFieldInvalid(confermaPasswordField)
+            || isFieldInvalid(ibanField)
+            || isFieldInvalid(dataScadenzaField)
+            || isFieldInvalid(cvcField);
 
     if (isInvalidForm) {
       actionEvent.consume();
@@ -168,6 +170,8 @@ public class Registrazione implements Initializable {
             dataScadenzaField.getValue(),
             cvcField.getText());
 
+    // todo: aggiungerlo nel db se ritorna un errore mostrare un errore se no redirect alla home
+
     System.out.println("Valido");
     System.out.println(newUtente);
     System.out.println(newUtente.getIban());
@@ -182,7 +186,7 @@ public class Registrazione implements Initializable {
         });
   }
 
-  private boolean fieldInvalid(MFXTextField field) {
+  private boolean isFieldInvalid(MFXTextField field) {
     return field.getPseudoClassStates().stream()
         .anyMatch(pseudoClass -> pseudoClass.equals(INVALID_PSEUDO_CLASS));
   }
@@ -193,7 +197,6 @@ public class Registrazione implements Initializable {
       field.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
       label.setText(constraints.getFirst().getMessage());
       label.setVisible(true);
-      //      new animatefx.animation.Shake(field).play();
     }
   }
 

@@ -5,22 +5,22 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 public class ScreenController {
-  private static HashMap<String, Pane> screenMap = new HashMap<>();
-  private static Scene main;
+  private static final HashMap<String, Pane> SCREEN_MAP = new HashMap<>();
+  private static Scene main = null;
 
-  public ScreenController(Scene main) {
-    this.main = main;
-  }
-
-  protected void addScreen(String name, Pane pane) {
-    screenMap.put(name, pane);
+  protected static void setMain(Scene main) {
+    ScreenController.main = main;
   }
 
   protected static void removeScreen(String name) {
-    screenMap.remove(name);
+    SCREEN_MAP.remove(name);
   }
 
   protected static void activate(String name) {
-    main.setRoot(screenMap.get(name));
+    main.setRoot(SCREEN_MAP.get(name));
+  }
+
+  protected static void addScreen(String name, Pane pane) {
+    SCREEN_MAP.put(name, pane);
   }
 }

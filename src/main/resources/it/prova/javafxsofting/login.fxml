@@ -21,7 +21,7 @@
                         <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                         <VBox fx:id="wrapperLogin" alignment="TOP_CENTER" prefHeight="500.0">
                             <children>
-                                <Text fill="#ffdc64" fontSmoothingType="LCD" stroke="#d8a016"
+                                <Text fill="#0d3bb1" fontSmoothingType="LCD" stroke="#748b9f"
                                       strokeType="OUTSIDE" text="Login" textAlignment="CENTER">
                                     <font>
                                         <Font name="RACE1 Brannt Chiseled NCV" size="50.0"/>

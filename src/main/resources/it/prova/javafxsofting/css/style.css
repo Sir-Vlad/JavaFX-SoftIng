@@ -1,6 +1,71 @@
-.root {
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-background-color: transparent;
-    -fx-border-radius: 40;
+* {
+    -mfx-main: #0D3BB1;
+}
+
+
+/*.tab {*/
+/*    -fx-background-color: #1c6fb8;*/
+/*    -fx-font: 16px "Helvetica Neue";*/
+/*    -fx-background-radius: 0;*/
+/*}*/
+
+/*.tab-label {*/
+/*    -fx-text-fill: #fff;*/
+/*}*/
+
+/*.tab:focused .tab-label {*/
+/*    -fx-text-fill: #000;*/
+/*}*/
+
+/*.tab-header-background {*/
+/*    -fx-background-color: #1c6fb8;*/
+/*}*/
+
+/*.tab-pane {*/
+/*    -fx-tab-min-width: 120px;*/
+/*    -fx-tab-max-width: 120px;*/
+/*    -fx-tab-min-height: 50px;*/
+/*    -fx-tab-max-height: 50px;*/
+/*    -fx-background-color: #15558c;*/
+/*}*/
+
+/*!*.tab:selected {*/
+/*    -fx-text-fill: #000;*/
+/*    -fx-background-color: #15558c;*/
+/*}*!*/
+
+/*.tab-pane .tab:selected {*/
+/*    -fx-background-color: #15558c;*/
+/*}*/
+
+/*.tab:selected .tab-label {*/
+/*    -fx-text-fill: #000;*/
+/*    -fx-background-color: #15558c;*/
+/*}*/
+
+#sidebar {
+    /*-fx-background-color: #475563;*/
+}
+
+#profiloBtn:selected {
+    -fx-background-color: #bb7a2a;
+}
+
+.mfx-text-field:focus-within {
+    -fx-border-color: #0D3BB1;
+}
+
+.mfx-date-picker:focus-within .icon {
+    -mfx-color: -mfx-main;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo:focus-within,
+.mfx-date-picker .date-picker-popup .years-combo:focus-within {
+    -fx-background-color: #f8f7fa;
+    -fx-text-fill: -mfx-main;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
+.mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected .label {
+    -fx-text-fill: -mfx-main;
 }

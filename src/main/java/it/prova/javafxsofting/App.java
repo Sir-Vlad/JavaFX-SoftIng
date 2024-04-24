@@ -15,6 +15,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class App extends javafx.application.Application {
+
+  public static Utente utente = null;
+
   public static void main(String[] args) {
     Arrays.stream(args)
         .filter(arg -> arg.contains("-Dport"))
@@ -26,7 +29,7 @@ public class App extends javafx.application.Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("configurator.fxml"));
     Pane root = new Pane();
     root.getChildren().addAll((Node) fxmlLoader.load());
     Scene scene = new Scene(root, 1200, 800);
@@ -39,7 +42,12 @@ public class App extends javafx.application.Application {
         .build()
         .setGlobal();
 
-    createScreenController(scene);
+    scene
+        .getStylesheets()
+        .add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
+
+    createScreenController();
+    ScreenController.setMain(scene);
 
     stage.setResizable(false);
     stage.setTitle("Laboratorio di Adrenalina");
@@ -53,13 +61,19 @@ public class App extends javafx.application.Application {
     stage.show();
   }
 
-  private void createScreenController(Scene scene) throws IOException {
-    ScreenController screenController = new ScreenController(scene);
-    screenController.addScreen("login", FXMLLoader.load(App.class.getResource("login.fxml")));
-    screenController.addScreen("home", FXMLLoader.load(App.class.getResource("home.fxml")));
-    screenController.addScreen(
-        "chargeModel", FXMLLoader.load(App.class.getResource("changeModel.fxml")));
-    screenController.addScreen(
-        "registrazione", FXMLLoader.load(App.class.getResource("registrazione.fxml")));
+  private void createScreenController() throws IOException {
+    ScreenController.addScreen(
+        "login", FXMLLoader.load(Objects.requireNonNull(App.class.getResource("login.fxml"))));
+    ScreenController.addScreen(
+        "home", FXMLLoader.load(Objects.requireNonNull(App.class.getResource("home.fxml"))));
+    ScreenController.addScreen(
+        "chargeModel",
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("changeModel.fxml"))));
+    ScreenController.addScreen(
+        "registrazione",
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("registrazione.fxml"))));
+    ScreenController.addScreen(
+        "config",
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("configurator.fxml"))));
   }
 }
