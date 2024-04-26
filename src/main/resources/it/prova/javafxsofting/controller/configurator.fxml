@@ -2,28 +2,31 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
+<?import it.prova.javafxsofting.component.ProfileBox?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.ConfiguratorController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.prova.javafxsofting.controller.ConfiguratorController">
     <children>
         <VBox prefHeight="800.0" prefWidth="1200.0">
             <children>
                 <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;">
                     <children>
                         <VBox fx:id="homeBtn" alignment="CENTER" minHeight="-Infinity"
-                              minWidth="-Infinity" onMouseClicked="#switchHome" prefWidth="100.0">
+                              minWidth="-Infinity" onMouseClicked="#switchHome" prefWidth="100.0"
+                              styleClass="text-header">
                             <children>
                                 <Text fx:id="labelHome" strokeType="OUTSIDE" strokeWidth="0.0"
                                       text="Home" textAlignment="CENTER"/>
                             </children>
                         </VBox>
                         <VBox fx:id="changeModelBtn" alignment="CENTER"
-                              onMouseClicked="#switchModelChange" prefWidth="150.0">
+                              onMouseClicked="#switchModelChange" prefWidth="150.0"
+                              styleClass="text-header">
                             <children>
                                 <Text fx:id="labelCambiaModello" strokeType="OUTSIDE"
                                       strokeWidth="0.0" text="Cambia Modello"/>
@@ -45,15 +48,11 @@
                                 </Text>
                             </children>
                         </VBox>
-                        <VBox fx:id="account" alignment="CENTER" prefWidth="50.0">
+                        <ProfileBox fx:id="account" prefWidth="50.0">
                             <HBox.margin>
                                 <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
                             </HBox.margin>
-                            <children>
-                                <Circle fx:id="imgAccount" fill="DODGERBLUE" radius="20.0"
-                                        stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0"/>
-                            </children>
-                        </VBox>
+                        </ProfileBox>
                     </children>
                 </HBox>
                 <HBox fx:id="context" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

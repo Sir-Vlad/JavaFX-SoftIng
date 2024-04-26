@@ -1,4 +1,4 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.controller;
 
 import static io.github.palexdev.materialfx.validation.Validated.INVALID_PSEUDO_CLASS;
 
@@ -8,6 +8,9 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
+import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.NotImplemented;
+import it.prova.javafxsofting.Utente;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -31,7 +34,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class Login implements Initializable {
+public class LoginController implements Initializable {
   @FXML public AnchorPane root;
   public VBox wrapperLogin;
 
@@ -55,7 +58,7 @@ public class Login implements Initializable {
     // set immagine di background
     BackgroundImage bg =
         new BackgroundImage(
-            new Image(String.valueOf(getClass().getResource("immagini/car.jpeg"))),
+            new Image(String.valueOf(App.class.getResource("immagini/car.jpeg"))),
             BackgroundRepeat.REPEAT,
             BackgroundRepeat.NO_REPEAT,
             BackgroundPosition.DEFAULT,

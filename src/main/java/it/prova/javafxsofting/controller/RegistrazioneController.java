@@ -1,4 +1,4 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.controller;
 
 import static io.github.palexdev.materialfx.validation.Validated.INVALID_PSEUDO_CLASS;
 
@@ -9,6 +9,8 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import io.github.palexdev.mfxcore.utils.converters.DateStringConverter;
+import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.Utente;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,7 +29,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.apache.commons.validator.routines.EmailValidator;
 
-public class Registrazione implements Initializable {
+public class RegistrazioneController implements Initializable {
   @FXML private AnchorPane root;
   @FXML private VBox wrapperRegistrazione;
 
@@ -63,7 +65,7 @@ public class Registrazione implements Initializable {
     // set immagine di background
     BackgroundImage bg =
         new BackgroundImage(
-            new Image(String.valueOf(getClass().getResource("immagini/car.jpeg"))),
+            new Image(String.valueOf(App.class.getResource("immagini/car.jpeg"))),
             BackgroundRepeat.REPEAT,
             BackgroundRepeat.NO_REPEAT,
             BackgroundPosition.DEFAULT,

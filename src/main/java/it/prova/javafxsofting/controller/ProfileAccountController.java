@@ -1,5 +1,6 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.controller;
 
+import it.prova.javafxsofting.App;
 import java.net.URL;
 import java.util.*;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ import javafx.scene.shape.SVGPath;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-public class ProfileAccount implements Initializable {
+public class ProfileAccountController implements Initializable {
 
   public Circle image_account;
   public Label name_account;
@@ -50,7 +51,7 @@ public class ProfileAccount implements Initializable {
     // set l'immagine di default dell'account
     image_account.setFill(
         new ImagePattern(
-            new Image(String.valueOf(getClass().getResource("immagini/fake-account.png")))));
+            new Image(String.valueOf(App.class.getResource("immagini/fake-account.png")))));
 
     // ridimensionamento delle icone della sidebar
     resize(icon_profilo, 20, 20);
@@ -64,7 +65,7 @@ public class ProfileAccount implements Initializable {
     tabController = new TabController();
     tabController.addTab(
         "profile",
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("dettagli_profilo.fxml"))),
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("dettagli_profilo.fxml"))),
         profiloBtn);
 
     AnchorPane anchorPane = new AnchorPane();

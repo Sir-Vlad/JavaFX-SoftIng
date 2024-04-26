@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <AnchorPane fx:id="profile" prefHeight="800.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.ProfileAccount">
+            fx:controller="it.prova.javafxsofting.controller.ProfileAccountController">
     <children>
         <HBox prefHeight="800.0" prefWidth="1200.0">
             <children>

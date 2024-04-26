@@ -1,9 +1,13 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.*;
+import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.ModelloAuto;
+import it.prova.javafxsofting.NotImplemented;
+import it.prova.javafxsofting.component.ProfileBox;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,28 +22,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
+  // auto test
+  private static final ModelloAuto auto =
+      new ModelloAuto(0, "Skyline R-34 GTT", "Nissan", 80000, "", 1360, 4600, 1550, 180);
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
   @FXML private MFXScrollPane scrollPane;
-
   @FXML private VBox homeBtn;
   @FXML private VBox changeModelBtn;
-  @FXML private VBox account;
+  @FXML private ProfileBox account;
   @FXML private VBox menu;
-
   @FXML private Text labelHome;
   @FXML private Text labelCambiaModello;
   @FXML private Text fieldModello;
   @FXML private Text fieldPrezzo;
   @FXML private Text fieldPrezzoValue;
-
   @FXML private Text fieldMarca;
   @FXML private Text fieldModelloV;
   @FXML private Text fieldAlimentazione;
@@ -49,20 +51,10 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldLunghezza;
   @FXML private Text fieldPeso;
   @FXML private Text fieldVolBagagliaio;
-
-  @FXML private MFXButton buttonFakeAdd;
-  @FXML private MFXButton buttonFakeMinus;
   @FXML private StackPane modelVisualize;
-  @FXML private Circle imgAccount;
   @FXML private SVGPath symbolMenu;
   @FXML private MFXButton saveConfigurazioneBtn;
-
   private boolean isMenuStageOpen = false;
-  private boolean isMenuAccountOpen = false;
-
-  // auto test
-  private static final ModelloAuto auto =
-      new ModelloAuto(0, "Skyline R-34 GTT", "Nissan", 80000, "", 1360, 4600, 1550, 180);
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -80,17 +72,12 @@ public class ConfiguratorController implements Initializable {
     scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
     scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
-    // init immagine di default per l'account
-    imgAccount.setFill(
-        new ImagePattern(
-            new Image(String.valueOf(getClass().getResource("immagini/fake-account.png")))));
-
     // immagine per visualizzare qualcosa
     modelVisualize
         .getChildren()
         .add(
             new ImageView(
-                new Image(String.valueOf(getClass().getResource("immagini/fake-account.png")))));
+                new Image(String.valueOf(App.class.getResource("immagini/fake-account.png")))));
 
     menu.setOnMouseClicked(
         actionEvent -> {
@@ -104,59 +91,7 @@ public class ConfiguratorController implements Initializable {
           actionEvent.consume();
         });
 
-    account.setOnMouseClicked(
-        mouseEvent -> {
-          ContextMenu contextMenuAccount = contextMenuAccount();
-          Point2D point = account.localToScreen(Point2D.ZERO);
-          // posiziono la finestra rispetto al bottone
-          double x = point.getX() - 25;
-          double y = point.getY() + 50;
-          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen, x, y);
-          isMenuAccountOpen = !isMenuAccountOpen;
-        });
-
-    hoverBtn(homeBtn);
-    hoverBtn(changeModelBtn);
-
     createToggleButton();
-    Platform.runLater(() -> scrollPane.vvalueProperty().set(0.0));
-  }
-
-  private void createToggleButton() {
-    ToggleGroup toggleGroup = new ToggleGroup();
-
-    MFXRectangleToggleNode redButton = new MFXRectangleToggleNode("Red");
-    redButton.setToggleGroup(toggleGroup);
-    redButton.setUserData(Color.RED);
-    redButton.setStyle("-fx-background-color: red");
-
-    MFXRectangleToggleNode grayButton = new MFXRectangleToggleNode("Gray");
-    grayButton.setToggleGroup(toggleGroup);
-    grayButton.setUserData(Color.GRAY);
-    grayButton.setStyle("-fx-background-color: gray");
-
-    MFXRectangleToggleNode blackButton = new MFXRectangleToggleNode("Black");
-    blackButton.setToggleGroup(toggleGroup);
-    blackButton.setUserData(Color.BLACK);
-    blackButton.setStyle("-fx-background-color: black");
-
-    toggleGroup
-        .selectedToggleProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue == null) {
-                modelVisualize.setStyle("-fx-background-color: white");
-              } else {
-                modelVisualize.setStyle(
-                    "-fx-background-color: "
-                        + "#"
-                        + toggleGroup.getSelectedToggle().getUserData().toString().split("0x")[1]);
-              }
-            });
-
-    toggleGroup.selectToggle(redButton);
-
-    toggleColor.getChildren().addAll(redButton, grayButton, blackButton);
   }
 
   @FXML
@@ -167,7 +102,7 @@ public class ConfiguratorController implements Initializable {
 
   @FXML
   public void switchModelChange(@NotNull MouseEvent mouseEvent) {
-    ScreenController.activate("modelChange");
+    ScreenController.activate("scegliModello");
     mouseEvent.consume();
   }
 
@@ -177,9 +112,40 @@ public class ConfiguratorController implements Initializable {
     actionEvent.consume();
   }
 
-  private void hoverBtn(@NotNull VBox btn) {
-    btn.setOnMouseEntered(event -> btn.setStyle("-fx-background-color: #6F6F6F80"));
-    btn.setOnMouseExited(event -> btn.setStyle(null));
+  private void createToggleButton() {
+    // todo: quando ho i colori della macchina passarli come argomento e generare i colori così
+    ToggleGroup toggleGroup = new ToggleGroup();
+
+    ArrayList<Color> colorList = new ArrayList<>();
+    colorList.add(Color.RED);
+    colorList.add(Color.BLUE);
+    colorList.add(Color.GREEN);
+
+    for (Color color : colorList) {
+      // fixme: il nome del colore deve essere mappato tramite una mappa nome hex
+      MFXRectangleToggleNode button = new MFXRectangleToggleNode(color.toString());
+      button.setToggleGroup(toggleGroup);
+      button.setUserData(color);
+      String hexValue = "#" + color.toString().split("0x")[1].substring(0, 6);
+      button.setStyle("-fx-background-color: " + hexValue + ";");
+      toggleColor.getChildren().add(button);
+    }
+
+    toggleGroup
+        .selectedToggleProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              // Se il newValue è null riseleziono il toggle vecchio altrimenti seleziono quello
+              // nuovo. Questo mi serve per avere sempre un'alternativa selezionata.
+              if (newValue == null) {
+                toggleGroup.selectToggle(oldValue);
+              } else {
+                modelVisualize.setStyle(
+                    "-fx-background-color: "
+                        + "#"
+                        + toggleGroup.getSelectedToggle().getUserData().toString().split("0x")[1]);
+              }
+            });
   }
 
   private void openContextMenu(
@@ -223,41 +189,6 @@ public class ConfiguratorController implements Initializable {
     SeparatorMenuItem separator2 = new SeparatorMenuItem();
 
     contextMenu.getItems().addAll(sommario, separator1, preventivo, separator2, concessionari);
-
-    return contextMenu;
-  }
-
-  private @NotNull ContextMenu contextMenuAccount() {
-    ContextMenu contextMenu = new ContextMenu();
-
-    if (App.utente == null) {
-      MenuItem signIn = new MenuItem("Sign In");
-      signIn.setId("signIn");
-      signIn.setOnAction(
-          actionEvent -> {
-            ScreenController.activate("login");
-            actionEvent.consume();
-          });
-      contextMenu.getItems().add(signIn);
-    } else {
-      MenuItem profile = new MenuItem("Profilo");
-      profile.setId("profile");
-      profile.setOnAction(
-          actionEvent -> {
-            ScreenController.activate("profilo");
-            actionEvent.consume();
-          });
-
-      MenuItem signOut = new MenuItem("Sign Out");
-      signOut.setId("signOut");
-      signOut.setOnAction(
-          actionEvent -> {
-            App.utente = null;
-            ScreenController.activate("home");
-            actionEvent.consume();
-          });
-      contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), signOut);
-    }
 
     return contextMenu;
   }

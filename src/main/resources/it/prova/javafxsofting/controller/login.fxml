@@ -10,8 +10,9 @@
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.prova.javafxsofting.Login">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.prova.javafxsofting.controller.LoginController">
     <children>
         <HBox prefHeight="800.0" prefWidth="1200.0">
             <children>
@@ -22,7 +23,8 @@
                         <VBox fx:id="wrapperLogin" alignment="TOP_CENTER" prefHeight="500.0">
                             <children>
                                 <Text fill="#0d3bb1" fontSmoothingType="LCD" stroke="#748b9f"
-                                      strokeType="OUTSIDE" text="Login" textAlignment="CENTER">
+                                      strokeType="OUTSIDE" styleClass="text" text="Login"
+                                      textAlignment="CENTER">
                                     <font>
                                         <Font name="RACE1 Brannt Chiseled NCV" size="50.0"/>
                                     </font>
@@ -32,7 +34,7 @@
                                 </Text>
                                 <VBox alignment="CENTER_LEFT">
                                     <children>
-                                        <Label fx:id="emailLabel" text="Email">
+                                        <Label fx:id="emailLabel" styleClass="text" text="Email">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
                                             </font>
@@ -67,7 +69,8 @@
                                 </VBox>
                                 <VBox alignment="CENTER_LEFT">
                                     <children>
-                                        <Label fx:id="passwordLabel" text="Password">
+                                        <Label fx:id="passwordLabel" styleClass="text"
+                                               text="Password">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
                                             </font>
@@ -109,7 +112,7 @@
                                         </MFXCheckbox>
                                         <Pane HBox.hgrow="ALWAYS"/>
                                         <Label fx:id="forgotPasswordLabel"
-                                               onMouseClicked="#forgotPassword"
+                                               onMouseClicked="#forgotPassword" styleClass="text"
                                                text="Forgot Password" textAlignment="RIGHT">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="15.0"/>

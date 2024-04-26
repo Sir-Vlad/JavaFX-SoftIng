@@ -9,3 +9,7 @@ I template c'è li creiamo in `html` e poi con `jinja2` e `pdfkit` creiamo il pd
 
 > NB. Guardare anche `ironpdf`
 
+# Aggiungere elemeneti a Scene Builder
+
+- prendere il file .jar in target
+- copiarlo in /home/maty/.scenebuilder/Library/

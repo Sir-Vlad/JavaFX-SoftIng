@@ -3,6 +3,7 @@ package it.prova.javafxsofting;
 import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
+import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class App extends javafx.application.Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("configurator.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/home.fxml"));
     Pane root = new Pane();
     root.getChildren().addAll((Node) fxmlLoader.load());
     Scene scene = new Scene(root, 1200, 800);
@@ -44,7 +45,7 @@ public class App extends javafx.application.Application {
 
     scene
         .getStylesheets()
-        .add(Objects.requireNonNull(getClass().getResource("css/style.css")).toExternalForm());
+        .add(Objects.requireNonNull(App.class.getResource("css/style.css")).toExternalForm());
 
     createScreenController();
     ScreenController.setMain(scene);
@@ -53,8 +54,7 @@ public class App extends javafx.application.Application {
     stage.setTitle("Laboratorio di Adrenalina");
     stage
         .getIcons()
-        .add(
-            new Image(Objects.requireNonNull(getClass().getResourceAsStream("immagini/icon.png"))));
+        .add(new Image(Objects.requireNonNull(App.class.getResourceAsStream("immagini/icon.png"))));
     stage.setScene(scene);
     // chiude tutte gli stage aperti
     stage.setOnHidden(windowEvent -> Platform.exit());
@@ -63,17 +63,22 @@ public class App extends javafx.application.Application {
 
   private void createScreenController() throws IOException {
     ScreenController.addScreen(
-        "login", FXMLLoader.load(Objects.requireNonNull(App.class.getResource("login.fxml"))));
+        "login",
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
     ScreenController.addScreen(
-        "home", FXMLLoader.load(Objects.requireNonNull(App.class.getResource("home.fxml"))));
+        "home",
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
     ScreenController.addScreen(
-        "chargeModel",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("changeModel.fxml"))));
+        "scegliModello",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
     ScreenController.addScreen(
         "registrazione",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("registrazione.fxml"))));
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
     ScreenController.addScreen(
         "config",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("configurator.fxml"))));
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/configurator.fxml"))));
   }
 }

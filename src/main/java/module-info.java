@@ -13,4 +13,13 @@ module it.prova.javafxsofting {
       javafx.fxml;
 
   exports it.prova.javafxsofting;
+  exports it.prova.javafxsofting.component;
+
+  opens it.prova.javafxsofting.component to
+      javafx.fxml;
+
+  exports it.prova.javafxsofting.controller;
+
+  opens it.prova.javafxsofting.controller to
+      javafx.fxml;
 }
