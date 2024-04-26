@@ -1,5 +1,6 @@
 package it.prova.javafxsofting;
 
+import java.io.File;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ public class Utente {
   private String iban;
   private LocalDate dataScadenza;
   private String cvc;
+  private File imageUtente = null;
 
   public Utente(
       String nome,

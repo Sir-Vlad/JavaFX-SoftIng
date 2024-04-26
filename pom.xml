@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>JavaFX-SoftIng</name>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.0</junit.version>
@@ -18,6 +19,11 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
+            <version>21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
             <version>21</version>
         </dependency>
         <dependency>
@@ -65,15 +71,15 @@
             <artifactId>atlantafx-base</artifactId>
             <version>2.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.interactivemesh.jfx</groupId>
-            <artifactId>sample</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>
-                ${project.basedir}/lib/JFX3DModelImporters/jimObjModelImporterJFX.jar
-            </systemPath>
-        </dependency>
+        <!--  <dependency>-->
+        <!--      <groupId>com.interactivemesh.jfx</groupId>-->
+        <!--      <artifactId>sample</artifactId>-->
+        <!--      <version>1.0</version>-->
+        <!--      <scope>system</scope>-->
+        <!--      <systemPath>-->
+        <!--          ${project.basedir}/lib/JFX3DModelImporters/jimObjModelImporterJFX.jar-->
+        <!--      </systemPath>-->
+        <!--  </dependency>-->
         <dependency>
             <groupId>io.github.typhon0</groupId>
             <artifactId>AnimateFX</artifactId>

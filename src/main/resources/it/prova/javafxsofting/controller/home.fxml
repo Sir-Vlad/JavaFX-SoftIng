@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.prova.javafxsofting.controller.HomeController">
+    <children>
+        <VBox fx:id="wrapperRoot" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox prefHeight="100.0"/>
+                <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Pane prefWidth="100.0"/>
+                        <GridPane alignment="CENTER" HBox.hgrow="ALWAYS">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                                vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                                vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <VBox fx:id="wrapperNuovo" alignment="CENTER"
+                                      onMouseClicked="#switchNuovo" prefHeight="200.0"
+                                      prefWidth="100.0" styleClass="wrapperHome"
+                                      GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <GridPane.margin>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                                    </GridPane.margin>
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              styleClass="text" text="Nuovo" textAlignment="CENTER">
+                                            <font>
+                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox fx:id="wrapperConcessionari" alignment="CENTER"
+                                      onMouseClicked="#switchConcessionari" prefHeight="200.0"
+                                      prefWidth="100.0" styleClass="wrapperHome"
+                                      GridPane.columnIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                                    </GridPane.margin>
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              styleClass="text" text="Concessionari"
+                                              textAlignment="CENTER">
+                                            <font>
+                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox fx:id="wrapperUsato" alignment="CENTER"
+                                      onMouseClicked="#switchUsato" prefHeight="200.0"
+                                      prefWidth="100.0" styleClass="wrapperHome"
+                                      GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                                    </GridPane.margin>
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              styleClass="text" text="Usato" textAlignment="CENTER">
+                                            <font>
+                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                                <VBox fx:id="wrapperPreventivo" alignment="CENTER"
+                                      onMouseClicked="#switchPreventivi" prefHeight="200.0"
+                                      prefWidth="100.0" styleClass="wrapperHome"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                                    </GridPane.margin>
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              styleClass="text" text="Preventivi Usato"
+                                              textAlignment="CENTER">
+                                            <font>
+                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                        <Pane prefWidth="100.0"/>
+                    </children>
+                </HBox>
+                <HBox prefHeight="100.0"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

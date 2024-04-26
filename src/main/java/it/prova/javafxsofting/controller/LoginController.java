@@ -1,4 +1,4 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.controller;
 
 import static io.github.palexdev.materialfx.validation.Validated.INVALID_PSEUDO_CLASS;
 
@@ -8,27 +8,33 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
+import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.NotImplemented;
+import it.prova.javafxsofting.Utente;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class Login implements Initializable {
+public class LoginController implements Initializable {
   @FXML public AnchorPane root;
   public VBox wrapperLogin;
 
@@ -49,15 +55,10 @@ public class Login implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    emailField.setTextFill(Color.BLACK);
-    passwordField.setTextFill(Color.BLACK);
-    textRegister.setFill(Color.BLACK);
-    rememberMe.setTextFill(Color.BLACK);
-    forgotPasswordLabel.setTextFill(Color.BLACK);
-
+    // set immagine di background
     BackgroundImage bg =
         new BackgroundImage(
-            new Image(String.valueOf(getClass().getResource("immagini/car.jpeg"))),
+            new Image(String.valueOf(App.class.getResource("immagini/car.jpeg"))),
             BackgroundRepeat.REPEAT,
             BackgroundRepeat.NO_REPEAT,
             BackgroundPosition.DEFAULT,
@@ -65,38 +66,58 @@ public class Login implements Initializable {
 
     root.setBackground(new Background(bg));
 
-    ImageView imageView =
-        new ImageView(
-            Objects.requireNonNull(getClass().getResource("immagini/car.jpeg")).toString());
-    imageView.setEffect(new GaussianBlur(40));
-
+    // set background al wrapper del login
     wrapperLogin.setBackground(
         new Background(
-            new BackgroundFill(Color.rgb(184, 180, 172, 0.85), new CornerRadii(25), Insets.EMPTY)));
+            new BackgroundFill(Color.rgb(180, 183, 183, 0.85), new CornerRadii(25), Insets.EMPTY)));
     wrapperLogin.setEffect(
         new DropShadow(BlurType.GAUSSIAN, Color.rgb(198, 204, 197, 0.8506), 18, 0.3, 0, 0));
     wrapperLogin.setStyle(
         "-fx-border-color: #6F6F6F80; -fx-border-width: 1px 1px 1px; -fx-border-radius: " + "25; ");
 
+    // set validate field
     setValidateEmail();
     setValidatePassword();
   }
 
-  public void logIn(ActionEvent actionEvent) {
+  public void logIn(ActionEvent actionEvent) throws IOException {
     List<Constraint> constEmail = emailField.validate();
     List<Constraint> constPassword = passwordField.validate();
-    boolean validated = fieldInvalid(emailField) || fieldInvalid(passwordField);
 
     showError(constEmail, emailField, validateEmail);
     showError(constPassword, passwordField, validatePassword);
 
-    // todo: check nel db
+    boolean isInvalidForm = fieldInvalid(emailField) || fieldInvalid(passwordField);
 
-    if (!validated) {
+    if (isInvalidForm) {
       return;
     }
 
-    // todo: redirect alla home
+    // todo: check nel db
+
+    App.utente = new Utente("Mattia", "Frigiola", "root", "root", "", LocalDate.now(), "123");
+
+    if (!emailField.getText().equals(App.utente.getEmail())
+        || !passwordField.getText().equals(App.utente.getPassword())) {
+      Alert alert = new Alert(AlertType.ERROR, "Email o password errati", ButtonType.OK);
+      alert.showAndWait();
+
+      // pulisco i campu
+      emailField.setText("");
+      passwordField.setText("");
+      return;
+    }
+
+    ScreenController.addScreen(
+        "profilo",
+        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("profile_account.fxml"))));
+
+    // pulisco i campu
+    emailField.setText("");
+    passwordField.setText("");
+
+    // redirect alla pagina del profilo
+    ScreenController.activate("config");
 
     actionEvent.consume();
   }
@@ -106,7 +127,7 @@ public class Login implements Initializable {
     mouseEvent.consume();
   }
 
-  public void switchRegister(MouseEvent mouseEvent) throws IOException {
+  public void switchRegister(MouseEvent mouseEvent) {
     ScreenController.activate("registrazione");
     mouseEvent.consume();
   }
