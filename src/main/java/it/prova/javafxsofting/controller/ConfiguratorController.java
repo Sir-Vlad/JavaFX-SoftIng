@@ -6,6 +6,7 @@ import it.prova.javafxsofting.ModelloAuto;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.ProfileBox;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -27,9 +28,6 @@ import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
-  // auto test
-  private static final ModelloAuto auto =
-      new ModelloAuto(0, "Skyline R-34 GTT", "Nissan", 80000, "", 1360, 4600, 1550, 180);
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
   @FXML private MFXScrollPane scrollPane;
@@ -58,7 +56,15 @@ public class ConfiguratorController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    fieldPrezzoValue.setText(auto.getPrezzoBase() + " €");
+    ModelloAuto auto = ScegliModelloController.getAutoSelezionata();
+    if (auto == null) {
+      ScreenController.removeScreen("config");
+      ScreenController.activate("scegliModello");
+      return;
+    }
+
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+    fieldPrezzoValue.setText(decimalFormat.format(auto.getPrezzoBase()) + " €");
 
     fieldModelloV.setText(auto.getNome());
     fieldMarca.setText(auto.getMarca());
@@ -96,12 +102,14 @@ public class ConfiguratorController implements Initializable {
 
   @FXML
   public void switchHome(@NotNull MouseEvent mouseEvent) {
+    ScreenController.removeScreen("config");
     ScreenController.activate("home");
     mouseEvent.consume();
   }
 
   @FXML
   public void switchModelChange(@NotNull MouseEvent mouseEvent) {
+    ScreenController.removeScreen("config");
     ScreenController.activate("scegliModello");
     mouseEvent.consume();
   }

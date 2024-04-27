@@ -13,3 +13,7 @@ I template c'è li creiamo in `html` e poi con `jinja2` e `pdfkit` creiamo il pd
 
 - prendere il file .jar in target
 - copiarlo in /home/maty/.scenebuilder/Library/
+
+# Query
+
+Utilizzare i dataframe di Apache Spark. Questa libreria è disponibile sia per Python che per Java.

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/style.css"
+            prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/home.css"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.prova.javafxsofting.controller.HomeController">
     <children>
@@ -38,7 +38,8 @@
                                     </GridPane.margin>
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text" text="Nuovo" textAlignment="CENTER">
+                                              styleClass="text-blue" text="Nuovo"
+                                              textAlignment="CENTER">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
                                             </font>
@@ -54,7 +55,7 @@
                                     </GridPane.margin>
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text" text="Concessionari"
+                                              styleClass="text-blue" text="Concessionari"
                                               textAlignment="CENTER">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
@@ -71,7 +72,8 @@
                                     </GridPane.margin>
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text" text="Usato" textAlignment="CENTER">
+                                              styleClass="text-blue" text="Usato"
+                                              textAlignment="CENTER">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
                                             </font>
@@ -87,7 +89,7 @@
                                     </GridPane.margin>
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text" text="Preventivi Usato"
+                                              styleClass="text-blue" text="Preventivi Usato"
                                               textAlignment="CENTER">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>

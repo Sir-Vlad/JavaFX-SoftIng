@@ -1,7 +1,5 @@
 package it.prova.javafxsofting.controller;
 
-import static io.github.palexdev.materialfx.validation.Validated.INVALID_PSEUDO_CLASS;
-
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
@@ -9,7 +7,6 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import io.github.palexdev.mfxcore.utils.converters.DateStringConverter;
-import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Utente;
 import java.net.URL;
 import java.util.List;
@@ -20,16 +17,11 @@ import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import org.apache.commons.validator.routines.EmailValidator;
 
-public class RegistrazioneController implements Initializable {
+public class RegistrazioneController extends ValidateForm implements Initializable {
   @FXML private AnchorPane root;
   @FXML private VBox wrapperRegistrazione;
 
@@ -62,26 +54,6 @@ public class RegistrazioneController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    // set immagine di background
-    BackgroundImage bg =
-        new BackgroundImage(
-            new Image(String.valueOf(App.class.getResource("immagini/car.jpeg"))),
-            BackgroundRepeat.REPEAT,
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundPosition.DEFAULT,
-            BackgroundSize.DEFAULT);
-
-    root.setBackground(new Background(bg));
-
-    // set background al wrapper della registrazione
-    wrapperRegistrazione.setBackground(
-        new Background(
-            new BackgroundFill(Color.rgb(183, 180, 172, 0.85), new CornerRadii(25), Insets.EMPTY)));
-    wrapperRegistrazione.setEffect(
-        new DropShadow(BlurType.GAUSSIAN, Color.rgb(198, 204, 197, 0.8506), 18, 0.3, 0, 0));
-    wrapperRegistrazione.setStyle(
-        "-fx-border-color: #6F6F6F80; -fx-border-width: 1px 1px 1px; -fx-border-radius: " + "25; ");
-
     // visualizzare nella data solo il mese e l'anno
     dataScadenzaField.setConverterSupplier(
         () -> new DateStringConverter("MM/yy", dataScadenzaField.getLocale()));
@@ -139,23 +111,23 @@ public class RegistrazioneController implements Initializable {
     showError(emailConstr, emailField, validateEmail);
     showError(passwordConstr, passwordField, validatePassword);
     if (!passwordConstr.isEmpty()) {
-      confermaPasswordField.setStyle("-fx-border-color: red; -fx-border-width: 1");
+      confermaPasswordField.getStyleClass().add("field-invalid");
     } else {
-      confermaPasswordField.setStyle(null);
+      confermaPasswordField.getStyleClass().remove("field-invalid");
     }
     showError(ibanConstr, ibanField, validateIban);
     showError(dateConstr, dataScadenzaField, validateDate);
     showError(cvcConstr, cvcField, validateCvc);
 
     boolean isInvalidForm =
-        isFieldInvalid(nomeField)
-            || isFieldInvalid(cognomeField)
-            || isFieldInvalid(emailField)
-            || isFieldInvalid(passwordField)
-            || isFieldInvalid(confermaPasswordField)
-            || isFieldInvalid(ibanField)
-            || isFieldInvalid(dataScadenzaField)
-            || isFieldInvalid(cvcField);
+        fieldInvalid(nomeField)
+            || fieldInvalid(cognomeField)
+            || fieldInvalid(emailField)
+            || fieldInvalid(passwordField)
+            || fieldInvalid(confermaPasswordField)
+            || fieldInvalid(ibanField)
+            || fieldInvalid(dataScadenzaField)
+            || fieldInvalid(cvcField);
 
     if (isInvalidForm) {
       actionEvent.consume();
@@ -176,7 +148,6 @@ public class RegistrazioneController implements Initializable {
 
     System.out.println("Valido");
     System.out.println(newUtente);
-    System.out.println(newUtente.getIban());
     actionEvent.consume();
   }
 
@@ -188,80 +159,34 @@ public class RegistrazioneController implements Initializable {
         });
   }
 
-  private boolean isFieldInvalid(MFXTextField field) {
-    return field.getPseudoClassStates().stream()
-        .anyMatch(pseudoClass -> pseudoClass.equals(INVALID_PSEUDO_CLASS));
-  }
-
-  private void showError(List<Constraint> constraints, MFXTextField field, Label label) {
-    if (!constraints.isEmpty()) {
-      field.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
-      field.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-      label.setText(constraints.getFirst().getMessage());
-      label.setVisible(true);
-    }
-  }
-
   private void setValidateNome() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Nome necessario")
-            .setCondition(nomeField.textProperty().isNotEmpty())
-            .get();
-
-    nomeField.getValidator().constraint(required);
+    addContraitRequired(nomeField, "Nome necessario");
     nomeField
         .getValidator()
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue) {
-                validateNome.setVisible(false);
-                nomeField.setStyle(null);
-                nomeField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
-              }
-            });
-    nomeField
-        .delegateFocusedProperty()
-        .addListener(
-            (observableValue, oldValue, newValue) -> {
-              if (oldValue && !newValue) {
-                List<Constraint> constraints = nomeField.validate();
-                showError(constraints, nomeField, validateNome);
+                removeClassInvalid(nomeField, validateNome);
               }
             });
   }
 
   private void setValidateCognome() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Cognome necessario")
-            .setCondition(cognomeField.textProperty().isNotEmpty())
-            .get();
-
-    cognomeField.getValidator().constraint(required);
+    addContraitRequired(cognomeField, "Cognome necessario");
     cognomeField
         .getValidator()
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue) {
-                validateCognome.setVisible(false);
-                cognomeField.setStyle(null);
-                cognomeField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                removeClassInvalid(cognomeField, validateCognome);
               }
             });
   }
 
   private void setValidateEmail() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Email necessaria")
-            .setCondition(emailField.textProperty().isNotEmpty())
-            .get();
+    addContraitRequired(emailField, "Email necessaria");
 
     Constraint emailValid =
         Constraint.Builder.build()
@@ -277,34 +202,21 @@ public class RegistrazioneController implements Initializable {
                             emailField.textProperty())))
             .get();
 
-    emailField.getValidator().constraint(emailValid).constraint(required);
+    emailField.getValidator().constraint(emailValid);
     emailField
         .getValidator()
         .validProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue) {
-                validateEmail.setVisible(false);
-                emailField.setStyle(null);
-                emailField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                removeClassInvalid(emailField, validateEmail);
               }
             });
   }
 
   private void setValidatePassword() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Password necessaria")
-            .setCondition(passwordField.textProperty().isNotEmpty())
-            .get();
-
-    Constraint lenConstraint =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Password deve essere almeno 8 caratteri")
-            .setCondition(passwordField.textProperty().length().greaterThanOrEqualTo(8))
-            .get();
+    addContraitRequired(passwordField, "Password necessaria");
+    addContraitLength(passwordField, "Password devono avere almeno 8 caratteri", 8);
 
     Constraint matchPassword =
         Constraint.Builder.build()
@@ -314,88 +226,54 @@ public class RegistrazioneController implements Initializable {
                 passwordField.textProperty().isEqualTo(confermaPasswordField.textProperty()))
             .get();
 
-    passwordField
-        .getValidator()
-        .constraint(required)
-        .constraint(lenConstraint)
-        .constraint(matchPassword);
+    passwordField.getValidator().constraint(matchPassword);
     passwordField
         .getValidator()
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue) {
-                validatePassword.setVisible(false);
-                passwordField.setStyle(null);
-                confermaPasswordField.setStyle(null);
-
-                passwordField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                confermaPasswordField.getStyleClass().remove("field-invalid");
+                removeClassInvalid(passwordField, validatePassword);
               }
             });
   }
 
   private void setValidateIban() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Iban necessario")
-            .setCondition(ibanField.textProperty().isNotEmpty())
-            .get();
-
-    ibanField.getValidator().constraint(required);
+    addContraitRequired(ibanField, "Numero della carta necessario");
     ibanField
         .getValidator()
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue) {
-                validateIban.setVisible(false);
-                ibanField.setStyle(null);
-                ibanField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                removeClassInvalid(ibanField, validateIban);
               }
             });
   }
 
   private void setValidateDate() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Data Scadenza necessario")
-            .setCondition(dataScadenzaField.textProperty().isNotEmpty())
-            .get();
-
-    dataScadenzaField.getValidator().constraint(required);
+    addContraitRequired(dataScadenzaField, "Data di Scadenza necessario");
     dataScadenzaField
         .getValidator()
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue) {
-                validateDate.setVisible(false);
-                dataScadenzaField.setStyle(null);
-                dataScadenzaField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                removeClassInvalid(dataScadenzaField, validateDate);
               }
             });
   }
 
   private void setValidateCvc() {
-    Constraint required =
-        Constraint.Builder.build()
-            .setSeverity(Severity.ERROR)
-            .setMessage("Cvc necessario")
-            .setCondition(cvcField.textProperty().isNotEmpty())
-            .get();
-
-    cvcField.getValidator().constraint(required);
+    addContraitRequired(cvcField, "Il codice CVC è necessario");
     cvcField
         .getValidator()
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (newValue) {
-                validateCvc.setVisible(false);
-                cvcField.setStyle(null);
-                cvcField.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+                removeClassInvalid(cvcField, validateCvc);
               }
             });
   }

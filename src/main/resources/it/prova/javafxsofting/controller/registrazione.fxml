@@ -9,7 +9,8 @@
 <?import javafx.scene.text.*?>
 <AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.controller.RegistrazioneController">
+            fx:controller="it.prova.javafxsofting.controller.RegistrazioneController"
+            stylesheets="@../css/login.css">
     <children>
         <HBox prefHeight="800.0" prefWidth="1200.0">
             <children>
@@ -18,11 +19,11 @@
                     <children>
                         <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                         <VBox fx:id="wrapperRegistrazione" alignment="TOP_CENTER"
-                              prefHeight="700.0">
+                              prefHeight="700.0" styleClass="wrapperForm">
                             <children>
-                                <Text fill="#ffdc64" fontSmoothingType="LCD" stroke="#d8a016"
+                                <Text fill="#0d3bb1" fontSmoothingType="LCD" stroke="#748b9f"
                                       strokeType="OUTSIDE" text="Registrazione"
-                                      textAlignment="CENTER">
+                                      textAlignment="CENTER" styleClass="text-blue">
                                     <font>
                                         <Font name="RACE1 Brannt Chiseled NCV" size="50.0"/>
                                     </font>

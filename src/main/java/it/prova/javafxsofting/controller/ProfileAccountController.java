@@ -1,26 +1,27 @@
 package it.prova.javafxsofting.controller;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.Utente;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
 public class ProfileAccountController implements Initializable {
 
-  public Circle image_account;
+  public HBox image_account;
   public Label name_account;
 
   public HBox profiloBtn;
@@ -35,11 +36,13 @@ public class ProfileAccountController implements Initializable {
 
   public VBox content;
   public VBox sidebar;
+  public MFXButton indietroBtn;
   private TabController tabController;
 
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    App.utente = new Utente("Mattia", "Frigiola", "root", "root", "", LocalDate.now(), "123");
     // imposto i dati dell'utente
     if (App.utente != null) {
       name_account.setText(App.utente.getNome() + " " + App.utente.getCognome());
@@ -48,24 +51,17 @@ public class ProfileAccountController implements Initializable {
       return;
     }
 
-    // set l'immagine di default dell'account
-    image_account.setFill(
-        new ImagePattern(
-            new Image(String.valueOf(App.class.getResource("immagini/fake-account.png")))));
-
     // ridimensionamento delle icone della sidebar
     resize(icon_profilo, 20, 20);
     resize(icon_ordini, 20, 20);
     resize(icon_preventivi, 20, 25);
     resize(icon_signOut, 20, 20);
 
-    sidebar.setStyle("-fx-background-color: #B4B7B7D9");
-
     // create le tab della sidebar
     tabController = new TabController();
     tabController.addTab(
         "profile",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("dettagli_profilo.fxml"))),
+        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("dettagli_profilo.fxml"))),
         profiloBtn);
 
     AnchorPane anchorPane = new AnchorPane();
@@ -81,8 +77,6 @@ public class ProfileAccountController implements Initializable {
     // set default page open
     content.getChildren().add(tabController.getTab("profile"));
     profiloBtn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
-
-    System.out.println(tabController.getKeyMain());
   }
 
   public void switchProfilo(MouseEvent mouseEvent) {
@@ -106,6 +100,11 @@ public class ProfileAccountController implements Initializable {
     mouseEvent.consume();
   }
 
+  public void switchIndietro(ActionEvent actionEvent) {
+    ScreenController.back();
+    actionEvent.consume();
+  }
+
   private void switchTab(HBox btn, String title) {
     tabController
         .getButton(tabController.getKeyMain())
@@ -120,7 +119,6 @@ public class ProfileAccountController implements Initializable {
   }
 
   private void resize(SVGPath svg, double width, double height) {
-
     double originalWidth = svg.prefWidth(-1);
     double originalHeight = svg.prefHeight(originalWidth);
 

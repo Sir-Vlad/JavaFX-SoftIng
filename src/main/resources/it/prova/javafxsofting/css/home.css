@@ -1,0 +1,16 @@
+.wrapperHome {
+    -fx-background-color: -my-gray-bg;
+    -fx-background-radius: 20;
+    -fx-border-color: -my-gray1;
+    -fx-border-radius: 20;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.85), 10, 0.1, 10, 10);
+}
+
+.wrapperHome:hover {
+    -fx-background-color: rgba(106, 108, 108, 0.85);
+}
+
+#wrapperRoot {
+    -fx-background-image: url(../immagini/car.jpeg);
+}
