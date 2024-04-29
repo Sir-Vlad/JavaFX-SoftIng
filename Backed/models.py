@@ -42,6 +42,7 @@ class ModelloAuto(db.Model):
     descrizione = Column(Text, nullable=False)
     altezza = Column(Integer, nullable=False)
     lunghezza = Column(Integer, nullable=False)
+    larghezza = Column(Integer, nullable=False)
     peso = Column(Integer, nullable=False)
     vol_bagagliaio = Column(Integer, nullable=False)
     marca = Column(Integer, nullable=False)
