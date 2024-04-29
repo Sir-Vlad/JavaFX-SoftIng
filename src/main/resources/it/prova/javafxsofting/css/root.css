@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "RACE1 Brannt Chiseled NCV";
+    src: url("../fonts/Race1BranntChiseledNcv-zvOL.ttf");
+}
+
 * {
     -my-blue-text: rgb(13, 59, 177);
     -my-blue-text-80-opacity: rgba(13, 59, 177, 0.85);
@@ -36,6 +41,10 @@
 /* -------------------------- */
 
 .text-blue {
+    -fx-font-family: "RACE1 Brannt Chiseled NCV";
     -fx-fill: -my-blue-text;
 }
 
+.text-30 {
+    -fx-font-size: 40;
+}
