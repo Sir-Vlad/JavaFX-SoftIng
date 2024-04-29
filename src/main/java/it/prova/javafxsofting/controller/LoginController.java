@@ -59,7 +59,7 @@ public class LoginController extends ValidateForm implements Initializable {
     showError(constEmail, emailField, validateEmail);
     showError(constPassword, passwordField, validatePassword);
 
-    boolean isInvalidForm = fieldInvalid(emailField) || fieldInvalid(passwordField);
+    boolean isInvalidForm = isFieldInvalid(emailField) || isFieldInvalid(passwordField);
 
     if (isInvalidForm) {
       return;
@@ -82,7 +82,7 @@ public class LoginController extends ValidateForm implements Initializable {
 
     ScreenController.addScreen(
         "profilo",
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profile_account.fxml"))));
+        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profilo_utente.fxml"))));
 
     // pulisco i campu
     emailField.setText("");
@@ -113,7 +113,7 @@ public class LoginController extends ValidateForm implements Initializable {
   }
 
   private void setValidateEmail() {
-    addContraitRequired(emailField, "Email necessaria");
+    addConstraintRequired(emailField, "Email necessaria");
     emailField
         .getValidator()
         .validProperty()
@@ -126,7 +126,7 @@ public class LoginController extends ValidateForm implements Initializable {
   }
 
   private void setValidatePassword() {
-    addContraitRequired(passwordField, "Password necessaria");
+    addConstraintRequired(passwordField, "Password necessaria");
     passwordField
         .getValidator()
         .validProperty()

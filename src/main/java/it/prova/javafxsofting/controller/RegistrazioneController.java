@@ -7,10 +7,12 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import io.github.palexdev.mfxcore.utils.converters.DateStringConverter;
+import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Utente;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.StringProperty;
@@ -87,6 +89,9 @@ public class RegistrazioneController extends ValidateForm implements Initializab
               updateField(ibanField.textProperty(), ibanField);
             });
 
+    onlyCharAlphabetical(nomeField);
+    onlyCharAlphabetical(cognomeField);
+
     // set validazione dei campi
     setValidateNome();
     setValidateCognome();
@@ -120,14 +125,14 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     showError(cvcConstr, cvcField, validateCvc);
 
     boolean isInvalidForm =
-        fieldInvalid(nomeField)
-            || fieldInvalid(cognomeField)
-            || fieldInvalid(emailField)
-            || fieldInvalid(passwordField)
-            || fieldInvalid(confermaPasswordField)
-            || fieldInvalid(ibanField)
-            || fieldInvalid(dataScadenzaField)
-            || fieldInvalid(cvcField);
+        isFieldInvalid(nomeField)
+            || isFieldInvalid(cognomeField)
+            || isFieldInvalid(emailField)
+            || isFieldInvalid(passwordField)
+            || isFieldInvalid(confermaPasswordField)
+            || isFieldInvalid(ibanField)
+            || isFieldInvalid(dataScadenzaField)
+            || isFieldInvalid(cvcField);
 
     if (isInvalidForm) {
       actionEvent.consume();
@@ -136,19 +141,42 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
     Utente newUtente =
         new Utente(
-            nomeField.getText(),
-            cognomeField.getText(),
-            emailField.getText(),
+            capitalize(nomeField.getText().trim()),
+            capitalize(cognomeField.getText().trim()),
+            emailField.getText().trim(),
             passwordField.getText(),
             ibanField.getText(),
             dataScadenzaField.getValue(),
             cvcField.getText());
 
+    App.utente = newUtente;
+
     // todo: aggiungerlo nel db se ritorna un errore mostrare un errore se no redirect alla home
 
-    System.out.println("Valido");
-    System.out.println(newUtente);
+    App.log.info(newUtente.toString());
+
+    ScreenController.activate("home");
     actionEvent.consume();
+  }
+
+  private void onlyCharAlphabetical(MFXTextField field) {
+    field
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              String newValueFormat = newValue;
+              if (!newValue.matches("[A-Za-z]")) {
+                newValueFormat = newValue.replaceAll("\\d|\\p{P}", "");
+              }
+              field.setText(newValueFormat);
+              updateField(field.textProperty(), field);
+            });
+  }
+
+  private String capitalize(String input) {
+    return Pattern.compile("^.")
+        .matcher(input)
+        .replaceFirst(matchResult -> matchResult.group().toUpperCase());
   }
 
   private void updateField(StringProperty timeText, MFXTextField field) {
@@ -160,7 +188,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidateNome() {
-    addContraitRequired(nomeField, "Nome necessario");
+    addConstraintRequired(nomeField, "Nome necessario");
     nomeField
         .getValidator()
         .validProperty()
@@ -173,7 +201,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidateCognome() {
-    addContraitRequired(cognomeField, "Cognome necessario");
+    addConstraintRequired(cognomeField, "Cognome necessario");
     cognomeField
         .getValidator()
         .validProperty()
@@ -186,7 +214,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidateEmail() {
-    addContraitRequired(emailField, "Email necessaria");
+    addConstraintRequired(emailField, "Email necessaria");
 
     Constraint emailValid =
         Constraint.Builder.build()
@@ -215,8 +243,8 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidatePassword() {
-    addContraitRequired(passwordField, "Password necessaria");
-    addContraitLength(passwordField, "Password devono avere almeno 8 caratteri", 8);
+    addConstraintRequired(passwordField, "Password necessaria");
+    addConstraintLength(passwordField, "Password devono avere almeno 8 caratteri", 8);
 
     Constraint matchPassword =
         Constraint.Builder.build()
@@ -240,7 +268,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidateIban() {
-    addContraitRequired(ibanField, "Numero della carta necessario");
+    addConstraintRequired(ibanField, "Numero della carta necessario");
     ibanField
         .getValidator()
         .validProperty()
@@ -253,7 +281,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidateDate() {
-    addContraitRequired(dataScadenzaField, "Data di Scadenza necessario");
+    addConstraintRequired(dataScadenzaField, "Data di Scadenza necessario");
     dataScadenzaField
         .getValidator()
         .validProperty()
@@ -266,7 +294,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   }
 
   private void setValidateCvc() {
-    addContraitRequired(cvcField, "Il codice CVC è necessario");
+    addConstraintRequired(cvcField, "Il codice CVC è necessario");
     cvcField
         .getValidator()
         .validProperty()

@@ -2,7 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/home.css"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
@@ -37,12 +38,12 @@
                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                                     </GridPane.margin>
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text-blue" text="Nuovo"
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nuovo"
                                               textAlignment="CENTER">
-                                            <font>
-                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
-                                            </font>
+                                            <styleClass>
+                                                <String fx:value="text-blue"/>
+                                                <String fx:value="text-30"/>
+                                            </styleClass>
                                         </Text>
                                     </children>
                                 </VBox>
@@ -55,11 +56,11 @@
                                     </GridPane.margin>
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text-blue" text="Concessionari"
-                                              textAlignment="CENTER">
-                                            <font>
-                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
-                                            </font>
+                                              text="Concessionari" textAlignment="CENTER">
+                                            <styleClass>
+                                                <String fx:value="text-blue"/>
+                                                <String fx:value="text-30"/>
+                                            </styleClass>
                                         </Text>
                                     </children>
                                 </VBox>
@@ -71,12 +72,12 @@
                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                                     </GridPane.margin>
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text-blue" text="Usato"
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Usato"
                                               textAlignment="CENTER">
-                                            <font>
-                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
-                                            </font>
+                                            <styleClass>
+                                                <String fx:value="text-blue"/>
+                                                <String fx:value="text-30"/>
+                                            </styleClass>
                                         </Text>
                                     </children>
                                 </VBox>
@@ -89,11 +90,11 @@
                                     </GridPane.margin>
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text-blue" text="Preventivi Usato"
-                                              textAlignment="CENTER">
-                                            <font>
-                                                <Font name="RACE1 Brannt Chiseled NCV" size="35.0"/>
-                                            </font>
+                                              text="Preventivi Usato" textAlignment="CENTER">
+                                            <styleClass>
+                                                <String fx:value="text-blue"/>
+                                                <String fx:value="text-30"/>
+                                            </styleClass>
                                         </Text>
                                     </children>
                                 </VBox>

@@ -7,6 +7,7 @@ import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,13 +19,16 @@ import javafx.stage.Stage;
 public class App extends javafx.application.Application {
 
   public static Utente utente = null;
+  public static Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)
         .filter(arg -> arg.contains("-Dport"))
         .forEach(arg -> Connection.setPorta(Integer.parseInt(arg.split("=")[1])));
 
-    System.out.println("Porta: " + Connection.porta);
+    log.info("Porta: " + Connection.porta);
+    //    System.out.println("Porta: " + Connection.porta);
+
     launch();
   }
 
@@ -79,5 +83,10 @@ public class App extends javafx.application.Application {
         "registrazione",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
+
+    ScreenController.addScreen(
+        "concessionari",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
   }
 }

@@ -2,9 +2,7 @@ package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.Utente;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -42,7 +40,7 @@ public class ProfileAccountController implements Initializable {
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    App.utente = new Utente("Mattia", "Frigiola", "root", "root", "", LocalDate.now(), "123");
+    //    App.utente = new Utente("Mattia", "Frigiola", "root", "root", "", LocalDate.now(), "123");
     // imposto i dati dell'utente
     if (App.utente != null) {
       name_account.setText(App.utente.getNome() + " " + App.utente.getCognome());

@@ -7,10 +7,9 @@
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.controller.RegistrazioneController"
-            stylesheets="@../css/login.css">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="800.0" prefWidth="1200.0"
+            stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="it.prova.javafxsofting.controller.RegistrazioneController">
     <children>
         <HBox prefHeight="800.0" prefWidth="1200.0">
             <children>
@@ -18,12 +17,12 @@
                 <VBox prefWidth="700.0">
                     <children>
                         <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
-                        <VBox fx:id="wrapperRegistrazione" alignment="TOP_CENTER"
-                              prefHeight="700.0" styleClass="wrapperForm">
+                        <VBox fx:id="wrapperRegistrazione" alignment="TOP_CENTER" prefHeight="700.0"
+                              styleClass="wrapperForm">
                             <children>
                                 <Text fill="#0d3bb1" fontSmoothingType="LCD" stroke="#748b9f"
-                                      strokeType="OUTSIDE" text="Registrazione"
-                                      textAlignment="CENTER" styleClass="text-blue">
+                                      strokeType="OUTSIDE" styleClass="text-blue"
+                                      text="Registrazione" textAlignment="CENTER">
                                     <font>
                                         <Font name="RACE1 Brannt Chiseled NCV" size="50.0"/>
                                     </font>
@@ -36,7 +35,8 @@
                                         <VBox alignment="CENTER_LEFT" prefWidth="300.0"
                                               HBox.hgrow="ALWAYS">
                                             <children>
-                                                <Label fx:id="nomeLabel" text="Nome">
+                                                <Label fx:id="nomeLabel" styleClass="text-field"
+                                                       text="Nome">
                                                     <font>
                                                         <Font name="RACE1 Brannt Chiseled NCV"
                                                               size="25.0"/>
@@ -71,7 +71,8 @@
                                         <VBox alignment="CENTER_LEFT" prefWidth="300.0"
                                               HBox.hgrow="ALWAYS">
                                             <children>
-                                                <Label fx:id="cognomeLabel" text="Cognome">
+                                                <Label fx:id="cognomeLabel" styleClass="text-field"
+                                                       text="Cognome">
                                                     <font>
                                                         <Font name="RACE1 Brannt Chiseled NCV"
                                                               size="25.0"/>
@@ -110,7 +111,8 @@
                                 </HBox>
                                 <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <Label fx:id="emailLabel" text="email">
+                                        <Label fx:id="emailLabel" styleClass="text-field"
+                                               text="email">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
                                             </font>
@@ -146,6 +148,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="passwordLabel"
+                                                               styleClass="text-field"
                                                                text="Password">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"
@@ -167,6 +170,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="confermaPasswordLabel"
+                                                               styleClass="text-field"
                                                                text="Conferma Passoword">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"
@@ -211,14 +215,15 @@
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              text="Metodo di Pagamento">
+                                              styleClass="text-field" text="Metodo di Pagamento">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
                                             </font>
                                         </Text>
                                         <VBox alignment="CENTER_LEFT">
                                             <children>
-                                                <Label fx:id="ibanLabel" text="Numero Carta">
+                                                <Label fx:id="ibanLabel" styleClass="text-field"
+                                                       text="Numero Carta">
                                                     <font>
                                                         <Font name="RACE1 Brannt Chiseled NCV"
                                                               size="25.0"/>
@@ -255,6 +260,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="dataScadenzaLabel"
+                                                               styleClass="text-field"
                                                                text="Data di Scadenza">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"
@@ -288,6 +294,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="cvcLabel"
+                                                               styleClass="text-field"
                                                                text="Security Code">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"

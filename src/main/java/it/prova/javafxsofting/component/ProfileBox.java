@@ -4,6 +4,7 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,6 +79,15 @@ public class ProfileBox extends VBox implements Initializable {
       profile.setId("profile");
       profile.setOnAction(
           actionEvent -> {
+            try {
+              ScreenController.addScreen(
+                  "profilo",
+                  FXMLLoader.load(
+                      Objects.requireNonNull(
+                          App.class.getResource("controller/profilo_utente.fxml"))));
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
             ScreenController.activate("profilo");
             actionEvent.consume();
           });

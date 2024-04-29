@@ -115,8 +115,8 @@
                                         <Pane HBox.hgrow="ALWAYS"/>
                                         <Label fx:id="forgotPasswordLabel"
                                                onMouseClicked="#forgotPassword"
-                                               styleClass="text-blue"
-                                               text="Forgot Password" textAlignment="RIGHT">
+                                               styleClass="text-field" text="Forgot Password"
+                                               textAlignment="RIGHT">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="15.0"/>
                                             </font>
@@ -149,8 +149,9 @@
                                 <HBox alignment="CENTER">
                                     <children>
                                         <Text fx:id="textRegister" strokeType="OUTSIDE"
-                                              strokeWidth="0.0" text="Don't have a account"
-                                              textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                              strokeWidth="0.0" styleClass="text-field"
+                                              text="Don't have a account" textAlignment="CENTER"
+                                              HBox.hgrow="ALWAYS">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="15.0"/>
                                             </font>
@@ -160,7 +161,7 @@
                                         </Text>
                                         <Text fx:id="register" onMouseClicked="#switchRegister"
                                               strokeType="OUTSIDE" strokeWidth="0.0"
-                                              text="Register">
+                                              styleClass="text-field" text="Register">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="15.0"/>
                                             </font>

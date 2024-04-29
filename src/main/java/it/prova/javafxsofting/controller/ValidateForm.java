@@ -18,12 +18,12 @@ public class ValidateForm {
     }
   }
 
-  public boolean fieldInvalid(MFXTextField field) {
+  public boolean isFieldInvalid(MFXTextField field) {
     return field.getPseudoClassStates().stream()
         .anyMatch(pseudoClass -> pseudoClass.equals(INVALID_PSEUDO_CLASS));
   }
 
-  public void addContraitRequired(MFXTextField field, String msg) {
+  public void addConstraintRequired(MFXTextField field, String msg) {
     Constraint request =
         Constraint.Builder.build()
             .setSeverity(Severity.ERROR)
@@ -34,7 +34,7 @@ public class ValidateForm {
     field.getValidator().constraint(request);
   }
 
-  public void addContraitLength(MFXTextField field, String msg, int length) {
+  public void addConstraintLength(MFXTextField field, String msg, int length) {
     Constraint lenConstraint =
         Constraint.Builder.build()
             .setSeverity(Severity.ERROR)
