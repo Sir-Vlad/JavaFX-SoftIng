@@ -6,6 +6,8 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import java.util.List;
+import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
 
 public class ValidateForm {
@@ -49,5 +51,54 @@ public class ValidateForm {
     labelMsgInvalid.setVisible(false);
     field.getStyleClass().remove("field-invalid");
     field.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
+  }
+
+  public void addEventRemoveClassInvalid(MFXTextField field, Label validate) {
+    field
+        .getValidator()
+        .validProperty()
+        .addListener(
+            (observableValue, oldValue, newValue) -> {
+              if (newValue) {
+                removeClassInvalid(field, validate);
+              }
+            });
+  }
+
+  public void onlyCharAlphabetical(MFXTextField field) {
+    field
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              String newValueFormat = newValue;
+              if (!newValue.matches("[A-Za-z]")) {
+                newValueFormat = newValue.replaceAll("\\d|\\p{P}", "");
+              }
+              field.setText(newValueFormat);
+              updateField(field.textProperty(), field);
+            });
+  }
+
+  public void onlyDigit(MFXTextField field) {
+    field
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              String newValueFormat = newValue;
+              if (!newValue.matches("\\d*")) {
+                newValueFormat = newValue.replaceAll("\\D", "");
+              }
+              //              newValueFormat = newValueFormat.replaceAll("(.{4})", "$1 ");
+              field.setText(newValueFormat);
+              updateField(field.textProperty(), field);
+            });
+  }
+
+  private void updateField(StringProperty timeText, MFXTextField field) {
+    Platform.runLater(
+        () -> {
+          field.setText(timeText.getValue());
+          field.positionCaret(timeText.getValue().length());
+        });
   }
 }

@@ -5,16 +5,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/home.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.controller.HomeController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0"
+            stylesheets="@../css/home.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="it.prova.javafxsofting.controller.UsatoController">
     <children>
         <VBox layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;">
                     <children>
+                        <VBox fx:id="homeBtn" alignment="CENTER" minHeight="-Infinity"
+                              minWidth="-Infinity" onMouseClicked="#switchHome" prefWidth="150.0"
+                              styleClass="text-header">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Home"
+                                      textAlignment="CENTER"/>
+                            </children>
+                        </VBox>
                         <VBox fx:id="concessionariBtn" alignment="CENTER" minHeight="-Infinity"
                               minWidth="-Infinity" onMouseClicked="#switchConcessionari"
                               prefWidth="150.0" styleClass="text-header">
@@ -55,7 +63,7 @@
                                             </rowConstraints>
                                             <children>
                                                 <VBox fx:id="wrapperNuovo" alignment="CENTER"
-                                                      onMouseClicked="#switchNuovo"
+                                                      onMouseClicked="#switchVendi"
                                                       prefHeight="200.0" prefWidth="100.0"
                                                       styleClass="wrapperHome"
                                                       GridPane.halignment="CENTER"
@@ -66,7 +74,7 @@
                                                     </GridPane.margin>
                                                     <children>
                                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                              text="Nuovo" textAlignment="CENTER">
+                                                              text="Vendi" textAlignment="CENTER">
                                                             <styleClass>
                                                                 <String fx:value="text-blue"/>
                                                                 <String fx:value="text-30"/>
@@ -75,7 +83,7 @@
                                                     </children>
                                                 </VBox>
                                                 <VBox fx:id="wrapperUsato" alignment="CENTER"
-                                                      onMouseClicked="#switchUsato"
+                                                      onMouseClicked="#switchCompra"
                                                       prefHeight="200.0" prefWidth="100.0"
                                                       styleClass="wrapperHome"
                                                       GridPane.columnIndex="1">
@@ -85,7 +93,7 @@
                                                     </GridPane.margin>
                                                     <children>
                                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                              text="Usato" textAlignment="CENTER">
+                                                              text="Compra" textAlignment="CENTER">
                                                             <styleClass>
                                                                 <String fx:value="text-blue"/>
                                                                 <String fx:value="text-30"/>

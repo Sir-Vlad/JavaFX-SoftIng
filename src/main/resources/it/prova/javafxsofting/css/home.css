@@ -1,3 +1,5 @@
+@import "header.css";
+
 .wrapperHome {
     -fx-background-color: -my-gray-bg;
     -fx-background-radius: 20;

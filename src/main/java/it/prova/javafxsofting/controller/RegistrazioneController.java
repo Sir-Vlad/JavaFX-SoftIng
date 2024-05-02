@@ -13,13 +13,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -63,31 +61,12 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
     // limitazione del campo cvc a 3 caratteri numerici
     cvcField.setTextLimit(3);
-    cvcField
-        .textProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (!newValue.matches("\\d*")) {
-                cvcField.setText(newValue.replaceAll("\\D", ""));
-                updateField(cvcField.textProperty(), cvcField);
-              }
-            });
+    onlyDigit(cvcField);
 
     // limitazione del campo iban a 16 caratteri numerici
     // 19 = 16 (numeri della carta) + 3 spazi
     ibanField.setTextLimit(19);
-    ibanField
-        .textProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              String newValueFormat = newValue;
-              if (!newValue.matches("\\d*")) {
-                newValueFormat = newValue.replaceAll("\\D", "");
-              }
-              newValueFormat = newValueFormat.replaceAll("(.{4})", "$1 ");
-              ibanField.setText(newValueFormat);
-              updateField(ibanField.textProperty(), ibanField);
-            });
+    onlyDigit(ibanField);
 
     onlyCharAlphabetical(nomeField);
     onlyCharAlphabetical(cognomeField);
@@ -100,9 +79,17 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     setValidateIban();
     setValidateDate();
     setValidateCvc();
+
+    // shortcuts
+    root.setOnKeyPressed(
+        event -> {
+          if (event.getCode().equals(KeyCode.ENTER)) {
+            createAccount();
+          }
+        });
   }
 
-  public void createAccount(ActionEvent actionEvent) {
+  public void createAccount() {
     List<Constraint> nomeConstr = nomeField.validate();
     List<Constraint> cognomeConstr = cognomeField.validate();
     List<Constraint> emailConstr = emailField.validate();
@@ -135,7 +122,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
             || isFieldInvalid(cvcField);
 
     if (isInvalidForm) {
-      actionEvent.consume();
       return;
     }
 
@@ -156,35 +142,12 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     App.log.info(newUtente.toString());
 
     ScreenController.activate("home");
-    actionEvent.consume();
-  }
-
-  private void onlyCharAlphabetical(MFXTextField field) {
-    field
-        .textProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              String newValueFormat = newValue;
-              if (!newValue.matches("[A-Za-z]")) {
-                newValueFormat = newValue.replaceAll("\\d|\\p{P}", "");
-              }
-              field.setText(newValueFormat);
-              updateField(field.textProperty(), field);
-            });
   }
 
   private String capitalize(String input) {
     return Pattern.compile("^.")
         .matcher(input)
         .replaceFirst(matchResult -> matchResult.group().toUpperCase());
-  }
-
-  private void updateField(StringProperty timeText, MFXTextField field) {
-    Platform.runLater(
-        () -> {
-          field.setText(timeText.getValue());
-          field.positionCaret(timeText.getValue().length());
-        });
   }
 
   private void setValidateNome() {

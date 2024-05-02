@@ -10,9 +10,7 @@ import javafx.scene.layout.*;
 
 public class HomeController implements Initializable {
   @FXML private VBox wrapperNuovo;
-  @FXML private VBox wrapperConcessionari;
   @FXML private VBox wrapperUsato;
-  @FXML private VBox wrapperPreventivo;
   @FXML private VBox wrapperRoot;
 
   @Override
@@ -30,14 +28,7 @@ public class HomeController implements Initializable {
   }
 
   public void switchUsato(MouseEvent mouseEvent) {
-    NotImplemented.notImplemented();
-    //    ScreenController.activate("usato");
-    mouseEvent.consume();
-  }
-
-  public void switchPreventivi(MouseEvent mouseEvent) {
-    NotImplemented.notImplemented();
-    //    ScreenController.activate("preventiviUsato");
+    ScreenController.activate("usato");
     mouseEvent.consume();
   }
 }

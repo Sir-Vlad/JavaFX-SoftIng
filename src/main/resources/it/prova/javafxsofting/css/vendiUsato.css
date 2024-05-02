@@ -1,0 +1,8 @@
+/*@import "form.css";*/
+@import "root.css";
+
+.button-usato {
+    -fx-border-color: -my-gray1;
+    -fx-border-radius: 15;
+}
+

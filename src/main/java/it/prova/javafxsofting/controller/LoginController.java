@@ -8,13 +8,11 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.Utente;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,9 +20,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import lombok.SneakyThrows;
 
 public class LoginController extends ValidateForm implements Initializable {
   @FXML public AnchorPane root;
@@ -47,12 +47,20 @@ public class LoginController extends ValidateForm implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    // ? shortcuts
+    root.setOnKeyPressed(
+        event -> {
+          if (event.getCode().equals(KeyCode.ENTER)) {
+            logIn();
+          }
+        });
     // set validate field
     setValidateEmail();
     setValidatePassword();
   }
 
-  public void logIn(ActionEvent actionEvent) throws IOException {
+  @SneakyThrows
+  public void logIn() {
     List<Constraint> constEmail = emailField.validate();
     List<Constraint> constPassword = passwordField.validate();
 
@@ -90,8 +98,6 @@ public class LoginController extends ValidateForm implements Initializable {
 
     // redirect alla pagina del profilo
     ScreenController.activate("home");
-
-    actionEvent.consume();
   }
 
   public void forgotPassword(MouseEvent mouseEvent) {

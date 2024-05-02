@@ -62,15 +62,20 @@ public class ProfileAccountController implements Initializable {
         FXMLLoader.load(Objects.requireNonNull(getClass().getResource("dettagli_profilo.fxml"))),
         profiloBtn);
 
+    tabController.addTab(
+        "preventivi",
+        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("preventivi_utente.fxml"))),
+        preventiviBtn);
+
     AnchorPane anchorPane = new AnchorPane();
     anchorPane.setId("ordini");
 
     tabController.addTab("ordini", anchorPane, ordiniBtn);
 
-    AnchorPane anchorPane2 = new AnchorPane();
-    anchorPane2.setId("preventivi");
-
-    tabController.addTab("preventivi", anchorPane2, preventiviBtn);
+    //    AnchorPane anchorPane2 = new AnchorPane();
+    //    anchorPane2.setId("preventivi");
+    //
+    //    tabController.addTab("preventivi", anchorPane2, preventiviBtn);
 
     // set default page open
     content.getChildren().add(tabController.getTab("profile"));

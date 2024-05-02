@@ -48,3 +48,7 @@
 .text-30 {
     -fx-font-size: 40;
 }
+
+.text-field {
+    -fx-font-family: "RACE1 Brannt Chiseled NCV";
+}
