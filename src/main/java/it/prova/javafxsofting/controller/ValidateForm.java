@@ -94,6 +94,27 @@ public class ValidateForm {
             });
   }
 
+  public void onlyFloat(MFXTextField field) {
+    field
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              String newValueFormat = newValue;
+              if (!newValue.matches("\\d*(\\.\\d+)?")) {
+                newValueFormat = newValue.replaceAll("[^0-9.]", "");
+                try {
+                  newValueFormat =
+                      newValueFormat.substring(
+                          0, newValueFormat.indexOf('.', newValueFormat.indexOf('.') + 1));
+                } catch (Exception ignored) {
+
+                }
+              }
+              field.setText(newValueFormat);
+              updateField(field.textProperty(), field);
+            });
+  }
+
   protected void updateField(StringProperty timeText, MFXTextField field) {
     Platform.runLater(
         () -> {

@@ -12,14 +12,13 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.IntStream;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -28,7 +27,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class VendiUsato extends ValidateForm implements Initializable {
-  public MFXButton scegliFotoBtn;
+  private final HashMap<File, File> immagini = new HashMap<>();
+  private MFXTextField[] targaField = null;
 
   @FXML private VBox homeBtn;
   @FXML private ProfileBox profile;
@@ -42,6 +42,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private Label lunghezzaLabel;
   @FXML private Label larghezzaLabel;
   @FXML private Label caricaFotoLabel;
+  @FXML private Label volBagagliaioLabel;
   @FXML private Label pesoLabel;
   @FXML private Label validateModello;
   @FXML private Label validateMarca;
@@ -51,7 +52,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private Label validateAltezza;
   @FXML private Label validateLunghezza;
   @FXML private Label validateLarghezza;
-  @FXML private Label volBagagliaioLabel;
   @FXML private Label validateVolBagagliaio;
   @FXML private Label validatePeso;
   @FXML private Label validateFoto;
@@ -60,9 +60,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private MFXTextField kmPercorsiField;
   @FXML private MFXTextField targaFieldFirstTwoLetter;
   @FXML private MFXTextField targaFieldDigit;
-
-  @FXML private MFXTextField[] targaField = null;
-
   @FXML private MFXTextField targaFieldLastTwoLetter;
   @FXML private MFXFilterComboBox<String> aaImmatricolazioneCombo;
   @FXML private MFXTextField altezzaField;
@@ -70,6 +67,15 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private MFXTextField larghezzaField;
   @FXML private MFXTextField volBagagliaioField;
   @FXML private MFXTextField pesoField;
+  @FXML private MFXButton scegliFotoBtn;
+
+  private static void alertWarning(String title, String message) {
+    Alert alert = new Alert(AlertType.WARNING);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -78,12 +84,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
     onlyCharAlphabetical(modelloField);
     onlyCharAlphabetical(marcaField);
 
-    onlyDigit(kmPercorsiField);
-    onlyDigit(altezzaField);
-    onlyDigit(larghezzaField);
-    onlyDigit(lunghezzaField);
-    onlyDigit(volBagagliaioField);
-    onlyDigit(pesoField);
+    onlyFloat(kmPercorsiField);
+    onlyFloat(altezzaField);
+    onlyFloat(larghezzaField);
+    onlyFloat(lunghezzaField);
+    onlyFloat(volBagagliaioField);
+    onlyFloat(pesoField);
 
     setValueComboBox();
 
@@ -97,7 +103,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
     setValidateLarghezza();
     setValidateVolBagagliaio();
     setValidatePeso();
-    setValidateFoto();
 
     // shortcuts
     wrapperRoot.setOnKeyPressed(
@@ -118,9 +123,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     List<Constraint> marcaConstr = marcaField.validate();
     List<Constraint> kmPercorsiConstr = kmPercorsiField.validate();
     List<Constraint> targaConstr = new ArrayList<>();
-    for (MFXTextField field : targaField) {
-      targaConstr.addAll(field.validate());
-    }
+    for (MFXTextField field : targaField) targaConstr.addAll(field.validate());
     List<Constraint> aaImmatricolazioneConstr = aaImmatricolazioneCombo.validate();
     List<Constraint> altezzaConstr = altezzaField.validate();
     List<Constraint> lunghezzaConstr = lunghezzaField.validate();
@@ -139,24 +142,32 @@ public class VendiUsato extends ValidateForm implements Initializable {
     showError(volBagagliaioConstr, volBagagliaioField, validateVolBagagliaio);
     showError(pesoConstr, pesoField, validatePeso);
 
-    boolean isInvalidForm =
+    boolean isInvalidInfoAuto =
         isFieldInvalid(modelloField)
             || isFieldInvalid(marcaField)
             || isFieldInvalid(kmPercorsiField)
             || isFieldInvalid(targaField[0])
             || isFieldInvalid(targaField[1])
             || isFieldInvalid(targaField[2])
-            || isFieldInvalid(aaImmatricolazioneCombo)
+            || isFieldInvalid(aaImmatricolazioneCombo);
+
+    boolean isInvalidDatiAuto =
+        setValidateFoto()
             || isFieldInvalid(altezzaField)
             || isFieldInvalid(lunghezzaField)
             || isFieldInvalid(larghezzaField)
             || isFieldInvalid(volBagagliaioField)
             || isFieldInvalid(pesoField);
 
-    if (isInvalidForm) {}
+    if (isInvalidDatiAuto && isInvalidInfoAuto) {}
   }
 
   public void scegliFoto() {
+    if (immagini.size() > 10) {
+      alertWarning("Limite massimo immagini", "Hai raggiunto il limite massimo di 10 immagini");
+      return;
+    }
+
     FileChooser fileChooser = new FileChooser();
 
     // decido le estensioni ammissibili
@@ -166,8 +177,40 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
     // apre una finestra dove poter scegliere i file
     List<File> listImmagini = fileChooser.showOpenMultipleDialog(null);
+    if (listImmagini.size() > 10) {
+      alertWarning(
+          "Limite massimo immagini",
+          "Hai raggiunto il limite massimo di 10 immagini. Seleziona meno immagini.");
+      validateFoto.setText("Immagini non aggiunte");
+      return;
+    }
 
     // controllo se esiste la cartella dove salvare le immagini `instance/data`
+    if (checkFolderImmagini()) {
+      for (File f : listImmagini) {
+        try {
+          String newName = generateAlphaFileName() + getExtension(f.getName());
+          File newPath = Path.of(new File("instance/data").getPath() + "/" + newName).toFile();
+          // aggiunge l'immagine solo se non è stata già aggiunta, ovvero elimino la possibilità che
+          // l'utente possa aggiungere due volte la stessa immagine
+          File value = immagini.putIfAbsent(f, newPath);
+          if (value == null) Files.copy(f.toPath(), newPath.toPath());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    } else {
+      alertWarning("Impossibile salvare le immagini", "Impossibile salvare le immagini");
+    }
+
+    if (validateFoto.textProperty().isNotEmpty().get()) {
+      validateFoto.setText("");
+    }
+
+    System.out.println(immagini);
+  }
+
+  private boolean checkFolderImmagini() {
     if (Files.isDirectory(new File("instance").toPath())) {
       File folderSaveImage = new File("instance/data");
       if (!Files.isDirectory(folderSaveImage.toPath())) {
@@ -177,23 +220,10 @@ public class VendiUsato extends ValidateForm implements Initializable {
           throw new RuntimeException(e);
         }
       }
-      System.out.println(listImmagini);
-      File[] immaginiSalvate = new File[listImmagini.size()];
-      int count = 0;
-      for (File f : listImmagini) {
-        try {
-          String newName = generateAlphaFileName() + getExtension(f.getName());
-          File newPath = Path.of(folderSaveImage.getPath() + "/" + newName).toFile();
-          Files.copy(f.toPath(), newPath.toPath());
-          immaginiSalvate[count++] = newPath;
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      }
-      System.out.println(Arrays.toString(immaginiSalvate));
-    } else {
-      System.out.println("file non esiste");
+      return true;
     }
+    System.out.println("La directory non found");
+    return false;
   }
 
   private void setBoundsTarga() {
@@ -209,20 +239,14 @@ public class VendiUsato extends ValidateForm implements Initializable {
     onlyCharAlphabetical(targaFieldLastTwoLetter);
     onlyDigit(targaFieldDigit);
 
-    targaFieldFirstTwoLetter
-        .textProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              targaFieldFirstTwoLetter.setText(newValue.toUpperCase());
-              updateField(targaFieldFirstTwoLetter.textProperty(), targaFieldFirstTwoLetter);
-            });
-    targaFieldLastTwoLetter
-        .textProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              targaFieldLastTwoLetter.setText(newValue.toUpperCase());
-              updateField(targaFieldLastTwoLetter.textProperty(), targaFieldLastTwoLetter);
-            });
+    for (MFXTextField f : new MFXTextField[] {targaFieldFirstTwoLetter, targaFieldLastTwoLetter}) {
+      f.textProperty()
+          .addListener(
+              (observable, oldValue, newValue) -> {
+                f.setText(newValue.toUpperCase());
+                updateField(f.textProperty(), f);
+              });
+    }
 
     for (int i = 0; i < targaField.length - 1; i++) {
       MFXTextField field = targaField[i];
@@ -319,5 +343,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
     addEventRemoveClassInvalid(pesoField, validatePeso);
   }
 
-  private void setValidateFoto() {}
+  private boolean setValidateFoto() {
+    if (immagini.isEmpty()) {
+      validateFoto.setText("Caricare almeno una foto");
+      return true;
+    }
+    validateFoto.setText("");
+    return false;
+  }
 }

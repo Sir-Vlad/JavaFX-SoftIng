@@ -34,7 +34,7 @@ public class App extends javafx.application.Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/vendiUsato.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/home.fxml"));
     Pane root = new Pane();
     root.getChildren().addAll((Node) fxmlLoader.load());
     Scene scene = new Scene(root, 1200, 800);
@@ -92,10 +92,5 @@ public class App extends javafx.application.Application {
     ScreenController.addScreen(
         "usato",
         FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/usato.fxml"))));
-
-    ScreenController.addScreen(
-        "vendiUsato",
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/vendiUsato.fxml"))));
   }
 }

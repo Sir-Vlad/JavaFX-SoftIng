@@ -35,7 +35,8 @@
                                         <VBox alignment="CENTER_LEFT" prefWidth="300.0"
                                               HBox.hgrow="ALWAYS">
                                             <children>
-                                                <Label fx:id="nomeLabel" styleClass="text-field"
+                                                <Label fx:id="nomeLabel"
+                                                       styleClass="text-field-font"
                                                        text="Nome">
                                                     <font>
                                                         <Font name="RACE1 Brannt Chiseled NCV"
@@ -71,7 +72,8 @@
                                         <VBox alignment="CENTER_LEFT" prefWidth="300.0"
                                               HBox.hgrow="ALWAYS">
                                             <children>
-                                                <Label fx:id="cognomeLabel" styleClass="text-field"
+                                                <Label fx:id="cognomeLabel"
+                                                       styleClass="text-field-font"
                                                        text="Cognome">
                                                     <font>
                                                         <Font name="RACE1 Brannt Chiseled NCV"
@@ -111,7 +113,7 @@
                                 </HBox>
                                 <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <Label fx:id="emailLabel" styleClass="text-field"
+                                        <Label fx:id="emailLabel" styleClass="text-field-font"
                                                text="email">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
@@ -148,7 +150,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="passwordLabel"
-                                                               styleClass="text-field"
+                                                               styleClass="text-field-font"
                                                                text="Password">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"
@@ -170,7 +172,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="confermaPasswordLabel"
-                                                               styleClass="text-field"
+                                                               styleClass="text-field-font"
                                                                text="Conferma Passoword">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"
@@ -215,14 +217,16 @@
                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                     <children>
                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text-field" text="Metodo di Pagamento">
+                                              styleClass="text-field-font"
+                                              text="Metodo di Pagamento">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
                                             </font>
                                         </Text>
                                         <VBox alignment="CENTER_LEFT">
                                             <children>
-                                                <Label fx:id="ibanLabel" styleClass="text-field"
+                                                <Label fx:id="ibanLabel"
+                                                       styleClass="text-field-font"
                                                        text="Numero Carta">
                                                     <font>
                                                         <Font name="RACE1 Brannt Chiseled NCV"
@@ -260,7 +264,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="dataScadenzaLabel"
-                                                               styleClass="text-field"
+                                                               styleClass="text-field-font"
                                                                text="Data di Scadenza">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"
@@ -294,7 +298,7 @@
                                                       HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label fx:id="cvcLabel"
-                                                               styleClass="text-field"
+                                                               styleClass="text-field-font"
                                                                text="Security Code">
                                                             <font>
                                                                 <Font name="RACE1 Brannt Chiseled NCV"

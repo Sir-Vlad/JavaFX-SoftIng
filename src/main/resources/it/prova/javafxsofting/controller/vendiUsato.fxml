@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import java.lang.String?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="800.0" prefWidth="1200.0"
             stylesheets="@../css/vendiUsato.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="it.prova.javafxsofting.controller.VendiUsato">
@@ -49,11 +50,14 @@
                                                 <HBox alignment="CENTER_LEFT">
                                                     <children>
                                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                              styleClass="text-field"
                                                               text="Vendi Usato">
                                                             <font>
                                                                 <Font size="30.0"/>
                                                             </font>
+                                                            <styleClass>
+                                                                <String fx:value="text-field-font"/>
+                                                                <String fx:value="label-form-30-size"/>
+                                                            </styleClass>
                                                         </Text>
                                                     </children>
                                                     <VBox.margin>
@@ -65,7 +69,6 @@
                                                 <HBox alignment="CENTER_LEFT">
                                                     <children>
                                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                              styleClass="text-field"
                                                               text="Informazioni Generali">
                                                             <font>
                                                                 <Font size="25.0"/>
@@ -86,16 +89,14 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="modelloLabel"
-                                                                               styleClass="text-field"
-                                                                               stylesheets="@../css/form.css"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Modello">
-                                                                            <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
-                                                                            </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
                                                                             </VBox.margin>
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
                                                                         </Label>
                                                                         <MFXTextField
                                                                                 fx:id="modelloField"
@@ -128,11 +129,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="marcaLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Marca">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -176,11 +176,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="kmPercorsiLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="KM percorsi">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -217,27 +216,43 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="targaLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Targa">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
                                                                             </VBox.margin>
                                                                         </Label>
-                                                                        <MFXTextField
-                                                                                fx:id="targaField"
-                                                                                alignment="CENTER"
-                                                                                borderGap="0.0"
-                                                                                floatMode="BORDER"
-                                                                                maxWidth="1.7976931348623157E308"
-                                                                                VBox.vgrow="ALWAYS">
+                                                                        <HBox VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
                                                                             </VBox.margin>
-                                                                        </MFXTextField>
+                                                                            <children>
+                                                                                <MFXTextField
+                                                                                        fx:id="targaFieldFirstTwoLetter"
+                                                                                        alignment="CENTER"
+                                                                                        borderGap="0.0"
+                                                                                        floatMode="BORDER"
+                                                                                        maxWidth="1.7976931348623157E308"
+                                                                                        HBox.hgrow="ALWAYS"/>
+                                                                                <MFXTextField
+                                                                                        fx:id="targaFieldDigit"
+                                                                                        alignment="CENTER"
+                                                                                        borderGap="0.0"
+                                                                                        floatMode="BORDER"
+                                                                                        maxWidth="1.7976931348623157E308"
+                                                                                        HBox.hgrow="ALWAYS"/>
+                                                                                <MFXTextField
+                                                                                        fx:id="targaFieldLastTwoLetter"
+                                                                                        alignment="CENTER"
+                                                                                        borderGap="0.0"
+                                                                                        floatMode="BORDER"
+                                                                                        maxWidth="1.7976931348623157E308"
+                                                                                        HBox.hgrow="ALWAYS"/>
+                                                                            </children>
+                                                                        </HBox>
                                                                         <HBox alignment="CENTER">
                                                                             <children>
                                                                                 <Label fx:id="validateTarga"
@@ -265,11 +280,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="aaImmatricolazioneLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Anno Immatricolazione">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -277,6 +291,9 @@
                                                                         </Label>
                                                                         <MFXFilterComboBox
                                                                                 fx:id="aaImmatricolazioneCombo"
+                                                                                accessibleRole="COMBO_BOX"
+                                                                                alignment="CENTER"
+                                                                                floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"/>
                                                                         <HBox alignment="CENTER">
                                                                             <children>
@@ -306,7 +323,6 @@
                                                 <HBox alignment="CENTER_LEFT">
                                                     <children>
                                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                                                              styleClass="text-field"
                                                               text="Dati Auto">
                                                             <font>
                                                                 <Font size="25.0"/>
@@ -327,12 +343,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="altezzaLabel"
-                                                                               styleClass="text-field"
-                                                                               stylesheets="@../css/form.css"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Altezza">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -344,6 +358,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire l'altezza in millimetri"
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -369,11 +384,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="lunghezzaLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Lunghezza">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -385,6 +399,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire la lunghezza in millimetri"
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -417,11 +432,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="larghezzaLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Larghezza">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -433,6 +447,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire la larghezza in millimetri"
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -458,11 +473,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="volBagagliaioLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Volume Bagagliaio">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -474,6 +488,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire il volume del bagagliaio in litri"
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -506,11 +521,10 @@
                                                                       HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Label fx:id="pesoLabel"
-                                                                               styleClass="text-field"
+                                                                               styleClass="text-field-font, label-form-25-size"
                                                                                text="Peso">
                                                                             <font>
-                                                                                <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                      size="25.0"/>
+                                                                                <Font size="25.0"/>
                                                                             </font>
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -522,6 +536,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire il peso in chilogrammi"
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -550,11 +565,10 @@
                                                                               spacing="40.0">
                                                                             <children>
                                                                                 <Label fx:id="caricaFotoLabel"
-                                                                                       styleClass="text-field"
+                                                                                       styleClass="text-field-font, label-form-25-size"
                                                                                        text="Carica Foto">
                                                                                     <font>
-                                                                                        <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                              size="25.0"/>
+                                                                                        <Font size="25.0"/>
                                                                                     </font>
                                                                                 </Label>
                                                                                 <MFXButton
@@ -563,13 +577,12 @@
                                                                                         styleClass="button-usato"
                                                                                         text="Scegli le foto">
                                                                                     <font>
-                                                                                        <Font name="RACE1 Brannt Chiseled NCV"
-                                                                                              size="25.0"/>
+                                                                                        <Font size="25.0"/>
                                                                                     </font>
                                                                                 </MFXButton>
                                                                             </children>
                                                                         </HBox>
-                                                                        <HBox alignment="CENTER_LEFT">
+                                                                        <HBox alignment="CENTER">
                                                                             <children>
                                                                                 <Label fx:id="validateFoto"
                                                                                        alignment="CENTER"
@@ -594,8 +607,7 @@
                                                 <HBox alignment="TOP_RIGHT" prefHeight="100.0"
                                                       prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                     <children>
-                                                        <MFXButton buttonType="RAISED"
-                                                                   computeRadiusMultiplier="false"
+                                                        <MFXButton computeRadiusMultiplier="false"
                                                                    depthLevel="LEVEL5"
                                                                    onAction="#richiediPreventivo"
                                                                    rippleAnimateBackground="false"

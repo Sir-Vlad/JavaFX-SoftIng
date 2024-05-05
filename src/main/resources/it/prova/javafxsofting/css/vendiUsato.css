@@ -1,8 +1,16 @@
 /*@import "form.css";*/
-@import "root.css";
+@import url(../css/root.css);
 
 .button-usato {
     -fx-border-color: -my-gray1;
     -fx-border-radius: 15;
+    -fx-background-radius: 15;
 }
 
+.label-form-25-size {
+    -fx-font-size: 25;
+}
+
+.label-form-30-size {
+    -fx-font-size: 30;
+}

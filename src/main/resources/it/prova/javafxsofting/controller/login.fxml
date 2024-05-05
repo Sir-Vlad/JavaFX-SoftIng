@@ -115,7 +115,7 @@
                                         <Pane HBox.hgrow="ALWAYS"/>
                                         <Label fx:id="forgotPasswordLabel"
                                                onMouseClicked="#forgotPassword"
-                                               styleClass="text-field" text="Forgot Password"
+                                               styleClass="text-field-font" text="Forgot Password"
                                                textAlignment="RIGHT">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="15.0"/>
@@ -149,7 +149,7 @@
                                 <HBox alignment="CENTER">
                                     <children>
                                         <Text fx:id="textRegister" strokeType="OUTSIDE"
-                                              strokeWidth="0.0" styleClass="text-field"
+                                              strokeWidth="0.0" styleClass="text-field-font"
                                               text="Don't have a account" textAlignment="CENTER"
                                               HBox.hgrow="ALWAYS">
                                             <font>
@@ -161,7 +161,7 @@
                                         </Text>
                                         <Text fx:id="register" onMouseClicked="#switchRegister"
                                               strokeType="OUTSIDE" strokeWidth="0.0"
-                                              styleClass="text-field" text="Register">
+                                              styleClass="text-field-font" text="Register">
                                             <font>
                                                 <Font name="RACE1 Brannt Chiseled NCV" size="15.0"/>
                                             </font>
