@@ -1,0 +1,16 @@
+.text-header:hover {
+    -fx-background-color: -my-gray1;
+    -fx-opacity: 0.5;
+}
+
+.text-header:hover .text {
+    -fx-opacity: 1;
+}
+
+.account-header {
+    -fx-background-image: url(../immagini/fake-account.png);
+    -fx-background-position: 50% 50%;
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+
+}

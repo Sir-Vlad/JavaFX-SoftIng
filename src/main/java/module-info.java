@@ -8,6 +8,7 @@ module it.prova.javafxsofting {
   requires commons.validator;
   requires AnimateFX;
   requires javafx.web;
+  requires java.logging;
 
   opens it.prova.javafxsofting to
       javafx.fxml;

@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+Traccia/*.md
+lib/JFX3DModelImporters
+instance/data

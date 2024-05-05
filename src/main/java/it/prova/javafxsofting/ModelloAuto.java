@@ -6,6 +6,14 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 
+enum TipoMotore {
+  GASOLIO,
+  BENZINA,
+  IBRIDA,
+  ELETTRICA,
+  IBRICA_PLUG_IN
+}
+
 @Getter
 @Setter
 public class ModelloAuto {
@@ -55,12 +63,4 @@ public class ModelloAuto {
         "ModelloAuto{\n\tindex=%s,\n\tnome=%s,\n\tdescrizione=%s,\n\tmarca=%s,\n\taltezza=%d,\n\tlunghezza=%d,\n\tpeso=%d,\n\tvolumeBagagliaio=%d\n\t}",
         index, nome, descrizione, marca, altezza, lunghezza, peso, volumeBagagliaio);
   }
-}
-
-enum TipoMotore {
-  GASOLIO,
-  BENZINA,
-  IBRIDA,
-  ELETTRICA,
-  IBRICA_PLUG_IN
 }

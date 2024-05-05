@@ -1,0 +1,54 @@
+@font-face {
+    font-family: "RACE1 Brannt Chiseled NCV";
+    src: url("../fonts/Race1BranntChiseledNcv-zvOL.ttf");
+}
+
+* {
+    -my-blue-text: rgb(13, 59, 177);
+    -my-blue-text-80-opacity: rgba(13, 59, 177, 0.85);
+    -my-gray1: rgb(111, 111, 111);
+    -my-gray-bg: rgb(180, 183, 183);
+    /* Riassegnamento di una var della libreria materialfx  */
+    -mfx-main: -my-blue-text;
+}
+
+/* -------------------------- */
+/*   Modify Css MaterialFX    */
+/* -------------------------- */
+
+
+.mfx-text-field:focus-within {
+    -fx-border-color: -my-blue-text;
+}
+
+.mfx-date-picker:focus-within .icon {
+    -mfx-color: -mfx-main;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo:focus-within,
+.mfx-date-picker .date-picker-popup .years-combo:focus-within {
+    -fx-background-color: #f8f7fa;
+    -fx-text-fill: -mfx-main;
+}
+
+.mfx-date-picker .date-picker-popup .months-combo .virtual-flow .mfx-combo-box-cell:selected .label,
+.mfx-date-picker .date-picker-popup .years-combo .virtual-flow .mfx-combo-box-cell:selected .label {
+    -fx-text-fill: -mfx-main;
+}
+
+/* -------------------------- */
+/*           My Css           */
+/* -------------------------- */
+
+.text-blue {
+    -fx-font-family: "RACE1 Brannt Chiseled NCV";
+    -fx-fill: -my-blue-text;
+}
+
+.text-30 {
+    -fx-font-size: 40;
+}
+
+.text-field-font {
+    -fx-font-family: "RACE1 Brannt Chiseled NCV";
+}

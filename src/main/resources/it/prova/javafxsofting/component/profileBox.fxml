@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1"
-         xmlns="http://javafx.com/javafx/21" stylesheets="@../css/style.css" fx:id="root">
+         xmlns="http://javafx.com/javafx/21" stylesheets="@../css/header.css" fx:id="root">
     <children>
         <Pane fx:id="immagine" prefHeight="200.0" prefWidth="200.0" styleClass="account-header"/>
     </children>

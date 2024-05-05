@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import it.prova.javafxsofting.component.ProfileBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.String?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="800.0" prefWidth="1200.0"
+            stylesheets="@../css/vendiUsato.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="it.prova.javafxsofting.controller.VendiUsato">
+    <children>
+        <VBox layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;"
+                      stylesheets="@../css/header.css">
+                    <children>
+                        <VBox fx:id="homeBtn" alignment="CENTER" minHeight="-Infinity"
+                              minWidth="-Infinity" onMouseClicked="#switchHome" prefWidth="150.0"
+                              styleClass="text-header">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Home"
+                                      textAlignment="CENTER"/>
+                            </children>
+                        </VBox>
+                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                        <ProfileBox fx:id="profile" prefWidth="50.0">
+                            <HBox.margin>
+                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                            </HBox.margin>
+                        </ProfileBox>
+                    </children>
+                </HBox>
+                <HBox VBox.vgrow="ALWAYS">
+                    <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <MFXScrollPane fitToHeight="true" fitToWidth="true"
+                                               AnchorPane.bottomAnchor="0.0"
+                                               AnchorPane.leftAnchor="0.0"
+                                               AnchorPane.rightAnchor="0.0"
+                                               AnchorPane.topAnchor="0.0">
+                                    <content>
+                                        <VBox fx:id="wrapperRoot" alignment="CENTER"
+                                              maxWidth="1.7976931348623157E308"
+                                              minWidth="-Infinity">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                                              text="Vendi Usato">
+                                                            <font>
+                                                                <Font size="30.0"/>
+                                                            </font>
+                                                            <styleClass>
+                                                                <String fx:value="text-field-font"/>
+                                                                <String fx:value="label-form-30-size"/>
+                                                            </styleClass>
+                                                        </Text>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" left="10.0"
+                                                                right="10.0" top="10.0"/>
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <Separator prefWidth="200.0"/>
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                                              text="Informazioni Generali">
+                                                            <font>
+                                                                <Font size="25.0"/>
+                                                            </font>
+                                                        </Text>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" left="10.0"
+                                                                right="10.0" top="10.0"/>
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <VBox>
+                                                    <children>
+                                                        <HBox>
+                                                            <children>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="modelloLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Modello">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="modelloField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateModello"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="marcaLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Marca">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="marcaField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateMarca"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0"
+                                                                        right="10.0" top="10.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <children>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="kmPercorsiLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="KM percorsi">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="kmPercorsiField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateKmPercorsi"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="targaLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Targa">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <HBox VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                            <children>
+                                                                                <MFXTextField
+                                                                                        fx:id="targaFieldFirstTwoLetter"
+                                                                                        alignment="CENTER"
+                                                                                        borderGap="0.0"
+                                                                                        floatMode="BORDER"
+                                                                                        maxWidth="1.7976931348623157E308"
+                                                                                        HBox.hgrow="ALWAYS"/>
+                                                                                <MFXTextField
+                                                                                        fx:id="targaFieldDigit"
+                                                                                        alignment="CENTER"
+                                                                                        borderGap="0.0"
+                                                                                        floatMode="BORDER"
+                                                                                        maxWidth="1.7976931348623157E308"
+                                                                                        HBox.hgrow="ALWAYS"/>
+                                                                                <MFXTextField
+                                                                                        fx:id="targaFieldLastTwoLetter"
+                                                                                        alignment="CENTER"
+                                                                                        borderGap="0.0"
+                                                                                        floatMode="BORDER"
+                                                                                        maxWidth="1.7976931348623157E308"
+                                                                                        HBox.hgrow="ALWAYS"/>
+                                                                            </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateTarga"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0"
+                                                                        right="10.0" top="10.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <children>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="aaImmatricolazioneLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Anno Immatricolazione">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXFilterComboBox
+                                                                                fx:id="aaImmatricolazioneCombo"
+                                                                                accessibleRole="COMBO_BOX"
+                                                                                alignment="CENTER"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"/>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateAAImmatricolazione"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                                <Pane prefWidth="450.0"
+                                                                      HBox.hgrow="ALWAYS"/>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0"
+                                                                        right="10.0" top="10.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                                <Separator prefWidth="200.0"/>
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                                              text="Dati Auto">
+                                                            <font>
+                                                                <Font size="25.0"/>
+                                                            </font>
+                                                        </Text>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" left="10.0"
+                                                                right="10.0" top="10.0"/>
+                                                    </VBox.margin>
+                                                </HBox>
+                                                <VBox>
+                                                    <children>
+                                                        <HBox>
+                                                            <children>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="altezzaLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Altezza">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="altezzaField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire l'altezza in millimetri"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateAltezza"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="lunghezzaLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Lunghezza">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="lunghezzaField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire la lunghezza in millimetri"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateLunghezza"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0"
+                                                                        right="10.0" top="10.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <children>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="larghezzaLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Larghezza">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="larghezzaField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire la larghezza in millimetri"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateLarghezza"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="volBagagliaioLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Volume Bagagliaio">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="volBagagliaioField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire il volume del bagagliaio in litri"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateVolBagagliaio"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0"
+                                                                        right="10.0" top="10.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <children>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="300.0"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label fx:id="pesoLabel"
+                                                                               styleClass="text-field-font, label-form-25-size"
+                                                                               text="Peso">
+                                                                            <font>
+                                                                                <Font size="25.0"/>
+                                                                            </font>
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </Label>
+                                                                        <MFXTextField
+                                                                                fx:id="pesoField"
+                                                                                alignment="CENTER"
+                                                                                borderGap="0.0"
+                                                                                floatMode="BORDER"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserire il peso in chilogrammi"
+                                                                                VBox.vgrow="ALWAYS">
+                                                                            <VBox.margin>
+                                                                                <Insets/>
+                                                                            </VBox.margin>
+                                                                        </MFXTextField>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validatePeso"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                                <Pane HBox.hgrow="ALWAYS"/>
+                                                                <VBox alignment="CENTER"
+                                                                      HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <HBox alignment="CENTER_LEFT"
+                                                                              prefWidth="300.0"
+                                                                              spacing="40.0">
+                                                                            <children>
+                                                                                <Label fx:id="caricaFotoLabel"
+                                                                                       styleClass="text-field-font, label-form-25-size"
+                                                                                       text="Carica Foto">
+                                                                                    <font>
+                                                                                        <Font size="25.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                                <MFXButton
+                                                                                        fx:id="scegliFotoBtn"
+                                                                                        onAction="#scegliFoto"
+                                                                                        styleClass="button-usato"
+                                                                                        text="Scegli le foto">
+                                                                                    <font>
+                                                                                        <Font size="25.0"/>
+                                                                                    </font>
+                                                                                </MFXButton>
+                                                                            </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER">
+                                                                            <children>
+                                                                                <Label fx:id="validateFoto"
+                                                                                       alignment="CENTER"
+                                                                                       textFill="RED">
+                                                                                    <font>
+                                                                                        <Font name="FiraCode Nerd Font Reg"
+                                                                                              size="13.0"/>
+                                                                                    </font>
+                                                                                </Label>
+                                                                            </children>
+                                                                        </HBox>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0"
+                                                                        right="10.0" top="10.0"/>
+                                                            </padding>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                                <HBox alignment="TOP_RIGHT" prefHeight="100.0"
+                                                      prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                    <children>
+                                                        <MFXButton computeRadiusMultiplier="false"
+                                                                   depthLevel="LEVEL5"
+                                                                   onAction="#richiediPreventivo"
+                                                                   rippleAnimateBackground="false"
+                                                                   rippleRadiusMultiplier="5.0"
+                                                                   styleClass="button-usato"
+                                                                   text="Richiedi Preventivo">
+                                                            <font>
+                                                                <Font size="25.0"/>
+                                                            </font>
+                                                        </MFXButton>
+                                                    </children>
+                                                    <VBox.margin>
+                                                        <Insets top="35.0"/>
+                                                    </VBox.margin>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                    <padding>
+                                        <Insets bottom="20.0" left="40.0" right="40.0" top="20.0"/>
+                                    </padding>
+                                </MFXScrollPane>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
