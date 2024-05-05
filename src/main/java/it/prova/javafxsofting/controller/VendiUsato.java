@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,6 +29,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 public class VendiUsato extends ValidateForm implements Initializable {
   public MFXButton scegliFotoBtn;
+
   @FXML private VBox homeBtn;
   @FXML private ProfileBox profile;
   @FXML private VBox wrapperRoot;
@@ -55,7 +58,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private MFXTextField modelloField;
   @FXML private MFXTextField marcaField;
   @FXML private MFXTextField kmPercorsiField;
-  @FXML private MFXTextField targaField;
+  @FXML private MFXTextField targaFieldFirstTwoLetter;
+  @FXML private MFXTextField targaFieldDigit;
+
+  @FXML private MFXTextField[] targaField = null;
+
+  @FXML private MFXTextField targaFieldLastTwoLetter;
   @FXML private MFXFilterComboBox<String> aaImmatricolazioneCombo;
   @FXML private MFXTextField altezzaField;
   @FXML private MFXTextField lunghezzaField;
@@ -65,6 +73,8 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    setBoundsTarga();
+
     onlyCharAlphabetical(modelloField);
     onlyCharAlphabetical(marcaField);
 
@@ -107,8 +117,11 @@ public class VendiUsato extends ValidateForm implements Initializable {
     List<Constraint> modelloConstr = modelloField.validate();
     List<Constraint> marcaConstr = marcaField.validate();
     List<Constraint> kmPercorsiConstr = kmPercorsiField.validate();
-    List<Constraint> targaConstr = targaField.validate();
-    //    List<Constraint> aaImmatricolazioneConstr = aaImmatricolazioneField.validate();
+    List<Constraint> targaConstr = new ArrayList<>();
+    for (MFXTextField field : targaField) {
+      targaConstr.addAll(field.validate());
+    }
+    List<Constraint> aaImmatricolazioneConstr = aaImmatricolazioneCombo.validate();
     List<Constraint> altezzaConstr = altezzaField.validate();
     List<Constraint> lunghezzaConstr = lunghezzaField.validate();
     List<Constraint> larghezzaConstr = larghezzaField.validate();
@@ -118,8 +131,8 @@ public class VendiUsato extends ValidateForm implements Initializable {
     showError(modelloConstr, modelloField, validateModello);
     showError(marcaConstr, marcaField, validateMarca);
     showError(kmPercorsiConstr, kmPercorsiField, validateKmPercorsi);
-    showError(targaConstr, targaField, validateTarga);
-    //    showError(aaImmatricolazioneConstr, aaImmatricolazioneField, validateAAImmatricolazione);
+    for (MFXTextField field : targaField) showError(targaConstr, field, validateTarga);
+    showError(aaImmatricolazioneConstr, aaImmatricolazioneCombo, validateAAImmatricolazione);
     showError(altezzaConstr, altezzaField, validateAltezza);
     showError(lunghezzaConstr, lunghezzaField, validateLunghezza);
     showError(larghezzaConstr, larghezzaField, validateLarghezza);
@@ -130,17 +143,17 @@ public class VendiUsato extends ValidateForm implements Initializable {
         isFieldInvalid(modelloField)
             || isFieldInvalid(marcaField)
             || isFieldInvalid(kmPercorsiField)
-            || isFieldInvalid(targaField)
-            //            || isFieldInvalid(aaImmatricolazioneField)
+            || isFieldInvalid(targaField[0])
+            || isFieldInvalid(targaField[1])
+            || isFieldInvalid(targaField[2])
+            || isFieldInvalid(aaImmatricolazioneCombo)
             || isFieldInvalid(altezzaField)
             || isFieldInvalid(lunghezzaField)
             || isFieldInvalid(larghezzaField)
             || isFieldInvalid(volBagagliaioField)
             || isFieldInvalid(pesoField);
 
-    if (isInvalidForm) {
-      return;
-    }
+    if (isInvalidForm) {}
   }
 
   public void scegliFoto() {
@@ -183,11 +196,56 @@ public class VendiUsato extends ValidateForm implements Initializable {
     }
   }
 
+  private void setBoundsTarga() {
+    // set bounds targaField
+    targaField =
+        new MFXTextField[] {targaFieldFirstTwoLetter, targaFieldDigit, targaFieldLastTwoLetter};
+
+    targaFieldFirstTwoLetter.setTextLimit(2);
+    targaFieldLastTwoLetter.setTextLimit(2);
+    targaFieldDigit.setTextLimit(3);
+
+    onlyCharAlphabetical(targaFieldFirstTwoLetter);
+    onlyCharAlphabetical(targaFieldLastTwoLetter);
+    onlyDigit(targaFieldDigit);
+
+    targaFieldFirstTwoLetter
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              targaFieldFirstTwoLetter.setText(newValue.toUpperCase());
+              updateField(targaFieldFirstTwoLetter.textProperty(), targaFieldFirstTwoLetter);
+            });
+    targaFieldLastTwoLetter
+        .textProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              targaFieldLastTwoLetter.setText(newValue.toUpperCase());
+              updateField(targaFieldLastTwoLetter.textProperty(), targaFieldLastTwoLetter);
+            });
+
+    for (int i = 0; i < targaField.length - 1; i++) {
+      MFXTextField field = targaField[i];
+      int finalI = i;
+      field
+          .textProperty()
+          .addListener(
+              (observable, oldValue, newValue) -> {
+                if (field.getTextLimit() == field.getLength())
+                  targaField[finalI + 1].requestFocus();
+              });
+    }
+  }
+
   private void setValueComboBox() {
+    int yearCurrent = Year.now().getValue();
     ObservableList<String> valueComboBox =
-        IntStream.rangeClosed(1900, 2023).mapToObj(String::valueOf).collect(FXCollectors.toList());
+        IntStream.rangeClosed(1960, yearCurrent)
+            .mapToObj(String::valueOf)
+            .collect(FXCollectors.toList());
 
     aaImmatricolazioneCombo.setItems(valueComboBox);
+    aaImmatricolazioneCombo.getSelectionModel().selectLast();
   }
 
   private String generateAlphaFileName() {
@@ -222,34 +280,18 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   private void setValidateTarga() {
-    addConstraintRequired(targaField, "La targa è necessaria");
+    for (MFXTextField field : targaField) {
+      addConstraintRequired(field, "La targa è necessaria");
+    }
 
-    // fixme: non funziona validTarga
-    //    Constraint validTarga =
-    //        Constraint.Builder.build()
-    //            .setSeverity(Severity.ERROR)
-    //            .setMessage("La targa non è valida")
-    //            .setCondition(
-    //                Bindings.createBooleanBinding(VendiUsato::validateTarga,
-    // targaField.textProperty()))
-    //            .get();
-    //
-    //    targaField.getValidator().constraint(validTarga);
-
-    addEventRemoveClassInvalid(targaField, validateTarga);
-  }
-
-  private boolean validateTarga() {
-    return targaField
-        .textProperty()
-        .toString()
-        .trim()
-        .matches("^[A-Za-z]{2} [0-9]{3} [A-Za-z]{2}$");
+    for (MFXTextField field : targaField) {
+      addEventRemoveClassInvalid(field, validateTarga);
+    }
   }
 
   private void setValidateAAImmatricolazione() {
-    //    addConstraintRequired(aaImmatricolazioneField, "L'anno di immatricolazione è necessario");
-    //    addEventRemoveClassInvalid(aaImmatricolazioneField, validateAAImmatricolazione);
+    addConstraintRequired(aaImmatricolazioneCombo, "L'anno di immatricolazione è necessario");
+    addEventRemoveClassInvalid(aaImmatricolazioneCombo, validateAAImmatricolazione);
   }
 
   private void setValidateAltezza() {

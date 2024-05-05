@@ -94,7 +94,7 @@ public class ValidateForm {
             });
   }
 
-  private void updateField(StringProperty timeText, MFXTextField field) {
+  protected void updateField(StringProperty timeText, MFXTextField field) {
     Platform.runLater(
         () -> {
           field.setText(timeText.getValue());
