@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.validation.Constraint;
+import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.component.ProfileBox;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Year;
 import java.util.*;
+import java.util.List;
 import java.util.stream.IntStream;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,6 +30,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 public class VendiUsato extends ValidateForm implements Initializable {
   private final HashMap<File, File> immagini = new HashMap<>();
+  @FXML private Header header;
   private MFXTextField[] targaField = null;
 
   @FXML private VBox homeBtn;
@@ -79,6 +82,9 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    header.addTab("Indietro", event -> ScreenController.back());
+    header.addTab("Home", event -> ScreenController.activate("home"));
+
     setBoundsTarga();
 
     onlyCharAlphabetical(modelloField);
@@ -177,6 +183,9 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
     // apre una finestra dove poter scegliere i file
     List<File> listImmagini = fileChooser.showOpenMultipleDialog(null);
+    if (listImmagini == null) {
+      return;
+    }
     if (listImmagini.size() > 10) {
       alertWarning(
           "Limite massimo immagini",

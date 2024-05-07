@@ -14,3 +14,7 @@
     -fx-background-repeat: no-repeat;
 
 }
+
+#root {
+    -fx-background-color: #B4B7B7D9;
+}

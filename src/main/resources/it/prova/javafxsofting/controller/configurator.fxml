@@ -2,7 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
-<?import it.prova.javafxsofting.component.ProfileBox?>
+<?import it.prova.javafxsofting.component.Header?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
@@ -14,47 +14,7 @@
     <children>
         <VBox prefHeight="800.0" prefWidth="1200.0">
             <children>
-                <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;">
-                    <children>
-                        <VBox fx:id="homeBtn" alignment="CENTER" minHeight="-Infinity"
-                              minWidth="-Infinity" onMouseClicked="#switchHome" prefWidth="100.0"
-                              styleClass="text-header">
-                            <children>
-                                <Text fx:id="labelHome" strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="Home" textAlignment="CENTER"/>
-                            </children>
-                        </VBox>
-                        <VBox fx:id="changeModelBtn" alignment="CENTER"
-                              onMouseClicked="#switchModelChange" prefWidth="150.0"
-                              styleClass="text-header">
-                            <children>
-                                <Text fx:id="labelCambiaModello" strokeType="OUTSIDE"
-                                      strokeWidth="0.0" text="Cambia Modello"/>
-                            </children>
-                        </VBox>
-                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                        <VBox alignment="CENTER" prefWidth="200.0">
-                            <children>
-                                <Text fx:id="fieldPrezzo" strokeType="OUTSIDE" strokeWidth="0.0"
-                                      text="Prezzo"/>
-                                <Text fx:id="fieldPrezzoValue" strokeType="OUTSIDE"
-                                      strokeWidth="0.0" text="100000 €">
-                                    <font>
-                                        <Font name="System Bold" size="20"/>
-                                    </font>
-                                    <font>
-                                        <Font name="System Bold" size="20.0"/>
-                                    </font>
-                                </Text>
-                            </children>
-                        </VBox>
-                        <ProfileBox fx:id="account" prefWidth="50.0">
-                            <HBox.margin>
-                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
-                            </HBox.margin>
-                        </ProfileBox>
-                    </children>
-                </HBox>
+                <Header fx:id="header"/>
                 <HBox fx:id="context" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <children>
                         <StackPane fx:id="modelVisualize" prefHeight="150.0" prefWidth="200.0"

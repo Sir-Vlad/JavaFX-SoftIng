@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="50.0" maxWidth="1200.0"
+         prefHeight="800.0"
+         prefWidth="1200.0" stylesheets="@../css/header.css"
+         type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/21">
+    <children>
+        <GridPane fx:id="gridPane" HBox.hgrow="SOMETIMES">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+        </GridPane>
+        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+    </children>
+</fx:root>

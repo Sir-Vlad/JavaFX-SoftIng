@@ -1,6 +1,7 @@
 package it.prova.javafxsofting.controller;
 
 import it.prova.javafxsofting.*;
+import it.prova.javafxsofting.component.Header;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -9,21 +10,23 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 public class HomeController implements Initializable {
+  public Header header;
   @FXML private VBox wrapperNuovo;
   @FXML private VBox wrapperUsato;
   @FXML private VBox wrapperRoot;
 
   @Override
-  public void initialize(URL location, ResourceBundle resources) {}
+  public void initialize(URL location, ResourceBundle resources) {
+    header.addTab(
+        "Concessionari",
+        event -> {
+          NotImplemented.notImplemented();
+          // ScreenController.activate("concessionari");
+        });
+  }
 
   public void switchNuovo(MouseEvent mouseEvent) {
     ScreenController.activate("scegliModello");
-    mouseEvent.consume();
-  }
-
-  public void switchConcessionari(MouseEvent mouseEvent) {
-    NotImplemented.notImplemented();
-    //    ScreenController.activate("concessionari");
     mouseEvent.consume();
   }
 

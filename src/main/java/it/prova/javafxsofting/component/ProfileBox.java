@@ -34,6 +34,26 @@ public class ProfileBox extends VBox implements Initializable {
     }
   }
 
+  private static @NotNull MenuItem getProfile() {
+    MenuItem profile = new MenuItem("Profilo");
+    profile.setId("profile");
+    profile.setOnAction(
+        actionEvent -> {
+          try {
+            ScreenController.addScreen(
+                "profilo",
+                FXMLLoader.load(
+                    Objects.requireNonNull(
+                        App.class.getResource("controller/profilo_utente.fxml"))));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+          ScreenController.activate("profilo");
+          actionEvent.consume();
+        });
+    return profile;
+  }
+
   public void setImage(String path) {
     immagine.setStyle("-fx-background-image: url(" + path + ")");
   }
@@ -75,22 +95,7 @@ public class ProfileBox extends VBox implements Initializable {
           });
       contextMenu.getItems().add(signIn);
     } else {
-      MenuItem profile = new MenuItem("Profilo");
-      profile.setId("profile");
-      profile.setOnAction(
-          actionEvent -> {
-            try {
-              ScreenController.addScreen(
-                  "profilo",
-                  FXMLLoader.load(
-                      Objects.requireNonNull(
-                          App.class.getResource("controller/profilo_utente.fxml"))));
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
-            ScreenController.activate("profilo");
-            actionEvent.consume();
-          });
+      MenuItem profile = getProfile();
 
       MenuItem signOut = new MenuItem("Sign Out");
       signOut.setId("signOut");
