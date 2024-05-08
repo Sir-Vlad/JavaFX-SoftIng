@@ -4,7 +4,9 @@ import io.github.palexdev.materialfx.controls.*;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.ModelloAuto;
 import it.prova.javafxsofting.NotImplemented;
+import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.component.ProfileBox;
+import java.awt.*;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -13,7 +15,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +32,7 @@ import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
+  @FXML private Header header;
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
   @FXML private MFXScrollPane scrollPane;
@@ -38,8 +43,6 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text labelHome;
   @FXML private Text labelCambiaModello;
   @FXML private Text fieldModello;
-  @FXML private Text fieldPrezzo;
-  @FXML private Text fieldPrezzoValue;
   @FXML private Text fieldMarca;
   @FXML private Text fieldModelloV;
   @FXML private Text fieldAlimentazione;
@@ -63,8 +66,20 @@ public class ConfiguratorController implements Initializable {
       return;
     }
 
-    DecimalFormat decimalFormat = new DecimalFormat("###,###");
-    fieldPrezzoValue.setText(decimalFormat.format(auto.getPrezzoBase()) + " €");
+    header.addTab(
+        "Home",
+        event -> {
+          ScreenController.removeScreen("config");
+          ScreenController.activate("home");
+        });
+    header.addTab(
+        "Cambia Modello",
+        event -> {
+          ScreenController.removeScreen("config");
+          ScreenController.activate("scegliModello");
+        });
+
+    createBoxPrezzo(auto);
 
     fieldModelloV.setText(auto.getNome());
     fieldMarca.setText(auto.getMarca());
@@ -101,23 +116,28 @@ public class ConfiguratorController implements Initializable {
   }
 
   @FXML
-  public void switchHome(@NotNull MouseEvent mouseEvent) {
-    ScreenController.removeScreen("config");
-    ScreenController.activate("home");
-    mouseEvent.consume();
-  }
-
-  @FXML
-  public void switchModelChange(@NotNull MouseEvent mouseEvent) {
-    ScreenController.removeScreen("config");
-    ScreenController.activate("scegliModello");
-    mouseEvent.consume();
-  }
-
-  @FXML
   public void salvaConfigurazione(@NotNull ActionEvent actionEvent) {
     NotImplemented.notImplemented();
     actionEvent.consume();
+  }
+
+  private void createBoxPrezzo(ModelloAuto auto) {
+    VBox vbox = new VBox();
+    vbox.setPrefWidth(200);
+    vbox.setAlignment(Pos.CENTER);
+
+    Text fieldPrezzo = new Text("Prezzo");
+    Text fieldPrezzoValue = new Text();
+    fieldPrezzoValue.setId("fieldPrezzoValue");
+    fieldPrezzoValue.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
+
+    vbox.getChildren().addAll(fieldPrezzo, fieldPrezzoValue);
+
+    int index = header.getChildren().size() - 1;
+    header.getChildren().add(index, vbox);
+
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+    fieldPrezzoValue.setText(decimalFormat.format(auto.getPrezzoBase()) + " €");
   }
 
   private void createToggleButton() {

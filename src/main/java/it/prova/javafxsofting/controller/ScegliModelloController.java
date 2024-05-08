@@ -3,7 +3,7 @@ package it.prova.javafxsofting.controller;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import it.prova.javafxsofting.ModelloAuto;
 import it.prova.javafxsofting.component.CardAuto;
-import it.prova.javafxsofting.component.ProfileBox;
+import it.prova.javafxsofting.component.Header;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,11 +21,12 @@ public class ScegliModelloController implements Initializable {
   public AnchorPane root;
   public MFXScrollPane scrollPane;
   public FlowPane flowPane;
-  public ProfileBox profile;
+  public Header header;
 
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    header.addTab("Home", event -> ScreenController.activate("home"));
     ArrayList<ModelloAuto> modelliAuto = new ArrayList<>();
     Random random = new Random();
     for (int i = 0; i < 20; i++) {

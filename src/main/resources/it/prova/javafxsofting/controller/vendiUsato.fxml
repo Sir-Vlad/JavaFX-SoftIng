@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.*?>
-<?import it.prova.javafxsofting.component.ProfileBox?>
+<?import it.prova.javafxsofting.component.Header?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -14,25 +14,7 @@
         <VBox layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;"
-                      stylesheets="@../css/header.css">
-                    <children>
-                        <VBox fx:id="homeBtn" alignment="CENTER" minHeight="-Infinity"
-                              minWidth="-Infinity" onMouseClicked="#switchHome" prefWidth="150.0"
-                              styleClass="text-header">
-                            <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Home"
-                                      textAlignment="CENTER"/>
-                            </children>
-                        </VBox>
-                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                        <ProfileBox fx:id="profile" prefWidth="50.0">
-                            <HBox.margin>
-                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
-                            </HBox.margin>
-                        </ProfileBox>
-                    </children>
-                </HBox>
+                <Header fx:id="header"/>
                 <HBox VBox.vgrow="ALWAYS">
                     <children>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
