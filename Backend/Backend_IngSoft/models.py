@@ -27,7 +27,7 @@ class ModelloAuto(models.Model):
 
     nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
     marca = models.CharField(max_length=20, null=False, blank=False,
-        choices=MarcaAuto)  # lista di valori noti
+                             choices=MarcaAuto)  # lista di valori noti
     # descrizione = models.TextField()
     prezzo_base = models.IntegerField(null=False, blank=False)
     # dati auto
@@ -76,11 +76,11 @@ class Configurazione(models.Model):
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
     # required
     colore = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False,
-        related_name='colore')
+                               related_name='colore')
     cambio = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False,
-        related_name='cambio')
+                               related_name='cambio')
     motorizzazione = models.ForeignKey(Optional, on_delete=CASCADE, null=False,
-        blank=False, related_name='motorizzazione')
+                                       blank=False, related_name='motorizzazione')
     # optional
     dim_cerchi = models.ForeignKey(Optional, on_delete=CASCADE, related_name='dim_cer')
     stereo = models.ForeignKey(Optional, on_delete=CASCADE, related_name='stereo')
@@ -97,7 +97,7 @@ class Configurazione(models.Model):
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     configurazione = models.ForeignKey(Configurazione, on_delete=CASCADE, null=False,
-        blank=False)
+                                       blank=False)
     data_emissione = models.DateField(null=False, blank=False)
     sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
     # detrazione = models.ManyToManyField(Detrazione, on_delete=CASCADE)
