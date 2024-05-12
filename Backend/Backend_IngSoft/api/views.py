@@ -1,10 +1,11 @@
+from django.http import HttpResponseNotFound
 from rest_framework import status
-from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Backend_IngSoft.api.serializers import UtenteSerializer
 from Backend_IngSoft.models import Utente
+from Backend_IngSoft.util.error import raises
 
 
 class UtenteListCreateAPIView(APIView):
@@ -22,17 +23,24 @@ class UtenteListCreateAPIView(APIView):
 
 
 class UtenteDetailAPIView(APIView):
-    def get_object(self, pk):
-        utente = get_object_or_404(Utente, pk=pk)
-        return utente
+    @raises(Utente.DoesNotExist)
+    def get_object(self, email):
+        return Utente.objects.get(email=email)
 
-    def get(self, request, pk):
-        utente = self.get_object(pk)
-        serializer = UtenteSerializer(utente)
-        return Response(serializer.data)
+    def get(self, request, email):
+        try:
+            utente = self.get_object(email)
+            serializer = UtenteSerializer(utente)
+            return Response(serializer.data)
+        except Utente.DoesNotExist:
+            return HttpResponseNotFound("Utente non esiste")
 
     def put(self, request, pk):
-        utente = self.get_object(pk)
+        try:
+            utente = self.get_object(pk)
+        except Utente.DoesNotExist:
+            return HttpResponseNotFound("Utente non esiste")
+
         serializer = UtenteSerializer(utente, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -40,7 +48,10 @@ class UtenteDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        utente = self.get_object(pk)
+        try:
+            utente = self.get_object(pk)
+        except Utente.DoesNotExist:
+            return HttpResponseNotFound("Utente non esiste")
+
         utente.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-

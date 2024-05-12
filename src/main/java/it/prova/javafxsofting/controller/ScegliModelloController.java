@@ -1,9 +1,9 @@
 package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import it.prova.javafxsofting.ModelloAuto;
 import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.models.ModelloAuto;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,9 +34,8 @@ public class ScegliModelloController implements Initializable {
           new ModelloAuto(
               i,
               "Skyline R-34 GTT - " + i,
-              "Nissan",
+              "nissan",
               random.nextInt(80000, 150000),
-              "",
               1360,
               4600,
               1550,

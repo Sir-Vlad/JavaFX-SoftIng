@@ -2,11 +2,10 @@ package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.*;
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.ModelloAuto;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.component.ProfileBox;
-import java.awt.*;
+import it.prova.javafxsofting.models.ModelloAuto;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class ConfiguratorController implements Initializable {
     createBoxPrezzo(auto);
 
     fieldModelloV.setText(auto.getNome());
-    fieldMarca.setText(auto.getMarca());
+    fieldMarca.setText(String.valueOf(auto.getMarca()));
     fieldModello.setText(auto.getNome());
     fieldAltezza.setText(auto.getAltezza() + " mm");
     fieldLarghezza.setText(auto.getLarghezza() + " mm");

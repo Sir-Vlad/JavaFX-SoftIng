@@ -8,7 +8,8 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import io.github.palexdev.mfxcore.utils.converters.DateStringConverter;
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.Utente;
+import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.models.Utente;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -126,7 +127,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     }
 
     Utente newUtente =
-        new Utente(
+        Utente.getInstance(
             capitalize(nomeField.getText().trim()),
             capitalize(cognomeField.getText().trim()),
             emailField.getText().trim(),
@@ -135,9 +136,15 @@ public class RegistrazioneController extends ValidateForm implements Initializab
             dataScadenzaField.getValue(),
             cvcField.getText());
 
-    App.utente = newUtente;
-
     // todo: aggiungerlo nel db se ritorna un errore mostrare un errore se no redirect alla home
+    try {
+      Connection.sendDataToBacked(newUtente, Connection.porta, "utenti/");
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      return;
+    }
+
+    App.utente = newUtente;
 
     App.log.info(newUtente.toString());
 

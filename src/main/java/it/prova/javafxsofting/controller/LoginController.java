@@ -6,10 +6,10 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.NotImplemented;
-import it.prova.javafxsofting.Utente;
+import it.prova.javafxsofting.models.Utente;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -73,29 +73,28 @@ public class LoginController extends ValidateForm implements Initializable {
       return;
     }
 
-    // todo: check nel db
-
-    App.utente = new Utente("Mattia", "Frigiola", "root", "root", "", LocalDate.now(), "123");
+    // check nel db
+    try {
+      App.utente = Connection.getData("utente/" + emailField.getText(), Utente.class);
+    } catch (Exception e) {
+      Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
+      alert.showAndWait();
+      clearField();
+      return;
+    }
 
     if (!emailField.getText().equals(App.utente.getEmail())
         || !passwordField.getText().equals(App.utente.getPassword())) {
       Alert alert = new Alert(AlertType.ERROR, "Email o password errati", ButtonType.OK);
       alert.showAndWait();
-
-      // pulisco i campu
-      emailField.setText("");
-      passwordField.setText("");
+      clearField();
       return;
     }
 
     ScreenController.addScreen(
         "profilo",
         FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profilo_utente.fxml"))));
-
-    // pulisco i campu
-    emailField.setText("");
-    passwordField.setText("");
-
+    clearField();
     // redirect alla pagina del profilo
     ScreenController.activate("home");
   }
@@ -116,6 +115,11 @@ public class LoginController extends ValidateForm implements Initializable {
       super.showError(constraints, field, label);
       new animatefx.animation.Shake(field).play();
     }
+  }
+
+  private void clearField() {
+    emailField.setText("");
+    passwordField.setText("");
   }
 
   private void setValidateEmail() {

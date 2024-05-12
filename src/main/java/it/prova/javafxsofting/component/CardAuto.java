@@ -1,9 +1,9 @@
 package it.prova.javafxsofting.component;
 
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.ModelloAuto;
 import it.prova.javafxsofting.controller.ScegliModelloController;
 import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.models.ModelloAuto;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;

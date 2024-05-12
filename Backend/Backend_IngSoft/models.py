@@ -168,6 +168,7 @@ class Ritiro(models.Model):
 
 
 class AutoUsata(models.Model):
+    # ? utente non dovrebbe essere qui
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.CharField(max_length=20, null=False, blank=False)
     marca = models.CharField(max_length=20, null=False, blank=False)

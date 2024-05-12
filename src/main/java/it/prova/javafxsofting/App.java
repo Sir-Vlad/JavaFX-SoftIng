@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.models.Utente;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -27,7 +28,6 @@ public class App extends javafx.application.Application {
         .forEach(arg -> Connection.setPorta(Integer.parseInt(arg.split("=")[1])));
 
     log.info("Porta: " + Connection.porta);
-    //    System.out.println("Porta: " + Connection.porta);
 
     launch();
   }
