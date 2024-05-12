@@ -1,11 +1,9 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.models;
 
 import java.time.LocalDate;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class Preventivo {
   private int id;
   private int id_utente;

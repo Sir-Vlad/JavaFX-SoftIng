@@ -23,4 +23,10 @@ module it.prova.javafxsofting {
 
   opens it.prova.javafxsofting.controller to
       javafx.fxml;
+
+  exports it.prova.javafxsofting.models;
+
+  opens it.prova.javafxsofting.models to
+      javafx.fxml,
+      com.google.gson;
 }
