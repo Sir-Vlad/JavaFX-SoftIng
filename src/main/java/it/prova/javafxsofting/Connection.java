@@ -2,8 +2,11 @@ package it.prova.javafxsofting;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
+import it.prova.javafxsofting.errori.ErrorResponse;
+import it.prova.javafxsofting.serializzatori.ErrorResponseDeserializer;
+import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
+import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import java.io.*;
-import java.lang.reflect.Modifier;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -36,14 +39,11 @@ public class Connection {
 
     HttpURLConnection conn = getHttpURLConnection(sub_directory, methods.POST);
 
-    // Aggiunge la possibilità di serializzare anche i campi statici
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.excludeFieldsWithModifiers(Modifier.TRANSIENT);
-
     // Dati da inviare al backend in formato JSON
     Gson gson =
         new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
+            .registerTypeAdapter(ErrorResponse.class, new ErrorResponseDeserializer())
             .setDateFormat(DateFormat.LONG)
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setExclusionStrategies(
@@ -71,26 +71,23 @@ public class Connection {
     }
 
     // riceve la risposta dal backed
-    // fixme: nel caso venga ritornato un errore non riesco a recuperare il suo messaggio
-    StringBuilder response = new StringBuilder();
-    try (BufferedReader br =
-        new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-      String responseLine;
-      while ((responseLine = br.readLine()) != null) {
-        response.append(responseLine.trim());
+    int responseCode = conn.getResponseCode();
+    System.out.println(responseCode);
+    if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
+      StringBuilder response = new StringBuilder();
+      try (BufferedReader br =
+          new BufferedReader(
+              new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+        String responseLine;
+        while ((responseLine = br.readLine()) != null) {
+          response.append(responseLine.trim());
+        }
+        System.out.println("Risposta: " + response); // Stampare la risposta dal backend
+
+        // fixme: non riesce a serializzare l'errore
+        ErrorResponse errorResponse = gson.fromJson(response.toString(), ErrorResponse.class);
+        throw new Exception(errorResponse.getMessage());
       }
-      System.out.println("Risposta: " + response); // Stampare la risposta dal backend
-    }
-    try {
-      BufferedReader br =
-          new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8));
-      String responseLine;
-      while ((responseLine = br.readLine()) != null) {
-        response.append(responseLine);
-      }
-      System.out.println("Risposta: " + response); // Stampare la risposta dal backend
-    } catch (IOException e) {
-      throw new RuntimeException(e);
     }
 
     conn.disconnect();

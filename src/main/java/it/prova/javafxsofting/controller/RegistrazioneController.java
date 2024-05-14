@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -140,7 +142,8 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     try {
       Connection.sendDataToBacked(newUtente, Connection.porta, "utenti/");
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+      alert.showAndWait();
       return;
     }
 

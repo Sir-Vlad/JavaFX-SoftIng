@@ -1,11 +1,10 @@
+from Backend_IngSoft.api.serializers import UtenteSerializer
+from Backend_IngSoft.models import Utente
+from Backend_IngSoft.util.error import raises
 from django.http import HttpResponseNotFound
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from Backend_IngSoft.api.serializers import UtenteSerializer
-from Backend_IngSoft.models import Utente
-from Backend_IngSoft.util.error import raises
 
 
 class UtenteListCreateAPIView(APIView):
@@ -19,7 +18,10 @@ class UtenteListCreateAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        error = {'message': [i for e in serializer.errors.values() for i in e]}
+        print(error)
+
+        return Response(error, status=status.HTTP_409_CONFLICT)
 
 
 class UtenteDetailAPIView(APIView):
