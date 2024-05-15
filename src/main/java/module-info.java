@@ -6,8 +6,6 @@ module it.prova.javafxsofting {
   requires MaterialFX;
   requires static lombok;
   requires commons.validator;
-  requires AnimateFX;
-  requires javafx.web;
   requires java.logging;
 
   opens it.prova.javafxsofting to
