@@ -140,7 +140,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
     // todo: aggiungerlo nel db se ritorna un errore mostrare un errore se no redirect alla home
     try {
-      Connection.sendDataToBacked(newUtente, Connection.porta, "utenti/");
+      Connection.postDataToBacked(newUtente, "utenti/");
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage());
       alert.showAndWait();

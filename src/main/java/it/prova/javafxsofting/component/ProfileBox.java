@@ -9,7 +9,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
+import javafx.geometry.Bounds;
+import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -22,6 +23,7 @@ public class ProfileBox extends VBox implements Initializable {
   @FXML Pane immagine;
   @FXML VBox root;
   private boolean isMenuAccountOpen = false;
+  private ContextMenu contextMenuAccount;
 
   public ProfileBox() {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("profileBox.fxml"));
@@ -34,7 +36,7 @@ public class ProfileBox extends VBox implements Initializable {
     }
   }
 
-  private static @NotNull MenuItem getProfile() {
+  private @NotNull MenuItem getProfile() {
     MenuItem profile = new MenuItem("Profilo");
     profile.setId("profile");
     profile.setOnAction(
@@ -62,12 +64,20 @@ public class ProfileBox extends VBox implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     root.setOnMouseClicked(
         mouseEvent -> {
-          ContextMenu contextMenuAccount = contextMenuAccount();
-          Point2D point = root.localToScreen(Point2D.ZERO);
-          // posiziono la finestra rispetto al bottone
-          double x = point.getX() - 25;
-          double y = point.getY() + 50;
-          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen, x, y);
+          contextMenuAccount = contextMenuAccount();
+          contextMenuAccount.setOnShown(
+              event -> {
+                Bounds bounds = root.localToScreen(root.getBoundsInLocal());
+                double buttonBottomRightX = bounds.getMinX() + bounds.getWidth();
+                double buttonBottomRightY = bounds.getMinY() + bounds.getHeight();
+
+                // Posizionamento del contextMenu in modo che l'angolo in alto a destra si allinei
+                // con l'angolo in basso a destra del pulsante
+                contextMenuAccount.setX(buttonBottomRightX - contextMenuAccount.getWidth() + 8);
+                contextMenuAccount.setY(buttonBottomRightY);
+              });
+
+          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen, 0, 0);
           isMenuAccountOpen = !isMenuAccountOpen;
         });
   }
@@ -77,7 +87,7 @@ public class ProfileBox extends VBox implements Initializable {
     if (open) {
       menu.hide();
     } else {
-      menu.show(root, xPos, yPos);
+      menu.show(root, Side.BOTTOM, xPos, yPos);
     }
     mouseEvent.consume();
   }
@@ -86,26 +96,33 @@ public class ProfileBox extends VBox implements Initializable {
     ContextMenu contextMenu = new ContextMenu();
 
     if (App.utente == null) {
-      MenuItem signIn = new MenuItem("Sign In");
-      signIn.setId("signIn");
-      signIn.setOnAction(
+      MenuItem login = new MenuItem("Login");
+      login.setId("login");
+      login.setOnAction(
           actionEvent -> {
             ScreenController.activate("login");
             actionEvent.consume();
           });
-      contextMenu.getItems().add(signIn);
+      MenuItem registrazione = new MenuItem("Registrazione");
+      registrazione.setId("registrazione");
+      registrazione.setOnAction(
+          actionEvent -> {
+            ScreenController.activate("registrazione");
+            actionEvent.consume();
+          });
+      contextMenu.getItems().addAll(login, registrazione);
     } else {
       MenuItem profile = getProfile();
 
-      MenuItem signOut = new MenuItem("Sign Out");
-      signOut.setId("signOut");
-      signOut.setOnAction(
+      MenuItem logout = new MenuItem("Logout");
+      logout.setId("logout");
+      logout.setOnAction(
           actionEvent -> {
             App.utente = null;
             ScreenController.activate("home");
             actionEvent.consume();
           });
-      contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), signOut);
+      contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), logout);
     }
 
     return contextMenu;

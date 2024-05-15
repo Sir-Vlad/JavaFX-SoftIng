@@ -18,26 +18,85 @@ public class Connection {
 
   public static int porta = -1;
 
+  private Connection() {
+    throw new UnsupportedOperationException("This class is not supported");
+  }
+
   static void setPorta(int porta) {
     Connection.porta = porta;
   }
 
   /**
+   * @param sub_directory sottodomio dove fare la get
+   * @param objClass classe della risposta della get per eseguire la deserializzazione
+   * @return json object deserializzato
+   * @param <T> tipo dell'oggetto deserializzato
+   * @throws Exception errore nella connessione oppure nella risposta della get
+   */
+  public static <T extends Serializable> @Nullable T getDataToBackend(
+      String sub_directory, Class<T> objClass) throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.GET);
+    int statusCode = conn.getResponseCode();
+    StringBuilder content = new StringBuilder();
+
+    System.out.println(statusCode);
+
+    if (statusCode == 200) {
+      InputStream inputStream = conn.getInputStream();
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      String line;
+      while ((line = bufferedReader.readLine()) != null) {
+        content.append(line);
+      }
+
+      Gson gson =
+          new GsonBuilder()
+              .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
+              .setDateFormat(DateFormat.LONG)
+              .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+              .setExclusionStrategies(
+                  new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                      return f.getAnnotation(Expose.class) != null
+                          && !f.getAnnotation(Expose.class).deserialize();
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                      return false;
+                    }
+                  })
+              .create();
+
+      return gson.fromJson(content.toString(), objClass);
+    } else if (statusCode == 404) {
+      InputStream inputStream = conn.getErrorStream();
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      String line;
+      while ((line = bufferedReader.readLine()) != null) {
+        content.append(line);
+      }
+      throw new Exception(content.toString());
+    }
+    conn.disconnect();
+    return null;
+  }
+
+  /**
    * Invia i dati al backend
    *
-   * @param data dati da inviare
-   * @param porta porta dove aprire la connessione
-   * @param sub_directory url dove inviare i dati
    * @param <T> tipo generico che deve essere serializzatile
-   * @return la risposta del backend
+   * @param data dati da inviare
+   * @param sub_directory url dove inviare i dati
    */
-  public static <T extends Serializable> void sendDataToBacked(
-      T data, int porta, String sub_directory) throws Exception {
+  public static <T extends Serializable> void postDataToBacked(T data, String sub_directory)
+      throws Exception {
     if (Connection.porta == -1) {
-      Connection.porta = porta;
+      throw new RuntimeException("Connessione non disponibile");
     }
 
-    HttpURLConnection conn = getHttpURLConnection(sub_directory, methods.POST);
+    HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.POST);
 
     // Dati da inviare al backend in formato JSON
     Gson gson =
@@ -101,7 +160,7 @@ public class Connection {
    * @return la connessione
    */
   @NotNull
-  private static HttpURLConnection getHttpURLConnection(String sub_directory, methods methods) {
+  private static HttpURLConnection getHttpURLConnection(String sub_directory, Methods methods) {
     StringBuilder subdirectory = sub_directory == null ? null : new StringBuilder(sub_directory);
     String url_path =
         String.format(
@@ -123,57 +182,7 @@ public class Connection {
     return conn;
   }
 
-  public static <T extends Serializable> @Nullable T getData(String path, Class<T> objClass)
-      throws Exception {
-    HttpURLConnection conn = getHttpURLConnection(path, methods.GET);
-    int statusCode = conn.getResponseCode();
-    StringBuilder content = new StringBuilder();
-
-    System.out.println(statusCode);
-
-    if (statusCode == 200) {
-      InputStream inputStream = conn.getInputStream();
-      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-      String line;
-      while ((line = bufferedReader.readLine()) != null) {
-        content.append(line);
-      }
-
-      Gson gson =
-          new GsonBuilder()
-              .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
-              .setDateFormat(DateFormat.LONG)
-              .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-              .setExclusionStrategies(
-                  new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f) {
-                      return f.getAnnotation(Expose.class) != null
-                          && !f.getAnnotation(Expose.class).deserialize();
-                    }
-
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                      return false;
-                    }
-                  })
-              .create();
-
-      return gson.fromJson(content.toString(), objClass);
-    } else if (statusCode == 404) {
-      InputStream inputStream = conn.getErrorStream();
-      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-      String line;
-      while ((line = bufferedReader.readLine()) != null) {
-        content.append(line);
-      }
-      throw new Exception(content.toString());
-    }
-    conn.disconnect();
-    return null;
-  }
-
-  enum methods {
+  enum Methods {
     GET,
     POST,
     DELETE,

@@ -29,3 +29,12 @@ generare un token in python che mi passo tramite le richieste.
 - https://dev.to/noelopez/http-client-api-in-java-part-2-75e
 
 # Aggiungere i font nel progetto
+
+# Response Json multi object
+
+```java
+Gson gson = new Gson();
+String json = "..."; // your JSON string
+Type type = new TypeToken<List<User>>() {}.getType();
+List<User> users = gson.fromJson(json, type);
+```

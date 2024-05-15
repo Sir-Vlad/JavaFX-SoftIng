@@ -75,7 +75,7 @@ public class LoginController extends ValidateForm implements Initializable {
 
     // check nel db
     try {
-      App.utente = Connection.getData("utente/" + emailField.getText(), Utente.class);
+      App.utente = Connection.getDataToBackend("utente/" + emailField.getText(), Utente.class);
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
       alert.showAndWait();
@@ -113,7 +113,6 @@ public class LoginController extends ValidateForm implements Initializable {
   public void showError(List<Constraint> constraints, MFXTextField field, Label label) {
     if (!constraints.isEmpty()) {
       super.showError(constraints, field, label);
-      new animatefx.animation.Shake(field).play();
     }
   }
 
