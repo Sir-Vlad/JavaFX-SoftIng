@@ -69,6 +69,7 @@ class Optional(models.Model):
     prezzo = models.IntegerField(blank=False)
 
     class Meta:
+        unique_together = ('nome', 'descrizione')
         verbose_name_plural = "Optional"
 
     def __str__(self):

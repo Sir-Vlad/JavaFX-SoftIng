@@ -1,574 +1,734 @@
 [
   {
     "model": "Backend_IngSoft.utente",
-    "pk": 41,
+    "pk": 1,
     "fields": {
-      "email": "Victoria.Feil@gmail.com",
-      "password": "BYaXYjlks1mqFNq",
-      "nome": "Paige",
-      "cognome": "Oberbrunner",
-      "numero_carta": "5893-1400-5071-5294",
-      "cvc": "428",
-      "data_scadenza": "2022-01-06"
+      "email": "Kenna_Lesch98@example.com",
+      "password": "password123",
+      "nome": "Kiana",
+      "cognome": "Wilderman",
+      "numero_carta": "6762-4958-6396-8506",
+      "cvc": "008",
+      "data_scadenza": "2021-06-03"
     }
   },
   {
     "model": "Backend_IngSoft.utente",
-    "pk": 92,
+    "pk": 2,
     "fields": {
-      "email": "Hilton99@example.com",
-      "password": "rfwPHlbqWw7fUNi",
-      "nome": "Randal",
-      "cognome": "Larson",
-      "numero_carta": "6771-8967-5829-2036",
-      "cvc": "155",
-      "data_scadenza": "2022-09-27"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 96,
-    "fields": {
-      "email": "Shanie_Schaefer@example.com",
-      "password": "TLBzxmRAPyfph7c",
-      "nome": "Summer",
-      "cognome": "Schamberger",
-      "numero_carta": "3529-4435-0453-9428",
-      "cvc": "852",
-      "data_scadenza": "2024-03-01"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 95,
-    "fields": {
-      "email": "Gladys_Gislason@example.com",
-      "password": "BVYHFu00EPSv5P5",
-      "nome": "Hazel",
-      "cognome": "Mertz",
-      "numero_carta": "3497-414459-17866",
-      "cvc": "819",
-      "data_scadenza": "2024-02-27"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 31,
-    "fields": {
-      "email": "Bernie73@example.com",
-      "password": "e4XyB91SNoExkEM",
-      "nome": "Garnett",
-      "cognome": "Reichel",
-      "numero_carta": "3528-1783-3811-4680",
-      "cvc": "090",
-      "data_scadenza": "2024-01-19"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 49,
-    "fields": {
-      "email": "Bernie.Hodkiewicz@example.com",
-      "password": "S5HfBAmANfYFWpc",
-      "nome": "Fabian",
-      "cognome": "Shanahan",
-      "numero_carta": "3617-389353-5818",
-      "cvc": "237",
-      "data_scadenza": "2024-01-02"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 22,
-    "fields": {
-      "email": "Rodger.Toy47@gmail.com",
-      "password": "WMjIQTbABp8W3WO",
-      "nome": "Maverick",
-      "cognome": "Johns",
-      "numero_carta": "3767-963930-78380",
-      "cvc": "511",
-      "data_scadenza": "2023-11-23"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 41,
-    "fields": {
-      "email": "Cristian_Carter-Bayer32@gmail.com",
-      "password": "jH3RWqKdPUVCgSY",
-      "nome": "Merritt",
-      "cognome": "Crooks",
-      "numero_carta": "6445-6281-7330-3443-7635",
-      "cvc": "036",
-      "data_scadenza": "2021-08-22"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 75,
-    "fields": {
-      "email": "Bridgette86@gmail.com",
-      "password": "TPDr2iG1Izug4O0",
-      "nome": "Tod",
-      "cognome": "Nikolaus",
-      "numero_carta": "3536-5921-2333-5450",
-      "cvc": "459",
-      "data_scadenza": "2020-08-15"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 91,
-    "fields": {
-      "email": "Wava.Davis@example.com",
-      "password": "7_38bjxKlNBCPc3",
-      "nome": "Eliane",
-      "cognome": "Wiza",
-      "numero_carta": "5411-2861-9638-3902",
-      "cvc": "417",
-      "data_scadenza": "2024-03-12"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 47,
-    "fields": {
-      "email": "Destiny_Murazik49@example.com",
-      "password": "D04DCwA1HxgIz7M",
-      "nome": "Everette",
-      "cognome": "Jerde",
-      "numero_carta": "6522-8228-6934-3726",
-      "cvc": "890",
-      "data_scadenza": "2021-04-16"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 71,
-    "fields": {
-      "email": "Carroll21@gmail.com",
-      "password": "77v36QeJrEVVlY2",
-      "nome": "Gregorio",
-      "cognome": "Kassulke",
-      "numero_carta": "6504-4219-8375-5402",
-      "cvc": "678",
-      "data_scadenza": "2020-06-06"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 9,
-    "fields": {
-      "email": "Moshe71@example.com",
-      "password": "J8XXuSGSp68tPOd",
-      "nome": "Rosalyn",
-      "cognome": "Mante",
-      "numero_carta": "6771-8921-1197-7850",
-      "cvc": "854",
-      "data_scadenza": "2021-12-12"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 89,
-    "fields": {
-      "email": "Mohamed29@gmail.com",
-      "password": "GkmAjs2MHN2nP_F",
-      "nome": "Destiney",
-      "cognome": "Ullrich",
-      "numero_carta": "5020-3044-2879-9697",
-      "cvc": "367",
-      "data_scadenza": "2024-05-04"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 28,
-    "fields": {
-      "email": "Cruz_Schmitt4@gmail.com",
-      "password": "Wkr5Q6ZWEMbUs4V",
-      "nome": "Kelsi",
-      "cognome": "Kautzer",
-      "numero_carta": "6304-1243-3811-4778",
-      "cvc": "547",
-      "data_scadenza": "2023-08-18"
+      "email": "Cordell_Wuckert49@gmail.com",
+      "password": "password123",
+      "nome": "Alfreda",
+      "cognome": "Spencer",
+      "numero_carta": "50187727632453997",
+      "cvc": "468",
+      "data_scadenza": "2020-03-18"
     }
   },
   {
     "model": "Backend_IngSoft.utente",
     "pk": 3,
     "fields": {
-      "email": "Imelda67@example.com",
-      "password": "wh2wOfGELbl_prR",
-      "nome": "Brenna",
-      "cognome": "Parker-Heathcote",
-      "numero_carta": "6538-6219-1644-9993-4939",
-      "cvc": "903",
-      "data_scadenza": "2021-11-30"
+      "email": "Ebony.Emard@gmail.com",
+      "password": "password123",
+      "nome": "Abbie",
+      "cognome": "Sporer",
+      "numero_carta": "5463-7537-1770-0499",
+      "cvc": "699",
+      "data_scadenza": "2023-07-29"
     }
   },
   {
     "model": "Backend_IngSoft.utente",
-    "pk": 57,
+    "pk": 4,
     "fields": {
-      "email": "Kayleigh.Schultz@gmail.com",
-      "password": "MhY_hv37C0mmcuL",
-      "nome": "Ryder",
-      "cognome": "Bruen",
-      "numero_carta": "6440-7957-9716-3284",
-      "cvc": "293",
-      "data_scadenza": "2021-01-22"
+      "email": "Eloise75@example.com",
+      "password": "password123",
+      "nome": "Berneice",
+      "cognome": "White",
+      "numero_carta": "3531-9262-7119-3839",
+      "cvc": "420",
+      "data_scadenza": "2023-05-14"
     }
   },
   {
     "model": "Backend_IngSoft.utente",
-    "pk": 28,
+    "pk": 5,
     "fields": {
-      "email": "Kailyn10@example.com",
-      "password": "Z3tfs_aEfGxWyP_",
-      "nome": "Watson",
-      "cognome": "Grant",
-      "numero_carta": "3529-0325-0346-9297",
-      "cvc": "424",
-      "data_scadenza": "2020-04-13"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 70,
-    "fields": {
-      "email": "Freeman28@example.com",
-      "password": "g5GqaSEQVeiKiSQ",
-      "nome": "Simeon",
-      "cognome": "Jacobson",
-      "numero_carta": "6011-6285-1661-9713-3198",
-      "cvc": "378",
-      "data_scadenza": "2024-01-19"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 73,
-    "fields": {
-      "email": "Dannie_Doyle@gmail.com",
-      "password": "alANrQtUe1XVgFo",
-      "nome": "Aileen",
-      "cognome": "Graham",
-      "numero_carta": "3528-0771-5477-3910",
-      "cvc": "813",
-      "data_scadenza": "2022-08-16"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 98,
-    "fields": {
-      "email": "Royal_Keeling38@example.com",
-      "password": "xKjeWn7Q_GOqvmJ",
-      "nome": "Dane",
-      "cognome": "Ratke",
-      "numero_carta": "5385-8368-0105-4314",
-      "cvc": "745",
-      "data_scadenza": "2020-06-08"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 69,
-    "fields": {
-      "email": "Arnoldo55@gmail.com",
-      "password": "Q821P70sBzND_Nw",
-      "nome": "Aliya",
-      "cognome": "Roberts",
-      "numero_carta": "4851-4255-1205-7697",
-      "cvc": "812",
-      "data_scadenza": "2020-06-21"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 23,
-    "fields": {
-      "email": "Lavern.Rutherford57@example.com",
-      "password": "zOTTWDFNVDm6Def",
-      "nome": "Valentin",
-      "cognome": "Kerluke",
-      "numero_carta": "3528-3021-9299-8893",
-      "cvc": "003",
-      "data_scadenza": "2020-05-28"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 64,
-    "fields": {
-      "email": "Destiney.Schaden@gmail.com",
-      "password": "Jfvg76ahxvDwoxF",
-      "nome": "Jaylin",
-      "cognome": "Daugherty",
-      "numero_carta": "4951382977163",
-      "cvc": "611",
-      "data_scadenza": "2020-08-08"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 65,
-    "fields": {
-      "email": "Shania_Brakus86@gmail.com",
-      "password": "pOTj3jqxiJPGKBl",
-      "nome": "Margaret",
-      "cognome": "Kilback-Moore",
-      "numero_carta": "4948256349339",
-      "cvc": "735",
-      "data_scadenza": "2021-09-10"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 75,
-    "fields": {
-      "email": "Green68@gmail.com",
-      "password": "E8eZMeMabsp7c_7",
-      "nome": "Adolfo",
-      "cognome": "Rowe",
-      "numero_carta": "3445-061042-25702",
-      "cvc": "560",
-      "data_scadenza": "2020-06-01"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 77,
-    "fields": {
-      "email": "Florian39@example.com",
-      "password": "nG8Y1QyYxwBHreQ",
-      "nome": "Mackenzie",
-      "cognome": "Funk-Jones",
-      "numero_carta": "4110169745968",
-      "cvc": "880",
-      "data_scadenza": "2021-08-08"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 40,
-    "fields": {
-      "email": "Talon77@gmail.com",
-      "password": "bSAopv0N36HnPOR",
-      "nome": "Carrie",
-      "cognome": "Senger",
-      "numero_carta": "6493-6234-8642-2993-0941",
-      "cvc": "922",
-      "data_scadenza": "2023-02-16"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 71,
-    "fields": {
-      "email": "Ayden72@gmail.com",
-      "password": "2rIHoNek1Td0vdF",
-      "nome": "Robin",
-      "cognome": "Luettgen",
-      "numero_carta": "3491-526744-86781",
-      "cvc": "629",
-      "data_scadenza": "2023-01-09"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 17,
-    "fields": {
-      "email": "Greg9@gmail.com",
-      "password": "KJhs8K4hGhWbCSb",
-      "nome": "Erica",
-      "cognome": "King",
-      "numero_carta": "3529-3944-3854-2048",
-      "cvc": "813",
-      "data_scadenza": "2022-11-15"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 86,
-    "fields": {
-      "email": "Henderson63@example.com",
-      "password": "csz_nphCE36hkjS",
-      "nome": "Blair",
-      "cognome": "Koch-Wyman",
-      "numero_carta": "5020583426333905045",
-      "cvc": "051",
-      "data_scadenza": "2022-11-15"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 47,
-    "fields": {
-      "email": "Darion.Pagac@example.com",
-      "password": "b3RZIL8TkzXYuAY",
-      "nome": "Isabelle",
-      "cognome": "Windler",
-      "numero_carta": "3046-144044-6167",
-      "cvc": "659",
-      "data_scadenza": "2022-02-26"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 88,
-    "fields": {
-      "email": "Dayton.Kub-Hessel@gmail.com",
-      "password": "nWHoPDESGSjO8mt",
-      "nome": "Janis",
-      "cognome": "Swaniawski",
-      "numero_carta": "3647-622324-4914",
-      "cvc": "889",
-      "data_scadenza": "2023-10-06"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 77,
-    "fields": {
-      "email": "Samantha.Johns66@example.com",
-      "password": "JwUUzOg1GBJbl5L",
-      "nome": "Tristian",
-      "cognome": "Ryan",
-      "numero_carta": "6771-8982-2835-9627",
-      "cvc": "814",
-      "data_scadenza": "2023-05-26"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 22,
-    "fields": {
-      "email": "Alfred.Turcotte@example.com",
-      "password": "2_HxEEisbslYFR6",
-      "nome": "Miracle",
-      "cognome": "Boyle",
-      "numero_carta": "4789-5535-5474-0552",
-      "cvc": "736",
-      "data_scadenza": "2020-07-04"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 51,
-    "fields": {
-      "email": "Dennis_Willms@gmail.com",
-      "password": "NFTzj5B_neHCWKM",
-      "nome": "Betsy",
-      "cognome": "Oberbrunner",
-      "numero_carta": "5893-6015-2698-1711",
-      "cvc": "128",
-      "data_scadenza": "2023-01-31"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 16,
-    "fields": {
-      "email": "Nova66@gmail.com",
-      "password": "aYb_haLvFAW8nCf",
-      "nome": "Chadrick",
-      "cognome": "Rippin",
-      "numero_carta": "6762-9642-4846-5835",
-      "cvc": "102",
-      "data_scadenza": "2021-02-19"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 89,
-    "fields": {
-      "email": "Ernestine48@example.com",
-      "password": "u6UANb5cSi0NJW0",
-      "nome": "Jazmin",
-      "cognome": "Pagac",
-      "numero_carta": "3475-918172-96650",
-      "cvc": "389",
-      "data_scadenza": "2020-05-29"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 31,
-    "fields": {
-      "email": "Kianna.Waters49@example.com",
-      "password": "8NYiSYICWeGUrj8",
-      "nome": "Leda",
-      "cognome": "Auer",
-      "numero_carta": "4362-3214-2503-7094",
-      "cvc": "074",
-      "data_scadenza": "2021-09-19"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 85,
-    "fields": {
-      "email": "Vergie_Schinner49@gmail.com",
-      "password": "zvAaj7OeHZCTwqJ",
-      "nome": "Colin",
-      "cognome": "Gleichner",
-      "numero_carta": "6011-8939-9815-3185",
-      "cvc": "366",
-      "data_scadenza": "2023-01-01"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 85,
-    "fields": {
-      "email": "Thurman_Monahan@example.com",
-      "password": "YlGEzxj2zVbqjaq",
-      "nome": "Opal",
-      "cognome": "Homenick",
-      "numero_carta": "6447-2297-2359-8028",
-      "cvc": "931",
-      "data_scadenza": "2022-01-28"
-    }
-  },
-  {
-    "model": "Backend_IngSoft.utente",
-    "pk": 25,
-    "fields": {
-      "email": "Elvie.Gutkowski@example.com",
-      "password": "yJK2nOtsOzzFo2i",
-      "nome": "Santiago",
-      "cognome": "Heller",
-      "numero_carta": "6771-8945-2474-5098",
-      "cvc": "907",
-      "data_scadenza": "2021-12-29"
+      "email": "Shannon33@gmail.com",
+      "password": "password123",
+      "nome": "Bulah",
+      "cognome": "O'Kon",
+      "numero_carta": "3528-7584-9164-9695",
+      "cvc": "339",
+      "data_scadenza": "2020-02-16"
     }
   },
   {
     "model": "Backend_IngSoft.utente",
     "pk": 6,
     "fields": {
-      "email": "Alexandria.Douglas74@example.com",
-      "password": "yiEs3PudS1aZX8m",
-      "nome": "Tate",
-      "cognome": "Thiel",
-      "numero_carta": "4010774284181",
-      "cvc": "637",
-      "data_scadenza": "2023-03-21"
+      "email": "Vergie47@example.com",
+      "password": "password123",
+      "nome": "Duncan",
+      "cognome": "Willms",
+      "numero_carta": "3529-8283-6438-8751",
+      "cvc": "792",
+      "data_scadenza": "2023-07-17"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 7,
+    "fields": {
+      "email": "Carol.Lindgren@example.com",
+      "password": "password123",
+      "nome": "Tania",
+      "cognome": "Tillman",
+      "numero_carta": "3048-713198-4596",
+      "cvc": "890",
+      "data_scadenza": "2024-02-19"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 8,
+    "fields": {
+      "email": "Jewell_Farrell@gmail.com",
+      "password": "password123",
+      "nome": "Everette",
+      "cognome": "Feeney",
+      "numero_carta": "5142-9475-2422-9655",
+      "cvc": "818",
+      "data_scadenza": "2020-10-22"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 9,
+    "fields": {
+      "email": "Benjamin56@example.com",
+      "password": "password123",
+      "nome": "Tito",
+      "cognome": "Spencer",
+      "numero_carta": "4752950537862",
+      "cvc": "431",
+      "data_scadenza": "2021-07-11"
     }
   },
   {
     "model": "Backend_IngSoft.utente",
     "pk": 10,
     "fields": {
-      "email": "Ericka32@example.com",
-      "password": "cjY1HCT60k2AL_G",
-      "nome": "Eldred",
-      "cognome": "Homenick",
-      "numero_carta": "6011-7458-8655-7176",
-      "cvc": "654",
-      "data_scadenza": "2021-02-07"
+      "email": "Leonel_Purdy@example.com",
+      "password": "password123",
+      "nome": "Ramon",
+      "cognome": "Raynor",
+      "numero_carta": "6454-5744-2266-7834",
+      "cvc": "135",
+      "data_scadenza": "2022-01-04"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 1,
+    "fields": {
+      "nome": "Skyline R-34 GTT",
+      "marca": "NISSAN",
+      "altezza": 1360,
+      "lunghezza": 4600,
+      "larghezza": 1785,
+      "peso": 1550,
+      "volume_bagagliaio": 180,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 2,
+    "fields": {
+      "nome": "370Z",
+      "marca": "NISSAN",
+      "altezza": 1318,
+      "lunghezza": 4250,
+      "larghezza": 1845,
+      "peso": 1310,
+      "volume_bagagliaio": 235,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 3,
+    "fields": {
+      "nome": "RX-7 2JZ",
+      "marca": "MAZDA",
+      "altezza": 1230,
+      "lunghezza": 4287,
+      "larghezza": 1740,
+      "peso": 1423,
+      "volume_bagagliaio": 270,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 4,
+    "fields": {
+      "nome": "GOLF GTI",
+      "marca": "VOLKSWAGEN",
+      "altezza": 1478,
+      "lunghezza": 4295,
+      "larghezza": 1790,
+      "peso": 1500,
+      "volume_bagagliaio": 374,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 5,
+    "fields": {
+      "nome": "GOLF R LINE GTD",
+      "marca": "VOLKSWAGEN",
+      "altezza": 1490,
+      "lunghezza": 4280,
+      "larghezza": 1790,
+      "peso": 1465,
+      "volume_bagagliaio": 374,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 6,
+    "fields": {
+      "nome": "SCIROCCO 4",
+      "marca": "VOLKSWAGEN",
+      "altezza": 1490,
+      "lunghezza": 4260,
+      "larghezza": 1810,
+      "peso": 1300,
+      "volume_bagagliaio": 312,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 7,
+    "fields": {
+      "nome": "FIESTA ST",
+      "marca": "FORD",
+      "altezza": 1480,
+      "lunghezza": 4050,
+      "larghezza": 1734,
+      "peso": 1130,
+      "volume_bagagliaio": 311,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 8,
+    "fields": {
+      "nome": "FOCUS ST",
+      "marca": "FORD",
+      "altezza": 1458,
+      "lunghezza": 4038,
+      "larghezza": 1825,
+      "peso": 1433,
+      "volume_bagagliaio": 375,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 9,
+    "fields": {
+      "nome": "Civic Type R",
+      "marca": "HONDA",
+      "altezza": 1401,
+      "lunghezza": 4594,
+      "larghezza": 1890,
+      "peso": 1429,
+      "volume_bagagliaio": 410,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 10,
+    "fields": {
+      "nome": "RS7 Avant",
+      "marca": "AUDI",
+      "altezza": 1420,
+      "lunghezza": 5010,
+      "larghezza": 1950,
+      "peso": 2065,
+      "volume_bagagliaio": 535,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 11,
+    "fields": {
+      "nome": "TT RS",
+      "marca": "AUDI",
+      "altezza": 1340,
+      "lunghezza": 4200,
+      "larghezza": 1820,
+      "peso": 1550,
+      "volume_bagagliaio": 305,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 12,
+    "fields": {
+      "nome": "E-36",
+      "marca": "BMW",
+      "altezza": 1393,
+      "lunghezza": 4433,
+      "larghezza": 1695,
+      "peso": 1250,
+      "volume_bagagliaio": 340,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 13,
+    "fields": {
+      "nome": "E-46",
+      "marca": "BMW",
+      "altezza": 1420,
+      "lunghezza": 4470,
+      "larghezza": 1780,
+      "peso": 1495,
+      "volume_bagagliaio": 435,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 14,
+    "fields": {
+      "nome": "M3 Competition",
+      "marca": "BMW",
+      "altezza": 1438,
+      "lunghezza": 4794,
+      "larghezza": 1903,
+      "peso": 1805,
+      "volume_bagagliaio": 480,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 15,
+    "fields": {
+      "nome": "M2 Competition",
+      "marca": "BMW",
+      "altezza": 1410,
+      "lunghezza": 4460,
+      "larghezza": 1840,
+      "peso": 1625,
+      "volume_bagagliaio": 390,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.modelloauto",
+    "pk": 16,
+    "fields": {
+      "nome": "E-30",
+      "marca": "BMW",
+      "altezza": 1380,
+      "lunghezza": 4325,
+      "larghezza": 1680,
+      "peso": 1090,
+      "volume_bagagliaio": 404,
+      "prezzo_base": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 1,
+    "fields": {
+      "nome": "motorizzazione",
+      "descrizione": "1200 aspirato",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 2,
+    "fields": {
+      "nome": "motorizzazione",
+      "descrizione": "1600 aspirato",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 3,
+    "fields": {
+      "nome": "motorizzazione",
+      "descrizione": "1800 aspirato",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 4,
+    "fields": {
+      "nome": "motorizzazione",
+      "descrizione": "1800 turno",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 5,
+    "fields": {
+      "nome": "motorizzazione",
+      "descrizione": "2000 turbo",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 6,
+    "fields": {
+      "nome": "motorizzazione",
+      "descrizione": "3000 turbo",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 7,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "15",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 8,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "16",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 9,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "17",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 10,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "18",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 11,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "19",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 12,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "20",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 13,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "22",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 14,
+    "fields": {
+      "nome": "dimensione cerchi",
+      "descrizione": "25",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 15,
+    "fields": {
+      "nome": "cambio",
+      "descrizione": "di serie",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 16,
+    "fields": {
+      "nome": "cambio",
+      "descrizione": "manuele",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 17,
+    "fields": {
+      "nome": "cambio",
+      "descrizione": "automatico DSG",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 18,
+    "fields": {
+      "nome": "stereo",
+      "descrizione": "di serie",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 19,
+    "fields": {
+      "nome": "stereo",
+      "descrizione": "BOSE audio",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 20,
+    "fields": {
+      "nome": "stereo",
+      "descrizione": "PIONEER audio",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 21,
+    "fields": {
+      "nome": "fanali",
+      "descrizione": "di serie (alogeni)",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 22,
+    "fields": {
+      "nome": "fanali",
+      "descrizione": "alogeni oscurati",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 23,
+    "fields": {
+      "nome": "fanali",
+      "descrizione": "led",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 24,
+    "fields": {
+      "nome": "fanali",
+      "descrizione": "led oscurati",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 25,
+    "fields": {
+      "nome": "fanali",
+      "descrizione": "led dinamici",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 26,
+    "fields": {
+      "nome": "finestrini",
+      "descrizione": "di serie",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 27,
+    "fields": {
+      "nome": "finestrini",
+      "descrizione": "oscurati 50%",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 28,
+    "fields": {
+      "nome": "finestrini",
+      "descrizione": "oscurati 75%",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 29,
+    "fields": {
+      "nome": "finestrini",
+      "descrizione": "oscurati 1%",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 30,
+    "fields": {
+      "nome": "sospensioni",
+      "descrizione": "di serie",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 31,
+    "fields": {
+      "nome": "sospensioni",
+      "descrizione": "assetto a ghiera regolabile",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 32,
+    "fields": {
+      "nome": "sospensioni",
+      "descrizione": "assetto ad aria AirLift",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 33,
+    "fields": {
+      "nome": "scarico",
+      "descrizione": "di serie",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 34,
+    "fields": {
+      "nome": "scarico",
+      "descrizione": "scarico di serie con valvola bypass",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 35,
+    "fields": {
+      "nome": "scarico",
+      "descrizione": "scarico artigianale con silenziatore maggiorato",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 36,
+    "fields": {
+      "nome": "scarico",
+      "descrizione": "scarico artigianale diretto",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 37,
+    "fields": {
+      "nome": "sedili",
+      "descrizione": "di serie",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 38,
+    "fields": {
+      "nome": "sedili",
+      "descrizione": "sedili comfort con riscaldamento e condizionamento",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 39,
+    "fields": {
+      "nome": "sedili",
+      "descrizione": "sedili da gara con applicazione cintura a 4 pompanti",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 40,
+    "fields": {
+      "nome": "infotainment",
+      "descrizione": "di serie (radio DAB)",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 41,
+    "fields": {
+      "nome": "infotainment",
+      "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 42,
+    "fields": {
+      "nome": "infotainment",
+      "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto + sistema controllo-corsia e cruise-control",
+      "prezzo": 0
     }
   }
 ]
