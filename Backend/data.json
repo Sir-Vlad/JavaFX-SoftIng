@@ -730,5 +730,50 @@
       "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto + sistema controllo-corsia e cruise-control",
       "prezzo": 0
     }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 43,
+    "fields": {
+      "nome": "colore",
+      "descrizione": "nera - #000000",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 44,
+    "fields": {
+      "nome": "colore",
+      "descrizione": "bianca - #ffffff",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 45,
+    "fields": {
+      "nome": "colore",
+      "descrizione": "blu - #0000ff",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 46,
+    "fields": {
+      "nome": "colore",
+      "descrizione": "grigia - #808080",
+      "prezzo": 0
+    }
+  },
+  {
+    "model": "Backend_IngSoft.optional",
+    "pk": 47,
+    "fields": {
+      "nome": "colore",
+      "descrizione": "rosso - #ff00000",
+      "prezzo": 0
+    }
   }
 ]

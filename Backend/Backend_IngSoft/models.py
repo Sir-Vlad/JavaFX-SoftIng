@@ -10,7 +10,7 @@ class Utente(models.Model):
     password = models.CharField(max_length=20, null=False, blank=False)
     nome = models.CharField(max_length=20, null=False, blank=False)
     cognome = models.CharField(max_length=20, null=False, blank=False)
-    numero_carta = models.CharField(max_length=20, null=False, blank=False)
+    numero_carta = models.CharField(max_length=16, null=False, blank=False)
     data_scadenza = models.DateField(null=False, blank=False)
     cvc = models.CharField(max_length=3, null=False, blank=False)
 
@@ -23,12 +23,12 @@ class Utente(models.Model):
 
 class ModelloAuto(models.Model):
     class MarcaAuto(models.TextChoices):
-        NISSAN = "Nissan"
-        MAZDA = "Mazda"
-        VOLKSWAGEN = "Volkswagen"
-        FORD = "Ford"
-        HONDA = "Honda"
-        AUDI = "Audi"
+        NISSAN = "NISSAN"
+        MAZDA = "MAZDA"
+        VOLKSWAGEN = "VOLKSWAGEN"
+        FORD = "FORD"
+        HONDA = "HONDA"
+        AUDI = "AUDI"
         BMW = "BMW"
 
     nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
@@ -92,8 +92,7 @@ class Sede(models.Model):
 
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
-    # configurazione = models.OneToOneField(Configurazione, on_delete=CASCADE, null=False,
-    #                                       blank=False)
+    modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
     data_emissione = models.DateField(null=False, blank=False)
     sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
     # detrazione = models.ManyToManyField(Detrazione, on_delete=CASCADE)
