@@ -1,4 +1,4 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.serializzatori;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

@@ -6,8 +6,6 @@ module it.prova.javafxsofting {
   requires MaterialFX;
   requires static lombok;
   requires commons.validator;
-  requires AnimateFX;
-  requires javafx.web;
   requires java.logging;
 
   opens it.prova.javafxsofting to
@@ -29,4 +27,14 @@ module it.prova.javafxsofting {
   opens it.prova.javafxsofting.models to
       javafx.fxml,
       com.google.gson;
+
+  exports it.prova.javafxsofting.errori;
+
+  opens it.prova.javafxsofting.errori to
+      javafx.fxml;
+
+  exports it.prova.javafxsofting.serializzatori;
+
+  opens it.prova.javafxsofting.serializzatori to
+      javafx.fxml;
 }

@@ -39,7 +39,7 @@ public class UsatoController implements Initializable {
         "Concessionari",
         event -> {
           NotImplemented.notImplemented();
-          ScreenController.activate("concessionari");
+          // ScreenController.activate("concessionari");
         });
   }
 }
