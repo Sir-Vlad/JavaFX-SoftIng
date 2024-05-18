@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+from unfold.contrib import import_export
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,9 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-u2b8$r8623quxw4i4ch@fvb6xejj+7v=^17&&y)nqa@^!5dic8"
-)
+SECRET_KEY = "django-insecure-u2b8$r8623quxw4i4ch@fvb6xejj+7v=^17&&y)nqa@^!5dic8"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,6 +33,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.import_export",
+    # optional, if django-import-export package is used
+    "unfold.contrib.guardian",
+    # optional, if django-guardian package is used
+    "unfold.contrib.simple_history",
+    # optional, if django-simple-history package is used
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,7 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "Backend_IngSoft.apps.BackendIngsoftConfig",
-    "django_extensions"
+    "django_extensions",  # serve per il grafico del db
 ]
 
 MIDDLEWARE = [
@@ -123,3 +134,17 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# https://github.com/unfoldadmin/django-unfold?tab=readme-ov-file#available-settingspy-options
+UNFOLD = {
+    "SITE_HEADER": _("Amministrazione"),
+    "SITE_TITLE": _("Amministrazione"),
+    "SITE_SYMBOL": "settings",
+    "SITE_URL": "/",
+    "THEME": "dark",
+    "SHOW_VIEW_ON_SITE": False,
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_application": True,
+    },
+}

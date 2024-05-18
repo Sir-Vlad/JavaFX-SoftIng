@@ -1,16 +1,35 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 
 from .models import *
 
 
+# from unfold.contrib.filters.admin import
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User, Group
+
+admin.site.unregister(User)
+admin.site.unregister(Group)
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
+    pass
+
+
+@admin.register(Group)
+class GroupAdmin(ModelAdmin):
+    pass
+
+
 @admin.register(Utente)
-class UtenteAdmin(admin.ModelAdmin):
+class UtenteAdmin(ModelAdmin):
     list_display = ("email", "nome", "cognome")
 
 
 class MarcaFilter(admin.SimpleListFilter):
-    title = 'marca'
-    parameter_name = 'marca'
+    title = "marca"
+    parameter_name = "marca"
 
     def lookups(self, request, model_admin):
         list_of_models = set()
@@ -26,14 +45,14 @@ class MarcaFilter(admin.SimpleListFilter):
 
 
 @admin.register(ModelloAuto)
-class ModelloAutoAdmin(admin.ModelAdmin):
+class ModelloAutoAdmin(ModelAdmin):
     list_display = ("nome", "marca", "prezzo_base")
     list_filter = (MarcaFilter,)
 
 
 class TypeOptionalFilter(admin.SimpleListFilter):
-    title = 'nome'
-    parameter_name = 'nome'
+    title = "nome"
+    parameter_name = "nome"
 
     def lookups(self, request, model_admin):
         list_of_models = set()
@@ -49,7 +68,7 @@ class TypeOptionalFilter(admin.SimpleListFilter):
 
 
 @admin.register(Optional)
-class OptionalAdmin(admin.ModelAdmin):
+class OptionalAdmin(ModelAdmin):
     list_display = ("nome", "descrizione", "prezzo")
     list_filter = (TypeOptionalFilter,)
 
@@ -60,41 +79,61 @@ class OptionalAdmin(admin.ModelAdmin):
 
 
 class PrezzoAutoUsataFilter(admin.SimpleListFilter):
-    title = 'prezzo'
-    parameter_name = 'prezzo'
+    title = "prezzo"
+    parameter_name = "prezzo"
+
     def lookups(self, request, model_admin):
         list_of_models = set()
         queryset = AutoUsata.objects.all()
         print(queryset)
         for entry in queryset:
             if entry.prezzo == 0:
-                list_of_models.add(('non \te', 'non validate'))
+                list_of_models.add(("non \te", "non validate"))
             else:
-                list_of_models.add(('validate', 'validate'))
+                list_of_models.add(("validate", "validate"))
         return list_of_models
 
     def queryset(self, request, queryset):
-        if self.value() == 'non validate':
+        if self.value() == "non validate":
             return queryset.filter(prezzo=0)
-        elif self.value() == 'validate':
+        elif self.value() == "validate":
             return queryset.exclude(prezzo=0)
 
 
 @admin.register(AutoUsata)
-class AutoUsataAdmin(admin.ModelAdmin):
-    list_display = ('modello', 'prezzo')
+class AutoUsataAdmin(ModelAdmin):
+    list_display = ("modello", "prezzo")
     list_filter = (PrezzoAutoUsataFilter,)
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
             return []
-        return ['modello', 'marca', 'anno_immatricolazione', 'km_percorsi', 'altezza',
-                'lunghezza', 'larghezza', 'peso', 'volume_bagagliaio']
+        return [
+            "modello",
+            "marca",
+            "anno_immatricolazione",
+            "km_percorsi",
+            "altezza",
+            "lunghezza",
+            "larghezza",
+            "peso",
+            "volume_bagagliaio",
+        ]
 
 
-admin.site.register(Sede)
-admin.site.register(Sconto)
-admin.site.register(Ritiro)
+@admin.register(Sede)
+class SedeAdmin(ModelAdmin):
+    pass
+
+
+@admin.register(Sconto)
+class ScontoAdmin(ModelAdmin):
+    pass
+
+
+@admin.register(Ritiro)
+class RitiroAdmin(ModelAdmin):
+    pass
 
 
 # TODO: https://medium.com/django-unleashed/django-admin-displaying-images-in-your-models-bb7e9d8be105
