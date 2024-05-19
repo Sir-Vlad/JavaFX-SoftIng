@@ -88,7 +88,6 @@ public class ValidateForm {
               if (!newValue.matches("\\d*")) {
                 newValueFormat = newValue.replaceAll("\\D", "");
               }
-              //              newValueFormat = newValueFormat.replaceAll("(.{4})", "$1 ");
               field.setText(newValueFormat);
               updateField(field.textProperty(), field);
             });
