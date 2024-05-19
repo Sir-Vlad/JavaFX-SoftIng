@@ -1,19 +1,20 @@
 package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
+import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.ModelloAuto;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 
 public class ScegliModelloController implements Initializable {
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
@@ -23,34 +24,21 @@ public class ScegliModelloController implements Initializable {
   public FlowPane flowPane;
   public Header header;
 
-  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     header.addTab("Home", event -> ScreenController.activate("home"));
-    ArrayList<ModelloAuto> modelliAuto = new ArrayList<>();
-    Random random = new Random();
-    for (int i = 0; i < 20; i++) {
-      modelliAuto.add(
-          new ModelloAuto(
-              i,
-              "Skyline R-34 GTT - " + i,
-              "nissan",
-              random.nextInt(80000, 150000),
-              1360,
-              4600,
-              1550,
-              180));
+    List<ModelloAuto> modelliAuto;
+    try {
+      modelliAuto = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
+    } catch (Exception e) {
+      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+      alert.setHeaderText("Errore del server");
+      alert.showAndWait();
+      Platform.exit();
+      throw new RuntimeException(e);
     }
-
-    for (int i = 0; i < 20; i++) {
-      CardAuto auto = new CardAuto(modelliAuto.get(i));
-
-      flowPane.getChildren().addAll(auto);
+    if (modelliAuto != null) {
+      modelliAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
     }
-  }
-
-  public void switchHome(MouseEvent mouseEvent) {
-    ScreenController.activate("home");
-    mouseEvent.consume();
   }
 }
