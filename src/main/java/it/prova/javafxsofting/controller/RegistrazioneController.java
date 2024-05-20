@@ -11,16 +11,21 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.models.Utente;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -68,7 +73,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
     // limitazione del campo iban a 16 caratteri numerici
     // 19 = 16 (numeri della carta) + 3 spazi
-    ibanField.setTextLimit(19);
+    ibanField.setTextLimit(16);
     onlyDigit(ibanField);
 
     onlyCharAlphabetical(nomeField);
@@ -84,6 +89,20 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     setValidateCvc();
 
     // shortcuts
+    root.addEventFilter(
+        KeyEvent.KEY_PRESSED,
+        new EventHandler<>() {
+          private static final KeyCombination COMBINATION =
+              new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN);
+
+          @Override
+          public void handle(KeyEvent event) {
+            if (COMBINATION.match(event)) {
+              dataFake();
+            }
+          }
+        });
+
     root.setOnKeyPressed(
         event -> {
           if (event.getCode().equals(KeyCode.ENTER)) {
@@ -152,6 +171,17 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     App.log.info(newUtente.toString());
 
     ScreenController.activate("home");
+  }
+
+  private void dataFake() {
+    nomeField.setText("Mario");
+    cognomeField.setText("Rossi");
+    emailField.setText("mario@rossi.it");
+    passwordField.setText("password123");
+    confermaPasswordField.setText("password123");
+    ibanField.setText("1234567890123456");
+    dataScadenzaField.setValue(LocalDate.now());
+    cvcField.setText("123");
   }
 
   private String capitalize(String input) {

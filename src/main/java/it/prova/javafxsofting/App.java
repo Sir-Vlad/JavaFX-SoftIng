@@ -14,6 +14,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -51,15 +54,22 @@ public class App extends javafx.application.Application {
         .getStylesheets()
         .add(Objects.requireNonNull(App.class.getResource("css/root.css")).toExternalForm());
 
-    createScreenController();
-    ScreenController.setMain(scene);
-
     stage.setResizable(false);
     stage.setTitle("Laboratorio di Adrenalina");
     stage
         .getIcons()
         .add(new Image(Objects.requireNonNull(App.class.getResourceAsStream("immagini/icon.png"))));
     stage.setScene(scene);
+
+    createScreenController();
+    ScreenController.setMain(scene);
+
+    KeyCombination kc = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
+    scene.getAccelerators().put(kc, stage::close);
+
+    KeyCombination back = new KeyCodeCombination(KeyCode.LEFT, KeyCombination.CONTROL_DOWN);
+    scene.getAccelerators().put(back, ScreenController::back);
+
     // chiude tutte gli stage aperti
     stage.setOnHidden(windowEvent -> Platform.exit());
     stage.show();

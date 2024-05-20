@@ -14,21 +14,28 @@ public class ScreenController {
     ScreenController.main = main;
   }
 
-  public static void removeScreen(String name) {
-    SCREEN_MAP.remove(name);
-  }
-
   public static void activate(String name) {
-    backPage = getBackPage(name);
+    if (backPage == null) {
+      backPage = "home";
+    } else {
+      backPage = getBackPage(name);
+    }
     main.setRoot(SCREEN_MAP.get(name));
-  }
-
-  public static void back() {
-    activate(backPage);
   }
 
   public static void addScreen(String name, Pane pane) {
     SCREEN_MAP.put(name, pane);
+  }
+
+  public static void back() {
+    if (backPage == null) {
+      return;
+    }
+    activate(backPage);
+  }
+
+  public static void removeScreen(String name) {
+    SCREEN_MAP.remove(name);
   }
 
   private static String getBackPage(String name) {

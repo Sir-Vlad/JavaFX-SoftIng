@@ -2,21 +2,46 @@ package it.prova.javafxsofting;
 
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 import it.prova.javafxsofting.errori.ErrorResponse;
 import it.prova.javafxsofting.serializzatori.ErrorResponseDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Connection {
 
   public static int porta = -1;
+
+  static Gson gson =
+      new GsonBuilder()
+          .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
+          .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
+          .registerTypeAdapter(ErrorResponse.class, new ErrorResponseDeserializer())
+          .setDateFormat(DateFormat.LONG)
+          .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+          .setExclusionStrategies(
+              new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                  return f.getAnnotation(Expose.class) != null
+                      && !f.getAnnotation(Expose.class).deserialize();
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                  return false;
+                }
+              })
+          .create(); // crea gson con la corrente configurazione
 
   private Connection() {
     throw new UnsupportedOperationException("This class is not supported");
@@ -26,20 +51,11 @@ public class Connection {
     Connection.porta = porta;
   }
 
-  /**
-   * @param sub_directory sottodomio dove fare la get
-   * @param objClass classe della risposta della get per eseguire la deserializzazione
-   * @return json object deserializzato
-   * @param <T> tipo dell'oggetto deserializzato
-   * @throws Exception errore nella connessione oppure nella risposta della get
-   */
-  public static <T extends Serializable> @Nullable T getDataToBackend(
+  public static <T extends Serializable> List<T> getArrayDataFromBackend(
       String sub_directory, Class<T> objClass) throws Exception {
     HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.GET);
     int statusCode = conn.getResponseCode();
     StringBuilder content = new StringBuilder();
-
-    System.out.println(statusCode);
 
     if (statusCode == 200) {
       InputStream inputStream = conn.getInputStream();
@@ -48,27 +64,41 @@ public class Connection {
       while ((line = bufferedReader.readLine()) != null) {
         content.append(line);
       }
+      Type type = TypeToken.getParameterized(List.class, objClass).getType();
+      return gson.fromJson(content.toString(), type);
+    } else if (statusCode == 404) {
+      InputStream inputStream = conn.getErrorStream();
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      String line;
+      while ((line = bufferedReader.readLine()) != null) {
+        content.append(line);
+      }
+      throw new Exception(content.toString());
+    }
+    conn.disconnect();
+    return null;
+  }
 
-      Gson gson =
-          new GsonBuilder()
-              .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
-              .setDateFormat(DateFormat.LONG)
-              .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-              .setExclusionStrategies(
-                  new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f) {
-                      return f.getAnnotation(Expose.class) != null
-                          && !f.getAnnotation(Expose.class).deserialize();
-                    }
+  /**
+   * @param sub_directory sottodomio dove fare la get
+   * @param objClass classe della risposta della get per eseguire la deserializzazione
+   * @return json object deserializzato
+   * @param <T> tipo dell'oggetto deserializzato
+   * @throws Exception errore nella connessione oppure nella risposta della get
+   */
+  public static <T extends Serializable> @Nullable T getDataFromBackend(
+      String sub_directory, Class<T> objClass) throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.GET);
+    int statusCode = conn.getResponseCode();
+    StringBuilder content = new StringBuilder();
 
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                      return false;
-                    }
-                  })
-              .create();
-
+    if (statusCode == 200) {
+      InputStream inputStream = conn.getInputStream();
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      String line;
+      while ((line = bufferedReader.readLine()) != null) {
+        content.append(line);
+      }
       return gson.fromJson(content.toString(), objClass);
     } else if (statusCode == 404) {
       InputStream inputStream = conn.getErrorStream();
@@ -99,26 +129,6 @@ public class Connection {
     HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.POST);
 
     // Dati da inviare al backend in formato JSON
-    Gson gson =
-        new GsonBuilder()
-            .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
-            .registerTypeAdapter(ErrorResponse.class, new ErrorResponseDeserializer())
-            .setDateFormat(DateFormat.LONG)
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .setExclusionStrategies(
-                new ExclusionStrategy() {
-                  @Override
-                  public boolean shouldSkipField(FieldAttributes f) {
-                    return f.getAnnotation(Expose.class) != null
-                        && !f.getAnnotation(Expose.class).deserialize();
-                  }
-
-                  @Override
-                  public boolean shouldSkipClass(Class<?> clazz) {
-                    return false;
-                  }
-                })
-            .create(); // crea gson con la corrente configurazione
     String jsonInputString = gson.toJson(data);
 
     // invia i dati al backed

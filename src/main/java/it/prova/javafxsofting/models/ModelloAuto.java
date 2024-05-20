@@ -1,9 +1,10 @@
 package it.prova.javafxsofting.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.io.File;
+import java.io.Serializable;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 enum TipoMotore {
   GASOLIO,
@@ -13,45 +14,41 @@ enum TipoMotore {
   IBRICA_PLUG_IN
 }
 
-enum Marca {
-  NISSAN("nissan"),
-  MAZDA("mazda"),
-  VOLKSWAGEN("volkswagen"),
-  FORD("ford"),
-  HONDA("honda"),
-  AUDI("audi"),
-  BMW("bmw"),
-  ;
-
-  Marca(String name) {}
-
-  public static Marca getMarca(String name) {
-    for (Marca marca : Marca.values()) {
-      if (marca.name().equalsIgnoreCase(name)) {
-        return marca;
-      }
-    }
-    return null;
-  }
-}
-
-@Getter
-@Setter
 @Data
-public class ModelloAuto {
+public class ModelloAuto implements Serializable {
+  @SerializedName("id")
   private int index;
+
+  @SerializedName("nome")
   private String nome;
-  //  private String descrizione;
+
+  @SerializedName("marca")
   private Marca marca;
+
+  @SerializedName("prezzo_base")
   private int prezzoBase;
+
+  @Expose(deserialize = false)
   private File[] immagini;
+
   // dati auto
+  @SerializedName("altezza")
   private int altezza;
+
+  @SerializedName("lunghezza")
   private int lunghezza;
+
+  @SerializedName("larghezza")
   private int larghezza;
+
+  @SerializedName("peso")
   private int peso;
+
+  @SerializedName("volume_bagagliaio")
   private int volumeBagagliaio;
+
   // option
+  @Expose(deserialize = false)
   private Optional[] optional;
 
   public ModelloAuto(
