@@ -60,7 +60,7 @@ public class ValidateForm {
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(field, validate);
               }
             });

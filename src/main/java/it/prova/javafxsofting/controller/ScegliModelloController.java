@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,11 +42,13 @@ public class ScegliModelloController implements Initializable {
   private ObservableList<ModelloAuto> cardAuto;
   private List<ModelloAuto> autoFiltered;
 
+  ScheduledExecutorService scheduler;
+
   private List<String> getTypeAlimentazione() {
     return cardAuto.stream()
         .map(modelloAuto -> modelloAuto.getOptionals()[0].getDescrizione())
         .distinct()
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override
@@ -88,9 +89,6 @@ public class ScegliModelloController implements Initializable {
     List<String> a = getTypeAlimentazione();
     a.addFirst("Tutti");
     ObservableList<String> typeAlimentazione = FXCollections.observableList(a);
-
-    //    typeAlimentazione.addFirst("Tutti");
-
     alimentazioneFilter.setItems(typeAlimentazione);
 
     alimentazioneFilter
@@ -201,12 +199,12 @@ public class ScegliModelloController implements Initializable {
   }
 
   private void startPeriodicUpdate() {
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    scheduler = Executors.newScheduledThreadPool(1);
     scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 0, 5, TimeUnit.MINUTES);
   }
 
   private void updateListFromDatabase() {
-    App.log.info("Updating list from database");
+    App.getLog().info("Updating list from database");
     List<ModelloAuto> newData;
     try {
       newData = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);

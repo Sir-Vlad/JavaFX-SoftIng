@@ -5,6 +5,7 @@ import it.prova.javafxsofting.App;
 import java.net.URL;
 import java.util.*;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -18,32 +19,30 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 public class ProfileAccountController implements Initializable {
+  @FXML private HBox image_account;
+  @FXML private Label name_account;
 
-  public HBox image_account;
-  public Label name_account;
+  @FXML private HBox profiloBtn;
+  @FXML private HBox ordiniBtn;
+  @FXML private HBox preventiviBtn;
+  @FXML private HBox signOutBtn;
 
-  public HBox profiloBtn;
-  public HBox ordiniBtn;
-  public HBox preventiviBtn;
-  public HBox signOutBtn;
+  @FXML private SVGPath icon_profilo;
+  @FXML private SVGPath icon_ordini;
+  @FXML private SVGPath icon_preventivi;
+  @FXML private SVGPath icon_signOut;
 
-  public SVGPath icon_profilo;
-  public SVGPath icon_ordini;
-  public SVGPath icon_preventivi;
-  public SVGPath icon_signOut;
-
-  public VBox content;
-  public VBox sidebar;
-  public MFXButton indietroBtn;
+  @FXML private VBox content;
+  @FXML private VBox sidebar;
+  @FXML private MFXButton indietroBtn;
   private TabController tabController;
 
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    //    App.utente = new Utente("Mattia", "Frigiola", "root", "root", "", LocalDate.now(), "123");
     // imposto i dati dell'utente
-    if (App.utente != null) {
-      name_account.setText(App.utente.getNome() + " " + App.utente.getCognome());
+    if (App.getUtente() != null) {
+      name_account.setText(App.getUtente().getNome() + " " + App.getUtente().getCognome());
     } else {
       ScreenController.activate("login");
       return;
@@ -71,11 +70,6 @@ public class ProfileAccountController implements Initializable {
     anchorPane.setId("ordini");
 
     tabController.addTab("ordini", anchorPane, ordiniBtn);
-
-    //    AnchorPane anchorPane2 = new AnchorPane();
-    //    anchorPane2.setId("preventivi");
-    //
-    //    tabController.addTab("preventivi", anchorPane2, preventiviBtn);
 
     // set default page open
     content.getChildren().add(tabController.getTab("profile"));
@@ -137,7 +131,7 @@ public class ProfileAccountController implements Initializable {
 class TabController {
   private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
   private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
-  private static AnchorPane main = null;
+  private AnchorPane main = null;
 
   protected void removeTab(String name) {
     PANE_HASH_MAP.remove(name);

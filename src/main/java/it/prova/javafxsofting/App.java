@@ -19,12 +19,14 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
 
-  public static Utente utente = null;
-  public static Logger log = Logger.getLogger(App.class.getName());
+  @Getter @Setter private static Utente utente = null;
+  @Getter @Setter private static Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)

@@ -7,11 +7,13 @@ import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.component.ProfileBox;
+import it.prova.javafxsofting.models.Preventivo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.SecureRandom;
 import java.time.Year;
 import java.util.*;
 import java.util.List;
@@ -29,10 +31,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class VendiUsato extends ValidateForm implements Initializable {
+  static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  static final SecureRandom RANDOM = new SecureRandom();
   private final HashMap<File, File> immagini = new HashMap<>();
   @FXML private Header header;
   private MFXTextField[] targaField = null;
-
   @FXML private VBox homeBtn;
   @FXML private ProfileBox profile;
   @FXML private VBox wrapperRoot;
@@ -125,28 +128,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   public void richiediPreventivo() {
-    List<Constraint> modelloConstr = modelloField.validate();
-    List<Constraint> marcaConstr = marcaField.validate();
-    List<Constraint> kmPercorsiConstr = kmPercorsiField.validate();
-    List<Constraint> targaConstr = new ArrayList<>();
-    for (MFXTextField field : targaField) targaConstr.addAll(field.validate());
-    List<Constraint> aaImmatricolazioneConstr = aaImmatricolazioneCombo.validate();
-    List<Constraint> altezzaConstr = altezzaField.validate();
-    List<Constraint> lunghezzaConstr = lunghezzaField.validate();
-    List<Constraint> larghezzaConstr = larghezzaField.validate();
-    List<Constraint> volBagagliaioConstr = volBagagliaioField.validate();
-    List<Constraint> pesoConstr = pesoField.validate();
-
-    showError(modelloConstr, modelloField, validateModello);
-    showError(marcaConstr, marcaField, validateMarca);
-    showError(kmPercorsiConstr, kmPercorsiField, validateKmPercorsi);
-    for (MFXTextField field : targaField) showError(targaConstr, field, validateTarga);
-    showError(aaImmatricolazioneConstr, aaImmatricolazioneCombo, validateAAImmatricolazione);
-    showError(altezzaConstr, altezzaField, validateAltezza);
-    showError(lunghezzaConstr, lunghezzaField, validateLunghezza);
-    showError(larghezzaConstr, larghezzaField, validateLarghezza);
-    showError(volBagagliaioConstr, volBagagliaioField, validateVolBagagliaio);
-    showError(pesoConstr, pesoField, validatePeso);
+    showErrorAll();
 
     boolean isInvalidInfoAuto =
         isFieldInvalid(modelloField)
@@ -165,7 +147,11 @@ public class VendiUsato extends ValidateForm implements Initializable {
             || isFieldInvalid(volBagagliaioField)
             || isFieldInvalid(pesoField);
 
-    if (isInvalidDatiAuto && isInvalidInfoAuto) {}
+    if (isInvalidDatiAuto && isInvalidInfoAuto) {
+      return;
+    }
+
+    Preventivo preventivo = new Preventivo();
   }
 
   public void scegliFoto() {
@@ -197,9 +183,10 @@ public class VendiUsato extends ValidateForm implements Initializable {
     // controllo se esiste la cartella dove salvare le immagini `instance/data`
     if (checkFolderImmagini()) {
       for (File f : listImmagini) {
+        String rootPath = new File("instance/data").getPath();
         try {
           String newName = generateAlphaFileName() + getExtension(f.getName());
-          File newPath = Path.of(new File("instance/data").getPath() + "/" + newName).toFile();
+          File newPath = Path.of(rootPath + "/" + newName).toFile();
           // aggiunge l'immagine solo se non è stata già aggiunta, ovvero elimino la possibilità che
           // l'utente possa aggiungere due volte la stessa immagine
           File value = immagini.putIfAbsent(f, newPath);
@@ -215,8 +202,31 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (validateFoto.textProperty().isNotEmpty().get()) {
       validateFoto.setText("");
     }
+  }
 
-    System.out.println(immagini);
+  private void showErrorAll() {
+    List<Constraint> modelloConstr = modelloField.validate();
+    List<Constraint> marcaConstr = marcaField.validate();
+    List<Constraint> kmPercorsiConstr = kmPercorsiField.validate();
+    List<Constraint> targaConstr = new ArrayList<>();
+    for (MFXTextField field : targaField) targaConstr.addAll(field.validate());
+    List<Constraint> aaImmatricolazioneConstr = aaImmatricolazioneCombo.validate();
+    List<Constraint> altezzaConstr = altezzaField.validate();
+    List<Constraint> lunghezzaConstr = lunghezzaField.validate();
+    List<Constraint> larghezzaConstr = larghezzaField.validate();
+    List<Constraint> volBagagliaioConstr = volBagagliaioField.validate();
+    List<Constraint> pesoConstr = pesoField.validate();
+
+    showError(modelloConstr, modelloField, validateModello);
+    showError(marcaConstr, marcaField, validateMarca);
+    showError(kmPercorsiConstr, kmPercorsiField, validateKmPercorsi);
+    for (MFXTextField field : targaField) showError(targaConstr, field, validateTarga);
+    showError(aaImmatricolazioneConstr, aaImmatricolazioneCombo, validateAAImmatricolazione);
+    showError(altezzaConstr, altezzaField, validateAltezza);
+    showError(lunghezzaConstr, lunghezzaField, validateLunghezza);
+    showError(larghezzaConstr, larghezzaField, validateLarghezza);
+    showError(volBagagliaioConstr, volBagagliaioField, validateVolBagagliaio);
+    showError(pesoConstr, pesoField, validatePeso);
   }
 
   private boolean checkFolderImmagini() {
@@ -231,7 +241,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
       }
       return true;
     }
-    System.out.println("La directory non found");
     return false;
   }
 
@@ -282,13 +291,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   private String generateAlphaFileName() {
-    String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    String lower = "abcdefghijklmnopqrstuvwxyz";
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder(10);
     for (int i = 0; i < 10; i++) {
-      sb.append(upper.charAt((int) (Math.random() * upper.length())));
-      sb.append(lower.charAt((int) (Math.random() * lower.length())));
+      int index = RANDOM.nextInt(ALPHABET.length());
+      sb.append(ALPHABET.charAt(index));
     }
+
     return sb.toString();
   }
 

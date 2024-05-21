@@ -28,23 +28,23 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 public class LoginController extends ValidateForm implements Initializable {
-  @FXML public AnchorPane root;
-  public VBox wrapperLogin;
+  @FXML private AnchorPane root;
+  @FXML private VBox wrapperLogin;
 
-  public MFXTextField emailField;
-  public MFXPasswordField passwordField;
-  public MFXCheckbox rememberMe;
-  public MFXButton logInBtn;
+  @FXML private MFXTextField emailField;
+  @FXML private MFXPasswordField passwordField;
+  @FXML private MFXCheckbox rememberMe;
+  @FXML private MFXButton logInBtn;
 
-  public Text register;
-  public Text textRegister;
-  public Label passwordLabel;
-  public Label emailLabel;
-  public Label forgotPasswordLabel;
-  public HBox wrapperLogInBtn;
+  @FXML private Text register;
+  @FXML private Text textRegister;
+  @FXML private Label passwordLabel;
+  @FXML private Label emailLabel;
+  @FXML private Label forgotPasswordLabel;
+  @FXML private HBox wrapperLogInBtn;
 
-  public Label validateEmail;
-  public Label validatePassword;
+  @FXML private Label validateEmail;
+  @FXML private Label validatePassword;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,7 +76,7 @@ public class LoginController extends ValidateForm implements Initializable {
 
     // check nel db
     try {
-      App.utente = Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class);
+      App.setUtente(Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class));
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
       alert.showAndWait();
@@ -84,8 +84,8 @@ public class LoginController extends ValidateForm implements Initializable {
       return;
     }
 
-    if (!emailField.getText().equals(App.utente.getEmail())
-        || !passwordField.getText().equals(App.utente.getPassword())) {
+    if (!emailField.getText().equals(App.getUtente().getEmail())
+        || !passwordField.getText().equals(App.getUtente().getPassword())) {
       Alert alert = new Alert(AlertType.ERROR, "Email o password errati", ButtonType.OK);
       alert.showAndWait();
       clearField();
@@ -129,7 +129,7 @@ public class LoginController extends ValidateForm implements Initializable {
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(emailField, validateEmail);
               }
             });
@@ -142,7 +142,7 @@ public class LoginController extends ValidateForm implements Initializable {
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(passwordField, validatePassword);
               }
             });
