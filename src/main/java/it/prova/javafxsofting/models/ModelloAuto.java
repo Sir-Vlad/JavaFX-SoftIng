@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
 import lombok.Data;
 
 enum TipoMotore {
@@ -49,7 +50,7 @@ public class ModelloAuto implements Serializable {
 
   // option
   @Expose(deserialize = false)
-  private Optional[] optional;
+  private Optional[] optionals;
 
   public ModelloAuto(
       int index,
@@ -73,7 +74,7 @@ public class ModelloAuto implements Serializable {
   @Override
   public String toString() {
     return String.format(
-        "ModelloAuto{\n\tindex=%s,\n\tnome=%s,\n\tmarca=%s,\n\taltezza=%d,\n\tlunghezza=%d,\n\tpeso=%d,\n\tvolumeBagagliaio=%d\n\t}",
-        index, nome, marca, altezza, lunghezza, peso, volumeBagagliaio);
+        "ModelloAuto{\n\tindex=%s,\n\tnome=%s,\n\tmarca=%s,\n\taltezza=%d,\n\tlunghezza=%d,\n\tpeso=%d,\n\tvolumeBagagliaio=%d\n\t}%s",
+        index, nome, marca, altezza, lunghezza, peso, volumeBagagliaio, Arrays.toString(optionals));
   }
 }

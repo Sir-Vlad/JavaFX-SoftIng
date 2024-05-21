@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 public class LoginController extends ValidateForm implements Initializable {
   @FXML public AnchorPane root;
@@ -110,7 +111,7 @@ public class LoginController extends ValidateForm implements Initializable {
   }
 
   @Override
-  public void showError(List<Constraint> constraints, MFXTextField field, Label label) {
+  public void showError(@NotNull List<Constraint> constraints, MFXTextField field, Label label) {
     if (!constraints.isEmpty()) {
       super.showError(constraints, field, label);
     }

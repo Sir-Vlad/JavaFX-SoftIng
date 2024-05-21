@@ -83,6 +83,9 @@ public class ConfiguratorController implements Initializable {
     fieldModelloV.setText(auto.getNome());
     fieldMarca.setText(String.valueOf(auto.getMarca()));
     fieldModello.setText(auto.getNome());
+
+    fieldAlimentazione.setText(auto.getOptionals()[0].getDescrizione());
+
     fieldAltezza.setText(auto.getAltezza() + " mm");
     fieldLarghezza.setText(auto.getLarghezza() + " mm");
     fieldLunghezza.setText(auto.getLunghezza() + " mm");
@@ -120,7 +123,7 @@ public class ConfiguratorController implements Initializable {
     actionEvent.consume();
   }
 
-  private void createBoxPrezzo(ModelloAuto auto) {
+  private void createBoxPrezzo(@NotNull ModelloAuto auto) {
     VBox vbox = new VBox();
     vbox.setPrefWidth(200);
     vbox.setAlignment(Pos.CENTER);

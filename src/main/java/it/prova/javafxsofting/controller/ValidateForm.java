@@ -9,9 +9,10 @@ import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
+import org.jetbrains.annotations.NotNull;
 
 public class ValidateForm {
-  public void showError(List<Constraint> constraints, MFXTextField field, Label label) {
+  public void showError(@NotNull List<Constraint> constraints, MFXTextField field, Label label) {
     if (!constraints.isEmpty()) {
       field.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, true);
       field.getStyleClass().add("field-invalid");
@@ -20,12 +21,12 @@ public class ValidateForm {
     }
   }
 
-  public boolean isFieldInvalid(MFXTextField field) {
+  public boolean isFieldInvalid(@NotNull MFXTextField field) {
     return field.getPseudoClassStates().stream()
         .anyMatch(pseudoClass -> pseudoClass.equals(INVALID_PSEUDO_CLASS));
   }
 
-  public void addConstraintRequired(MFXTextField field, String msg) {
+  public void addConstraintRequired(@NotNull MFXTextField field, String msg) {
     Constraint request =
         Constraint.Builder.build()
             .setSeverity(Severity.ERROR)
@@ -36,7 +37,7 @@ public class ValidateForm {
     field.getValidator().constraint(request);
   }
 
-  public void addConstraintLength(MFXTextField field, String msg, int length) {
+  public void addConstraintLength(@NotNull MFXTextField field, String msg, int length) {
     Constraint lenConstraint =
         Constraint.Builder.build()
             .setSeverity(Severity.ERROR)
@@ -47,13 +48,13 @@ public class ValidateForm {
     field.getValidator().constraint(lenConstraint);
   }
 
-  public void removeClassInvalid(MFXTextField field, Label labelMsgInvalid) {
+  public void removeClassInvalid(@NotNull MFXTextField field, @NotNull Label labelMsgInvalid) {
     labelMsgInvalid.setVisible(false);
     field.getStyleClass().remove("field-invalid");
     field.pseudoClassStateChanged(INVALID_PSEUDO_CLASS, false);
   }
 
-  public void addEventRemoveClassInvalid(MFXTextField field, Label validate) {
+  public void addEventRemoveClassInvalid(@NotNull MFXTextField field, Label validate) {
     field
         .getValidator()
         .validProperty()
@@ -65,7 +66,7 @@ public class ValidateForm {
             });
   }
 
-  public void onlyCharAlphabetical(MFXTextField field) {
+  public void onlyCharAlphabetical(@NotNull MFXTextField field) {
     field
         .textProperty()
         .addListener(
@@ -79,7 +80,7 @@ public class ValidateForm {
             });
   }
 
-  public void onlyDigit(MFXTextField field) {
+  public void onlyDigit(@NotNull MFXTextField field) {
     field
         .textProperty()
         .addListener(
@@ -93,7 +94,7 @@ public class ValidateForm {
             });
   }
 
-  public void onlyFloat(MFXTextField field) {
+  public void onlyFloat(@NotNull MFXTextField field) {
     field
         .textProperty()
         .addListener(

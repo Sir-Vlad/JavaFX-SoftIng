@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
 
@@ -36,7 +37,7 @@ public class App extends javafx.application.Application {
   }
 
   @Override
-  public void start(Stage stage) throws IOException {
+  public void start(@NotNull Stage stage) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/home.fxml"));
     Pane root = new Pane();
     root.getChildren().addAll((Node) fxmlLoader.load());
