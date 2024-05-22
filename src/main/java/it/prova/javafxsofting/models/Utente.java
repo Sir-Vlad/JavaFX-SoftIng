@@ -5,30 +5,44 @@ import com.google.gson.annotations.SerializedName;
 import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.Data;
 
 @Data
 public class Utente implements Serializable {
   private static Utente instance;
+
   @SerializedName("id")
   @Expose(serialize = false)
   private int id;
+
   @SerializedName("nome")
   private String nome;
+
   @SerializedName("cognome")
   private String cognome;
+
   @SerializedName("email")
   private String email;
+
   @SerializedName("password")
   private String password;
+
   @SerializedName("numero_carta")
   private String iban;
+
   @SerializedName("data_scadenza")
   private LocalDate dataScadenza;
+
   @SerializedName("cvc")
   private String cvc;
+
   @Expose(deserialize = false)
   private File imageUtente = null;
+
+  @Expose(deserialize = false, serialize = false)
+  private StringProperty nomeCompleto = null;
 
   private Utente() {}
 
@@ -47,6 +61,8 @@ public class Utente implements Serializable {
     this.iban = iban;
     this.dataScadenza = dataScadenza;
     this.cvc = cvc;
+
+    this.nomeCompleto = new SimpleStringProperty(this.nome + "." + this.cognome);
   }
 
   public static Utente getInstance() {
@@ -73,7 +89,21 @@ public class Utente implements Serializable {
   @Override
   public String toString() {
     return String.format(
-        "Utente{\n\tDati personali{\n\t\tnome='%s',\n\t\tcognome='%s',\n\t\temail='%s',\n\t\tpassword='%s'\n\t},\n\tCoordinate Bancarie{\n\t\tiban='%s',\n\t\tdataScadenza='%s,\n\t\tcvc='%s\n\t}\n}",
+        """
+        Utente{
+          Dati personali{
+            nome='%s',
+            cognome='%s',
+            email='%s',
+            password='%s'
+          },
+          Coordinate Bancarie{
+            iban='%s',
+            dataScadenza='%s,
+            cvc='%s
+          }
+        }
+        """,
         nome, cognome, email, password, iban, dataScadenza, cvc);
   }
 }

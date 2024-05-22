@@ -1,6 +1,6 @@
 @import "../css/root.css";
 
-#image_account {
+#imageAccount {
     -fx-background-image: url(../immagini/fake-account.png);
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;

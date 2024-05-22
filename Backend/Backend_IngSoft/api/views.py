@@ -1,11 +1,10 @@
+from Backend_IngSoft.api.serializers import *
+from Backend_IngSoft.models import ModelloAuto, Utente
+from Backend_IngSoft.util.error import raises
 from django.http import HttpResponseNotFound
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from Backend_IngSoft.api.serializers import *
-from Backend_IngSoft.models import ModelloAuto, Utente
-from Backend_IngSoft.util.error import raises
 
 
 class UtenteListCreateAPIView(APIView):
@@ -40,9 +39,9 @@ class UtenteDetailAPIView(APIView):
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 
-    def put(self, request, pk):
+    def put(self, request, email):
         try:
-            utente = self.get_object(pk)
+            utente = self.get_object(email)
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 
@@ -52,9 +51,9 @@ class UtenteDetailAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
+    def delete(self, request, email):
         try:
-            utente = self.get_object(pk)
+            utente = self.get_object(email)
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 

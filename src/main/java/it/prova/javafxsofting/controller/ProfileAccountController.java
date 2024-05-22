@@ -19,18 +19,18 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 public class ProfileAccountController implements Initializable {
-  @FXML private HBox image_account;
-  @FXML private Label name_account;
+  @FXML private HBox imageAccount;
+  @FXML private Label nameAccount;
 
   @FXML private HBox profiloBtn;
   @FXML private HBox ordiniBtn;
   @FXML private HBox preventiviBtn;
   @FXML private HBox signOutBtn;
 
-  @FXML private SVGPath icon_profilo;
-  @FXML private SVGPath icon_ordini;
-  @FXML private SVGPath icon_preventivi;
-  @FXML private SVGPath icon_signOut;
+  @FXML private SVGPath iconProfilo;
+  @FXML private SVGPath iconOrdini;
+  @FXML private SVGPath iconPreventivi;
+  @FXML private SVGPath iconSignOut;
 
   @FXML private VBox content;
   @FXML private VBox sidebar;
@@ -42,23 +42,25 @@ public class ProfileAccountController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     // imposto i dati dell'utente
     if (App.getUtente() != null) {
-      name_account.setText(App.getUtente().getNome() + " " + App.getUtente().getCognome());
+      nameAccount.setText(App.getUtente().getNome() + " " + App.getUtente().getCognome());
+      //      nameAccount.textProperty().bindBidirectional(App.getUtente().getNomeCompleto());
     } else {
       ScreenController.activate("login");
       return;
     }
 
     // ridimensionamento delle icone della sidebar
-    resize(icon_profilo, 20, 20);
-    resize(icon_ordini, 20, 20);
-    resize(icon_preventivi, 20, 25);
-    resize(icon_signOut, 20, 20);
+    resize(iconProfilo, 20, 20);
+    resize(iconOrdini, 20, 20);
+    resize(iconPreventivi, 20, 25);
+    resize(iconSignOut, 20, 20);
 
     // create le tab della sidebar
     tabController = new TabController();
     tabController.addTab(
         "profile",
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("dettagli_profilo.fxml"))),
+        FXMLLoader.load(
+            Objects.requireNonNull(getClass().getResource("impostazioni_profilo.fxml"))),
         profiloBtn);
 
     tabController.addTab(

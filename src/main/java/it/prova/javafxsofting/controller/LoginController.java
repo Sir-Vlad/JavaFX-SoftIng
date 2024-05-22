@@ -92,6 +92,8 @@ public class LoginController extends ValidateForm implements Initializable {
       return;
     }
 
+    System.out.println(App.getUtente());
+
     ScreenController.addScreen(
         "profilo",
         FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profilo_utente.fxml"))));

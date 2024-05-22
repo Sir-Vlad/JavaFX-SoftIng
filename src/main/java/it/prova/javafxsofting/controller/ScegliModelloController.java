@@ -45,10 +45,11 @@ public class ScegliModelloController implements Initializable {
   ScheduledExecutorService scheduler;
 
   private List<String> getTypeAlimentazione() {
-    return cardAuto.stream()
-        .map(modelloAuto -> modelloAuto.getOptionals()[0].getDescrizione())
-        .distinct()
-        .toList();
+    return new ArrayList<>(
+        cardAuto.stream()
+            .map(modelloAuto -> modelloAuto.getOptionals()[0].getDescrizione())
+            .distinct()
+            .toList());
   }
 
   @Override

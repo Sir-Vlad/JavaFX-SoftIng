@@ -3,6 +3,7 @@ package it.prova.javafxsofting;
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
+import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.errori.ErrorResponse;
 import it.prova.javafxsofting.serializzatori.ErrorResponseDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
@@ -14,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.List;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,9 +54,27 @@ public class Connection {
     Connection.porta = porta;
   }
 
+  public static void deleteDataToBackend(String subDirectory) throws IOException {
+    if (Connection.porta == -1) {
+      throw new RuntimeException("Connessione non disponibile");
+    }
+
+    HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.DELETE);
+
+    int response = conn.getResponseCode();
+    if (response == HttpURLConnection.HTTP_NO_CONTENT) {
+      Alert alert = new Alert(AlertType.INFORMATION, "Account eliminato");
+      alert.showAndWait();
+      App.setUtente(null);
+      ScreenController.activate("home");
+    }
+
+    conn.disconnect();
+  }
+
   public static <T extends Serializable> List<T> getArrayDataFromBackend(
-      String sub_directory, Class<T> objClass) throws Exception {
-    HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.GET);
+      String subDirectory, Class<T> objClass) throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.GET);
     int statusCode = conn.getResponseCode();
     StringBuilder content = new StringBuilder();
 
@@ -80,15 +101,15 @@ public class Connection {
   }
 
   /**
-   * @param sub_directory sottodomio dove fare la get
+   * @param subDirectory sottodomio dove fare la get
    * @param objClass classe della risposta della get per eseguire la deserializzazione
    * @return json object deserializzato
    * @param <T> tipo dell'oggetto deserializzato
    * @throws Exception errore nella connessione oppure nella risposta della get
    */
   public static <T extends Serializable> @Nullable T getDataFromBackend(
-      String sub_directory, Class<T> objClass) throws Exception {
-    HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.GET);
+      String subDirectory, Class<T> objClass) throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.GET);
     int statusCode = conn.getResponseCode();
     StringBuilder content = new StringBuilder();
 
@@ -118,15 +139,15 @@ public class Connection {
    *
    * @param <T> tipo generico che deve essere serializzatile
    * @param data dati da inviare
-   * @param sub_directory url dove inviare i dati
+   * @param subDirectory url dove inviare i dati
    */
-  public static <T extends Serializable> void postDataToBacked(T data, String sub_directory)
+  public static <T extends Serializable> void postDataToBacked(T data, String subDirectory)
       throws Exception {
     if (Connection.porta == -1) {
       throw new RuntimeException("Connessione non disponibile");
     }
 
-    HttpURLConnection conn = getHttpURLConnection(sub_directory, Methods.POST);
+    HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.POST);
 
     // Dati da inviare al backend in formato JSON
     String jsonInputString = gson.toJson(data);
@@ -165,21 +186,21 @@ public class Connection {
   /**
    * Crea una connessione verso un URL con una dato metodo
    *
-   * @param sub_directory URL della directory dove creare la connessione
+   * @param subDirectory URL della directory dove creare la connessione
    * @param methods metodo di creazione della connessione
    * @return la connessione
    */
   @NotNull
-  private static HttpURLConnection getHttpURLConnection(String sub_directory, Methods methods) {
-    StringBuilder subdirectory = sub_directory == null ? null : new StringBuilder(sub_directory);
-    String url_path =
+  private static HttpURLConnection getHttpURLConnection(String subDirectory, Methods methods) {
+    StringBuilder subdirectory = subDirectory == null ? null : new StringBuilder(subDirectory);
+    String urlPath =
         String.format(
             "http://localhost:%d/api/%s",
             Connection.porta, subdirectory == null ? "" : subdirectory);
 
     HttpURLConnection conn;
     try {
-      URI uri = URI.create(url_path);
+      URI uri = URI.create(urlPath);
       URL url = uri.toURL(); // URL del backend Python
       conn = (HttpURLConnection) url.openConnection();
       // setto il metodo (GET, POST, DELETE, PUT)
