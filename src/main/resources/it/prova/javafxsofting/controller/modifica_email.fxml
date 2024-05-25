@@ -14,36 +14,32 @@
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifica Nome">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifica Email">
                     <font>
                         <Font size="30.0"/>
                     </font>
                 </Text>
                 <Separator prefWidth="200.0"/>
-                <HBox alignment="CENTER_LEFT" spacing="60.0" VBox.vgrow="ALWAYS">
+                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label text="Nome">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </Label>
-                        <MFXTextField fx:id="newNomeValue" floatMode="BORDER"
-                                      maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                                      minWidth="-Infinity" prefColumnCount="25" prefHeight="30.0"/>
+                        <HBox alignment="CENTER_LEFT" spacing="25.0">
+                            <children>
+                                <Label text="Email">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                                <MFXTextField fx:id="newEmail" floatMode="BORDER"
+                                              maxWidth="1.7976931348623157E308"
+                                              minHeight="-Infinity" minWidth="-Infinity"
+                                              prefColumnCount="28" prefHeight="30.0"
+                                              HBox.hgrow="ALWAYS"/>
+                            </children>
+                        </HBox>
+                        <Label fx:id="validateEmail" textAlignment="CENTER" VBox.vgrow="ALWAYS"/>
                     </children>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="30.0" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label text="Cognome">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </Label>
-                        <MFXTextField fx:id="newCognomeValue" floatMode="BORDER"
-                                      maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                                      minWidth="-Infinity" prefColumnCount="25" prefHeight="30.0"/>
-                    </children>
-                </HBox>
+                </VBox>
+                <Pane prefHeight="200.0" prefWidth="200.0"/>
                 <HBox alignment="BOTTOM_RIGHT" spacing="10.0">
                     <children>
                         <MFXButton fx:id="annullaBtn" buttonType="RAISED" depthLevel="LEVEL3"

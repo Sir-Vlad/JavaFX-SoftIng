@@ -43,11 +43,11 @@ public class ProfileAccountController implements Initializable {
     // imposto i dati dell'utente
     if (App.getUtente() != null) {
       nameAccount.setText(App.getUtente().getNome() + " " + App.getUtente().getCognome());
-      //      nameAccount.textProperty().bindBidirectional(App.getUtente().getNomeCompleto());
     } else {
       ScreenController.activate("login");
       return;
     }
+    nameAccount.textProperty().bindBidirectional(App.getUtente().nomeCompletoProperty());
 
     // ridimensionamento delle icone della sidebar
     resize(iconProfilo, 20, 20);
@@ -135,6 +135,14 @@ class TabController {
   private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
   private AnchorPane main = null;
 
+  protected String getKeyMain() {
+    return PANE_HASH_MAP.entrySet().stream()
+        .filter(entry -> Objects.equals(entry.getValue(), main))
+        .map(Map.Entry::getKey)
+        .findAny()
+        .orElseThrow();
+  }
+
   protected void removeTab(String name) {
     PANE_HASH_MAP.remove(name);
   }
@@ -151,13 +159,5 @@ class TabController {
 
   protected Node getButton(String name) {
     return BUTTONS_MAP.get(name);
-  }
-
-  protected String getKeyMain() {
-    return PANE_HASH_MAP.entrySet().stream()
-        .filter(entry -> Objects.equals(entry.getValue(), main))
-        .map(Map.Entry::getKey)
-        .findAny()
-        .orElseThrow();
   }
 }

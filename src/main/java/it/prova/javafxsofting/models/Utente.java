@@ -11,8 +11,6 @@ import lombok.Data;
 
 @Data
 public class Utente implements Serializable {
-  private static Utente instance;
-
   @SerializedName("id")
   @Expose(serialize = false)
   private int id;
@@ -42,11 +40,9 @@ public class Utente implements Serializable {
   private File imageUtente = null;
 
   @Expose(deserialize = false, serialize = false)
-  private StringProperty nomeCompleto = null;
+  private StringProperty nomeCompleto;
 
-  private Utente() {}
-
-  private Utente(
+  public Utente(
       String nome,
       String cognome,
       String email,
@@ -61,29 +57,21 @@ public class Utente implements Serializable {
     this.iban = iban;
     this.dataScadenza = dataScadenza;
     this.cvc = cvc;
-
-    this.nomeCompleto = new SimpleStringProperty(this.nome + "." + this.cognome);
   }
 
-  public static Utente getInstance() {
-    if (instance == null) {
-      instance = new Utente();
-    }
-    return instance;
+  public String getNomeCompleto() {
+    return nomeCompleto.get();
   }
 
-  public static Utente getInstance(
-      String nome,
-      String cognome,
-      String email,
-      String password,
-      String iban,
-      LocalDate dataScadenza,
-      String cvc) {
-    if (instance == null) {
-      instance = new Utente(nome, cognome, email, password, iban, dataScadenza, cvc);
+  public void setNomeCompleto(String nomeCompleto) {
+    this.nomeCompleto.set(nomeCompleto);
+  }
+
+  public StringProperty nomeCompletoProperty() {
+    if (nomeCompleto == null) {
+      nomeCompleto = new SimpleStringProperty(this.nome + " " + this.cognome);
     }
-    return instance;
+    return nomeCompleto;
   }
 
   @Override

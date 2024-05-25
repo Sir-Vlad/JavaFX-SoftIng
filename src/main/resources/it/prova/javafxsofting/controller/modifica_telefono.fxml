@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -8,42 +9,49 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0"
+            minWidth="-Infinity" prefHeight="300.0" prefWidth="550.0"
             xmlns="http://javafx.com/javafx/21">
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifica Nome">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifica Telefono">
                     <font>
                         <Font size="30.0"/>
                     </font>
                 </Text>
                 <Separator prefWidth="200.0"/>
-                <HBox alignment="CENTER_LEFT" spacing="60.0" VBox.vgrow="ALWAYS">
+                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label text="Nome">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </Label>
-                        <MFXTextField fx:id="newNomeValue" floatMode="BORDER"
-                                      maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                                      minWidth="-Infinity" prefColumnCount="25" prefHeight="30.0"/>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label text="Telefono">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                    <padding>
+                                        <Insets right="30.0"/>
+                                    </padding>
+                                </Label>
+                                <MFXComboBox fx:id="prefissoTelefono" floatMode="BORDER"
+                                             maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                                             minWidth="-Infinity" prefHeight="30.0"
+                                             prefWidth="120.0">
+                                    <padding>
+                                        <Insets left="30.0"/>
+                                    </padding>
+                                </MFXComboBox>
+                                <MFXTextField fx:id="newTelefono" alignment="CENTER"
+                                              floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                                              minHeight="-Infinity" minWidth="-Infinity"
+                                              prefColumnCount="20" prefHeight="30.0"
+                                              HBox.hgrow="ALWAYS"/>
+                            </children>
+                        </HBox>
+                        <Label fx:id="validateTelefono"/>
                     </children>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="30.0" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Label text="Cognome">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </Label>
-                        <MFXTextField fx:id="newCognomeValue" floatMode="BORDER"
-                                      maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                                      minWidth="-Infinity" prefColumnCount="25" prefHeight="30.0"/>
-                    </children>
-                </HBox>
+                </VBox>
+                <Pane prefHeight="200.0" prefWidth="200.0"/>
                 <HBox alignment="BOTTOM_RIGHT" spacing="10.0">
                     <children>
                         <MFXButton fx:id="annullaBtn" buttonType="RAISED" depthLevel="LEVEL3"

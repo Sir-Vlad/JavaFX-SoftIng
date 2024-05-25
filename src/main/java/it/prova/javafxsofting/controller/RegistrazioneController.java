@@ -148,7 +148,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     }
 
     Utente newUtente =
-        Utente.getInstance(
+        new Utente(
             capitalize(nomeField.getText().trim()),
             capitalize(cognomeField.getText().trim()),
             emailField.getText().trim(),

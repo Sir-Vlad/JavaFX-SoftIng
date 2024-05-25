@@ -3,7 +3,6 @@ package it.prova.javafxsofting;
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
-import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.errori.ErrorResponse;
 import it.prova.javafxsofting.serializzatori.ErrorResponseDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
@@ -15,8 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.List;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +51,7 @@ public class Connection {
     Connection.porta = porta;
   }
 
-  public static void deleteDataToBackend(String subDirectory) throws IOException {
+  public static boolean deleteDataToBackend(String subDirectory) throws IOException {
     if (Connection.porta == -1) {
       throw new RuntimeException("Connessione non disponibile");
     }
@@ -63,13 +60,10 @@ public class Connection {
 
     int response = conn.getResponseCode();
     if (response == HttpURLConnection.HTTP_NO_CONTENT) {
-      Alert alert = new Alert(AlertType.INFORMATION, "Account eliminato");
-      alert.showAndWait();
-      App.setUtente(null);
-      ScreenController.activate("home");
+      return true;
     }
-
     conn.disconnect();
+    return false;
   }
 
   public static <T extends Serializable> List<T> getArrayDataFromBackend(
