@@ -24,7 +24,6 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
-
   @Getter @Setter private static Utente utente = null;
   @Getter @Setter private static Logger log = Logger.getLogger(App.class.getName());
 
@@ -75,6 +74,14 @@ public class App extends javafx.application.Application {
 
     // chiude tutte gli stage aperti
     stage.setOnHidden(windowEvent -> Platform.exit());
+
+    stage.setOnCloseRequest(
+        event -> {
+          Platform.exit();
+          event.consume();
+          System.exit(0);
+        });
+
     stage.show();
   }
 

@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +27,6 @@ public class Connection {
       new GsonBuilder()
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
           .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
-          .registerTypeAdapter(ErrorResponse.class, new ErrorResponseDeserializer())
           .setDateFormat(DateFormat.LONG)
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
           .setExclusionStrategies(
@@ -43,6 +44,7 @@ public class Connection {
               })
           .create(); // crea gson con la corrente configurazione
 
+  @Contract(value = " -> fail", pure = true)
   private Connection() {
     throw new UnsupportedOperationException("This class is not supported");
   }
@@ -66,7 +68,7 @@ public class Connection {
     return false;
   }
 
-  public static <T extends Serializable> List<T> getArrayDataFromBackend(
+  public static <T extends Serializable> @Nullable List<T> getArrayDataFromBackend(
       String subDirectory, Class<T> objClass) throws Exception {
     HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.GET);
     int statusCode = conn.getResponseCode();

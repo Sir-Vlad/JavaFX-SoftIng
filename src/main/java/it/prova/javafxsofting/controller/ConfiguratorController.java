@@ -4,7 +4,6 @@ import io.github.palexdev.materialfx.controls.*;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.Header;
-import it.prova.javafxsofting.component.ProfileBox;
 import it.prova.javafxsofting.models.ModelloAuto;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -13,20 +12,14 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,12 +28,7 @@ public class ConfiguratorController implements Initializable {
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
   @FXML private MFXScrollPane scrollPane;
-  @FXML private VBox homeBtn;
-  @FXML private VBox changeModelBtn;
-  @FXML private ProfileBox account;
-  @FXML private VBox menu;
-  @FXML private Text labelHome;
-  @FXML private Text labelCambiaModello;
+  @FXML private Pane logoMarca;
   @FXML private Text fieldModello;
   @FXML private Text fieldMarca;
   @FXML private Text fieldModelloV;
@@ -52,9 +40,8 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldPeso;
   @FXML private Text fieldVolBagagliaio;
   @FXML private StackPane modelVisualize;
-  @FXML private SVGPath symbolMenu;
   @FXML private MFXButton saveConfigurazioneBtn;
-  private boolean isMenuStageOpen = false;
+  private final boolean isMenuStageOpen = false;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -80,6 +67,15 @@ public class ConfiguratorController implements Initializable {
 
     createBoxPrezzo(auto);
 
+    String pathImage =
+        "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
+    URL urlImage = App.class.getResource(pathImage);
+    if (urlImage == null) {
+      System.out.println("Image not found: " + urlImage.toString());
+    }
+    logoMarca.setStyle(
+        "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
+
     fieldModelloV.setText(auto.getNome());
     fieldMarca.setText(String.valueOf(auto.getMarca()));
     fieldModello.setText(auto.getNome());
@@ -102,17 +98,17 @@ public class ConfiguratorController implements Initializable {
             new ImageView(
                 new Image(String.valueOf(App.class.getResource("immagini/fake-account.png")))));
 
-    menu.setOnMouseClicked(
-        actionEvent -> {
-          ContextMenu contextMenu = createContextMenu();
-          Point2D point = menu.localToScreen(Point2D.ZERO);
-          // posiziono la finestra rispetto al bottone
-          double x = point.getX() - 80;
-          double y = point.getY() - 100;
-          openContextMenu(actionEvent, contextMenu, isMenuStageOpen, x, y);
-          isMenuStageOpen = !isMenuStageOpen;
-          actionEvent.consume();
-        });
+    //    menu.setOnMouseClicked(
+    //        actionEvent -> {
+    //          ContextMenu contextMenu = createContextMenu();
+    //          Point2D point = menu.localToScreen(Point2D.ZERO);
+    //          // posiziono la finestra rispetto al bottone
+    //          double x = point.getX() - 80;
+    //          double y = point.getY() - 100;
+    //          openContextMenu(actionEvent, contextMenu, isMenuStageOpen, x, y);
+    //          isMenuStageOpen = !isMenuStageOpen;
+    //          actionEvent.consume();
+    //        });
 
     createToggleButton();
   }
@@ -178,15 +174,15 @@ public class ConfiguratorController implements Initializable {
             });
   }
 
-  private void openContextMenu(
-      MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos, double yPos) {
-    if (open) {
-      menu.hide();
-    } else {
-      menu.show(account, xPos, yPos);
-    }
-    mouseEvent.consume();
-  }
+  //  private void openContextMenu(
+  //      MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos, double yPos) {
+  //    if (open) {
+  //      menu.hide();
+  //    } else {
+  //      menu.show(account, xPos, yPos);
+  //    }
+  //    mouseEvent.consume();
+  //  }
 
   private @NotNull ContextMenu createContextMenu() {
     ContextMenu contextMenu = new ContextMenu();

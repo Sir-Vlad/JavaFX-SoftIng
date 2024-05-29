@@ -1,13 +1,18 @@
 package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
+import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Data;
+import org.jetbrains.annotations.Contract;
 
 @Data
 public class Utente implements Serializable {
@@ -42,6 +47,7 @@ public class Utente implements Serializable {
   @Expose(deserialize = false, serialize = false)
   private StringProperty nomeCompleto;
 
+  @Contract(pure = true)
   public Utente(
       String nome,
       String cognome,

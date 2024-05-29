@@ -74,7 +74,24 @@ public class ModelloAuto implements Serializable {
   @Override
   public String toString() {
     return String.format(
-        "ModelloAuto{\n\tindex=%s,\n\tnome=%s,\n\tmarca=%s,\n\taltezza=%d,\n\tlunghezza=%d,\n\tpeso=%d,\n\tvolumeBagagliaio=%d\n\t}%s",
+        """
+        ModelloAuto{
+          Dati generali{
+            index=%s,
+            nome=%s,
+            marca=%s,
+          }
+          Dati tecnici{
+            altezza=%d,
+            lunghezza=%d,
+            peso=%d,
+            volumeBagagliaio=%d
+          }
+          Optionals{
+            %s
+          }
+        }
+        """,
         index, nome, marca, altezza, lunghezza, peso, volumeBagagliaio, Arrays.toString(optionals));
   }
 }
