@@ -14,13 +14,16 @@ import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Connection {
 
-  public static int porta = -1;
+  @Getter @Setter private static int porta = -1;
 
   static Gson gson =
       new GsonBuilder()
@@ -46,10 +49,6 @@ public class Connection {
   @Contract(value = " -> fail", pure = true)
   private Connection() {
     throw new UnsupportedOperationException("This class is not supported");
-  }
-
-  static void setPorta(int porta) {
-    Connection.porta = porta;
   }
 
   public static boolean deleteDataToBackend(String subDirectory) throws IOException {
@@ -175,7 +174,6 @@ public class Connection {
 
     // riceve la risposta dal backed
     int responseCode = conn.getResponseCode();
-    System.out.println(responseCode);
     if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
       StringBuilder response = new StringBuilder();
       try (BufferedReader br =

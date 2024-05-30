@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 public class HomeController implements Initializable {
-  public Header header;
+  @FXML private Header header;
   @FXML private VBox wrapperNuovo;
   @FXML private VBox wrapperUsato;
   @FXML private VBox wrapperRoot;

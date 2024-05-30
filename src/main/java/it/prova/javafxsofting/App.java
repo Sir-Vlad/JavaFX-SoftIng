@@ -7,8 +7,10 @@ import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -33,12 +35,12 @@ public class App extends javafx.application.Application {
         .filter(arg -> arg.contains("-Dport"))
         .forEach(arg -> Connection.setPorta(Integer.parseInt(arg.split("=")[1])));
 
-    log.info("Porta: " + Connection.porta);
+    log.log(Level.INFO, "Porta: {0}", Connection.getPorta());
 
     launch();
   }
 
-  private static void deleteDirectory(File dirImage) {
+  private static void deleteDirectory(File dirImage) throws IOException {
     if (dirImage.isDirectory()) {
       File[] files = dirImage.listFiles();
       if (files != null) {
@@ -47,7 +49,7 @@ public class App extends javafx.application.Application {
         }
       }
     }
-    dirImage.delete();
+    Files.delete(dirImage.toPath());
   }
 
   @Override
@@ -90,10 +92,15 @@ public class App extends javafx.application.Application {
 
     stage.setOnCloseRequest(
         event -> {
-          File dirImage =
-              new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
-
-          // deleteDirectory(dirImage);
+          //          File dirImage =
+          //              new
+          // File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
+          //
+          //          try {
+          //            deleteDirectory(dirImage);
+          //          } catch (IOException e) {
+          //            throw new RuntimeException(e);
+          //          }
 
           Platform.exit();
           event.consume();

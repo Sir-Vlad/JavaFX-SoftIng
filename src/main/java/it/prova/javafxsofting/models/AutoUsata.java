@@ -12,7 +12,7 @@ public class AutoUsata {
   private int prezzo;
   private File[] immagini;
   private int kmPercorsi;
-  private LocalDate anno_immatricolazione;
+  private LocalDate annoImmatricolazione;
   // dati auto
   private int altezza;
   private int lunghezza;

@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -70,7 +71,7 @@ public class ScegliModelloController implements Initializable {
       return;
     }
     if (modelliAuto != null) {
-      logger.info("Modelli caricati: " + modelliAuto.size());
+      logger.log(Level.INFO, "Modelli caricati: {0}", modelliAuto.size());
       logger.info("Init optional modelli");
       // accodato: optional dell'auto
       modelliAuto.forEach(
@@ -95,10 +96,12 @@ public class ScegliModelloController implements Initializable {
 
   private void settingCambioFilter() {}
 
+  private String elementTutti = "Tutti";
+
   private void settingAlimentazioneFilter() {
 
     List<String> a = getTypeAlimentazione();
-    a.addFirst("Tutti");
+    a.addFirst(elementTutti);
     ObservableList<String> typeAlimentazione = FXCollections.observableList(a);
     alimentazioneFilter.setItems(typeAlimentazione);
 
@@ -181,7 +184,7 @@ public class ScegliModelloController implements Initializable {
     ObservableList<String> marche =
         FXCollections.observableArrayList(
             Arrays.stream(Marca.values()).map(Enum::toString).toList());
-    marche.addFirst("Tutti");
+    marche.addFirst(elementTutti);
     marcaComboFilter.setItems(marche);
 
     marcaComboFilter
@@ -190,7 +193,7 @@ public class ScegliModelloController implements Initializable {
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
-                if (newValue.equals("Tutti")) {
+                if (newValue.equals(elementTutti)) {
                   flowPane.getChildren().clear();
                   cardAuto.stream()
                       .map(CardAuto::new)
@@ -211,7 +214,7 @@ public class ScegliModelloController implements Initializable {
 
   private void startPeriodicUpdate() {
     scheduler = Executors.newScheduledThreadPool(1);
-    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 5, 5, TimeUnit.MINUTES);
+    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 0, 5, TimeUnit.MINUTES);
   }
 
   private void updateListFromDatabase() {

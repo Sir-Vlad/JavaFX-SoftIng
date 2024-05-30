@@ -25,7 +25,6 @@ import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
-  private final boolean isMenuStageOpen = false;
   @FXML private Header header;
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
@@ -47,8 +46,9 @@ public class ConfiguratorController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     ModelloAuto auto = ScegliModelloController.getAutoSelezionata();
+    String config = "config";
     if (auto == null) {
-      ScreenController.removeScreen("config");
+      ScreenController.removeScreen(config);
       ScreenController.activate("scegliModello");
       return;
     }
@@ -56,13 +56,13 @@ public class ConfiguratorController implements Initializable {
     header.addTab(
         "Home",
         event -> {
-          ScreenController.removeScreen("config");
+          ScreenController.removeScreen(config);
           ScreenController.activate("home");
         });
     header.addTab(
         "Cambia Modello",
         event -> {
-          ScreenController.removeScreen("config");
+          ScreenController.removeScreen(config);
           ScreenController.activate("scegliModello");
         });
 
@@ -73,9 +73,10 @@ public class ConfiguratorController implements Initializable {
     URL urlImage = App.class.getResource(pathImage);
     if (urlImage == null) {
       System.out.println("Image not found: " + urlImage.toString());
+    } else {
+      logoMarca.setStyle(
+          "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
     }
-    logoMarca.setStyle(
-        "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
 
     fieldModelloV.setText(auto.getNome());
     fieldMarca.setText(String.valueOf(auto.getMarca()));
@@ -175,60 +176,5 @@ public class ConfiguratorController implements Initializable {
 
       toggleColor.getChildren().add(button);
     }
-
-    //    toggleGroup
-    //        .selectedToggleProperty()
-    //        .addListener(
-    //            (observable, oldValue, newValue) -> {
-    //              // Se il newValue è null riseleziono il toggle vecchio altrimenti seleziono
-    // quello
-    //              // nuovo. Questo mi serve per avere sempre un'alternativa selezionata.
-    //              if (newValue == null) {
-    //                toggleGroup.selectToggle(oldValue);
-    //              } else {
-    //                toggleGroup.selectToggle(newValue);
-    //
-    //                //                modelVisualize.setStyle(
-    //                //                    "-fx-background-color: "
-    //                //                        + "#"
-    //                //                        +
-    //                // toggleGroup.getSelectedToggle().getUserData().toString().split("0x")[1]);
-    //              }
-    //            });
-  }
-
-  private @NotNull ContextMenu createContextMenu() {
-    ContextMenu contextMenu = new ContextMenu();
-
-    MenuItem sommario = new MenuItem("Sommario");
-    sommario.setId("sommario");
-    sommario.setOnAction(
-        actionEvent -> {
-          System.out.println("Sommario");
-          actionEvent.consume();
-        });
-
-    MenuItem preventivo = new MenuItem("Preventivo");
-    preventivo.setId("preventivo");
-    preventivo.setOnAction(
-        actionEvent -> {
-          System.out.println("Preventivo");
-          actionEvent.consume();
-        });
-
-    MenuItem concessionari = new MenuItem("Concessionari");
-    concessionari.setId("concessionari");
-    concessionari.setOnAction(
-        actionEvent -> {
-          System.out.println("Concessionari vicino a te");
-          actionEvent.consume();
-        });
-
-    SeparatorMenuItem separator1 = new SeparatorMenuItem();
-    SeparatorMenuItem separator2 = new SeparatorMenuItem();
-
-    contextMenu.getItems().addAll(sommario, separator1, preventivo, separator2, concessionari);
-
-    return contextMenu;
   }
 }

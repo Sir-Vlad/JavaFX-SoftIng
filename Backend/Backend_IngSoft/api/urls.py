@@ -1,4 +1,12 @@
-from Backend_IngSoft.api.views import *
+from Backend_IngSoft.api.views import (
+    ImmaginiAutoNuoveListAPIView,
+    ModelliAutoListAPIView,
+    OptionalAutoListAPIView,
+    PreventiviUtenteListAPIView,
+    SedeListAPIView,
+    UtenteDetailAPIView,
+    UtenteListCreateAPIView,
+)
 from django.urls import path
 
 urlpatterns = [

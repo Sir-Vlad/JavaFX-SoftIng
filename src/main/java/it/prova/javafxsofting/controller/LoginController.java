@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,7 +48,7 @@ public class LoginController extends ValidateForm implements Initializable {
   @FXML private Label validateEmail;
   @FXML private Label validatePassword;
 
-  private Logger logger = Logger.getLogger(LoginController.class.getName());
+  private final Logger logger = Logger.getLogger(LoginController.class.getName());
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -80,9 +81,16 @@ public class LoginController extends ValidateForm implements Initializable {
     // check nel db
     try {
       Utente utente = Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class);
-      App.setUtente(utente);
+      if (utente != null) {
+        App.setUtente(utente);
+        logger.log(
+            Level.INFO,
+            () ->
+                String.format("Utente %s %s si è loggato", utente.getNome(), utente.getCognome()));
+      } else {
+        return;
+      }
     } catch (Exception e) {
-      System.out.println("Errore");
       Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
       alert.showAndWait();
       clearField();
@@ -96,8 +104,6 @@ public class LoginController extends ValidateForm implements Initializable {
       clearField();
       return;
     }
-
-    System.out.println(App.getUtente());
 
     ScreenController.addScreen(
         "profilo",

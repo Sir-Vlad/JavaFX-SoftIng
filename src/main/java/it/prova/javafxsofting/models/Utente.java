@@ -1,14 +1,10 @@
 package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
-
-import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
-import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Data;

@@ -2,6 +2,7 @@ package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import java.io.*;
 import java.util.ArrayList;
@@ -116,11 +117,14 @@ public class ModelloAuto implements Serializable {
     File pathDir =
         new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove/");
     if (!pathDir.exists() && pathDir.mkdirs()) {
-      System.out.println("creato");
+      App.getLog().info("Cartella immaginiAutoNuove creata");
     }
 
     for (ImmagineAuto immagineAuto : immagineAutoList) {
       String nameImmagine = pathDir.toPath() + "/" + immagineAuto.getNomeImmagine();
+      //      if (new File(nameImmagine).exists()) {
+      //        continue;
+      //      }
       String immagineBase64 = immagineAuto.getImmagineBase64();
       byte[] imageBytes = Base64.getDecoder().decode(immagineBase64);
 

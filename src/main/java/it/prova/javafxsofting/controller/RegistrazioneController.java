@@ -14,6 +14,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
@@ -59,6 +61,8 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   @FXML private Label validateIban;
   @FXML private Label validateCvc;
   @FXML private Label validateDate;
+
+  private Logger logger = Logger.getLogger(RegistrazioneController.class.getName());
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -111,6 +115,8 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         });
   }
 
+  private String literalFieldInvalid = "field-invalid";
+
   public void createAccount() {
     List<Constraint> nomeConstr = nomeField.validate();
     List<Constraint> cognomeConstr = cognomeField.validate();
@@ -125,9 +131,9 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     showError(emailConstr, emailField, validateEmail);
     showError(passwordConstr, passwordField, validatePassword);
     if (!passwordConstr.isEmpty()) {
-      confermaPasswordField.getStyleClass().add("field-invalid");
+      confermaPasswordField.getStyleClass().add(literalFieldInvalid);
     } else {
-      confermaPasswordField.getStyleClass().remove("field-invalid");
+      confermaPasswordField.getStyleClass().remove(literalFieldInvalid);
     }
     showError(ibanConstr, ibanField, validateIban);
     showError(dateConstr, dataScadenzaField, validateDate);
@@ -168,7 +174,11 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
     App.setUtente(newUtente);
 
-    App.getLog().info(newUtente.toString());
+    logger.log(
+        Level.INFO,
+        () ->
+            String.format(
+                "Utente %s %s si è loggato", newUtente.getNome(), newUtente.getCognome()));
 
     ScreenController.activate("home");
   }
@@ -264,7 +274,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (Boolean.TRUE.equals(newValue)) {
-                confermaPasswordField.getStyleClass().remove("field-invalid");
+                confermaPasswordField.getStyleClass().remove(literalFieldInvalid);
                 removeClassInvalid(passwordField, validatePassword);
               }
             });

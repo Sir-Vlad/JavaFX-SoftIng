@@ -1,5 +1,24 @@
-from Backend_IngSoft.api.serializers import *
-from Backend_IngSoft.models import ModelloAuto, Utente
+from Backend_IngSoft.api.serializers import (
+    AcquistoSerializer,
+    AutoUsataSerializer,
+    ImmaginiAutoNuoveSerializer,
+    ModelliAutoSerializer,
+    OptionalSerializer,
+    PreventivoSerializer,
+    SedeSerializer,
+    UtenteSerializer,
+)
+from Backend_IngSoft.models import (
+    Acquisto,
+    AutoUsata,
+    ImmaginiAutoNuove,
+    ModelloAuto,
+    Optional,
+    Possiede,
+    Preventivo,
+    Sede,
+    Utente,
+)
 from Backend_IngSoft.util.error import raises
 from django.http import HttpResponseNotFound
 from rest_framework import status

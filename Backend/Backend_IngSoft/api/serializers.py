@@ -1,7 +1,16 @@
 import base64
 from io import BytesIO
 
-from Backend_IngSoft.models import *
+from Backend_IngSoft.models import (
+    Acquisto,
+    AutoUsata,
+    ImmaginiAutoNuove,
+    Utente,
+    ModelloAuto,
+    Optional,
+    Sede,
+    Preventivo,
+)
 from PIL import Image
 from rest_framework import serializers
 

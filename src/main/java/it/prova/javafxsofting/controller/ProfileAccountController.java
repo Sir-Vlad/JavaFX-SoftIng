@@ -37,6 +37,9 @@ public class ProfileAccountController implements Initializable {
   @FXML private MFXButton indietroBtn;
   private TabController tabController;
 
+  private String literalOrdini = "ordini";
+  private String literalProfile = "profile";
+
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -58,7 +61,7 @@ public class ProfileAccountController implements Initializable {
     // create le tab della sidebar
     tabController = new TabController();
     tabController.addTab(
-        "profile",
+        literalProfile,
         FXMLLoader.load(
             Objects.requireNonNull(getClass().getResource("impostazioni_profilo.fxml"))),
         profiloBtn);
@@ -69,22 +72,22 @@ public class ProfileAccountController implements Initializable {
         preventiviBtn);
 
     AnchorPane anchorPane = new AnchorPane();
-    anchorPane.setId("ordini");
+    anchorPane.setId(literalOrdini);
 
-    tabController.addTab("ordini", anchorPane, ordiniBtn);
+    tabController.addTab(literalOrdini, anchorPane, ordiniBtn);
 
     // set default page open
-    content.getChildren().add(tabController.getTab("profile"));
+    content.getChildren().add(tabController.getTab(literalProfile));
     profiloBtn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
   }
 
   public void switchProfilo(MouseEvent mouseEvent) {
-    switchTab(profiloBtn, "profile");
+    switchTab(profiloBtn, literalProfile);
     mouseEvent.consume();
   }
 
   public void switchOrdini(MouseEvent mouseEvent) {
-    switchTab(ordiniBtn, "ordini");
+    switchTab(ordiniBtn, literalOrdini);
     mouseEvent.consume();
   }
 
@@ -94,7 +97,7 @@ public class ProfileAccountController implements Initializable {
   }
 
   public void signOut(MouseEvent mouseEvent) {
-    ScreenController.removeScreen("profile");
+    ScreenController.removeScreen(literalProfile);
     ScreenController.activate("login");
     mouseEvent.consume();
   }

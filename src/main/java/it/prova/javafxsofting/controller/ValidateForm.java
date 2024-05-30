@@ -107,7 +107,6 @@ public class ValidateForm {
                       newValueFormat.substring(
                           0, newValueFormat.indexOf('.', newValueFormat.indexOf('.') + 1));
                 } catch (Exception ignored) {
-
                 }
               }
               field.setText(newValueFormat);

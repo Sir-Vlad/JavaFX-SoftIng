@@ -4,11 +4,17 @@ import java.util.*;
 import java.util.Map.Entry;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import org.jetbrains.annotations.Contract;
 
 public class ScreenController {
   private static final HashMap<String, Pane> SCREEN_MAP = new HashMap<>();
   private static Scene main = null;
   private static String backPage = null;
+
+  @Contract(value = " -> fail", pure = true)
+  private ScreenController() {
+    throw new IllegalStateException("Utility class");
+  }
 
   public static void setMain(Scene main) {
     ScreenController.main = main;

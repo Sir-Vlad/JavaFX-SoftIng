@@ -37,7 +37,6 @@ class ModelloAuto(models.Model):
     marca = models.CharField(
         max_length=20, null=False, blank=False, choices=MarcaAuto
     )  # lista di valori noti
-    # descrizione = models.TextField()
     prezzo_base = models.IntegerField(null=False, blank=False)
     # dati auto
     altezza = models.IntegerField(null=False, blank=False)
@@ -98,7 +97,6 @@ class Preventivo(models.Model):
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
     data_emissione = models.DateField(null=False, blank=False)
     sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
-    # detrazione = models.ManyToManyField(Detrazione, on_delete=CASCADE)
     prezzo = models.IntegerField(null=False, blank=False)
 
 
@@ -240,9 +238,8 @@ class ImmaginiAutoNuove(AbstractImmagini):
         return f"imageAutoNuove/{filename}"
 
     def delete(self, *args, **kwargs):
-        if self.image:
-            if os.path.isfile(self.image.path):
-                os.remove(self.image.path)
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
