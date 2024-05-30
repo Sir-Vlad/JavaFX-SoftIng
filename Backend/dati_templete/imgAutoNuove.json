@@ -1,0 +1,386 @@
+[
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 1,
+    "fields": {
+      "image": "imageAutoNuove/BLACK.png",
+      "auto": 16
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 2,
+    "fields": {
+      "image": "imageAutoNuove/GRAY.png",
+      "auto": 16
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 3,
+    "fields": {
+      "image": "imageAutoNuove/WHITE.png",
+      "auto": 16
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 4,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_PEyFt84.png",
+      "auto": 2
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 5,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_wy14d7q.png",
+      "auto": 2
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 6,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_lVBNv5n.png",
+      "auto": 2
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 7,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_0j3BGSf.png",
+      "auto": 9
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 8,
+    "fields": {
+      "image": "imageAutoNuove/GRAY.jpeg",
+      "auto": 9
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 9,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_4l6inHF.png",
+      "auto": 9
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 10,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_UNawy5o.png",
+      "auto": 12
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 11,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_LYZFO2g.png",
+      "auto": 12
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 12,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_9ntFXxC.png",
+      "auto": 12
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 13,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_Qw0zeYc.png",
+      "auto": 13
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 14,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_5hvxL0s.png",
+      "auto": 13
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 15,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_ZD8GBPU.png",
+      "auto": 13
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 16,
+    "fields": {
+      "image": "imageAutoNuove/BLACK.png",
+      "auto": 7
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 17,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_aFa7xlG.png",
+      "auto": 7
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 18,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_qkJsqFQ.png",
+      "auto": 7
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 19,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_dwnlzyA.png",
+      "auto": 8
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 20,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_AQ2Fe13.png",
+      "auto": 8
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 21,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_1eLbBIs.png",
+      "auto": 8
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 22,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_Bzsy36d.png",
+      "auto": 4
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 23,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_2jM7dIz.png",
+      "auto": 4
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 24,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_tpkaW62.png",
+      "auto": 4
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 25,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_VYaS2Tu.png",
+      "auto": 5
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 26,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_6eIP5fZ.png",
+      "auto": 5
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 27,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_3v7F9mo.png",
+      "auto": 5
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 28,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_UFUWf5N.png",
+      "auto": 15
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 29,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_ciiRaZI.png",
+      "auto": 15
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 30,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_SQW64RH.png",
+      "auto": 15
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 31,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_TgNVVnJ.png",
+      "auto": 14
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 32,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_tcki7gD.png",
+      "auto": 14
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 33,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_d3lHTWV.png",
+      "auto": 14
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 34,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_7FpYnEJ.png",
+      "auto": 10
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 35,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_VxC5kF2.png",
+      "auto": 10
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 36,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_bpJPJme.png",
+      "auto": 10
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 37,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_OggCvCS.png",
+      "auto": 6
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 38,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_hnxcC8Y.png",
+      "auto": 6
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 39,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_Pf9re7f.png",
+      "auto": 6
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 40,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_vGLOD3y.png",
+      "auto": 1
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 41,
+    "fields": {
+      "image": "imageAutoNuove/GREY.png",
+      "auto": 1
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 42,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_e27lOFQ.png",
+      "auto": 1
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 43,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_Oo8Yyx8.png",
+      "auto": 11
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 44,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_ykk4Wh1.png",
+      "auto": 11
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 45,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_KyU89c4.png",
+      "auto": 11
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 46,
+    "fields": {
+      "image": "imageAutoNuove/BLACK_YHnIhS4.png",
+      "auto": 3
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 47,
+    "fields": {
+      "image": "imageAutoNuove/GRAY_Fiv8Ktx.png",
+      "auto": 3
+    }
+  },
+  {
+    "model": "Backend_IngSoft.immaginiautonuove",
+    "pk": 48,
+    "fields": {
+      "image": "imageAutoNuove/WHITE_uLaP6mh.png",
+      "auto": 3
+    }
+  }
+]

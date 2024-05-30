@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import it.prova.javafxsofting.errori.ErrorResponse;
-import it.prova.javafxsofting.serializzatori.ErrorResponseDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import java.io.*;
@@ -13,8 +12,8 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -84,13 +83,7 @@ public class Connection {
       Type type = TypeToken.getParameterized(List.class, objClass).getType();
       return gson.fromJson(content.toString(), type);
     } else if (statusCode == 404) {
-      InputStream inputStream = conn.getErrorStream();
-      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-      String line;
-      while ((line = bufferedReader.readLine()) != null) {
-        content.append(line);
-      }
-      throw new Exception(content.toString());
+      error404Connection(conn, content);
     }
     conn.disconnect();
     return null;
@@ -116,18 +109,42 @@ public class Connection {
       while ((line = bufferedReader.readLine()) != null) {
         content.append(line);
       }
+
+      if (content.isEmpty()) {
+        return null;
+      }
+
       return gson.fromJson(content.toString(), objClass);
-    } else if (statusCode == 404) {
-      InputStream inputStream = conn.getErrorStream();
+    } else if (statusCode == HttpURLConnection.HTTP_NOT_FOUND) {
+      error404Connection(conn, content);
+    }
+    conn.disconnect();
+    return null;
+  }
+
+  public static <T extends Serializable> List<T> getImageFromBackend(
+      String subDirectory, Class<T> objClass) throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.GET);
+    int statusCode = conn.getResponseCode();
+    StringBuilder content = new StringBuilder();
+
+    if (statusCode == 200) {
+      InputStream inputStream = conn.getInputStream();
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       String line;
       while ((line = bufferedReader.readLine()) != null) {
         content.append(line);
       }
-      throw new Exception(content.toString());
+
+      if (content.toString().equals("[]")) {
+        return Collections.emptyList();
+      }
+
+      Type type = TypeToken.getParameterized(List.class, objClass).getType();
+      return gson.fromJson(content.toString(), type);
     }
     conn.disconnect();
-    return null;
+    return Collections.emptyList();
   }
 
   /**
@@ -177,6 +194,17 @@ public class Connection {
     }
 
     conn.disconnect();
+  }
+
+  private static void error404Connection(HttpURLConnection conn, StringBuilder content)
+      throws Exception {
+    InputStream inputStream = conn.getErrorStream();
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    String line;
+    while ((line = bufferedReader.readLine()) != null) {
+      content.append(line);
+    }
+    throw new Exception(content.toString());
   }
 
   /**

@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,6 +45,8 @@ public class ScegliModelloController implements Initializable {
 
   ScheduledExecutorService scheduler;
 
+  private Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
+
   private List<String> getTypeAlimentazione() {
     return new ArrayList<>(
         cardAuto.stream()
@@ -57,8 +60,8 @@ public class ScegliModelloController implements Initializable {
     header.addTab("Home", event -> ScreenController.activate("home"));
     List<ModelloAuto> modelliAuto;
     try {
+      logger.info("Initializing modelli");
       modelliAuto = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
-      // todo: fare le get per gli optional dei modelli
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage());
       alert.setHeaderText("Errore del server");
@@ -67,10 +70,17 @@ public class ScegliModelloController implements Initializable {
       return;
     }
     if (modelliAuto != null) {
-      // accodato
+      logger.info("Modelli caricati: " + modelliAuto.size());
+      logger.info("Init optional modelli");
+      // accodato: optional dell'auto
       modelliAuto.forEach(
           modelloAuto ->
               modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
+
+      logger.info("Init immagini modelli");
+      // immagini delle auto
+      modelliAuto.forEach(ModelloAuto::setImmagini);
+
       cardAuto = FXCollections.observableList(modelliAuto);
       cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
     }
@@ -201,7 +211,7 @@ public class ScegliModelloController implements Initializable {
 
   private void startPeriodicUpdate() {
     scheduler = Executors.newScheduledThreadPool(1);
-    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 0, 5, TimeUnit.MINUTES);
+    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 5, 5, TimeUnit.MINUTES);
   }
 
   private void updateListFromDatabase() {
@@ -218,6 +228,9 @@ public class ScegliModelloController implements Initializable {
       newData.forEach(
           modelloAuto ->
               modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
+
+      newData.forEach(ModelloAuto::setImmagini);
+
       Platform.runLater(
           () -> {
             cardAuto.setAll(newData);

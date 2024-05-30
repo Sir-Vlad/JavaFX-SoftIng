@@ -18,9 +18,7 @@ class UtenteListCreateAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {
-            'message': [i for e in serializer.errors.values() for i in e]
-        }
+        error = {"message": [i for e in serializer.errors.values() for i in e]}
         print(error)
 
         return Response(error, status=status.HTTP_409_CONFLICT)
@@ -69,7 +67,7 @@ class ModelliAutoListAPIView(APIView):
         return Response(serializer.data)
 
 
-class OptionalAutoAPIView(APIView):
+class OptionalAutoListAPIView(APIView):
     def get(self, request, id_auto):
         try:
             auto = ModelloAuto.objects.get(id=id_auto)
@@ -118,13 +116,11 @@ class PreventiviUtenteListAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {
-            'message': [i for e in serializer.errors.values() for i in e]
-        }
+        error = {"message": [i for e in serializer.errors.values() for i in e]}
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AcquistoUtenteAPIView(APIView):
+class AcquistoUtenteListAPIView(APIView):
     def get(self, request, id_utente):
         try:
             utente = Utente.objects.get(id=id_utente)
@@ -146,9 +142,7 @@ class AcquistoUtenteAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {
-            'message': [i for e in serializer.errors.values() for i in e]
-        }
+        error = {"message": [i for e in serializer.errors.values() for i in e]}
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -163,9 +157,7 @@ class AutoUsateListAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {
-            'message': [i for e in serializer.errors.values() for i in e]
-        }
+        error = {"message": [i for e in serializer.errors.values() for i in e]}
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id_auto):
@@ -175,3 +167,10 @@ class AutoUsateListAPIView(APIView):
             return HttpResponseNotFound("Auto non esiste")
         auto.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ImmaginiAutoNuoveListAPIView(APIView):
+    def get(self, request, id_auto):
+        immagini = ImmaginiAutoNuove.objects.filter(auto=id_auto)
+        serializer = ImmaginiAutoNuoveSerializer(immagini, many=True)
+        return Response(serializer.data)

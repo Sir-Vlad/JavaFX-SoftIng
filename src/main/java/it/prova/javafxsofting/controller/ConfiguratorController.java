@@ -2,6 +2,7 @@ package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.*;
 import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.ColoriAuto;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.ModelloAuto;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
+  private final boolean isMenuStageOpen = false;
   @FXML private Header header;
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
@@ -39,9 +41,8 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldLunghezza;
   @FXML private Text fieldPeso;
   @FXML private Text fieldVolBagagliaio;
-  @FXML private StackPane modelVisualize;
+  @FXML private Pane modelVisualize;
   @FXML private MFXButton saveConfigurazioneBtn;
-  private final boolean isMenuStageOpen = false;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -92,25 +93,22 @@ public class ConfiguratorController implements Initializable {
     scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
     // immagine per visualizzare qualcosa
-    modelVisualize
-        .getChildren()
-        .add(
-            new ImageView(
-                new Image(String.valueOf(App.class.getResource("immagini/fake-account.png")))));
+    String resource;
+    if (auto.getImmagini().isEmpty()) {
+      resource = "immagini/fake-account.png";
+    } else {
+      resource = "immagini/immaginiAutoNuove/" + auto.getImmagini().getFirst().getName();
+    }
 
-    //    menu.setOnMouseClicked(
-    //        actionEvent -> {
-    //          ContextMenu contextMenu = createContextMenu();
-    //          Point2D point = menu.localToScreen(Point2D.ZERO);
-    //          // posiziono la finestra rispetto al bottone
-    //          double x = point.getX() - 80;
-    //          double y = point.getY() - 100;
-    //          openContextMenu(actionEvent, contextMenu, isMenuStageOpen, x, y);
-    //          isMenuStageOpen = !isMenuStageOpen;
-    //          actionEvent.consume();
-    //        });
+    ImageView imageView = new ImageView(new Image(String.valueOf(App.class.getResource(resource))));
+    imageView.setPreserveRatio(true);
 
-    createToggleButton();
+    imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
+    imageView.fitWidthProperty().bind(modelVisualize.widthProperty());
+
+    modelVisualize.getChildren().add(imageView);
+
+    createToggleButton(auto);
   }
 
   @FXML
@@ -138,51 +136,66 @@ public class ConfiguratorController implements Initializable {
     fieldPrezzoValue.setText(decimalFormat.format(auto.getPrezzoBase()) + " €");
   }
 
-  private void createToggleButton() {
+  private void createToggleButton(ModelloAuto auto) {
     // todo: quando ho i colori della macchina passarli come argomento e generare i colori così
+    ColoriAuto coloriAuto = new ColoriAuto();
     ToggleGroup toggleGroup = new ToggleGroup();
 
     ArrayList<Color> colorList = new ArrayList<>();
-    colorList.add(Color.RED);
-    colorList.add(Color.BLUE);
-    colorList.add(Color.GREEN);
+    colorList.add(Color.BLACK);
+    colorList.add(Color.GRAY);
+    colorList.add(Color.WHITE);
 
     for (Color color : colorList) {
-      // fixme: il nome del colore deve essere mappato tramite una mappa nome hex
-      MFXRectangleToggleNode button = new MFXRectangleToggleNode(color.toString());
+      MFXRectangleToggleNode button = new MFXRectangleToggleNode(coloriAuto.getNameColor(color));
       button.setToggleGroup(toggleGroup);
       button.setUserData(color);
       String hexValue = "#" + color.toString().split("0x")[1].substring(0, 6);
       button.setStyle("-fx-background-color: " + hexValue + ";");
+
+      button.setOnAction(
+          event -> {
+            String urlPath =
+                "immagini/immaginiAutoNuove/"
+                    + auto.getImmagini().stream()
+                        .filter(file -> file.getName().startsWith(coloriAuto.getNameColor(color)))
+                        .toList()
+                        .getFirst()
+                        .getName();
+            URL url = App.class.getResource(urlPath);
+            ImageView imageView = new ImageView(new Image(String.valueOf(url)));
+            imageView.setPreserveRatio(true);
+
+            imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
+            imageView.fitWidthProperty().bind(modelVisualize.widthProperty());
+
+            modelVisualize.getChildren().clear();
+            modelVisualize.getChildren().add(imageView);
+          });
+
       toggleColor.getChildren().add(button);
     }
 
-    toggleGroup
-        .selectedToggleProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              // Se il newValue è null riseleziono il toggle vecchio altrimenti seleziono quello
-              // nuovo. Questo mi serve per avere sempre un'alternativa selezionata.
-              if (newValue == null) {
-                toggleGroup.selectToggle(oldValue);
-              } else {
-                modelVisualize.setStyle(
-                    "-fx-background-color: "
-                        + "#"
-                        + toggleGroup.getSelectedToggle().getUserData().toString().split("0x")[1]);
-              }
-            });
+    //    toggleGroup
+    //        .selectedToggleProperty()
+    //        .addListener(
+    //            (observable, oldValue, newValue) -> {
+    //              // Se il newValue è null riseleziono il toggle vecchio altrimenti seleziono
+    // quello
+    //              // nuovo. Questo mi serve per avere sempre un'alternativa selezionata.
+    //              if (newValue == null) {
+    //                toggleGroup.selectToggle(oldValue);
+    //              } else {
+    //                toggleGroup.selectToggle(newValue);
+    //
+    //                //                modelVisualize.setStyle(
+    //                //                    "-fx-background-color: "
+    //                //                        + "#"
+    //                //                        +
+    //                // toggleGroup.getSelectedToggle().getUserData().toString().split("0x")[1]);
+    //              }
+    //            });
   }
-
-  //  private void openContextMenu(
-  //      MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos, double yPos) {
-  //    if (open) {
-  //      menu.hide();
-  //    } else {
-  //      menu.show(account, xPos, yPos);
-  //    }
-  //    mouseEvent.consume();
-  //  }
 
   private @NotNull ContextMenu createContextMenu() {
     ContextMenu contextMenu = new ContextMenu();

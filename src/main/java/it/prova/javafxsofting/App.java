@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,6 +36,18 @@ public class App extends javafx.application.Application {
     log.info("Porta: " + Connection.porta);
 
     launch();
+  }
+
+  private static void deleteDirectory(File dirImage) {
+    if (dirImage.isDirectory()) {
+      File[] files = dirImage.listFiles();
+      if (files != null) {
+        for (File file : files) {
+          deleteDirectory(file);
+        }
+      }
+    }
+    dirImage.delete();
   }
 
   @Override
@@ -77,6 +90,11 @@ public class App extends javafx.application.Application {
 
     stage.setOnCloseRequest(
         event -> {
+          File dirImage =
+              new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
+
+          // deleteDirectory(dirImage);
+
           Platform.exit();
           event.consume();
           System.exit(0);

@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -46,6 +47,8 @@ public class LoginController extends ValidateForm implements Initializable {
   @FXML private Label validateEmail;
   @FXML private Label validatePassword;
 
+  private Logger logger = Logger.getLogger(LoginController.class.getName());
+
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // ? shortcuts
@@ -76,8 +79,10 @@ public class LoginController extends ValidateForm implements Initializable {
 
     // check nel db
     try {
-      App.setUtente(Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class));
+      Utente utente = Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class);
+      App.setUtente(utente);
     } catch (Exception e) {
+      System.out.println("Errore");
       Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
       alert.showAndWait();
       clearField();
