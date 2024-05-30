@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source ./Backend/.venv/bin/activate
+# decommentare la prima volta che lancio lo script
+# pip install -r ./Backend/packages.txt
 
 # Define the backend command
 backend_cmd="python3 ./Backend/manage.py runserver"

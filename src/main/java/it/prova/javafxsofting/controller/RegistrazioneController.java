@@ -148,7 +148,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     }
 
     Utente newUtente =
-        Utente.getInstance(
+        new Utente(
             capitalize(nomeField.getText().trim()),
             capitalize(cognomeField.getText().trim()),
             emailField.getText().trim(),
@@ -166,9 +166,9 @@ public class RegistrazioneController extends ValidateForm implements Initializab
       return;
     }
 
-    App.utente = newUtente;
+    App.setUtente(newUtente);
 
-    App.log.info(newUtente.toString());
+    App.getLog().info(newUtente.toString());
 
     ScreenController.activate("home");
   }
@@ -197,7 +197,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(nomeField, validateNome);
               }
             });
@@ -210,7 +210,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(cognomeField, validateCognome);
               }
             });
@@ -239,7 +239,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(emailField, validateEmail);
               }
             });
@@ -263,7 +263,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 confermaPasswordField.getStyleClass().remove("field-invalid");
                 removeClassInvalid(passwordField, validatePassword);
               }
@@ -277,7 +277,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(ibanField, validateIban);
               }
             });
@@ -290,7 +290,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(dataScadenzaField, validateDate);
               }
             });
@@ -303,7 +303,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .validProperty()
         .addListener(
             (observableValue, oldValue, newValue) -> {
-              if (newValue) {
+              if (Boolean.TRUE.equals(newValue)) {
                 removeClassInvalid(cvcField, validateCvc);
               }
             });

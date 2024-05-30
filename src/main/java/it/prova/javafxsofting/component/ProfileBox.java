@@ -95,7 +95,7 @@ public class ProfileBox extends VBox implements Initializable {
   private @NotNull ContextMenu contextMenuAccount() {
     ContextMenu contextMenu = new ContextMenu();
 
-    if (App.utente == null) {
+    if (App.getUtente() == null) {
       MenuItem login = new MenuItem("Login");
       login.setId("login");
       login.setOnAction(
@@ -118,7 +118,7 @@ public class ProfileBox extends VBox implements Initializable {
       logout.setId("logout");
       logout.setOnAction(
           actionEvent -> {
-            App.utente = null;
+            App.setUtente(null);
             ScreenController.activate("home");
             actionEvent.consume();
           });

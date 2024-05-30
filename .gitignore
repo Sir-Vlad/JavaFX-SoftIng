@@ -8,6 +8,8 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/sonarlint
+.idea/inspectionProfiles
 *.iws
 *.iml
 *.ipr
@@ -40,3 +42,4 @@ build/
 Traccia/*.md
 lib/JFX3DModelImporters
 instance/data
+src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove/

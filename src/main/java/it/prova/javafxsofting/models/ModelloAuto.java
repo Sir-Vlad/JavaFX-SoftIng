@@ -2,8 +2,12 @@ package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.io.File;
-import java.io.Serializable;
+import it.prova.javafxsofting.Connection;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
 import lombok.Data;
 
 enum TipoMotore {
@@ -29,7 +33,7 @@ public class ModelloAuto implements Serializable {
   private int prezzoBase;
 
   @Expose(deserialize = false)
-  private File[] immagini;
+  private ArrayList<File> immagini;
 
   // dati auto
   @SerializedName("altezza")
@@ -49,7 +53,7 @@ public class ModelloAuto implements Serializable {
 
   // option
   @Expose(deserialize = false)
-  private Optional[] optional;
+  private Optional[] optionals;
 
   public ModelloAuto(
       int index,
@@ -59,7 +63,7 @@ public class ModelloAuto implements Serializable {
       int altezza,
       int lunghezza,
       int peso,
-      int volume_bagagliaio) {
+      int volumeBagagliaio) {
     this.index = index;
     this.nome = nome;
     this.prezzoBase = prezzoBase;
@@ -67,13 +71,67 @@ public class ModelloAuto implements Serializable {
     this.altezza = altezza;
     this.lunghezza = lunghezza;
     this.peso = peso;
-    this.volumeBagagliaio = volume_bagagliaio;
+    this.volumeBagagliaio = volumeBagagliaio;
   }
 
   @Override
   public String toString() {
     return String.format(
-        "ModelloAuto{\n\tindex=%s,\n\tnome=%s,\n\tmarca=%s,\n\taltezza=%d,\n\tlunghezza=%d,\n\tpeso=%d,\n\tvolumeBagagliaio=%d\n\t}",
-        index, nome, marca, altezza, lunghezza, peso, volumeBagagliaio);
+        """
+        ModelloAuto{
+          Dati generali{
+            index=%s,
+            nome=%s,
+            marca=%s,
+          }
+          Dati tecnici{
+            altezza=%d,
+            lunghezza=%d,
+            peso=%d,
+            volumeBagagliaio=%d
+          }
+          Optionals{
+            %s
+          }
+        }
+        """,
+        index, nome, marca, altezza, lunghezza, peso, volumeBagagliaio, Arrays.toString(optionals));
+  }
+
+  public void setImmagini() {
+    this.immagini = fetchImmagini(this.index);
+  }
+
+  private ArrayList<File> fetchImmagini(int index) {
+    ArrayList<File> immaginiList = new ArrayList<>();
+    List<ImmagineAuto> immagineAutoList;
+    try {
+      immagineAutoList =
+          Connection.getImageFromBackend(
+              String.format("immaginiAutoNuove/%d/", index), ImmagineAuto.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+    File pathDir =
+        new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove/");
+    if (!pathDir.exists() && pathDir.mkdirs()) {
+      System.out.println("creato");
+    }
+
+    for (ImmagineAuto immagineAuto : immagineAutoList) {
+      String nameImmagine = pathDir.toPath() + "/" + immagineAuto.getNomeImmagine();
+      String immagineBase64 = immagineAuto.getImmagineBase64();
+      byte[] imageBytes = Base64.getDecoder().decode(immagineBase64);
+
+      try (OutputStream os = new FileOutputStream(nameImmagine)) {
+        os.write(imageBytes);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      File output = new File(nameImmagine);
+      immaginiList.add(output);
+    }
+    return immaginiList;
   }
 }

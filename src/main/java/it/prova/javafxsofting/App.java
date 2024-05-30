@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -19,11 +20,13 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
-
-  public static Utente utente = null;
-  public static Logger log = Logger.getLogger(App.class.getName());
+  @Getter @Setter private static Utente utente = null;
+  @Getter @Setter private static Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -35,8 +38,20 @@ public class App extends javafx.application.Application {
     launch();
   }
 
+  private static void deleteDirectory(File dirImage) {
+    if (dirImage.isDirectory()) {
+      File[] files = dirImage.listFiles();
+      if (files != null) {
+        for (File file : files) {
+          deleteDirectory(file);
+        }
+      }
+    }
+    dirImage.delete();
+  }
+
   @Override
-  public void start(Stage stage) throws IOException {
+  public void start(@NotNull Stage stage) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/home.fxml"));
     Pane root = new Pane();
     root.getChildren().addAll((Node) fxmlLoader.load());
@@ -72,6 +87,19 @@ public class App extends javafx.application.Application {
 
     // chiude tutte gli stage aperti
     stage.setOnHidden(windowEvent -> Platform.exit());
+
+    stage.setOnCloseRequest(
+        event -> {
+          File dirImage =
+              new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
+
+          // deleteDirectory(dirImage);
+
+          Platform.exit();
+          event.consume();
+          System.exit(0);
+        });
+
     stage.show();
   }
 

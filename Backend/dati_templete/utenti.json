@@ -1,0 +1,132 @@
+[
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 1,
+    "fields": {
+      "email": "Kenna_Lesch98@example.com",
+      "password": "password123",
+      "nome": "Kiana",
+      "cognome": "Wilderman",
+      "numero_carta": "6762-4958-6396-8506",
+      "cvc": "008",
+      "data_scadenza": "2021-06-03"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 2,
+    "fields": {
+      "email": "Cordell_Wuckert49@gmail.com",
+      "password": "password123",
+      "nome": "Alfreda",
+      "cognome": "Spencer",
+      "numero_carta": "50187727632453997",
+      "cvc": "468",
+      "data_scadenza": "2020-03-18"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 3,
+    "fields": {
+      "email": "Ebony.Emard@gmail.com",
+      "password": "password123",
+      "nome": "Abbie",
+      "cognome": "Sporer",
+      "numero_carta": "5463-7537-1770-0499",
+      "cvc": "699",
+      "data_scadenza": "2023-07-29"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 4,
+    "fields": {
+      "email": "Eloise75@example.com",
+      "password": "password123",
+      "nome": "Berneice",
+      "cognome": "White",
+      "numero_carta": "3531-9262-7119-3839",
+      "cvc": "420",
+      "data_scadenza": "2023-05-14"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 5,
+    "fields": {
+      "email": "Shannon33@gmail.com",
+      "password": "password123",
+      "nome": "Bulah",
+      "cognome": "O'Kon",
+      "numero_carta": "3528-7584-9164-9695",
+      "cvc": "339",
+      "data_scadenza": "2020-02-16"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 6,
+    "fields": {
+      "email": "Vergie47@example.com",
+      "password": "password123",
+      "nome": "Duncan",
+      "cognome": "Willms",
+      "numero_carta": "3529-8283-6438-8751",
+      "cvc": "792",
+      "data_scadenza": "2023-07-17"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 7,
+    "fields": {
+      "email": "Carol.Lindgren@example.com",
+      "password": "password123",
+      "nome": "Tania",
+      "cognome": "Tillman",
+      "numero_carta": "3048-713198-4596",
+      "cvc": "890",
+      "data_scadenza": "2024-02-19"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 8,
+    "fields": {
+      "email": "Jewell_Farrell@gmail.com",
+      "password": "password123",
+      "nome": "Everette",
+      "cognome": "Feeney",
+      "numero_carta": "5142-9475-2422-9655",
+      "cvc": "818",
+      "data_scadenza": "2020-10-22"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 9,
+    "fields": {
+      "email": "Benjamin56@example.com",
+      "password": "password123",
+      "nome": "Tito",
+      "cognome": "Spencer",
+      "numero_carta": "4752950537862",
+      "cvc": "431",
+      "data_scadenza": "2021-07-11"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.utente",
+    "pk": 10,
+    "fields": {
+      "email": "Leonel_Purdy@example.com",
+      "password": "password123",
+      "nome": "Ramon",
+      "cognome": "Raynor",
+      "numero_carta": "6454-5744-2266-7834",
+      "cvc": "135",
+      "data_scadenza": "2022-01-04"
+    }
+  }
+]

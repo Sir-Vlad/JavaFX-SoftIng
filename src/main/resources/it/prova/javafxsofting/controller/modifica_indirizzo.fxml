@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modifica Indirizzo">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                </Text>
+                <Separator prefWidth="200.0" />
+                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="60.0">
+                            <children>
+                                <Label text="Via">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <MFXTextField fx:id="newVia" floatMode="BORDER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="35" prefHeight="30.0" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="validateNewVia" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="35.0">
+                            <children>
+                                <Label text="Civico">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <MFXTextField fx:id="newCivico" floatMode="BORDER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="35" prefHeight="30.0" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="valideteNewCivico" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="45.0">
+                            <children>
+                                <Label text="Città">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <MFXTextField fx:id="newCitta" floatMode="BORDER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="35" prefHeight="30.0" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="validateNewCitta" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <children>
+                                <Label text="Regione">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <MFXComboBox fx:id="newRegione" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="32" prefHeight="30.0" />
+                            </children>
+                        </HBox>
+                        <Label fx:id="validateNewRegione" />
+                    </children>
+                </VBox>
+                <HBox alignment="BOTTOM_RIGHT" spacing="10.0">
+                    <children>
+                        <MFXButton fx:id="annullaBtn" buttonType="RAISED" depthLevel="LEVEL3" text="Annulla" textAlignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </MFXButton>
+                        <MFXButton fx:id="modificaNomeButton" buttonType="RAISED" depthLevel="LEVEL3" text="Modifica" textAlignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </MFXButton>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </children>
+</AnchorPane>

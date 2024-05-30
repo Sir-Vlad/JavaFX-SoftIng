@@ -1,12 +1,10 @@
 from django.contrib import admin
+# from unfold.contrib.filters.admin import
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import Group, User
 from unfold.admin import ModelAdmin
 
 from .models import *
-
-
-# from unfold.contrib.filters.admin import
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User, Group
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
@@ -133,6 +131,11 @@ class ScontoAdmin(ModelAdmin):
 
 @admin.register(Ritiro)
 class RitiroAdmin(ModelAdmin):
+    pass
+
+
+@admin.register(ImmaginiAutoNuove)
+class ImmaginiAutoNuoveAdmin(ModelAdmin):
     pass
 
 

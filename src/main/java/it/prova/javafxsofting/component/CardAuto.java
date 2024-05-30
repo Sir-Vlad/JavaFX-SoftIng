@@ -38,8 +38,11 @@ public class CardAuto extends VBox {
     DecimalFormat decimalFormat = new DecimalFormat("###,###");
     labelPrezzo.setText(decimalFormat.format(auto.getPrezzoBase()));
 
-    URL imgUrl = App.class.getResource("immagini/car.jpeg"); // accodato: imgUrl cardAuto
-    wrapperImagine.setStyle("-fx-background-image: url(" + imgUrl + ")");
+    //    URL imgUrl = App.class.getResource("immagini/car.jpeg"); // accodato: imgUrl cardAuto
+    URL imgUrl =
+        App.class.getResource(
+            "immagini/immaginiAutoNuove/" + auto.getImmagini().getFirst().getName());
+    wrapperImagine.setStyle("-fx-background-image: url(" + imgUrl + "); ");
 
     rootCardAuto.setOnMouseClicked(
         event -> {

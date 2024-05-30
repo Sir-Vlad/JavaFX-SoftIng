@@ -1,8 +1,10 @@
+import os.path
 from datetime import datetime
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import CASCADE
+from django.utils.safestring import mark_safe
 
 
 class Utente(models.Model):
@@ -18,7 +20,7 @@ class Utente(models.Model):
         verbose_name_plural = "Utenti"
 
     def __str__(self):
-        return self.nome + ' ' + self.cognome
+        return self.nome + " " + self.cognome
 
 
 class ModelloAuto(models.Model):
@@ -32,8 +34,9 @@ class ModelloAuto(models.Model):
         BMW = "BMW"
 
     nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
-    marca = models.CharField(max_length=20, null=False, blank=False,
-                             choices=MarcaAuto)  # lista di valori noti
+    marca = models.CharField(
+        max_length=20, null=False, blank=False, choices=MarcaAuto
+    )  # lista di valori noti
     # descrizione = models.TextField()
     prezzo_base = models.IntegerField(null=False, blank=False)
     # dati auto
@@ -69,7 +72,7 @@ class Optional(models.Model):
     prezzo = models.IntegerField(blank=False)
 
     class Meta:
-        unique_together = ('nome', 'descrizione')
+        unique_together = ("nome", "descrizione")
         verbose_name_plural = "Optional"
 
     def __str__(self):
@@ -100,8 +103,9 @@ class Preventivo(models.Model):
 
 
 class Configurazione(models.Model):
-    preventivo = models.OneToOneField(Preventivo, on_delete=CASCADE, blank=False,
-                                      null=False)
+    preventivo = models.OneToOneField(
+        Preventivo, on_delete=CASCADE, blank=False, null=False
+    )
     optional = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False)
 
     class Meta:
@@ -109,9 +113,13 @@ class Configurazione(models.Model):
 
 
 class Acquisto(models.Model):
-    numero_fattura = models.CharField(max_length=10, unique=True, null=False, blank=False)
+    numero_fattura = models.CharField(
+        max_length=10, unique=True, null=False, blank=False
+    )
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
-    preventivo = models.ForeignKey(Preventivo, on_delete=CASCADE, null=False, blank=False)
+    preventivo = models.ForeignKey(
+        Preventivo, on_delete=CASCADE, null=False, blank=False
+    )
     acconto = models.IntegerField(null=False, blank=False)
     data_ritiro = models.DateField(null=False, blank=False)
 
@@ -143,8 +151,13 @@ class Periodo(models.Model):
         dicembre = "dicembre"
 
     mese = models.CharField(max_length=9, choices=Mesi, null=False, blank=False)
-    anno = models.IntegerField(choices=year_choice(), default=current_year(), null=False,
-                               blank=False, validators=[MaxValueValidator(9999)])
+    anno = models.IntegerField(
+        choices=year_choice(),
+        default=current_year(),
+        null=False,
+        blank=False,
+        validators=[MaxValueValidator(9999)],
+    )
 
     class Meta:
         unique_together = ("mese", "anno")
@@ -157,7 +170,8 @@ class Sconto(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
     percentuale_sconto = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(100)])  # valori da 1 a 100
+        validators=[MinValueValidator(1), MaxValueValidator(100)]
+    )  # valori da 1 a 100
 
     class Meta:
         unique_together = ("periodo", "modello")
@@ -186,8 +200,9 @@ class AutoUsata(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.CharField(max_length=20, null=False, blank=False)
     marca = models.CharField(max_length=20, null=False, blank=False)
-    prezzo = models.IntegerField(default=0, null=False, blank=False,
-                                 validators=[MinValueValidator(0)])
+    prezzo = models.IntegerField(
+        default=0, null=False, blank=False, validators=[MinValueValidator(0)]
+    )
     km_percorsi = models.IntegerField(null=False, blank=False)
     anno_immatricolazione = models.DateField(null=False, blank=False)
     # dati auto
@@ -204,20 +219,52 @@ class AutoUsata(models.Model):
         return self.modello + " - " + self.marca
 
 
-class ImmaginiAutoNuove(models.Model):
-    path = models.CharField(max_length=255)
-    auto = models.ForeignKey(ModelloAuto, on_delete=CASCADE)
+class AbstractImmagini(models.Model):
+    image = models.ImageField(upload_to="", default=None)
 
     class Meta:
-        unique_together = ("path", "auto")
+        abstract = True
+
+    def preview_img(self):
+        if self.image:
+            return mark_safe(f'<img src="{self.image.url}" />')
+        return "Nessuna immagine"
+
+    preview_img.short_description = "Anteprima Immagine"
 
 
-class ImmaginiAutoUsate(models.Model):
-    path = models.CharField(max_length=255)
+class ImmaginiAutoNuove(AbstractImmagini):
+    auto = models.ForeignKey(ModelloAuto, on_delete=CASCADE)
+
+    def upload_to(self, filename):
+        return f"imageAutoNuove/{filename}"
+
+    def delete(self, *args, **kwargs):
+        if self.image:
+            if os.path.isfile(self.image.path):
+                os.remove(self.image.path)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        try:
+            this = ImmaginiAutoNuove.objects.get(id=self.id)
+            if this.image != self.image:
+                this.image.delete(save=False)
+        except ImmaginiAutoNuove.DoesNotExist:
+            pass
+        self.image.name = self.upload_to(self.image)
+        super(AbstractImmagini, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = "Immagini Auto Nuove"
+        unique_together = ("image", "auto")
+
+
+class ImmaginiAutoUsate(AbstractImmagini):
     auto = models.ForeignKey(AutoUsata, on_delete=CASCADE)
 
     class Meta:
-        unique_together = ("path", "auto")
+        unique_together = ("image", "auto")
 
 
 class Detrazione(models.Model):

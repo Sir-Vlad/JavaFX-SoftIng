@@ -9,13 +9,13 @@ import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.Marca;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Optional;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +26,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class ScegliModelloController implements Initializable {
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
@@ -41,13 +43,25 @@ public class ScegliModelloController implements Initializable {
   private ObservableList<ModelloAuto> cardAuto;
   private List<ModelloAuto> autoFiltered;
 
+  ScheduledExecutorService scheduler;
+
+  private Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
+
+  private List<String> getTypeAlimentazione() {
+    return new ArrayList<>(
+        cardAuto.stream()
+            .map(modelloAuto -> modelloAuto.getOptionals()[0].getDescrizione())
+            .distinct()
+            .toList());
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     header.addTab("Home", event -> ScreenController.activate("home"));
     List<ModelloAuto> modelliAuto;
     try {
+      logger.info("Initializing modelli");
       modelliAuto = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
-      // todo: fare le get per gli optional dei modelli
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage());
       alert.setHeaderText("Errore del server");
@@ -56,6 +70,17 @@ public class ScegliModelloController implements Initializable {
       return;
     }
     if (modelliAuto != null) {
+      logger.info("Modelli caricati: " + modelliAuto.size());
+      logger.info("Init optional modelli");
+      // accodato: optional dell'auto
+      modelliAuto.forEach(
+          modelloAuto ->
+              modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
+
+      logger.info("Init immagini modelli");
+      // immagini delle auto
+      modelliAuto.forEach(ModelloAuto::setImmagini);
+
       cardAuto = FXCollections.observableList(modelliAuto);
       cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
     }
@@ -70,7 +95,38 @@ public class ScegliModelloController implements Initializable {
 
   private void settingCambioFilter() {}
 
-  private void settingAlimentazioneFilter() {}
+  private void settingAlimentazioneFilter() {
+
+    List<String> a = getTypeAlimentazione();
+    a.addFirst("Tutti");
+    ObservableList<String> typeAlimentazione = FXCollections.observableList(a);
+    alimentazioneFilter.setItems(typeAlimentazione);
+
+    alimentazioneFilter
+        .getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue != null) {
+                List<ModelloAuto> newAutoFiltered =
+                    cardAuto.stream()
+                        .filter(auto -> auto.getOptionals()[0].getDescrizione().equals(newValue))
+                        .toList();
+
+                if (autoFiltered == null) {
+                  autoFiltered = newAutoFiltered;
+                }
+
+                if (!autoFiltered.equals(newAutoFiltered)) {
+                  autoFiltered = newAutoFiltered;
+                  flowPane.getChildren().clear();
+                  autoFiltered.stream()
+                      .map(CardAuto::new)
+                      .forEach(auto -> flowPane.getChildren().add(auto));
+                }
+              }
+            });
+  }
 
   private void settingPrezzoFilter() {
     int[] minMaxPrezzo = minMaxPrezzoAuto();
@@ -101,7 +157,8 @@ public class ScegliModelloController implements Initializable {
             });
   }
 
-  private int[] minMaxPrezzoAuto() {
+  @Contract(" -> new")
+  private int @NotNull [] minMaxPrezzoAuto() {
     int max =
         cardAuto.stream()
             .mapToInt(ModelloAuto::getPrezzoBase)
@@ -153,13 +210,12 @@ public class ScegliModelloController implements Initializable {
   }
 
   private void startPeriodicUpdate() {
-    try (ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1)) {
-      scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 0, 5, TimeUnit.MINUTES);
-    }
+    scheduler = Executors.newScheduledThreadPool(1);
+    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 5, 5, TimeUnit.MINUTES);
   }
 
   private void updateListFromDatabase() {
-    App.log.info("Updating list from database");
+    App.getLog().info("Updating list from database");
     List<ModelloAuto> newData;
     try {
       newData = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
@@ -168,6 +224,13 @@ public class ScegliModelloController implements Initializable {
     }
 
     if (newData != null && !newData.equals(cardAuto)) {
+      // accodato
+      newData.forEach(
+          modelloAuto ->
+              modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
+
+      newData.forEach(ModelloAuto::setImmagini);
+
       Platform.runLater(
           () -> {
             cardAuto.setAll(newData);
