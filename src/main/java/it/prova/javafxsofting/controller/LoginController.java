@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -62,6 +63,11 @@ public class LoginController extends ValidateForm implements Initializable {
     // set validate field
     setValidateEmail();
     setValidatePassword();
+  }
+
+  public void switchIndietro(ActionEvent actionEvent) {
+    ScreenController.back();
+    actionEvent.consume();
   }
 
   @SneakyThrows

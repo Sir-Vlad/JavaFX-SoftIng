@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -181,6 +182,11 @@ public class RegistrazioneController extends ValidateForm implements Initializab
                 "Utente %s %s si è loggato", newUtente.getNome(), newUtente.getCognome()));
 
     ScreenController.activate("home");
+  }
+
+  public void switchIndietro(ActionEvent actionEvent) {
+    ScreenController.back();
+    actionEvent.consume();
   }
 
   private void dataFake() {

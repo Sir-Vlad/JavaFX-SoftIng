@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
-<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.DropShadow?>
@@ -16,7 +13,20 @@
     <children>
         <HBox prefHeight="800.0" prefWidth="1200.0">
             <children>
-                <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                <VBox prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <MFXButton fx:id="indietroBtn" buttonType="RAISED"
+                                           depthLevel="LEVEL0" onAction="#switchIndietro"
+                                           prefHeight="40.0" prefWidth="40.0" text="&lt;"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                </VBox>
                 <VBox prefWidth="400.0">
                     <children>
                         <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
