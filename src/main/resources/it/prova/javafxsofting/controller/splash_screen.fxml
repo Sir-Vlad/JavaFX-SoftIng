@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: rgb(111, 111, 111);" xmlns="http://javafx.com/javafx/21"
+            fx:controller="it.prova.javafxsofting.controller.SplashScreenController">
+    <children>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0">
+            <children>
+                <Pane prefHeight="75.0"/>
+                <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Pane prefWidth="150.0"/>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0"
+                              HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER">
+                                    <children>
+                                        <ImageView fitHeight="59.0" fitWidth="76.0"
+                                                   pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../immagini/icon.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              text="MyNextCar">
+                                            <font>
+                                                <Font size="35.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Pane prefHeight="30.0" prefWidth="300.0"/>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              text="By Laboratorio di Adrenalina"
+                                              HBox.hgrow="ALWAYS">
+                                            <font>
+                                                <Font size="14.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="V 1.0.0">
+                                            <font>
+                                                <Font size="25.0"/>
+                                            </font>
+                                        </Text>
+                                    </children>
+                                    <padding>
+                                        <Insets left="20.0"/>
+                                    </padding>
+                                </HBox>
+                            </children>
+                        </VBox>
+                        <Pane prefWidth="150.0"/>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="100.0">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                      text="L'applicazione sta caricando i dati"/>
+                                <MFXProgressBar animationSpeed="0.6" prefHeight="10.0"
+                                                prefWidth="600.0"/>
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="15.0" left="20.0" right="20.0" top="15.0"/>
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

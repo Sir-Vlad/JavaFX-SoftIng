@@ -3,6 +3,7 @@ package it.prova.javafxsofting;
 import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
+import it.prova.javafxsofting.controller.ScegliModelloController;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
 import java.io.File;
@@ -13,6 +14,9 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.application.Preloader.ProgressNotification;
+import javafx.application.Preloader.StateChangeNotification;
+import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -37,7 +41,8 @@ public class App extends javafx.application.Application {
 
     log.log(Level.INFO, "Porta: {0}", Connection.getPorta());
 
-    launch();
+    System.setProperty("javafx.preloader", SplashScreenPreloader.class.getCanonicalName());
+    launch(args);
   }
 
   private static void deleteDirectory(File dirImage) throws IOException {
@@ -50,6 +55,11 @@ public class App extends javafx.application.Application {
       }
     }
     Files.delete(dirImage.toPath());
+  }
+
+  @Override
+  public void init() throws Exception {
+    ScegliModelloController.fetchData();
   }
 
   @Override
@@ -108,6 +118,7 @@ public class App extends javafx.application.Application {
         });
 
     stage.show();
+    notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
   }
 
   private void createScreenController() throws IOException {
@@ -115,24 +126,34 @@ public class App extends javafx.application.Application {
         "home",
         FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
+    notifyPreloader(new ProgressNotification(20));
+
     ScreenController.addScreen(
         "scegliModello",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
 
+    notifyPreloader(new ProgressNotification(40));
+
     ScreenController.addScreen(
         "login",
         FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
+
+    notifyPreloader(new ProgressNotification(60));
 
     ScreenController.addScreen(
         "registrazione",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
 
+    notifyPreloader(new ProgressNotification(80));
+
     ScreenController.addScreen(
         "concessionari",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+
+    notifyPreloader(new ProgressNotification(100));
 
     ScreenController.addScreen(
         "usato",

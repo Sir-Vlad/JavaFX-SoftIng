@@ -15,15 +15,12 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ScegliModelloController implements Initializable {
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
+  private static final ObservableList<ModelloAuto> cardAuto = FXCollections.observableArrayList();
+  private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
   @FXML private AnchorPane root;
   @FXML private MFXScrollPane scrollPane;
   @FXML private FlowPane flowPane;
@@ -40,13 +39,9 @@ public class ScegliModelloController implements Initializable {
   @FXML private MFXSlider sliderMaxPrezzo;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
-
-  private ObservableList<ModelloAuto> cardAuto;
   private List<ModelloAuto> autoFiltered;
-
+  private final String elementTutti = "Tutti";
   ScheduledExecutorService scheduler;
-
-  private Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
 
   private List<String> getTypeAlimentazione() {
     return new ArrayList<>(
@@ -56,35 +51,30 @@ public class ScegliModelloController implements Initializable {
             .toList());
   }
 
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-    header.addTab("Home", event -> ScreenController.activate("home"));
-    List<ModelloAuto> modelliAuto;
+  public static void fetchData() {
+    App.getLog().info("Updating list from database");
+    List<ModelloAuto> newData;
     try {
-      logger.info("Initializing modelli");
-      modelliAuto = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
+      newData = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
     } catch (Exception e) {
-      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
-      alert.setHeaderText("Errore del server");
-      alert.showAndWait();
-      Platform.exit();
-      return;
+      throw new RuntimeException(e);
     }
-    if (modelliAuto != null) {
-      logger.log(Level.INFO, "Modelli caricati: {0}", modelliAuto.size());
-      logger.info("Init optional modelli");
-      // accodato: optional dell'auto
-      modelliAuto.forEach(
+
+    if (newData != null && !newData.equals(cardAuto)) {
+      // accodato
+      newData.forEach(
           modelloAuto ->
               modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
 
-      logger.info("Init immagini modelli");
-      // immagini delle auto
-      modelliAuto.forEach(ModelloAuto::setImmagini);
-
-      cardAuto = FXCollections.observableList(modelliAuto);
-      cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
+      newData.forEach(ModelloAuto::setImmagini);
     }
+    cardAuto.setAll(newData);
+  }
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    header.addTab("Home", event -> ScreenController.activate("home"));
+    cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
 
     settingMarcaFilter();
     settingPrezzoFilter();
@@ -95,8 +85,6 @@ public class ScegliModelloController implements Initializable {
   }
 
   private void settingCambioFilter() {}
-
-  private String elementTutti = "Tutti";
 
   private void settingAlimentazioneFilter() {
 
@@ -214,32 +202,16 @@ public class ScegliModelloController implements Initializable {
 
   private void startPeriodicUpdate() {
     scheduler = Executors.newScheduledThreadPool(1);
-    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 0, 5, TimeUnit.MINUTES);
+    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 5, 5, TimeUnit.MINUTES);
   }
 
   private void updateListFromDatabase() {
-    App.getLog().info("Updating list from database");
-    List<ModelloAuto> newData;
-    try {
-      newData = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    fetchData();
 
-    if (newData != null && !newData.equals(cardAuto)) {
-      // accodato
-      newData.forEach(
-          modelloAuto ->
-              modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
-
-      newData.forEach(ModelloAuto::setImmagini);
-
-      Platform.runLater(
-          () -> {
-            cardAuto.setAll(newData);
-            flowPane.getChildren().clear();
-            cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().add(auto));
-          });
-    }
+    Platform.runLater(
+        () -> {
+          flowPane.getChildren().clear();
+          cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().add(auto));
+        });
   }
 }
