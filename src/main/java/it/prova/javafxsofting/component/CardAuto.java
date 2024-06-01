@@ -5,6 +5,7 @@ import it.prova.javafxsofting.controller.ScegliModelloController;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.ModelloAuto;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Objects;
@@ -38,11 +39,13 @@ public class CardAuto extends VBox {
     DecimalFormat decimalFormat = new DecimalFormat("###,###");
     labelPrezzo.setText(decimalFormat.format(auto.getPrezzoBase()));
 
-    //    URL imgUrl = App.class.getResource("immagini/car.jpeg"); // accodato: imgUrl cardAuto
-    URL imgUrl =
-        App.class.getResource(
-            "immagini/immaginiAutoNuove/" + auto.getImmagini().getFirst().getName());
-    wrapperImagine.setStyle("-fx-background-image: url(" + imgUrl + "); ");
+    URL imgURL;
+    try {
+      imgURL = auto.getImmagini().getFirst().toURI().toURL();
+    } catch (MalformedURLException e) {
+      imgURL = App.class.getResource("immagini/car.png");
+    }
+    wrapperImagine.setStyle("-fx-background-image: url(" + imgURL + "); ");
 
     rootCardAuto.setOnMouseClicked(
         event -> {

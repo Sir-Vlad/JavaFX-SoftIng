@@ -5,6 +5,7 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.ColoriAuto;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.models.Configurazione;
 import it.prova.javafxsofting.models.ModelloAuto;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -15,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -98,10 +98,10 @@ public class ConfiguratorController implements Initializable {
     if (auto.getImmagini().isEmpty()) {
       resource = "immagini/fake-account.png";
     } else {
-      resource = "immagini/immaginiAutoNuove/" + auto.getImmagini().getFirst().getName();
+      resource = auto.getImmagini().getFirst().toURI().toString();
     }
 
-    ImageView imageView = new ImageView(new Image(String.valueOf(App.class.getResource(resource))));
+    ImageView imageView = new ImageView(new Image(resource));
     imageView.setPreserveRatio(true);
 
     imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
@@ -115,6 +115,9 @@ public class ConfiguratorController implements Initializable {
   @FXML
   public void salvaConfigurazione(@NotNull ActionEvent actionEvent) {
     NotImplemented.notImplemented();
+
+    Configurazione config = new Configurazione();
+
     actionEvent.consume();
   }
 
@@ -157,14 +160,13 @@ public class ConfiguratorController implements Initializable {
       button.setOnAction(
           event -> {
             String urlPath =
-                "immagini/immaginiAutoNuove/"
-                    + auto.getImmagini().stream()
-                        .filter(file -> file.getName().startsWith(coloriAuto.getNameColor(color)))
-                        .toList()
-                        .getFirst()
-                        .getName();
-            URL url = App.class.getResource(urlPath);
-            ImageView imageView = new ImageView(new Image(String.valueOf(url)));
+                auto.getImmagini().stream()
+                    .filter(file -> file.getName().startsWith(coloriAuto.getNameColor(color)))
+                    .toList()
+                    .getFirst()
+                    .toURI()
+                    .toString();
+            ImageView imageView = new ImageView(new Image(urlPath));
             imageView.setPreserveRatio(true);
 
             imageView.fitHeightProperty().bind(modelVisualize.heightProperty());

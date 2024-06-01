@@ -9,7 +9,12 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.models.Utente;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -89,10 +94,6 @@ public class LoginController extends ValidateForm implements Initializable {
       Utente utente = Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class);
       if (utente != null) {
         App.setUtente(utente);
-        logger.log(
-            Level.INFO,
-            () ->
-                String.format("Utente %s %s si è loggato", utente.getNome(), utente.getCognome()));
       } else {
         return;
       }
@@ -111,12 +112,37 @@ public class LoginController extends ValidateForm implements Initializable {
       return;
     }
 
+    logger.log(
+        Level.INFO,
+        () ->
+            String.format(
+                "Utente %s %s si è loggato",
+                App.getUtente().getNome(), App.getUtente().getCognome()));
+
+    if (rememberMe.isSelected()) {
+      saveUtente();
+    } else {
+      File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
+      Files.deleteIfExists(Path.of(path.getPath()));
+    }
+
     ScreenController.addScreen(
         "profilo",
         FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profilo_utente.fxml"))));
     clearField();
     // redirect alla pagina del profilo
     ScreenController.activate("home");
+  }
+
+  private void saveUtente() throws IOException {
+    String path = "src/main/resources/it/prova/javafxsofting/data";
+    try {
+      Files.createDirectory(Path.of(path));
+    } catch (FileAlreadyExistsException ignored) {
+    }
+
+    Path fileUtente = Files.createFile(Path.of(path + "/" + "utente.txt"));
+    Files.write(fileUtente, App.getUtente().getEmail().getBytes());
   }
 
   public void forgotPassword(MouseEvent mouseEvent) {

@@ -38,3 +38,8 @@ String json = "..."; // your JSON string
 Type type = new TypeToken<List<User>>() {}.getType();
 List<User> users = gson.fromJson(json, type);
 ```
+
+# Request per la conf
+
+Faccio la get a `api/preventivo/<id>/config/`
+nel beckend mi recupera il modello e tutti gli optional legati a quel modello 
