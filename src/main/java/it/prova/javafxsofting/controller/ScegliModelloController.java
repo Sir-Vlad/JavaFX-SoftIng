@@ -40,7 +40,7 @@ public class ScegliModelloController implements Initializable {
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
   private List<ModelloAuto> autoFiltered;
-  private final String elementTutti = "Tutti";
+  private static final String ELEMENT_TUTTI = "Tutti";
   ScheduledExecutorService scheduler;
 
   private List<String> getTypeAlimentazione() {
@@ -84,12 +84,14 @@ public class ScegliModelloController implements Initializable {
     startPeriodicUpdate();
   }
 
-  private void settingCambioFilter() {}
+  private void settingCambioFilter() {
+    // todo: da implementare
+  }
 
   private void settingAlimentazioneFilter() {
 
     List<String> a = getTypeAlimentazione();
-    a.addFirst(elementTutti);
+    a.addFirst(ELEMENT_TUTTI);
     ObservableList<String> typeAlimentazione = FXCollections.observableList(a);
     alimentazioneFilter.setItems(typeAlimentazione);
 
@@ -172,7 +174,7 @@ public class ScegliModelloController implements Initializable {
     ObservableList<String> marche =
         FXCollections.observableArrayList(
             Arrays.stream(Marca.values()).map(Enum::toString).toList());
-    marche.addFirst(elementTutti);
+    marche.addFirst(ELEMENT_TUTTI);
     marcaComboFilter.setItems(marche);
 
     marcaComboFilter
@@ -181,7 +183,7 @@ public class ScegliModelloController implements Initializable {
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
-                if (newValue.equals(elementTutti)) {
+                if (newValue.equals(ELEMENT_TUTTI)) {
                   flowPane.getChildren().clear();
                   cardAuto.stream()
                       .map(CardAuto::new)

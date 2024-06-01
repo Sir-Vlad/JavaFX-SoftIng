@@ -71,9 +71,7 @@ public class ConfiguratorController implements Initializable {
     String pathImage =
         "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
     URL urlImage = App.class.getResource(pathImage);
-    if (urlImage == null) {
-      System.out.println("Image not found: " + urlImage.toString());
-    } else {
+    if (urlImage != null) {
       logoMarca.setStyle(
           "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
     }

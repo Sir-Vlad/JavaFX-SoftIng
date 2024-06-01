@@ -28,6 +28,12 @@ public class Utente implements Serializable {
   @SerializedName("password")
   private String password;
 
+  @SerializedName("indirizzo")
+  private String indirizzo;
+
+  @SerializedName("numero_telefono")
+  private String numTelefono;
+
   @SerializedName("numero_carta")
   private String iban;
 
@@ -59,6 +65,24 @@ public class Utente implements Serializable {
     this.iban = iban;
     this.dataScadenza = dataScadenza;
     this.cvc = cvc;
+  }
+
+  public Utente(Utente newUtente) {
+    this.id = newUtente.id;
+    this.imageUtente = newUtente.imageUtente;
+
+    this.nome = newUtente.nome;
+    this.cognome = newUtente.cognome;
+    this.nomeCompleto = newUtente.nomeCompleto;
+
+    this.email = newUtente.email;
+    this.password = newUtente.password;
+    this.indirizzo = newUtente.indirizzo;
+    this.numTelefono = newUtente.numTelefono;
+
+    this.iban = newUtente.iban;
+    this.dataScadenza = newUtente.dataScadenza;
+    this.cvc = newUtente.cvc;
   }
 
   public String getNomeCompleto() {

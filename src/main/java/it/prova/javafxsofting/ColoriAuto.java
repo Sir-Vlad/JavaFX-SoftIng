@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 import javafx.scene.paint.Color;
 
 public class ColoriAuto {
-  private HashMap<String, Color> colorMap;
+  private final HashMap<String, Color> colorMap;
 
   public ColoriAuto() {
     colorMap = new HashMap<>();

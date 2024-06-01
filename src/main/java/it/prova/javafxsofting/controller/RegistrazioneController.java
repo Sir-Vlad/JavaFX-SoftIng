@@ -33,9 +33,10 @@ import javafx.scene.layout.*;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class RegistrazioneController extends ValidateForm implements Initializable {
+  private static final String LITERAL_FIELD_INVALID = "field-invalid";
+  private final Logger logger = Logger.getLogger(RegistrazioneController.class.getName());
   @FXML private AnchorPane root;
   @FXML private VBox wrapperRegistrazione;
-
   @FXML private Label nomeLabel;
   @FXML private Label cognomeLabel;
   @FXML private Label emailLabel;
@@ -44,7 +45,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   @FXML private Label ibanLabel;
   @FXML private Label dataScadenzaLabel;
   @FXML private Label cvcLabel;
-
   @FXML private MFXTextField ibanField;
   @FXML private MFXTextField nomeField;
   @FXML private MFXTextField cognomeField;
@@ -54,7 +54,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   @FXML private MFXDatePicker dataScadenzaField;
   @FXML private MFXTextField cvcField;
   @FXML private MFXButton createAccountBtn;
-
   @FXML private Label validateNome;
   @FXML private Label validateCognome;
   @FXML private Label validateEmail;
@@ -62,8 +61,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
   @FXML private Label validateIban;
   @FXML private Label validateCvc;
   @FXML private Label validateDate;
-
-  private Logger logger = Logger.getLogger(RegistrazioneController.class.getName());
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -116,8 +113,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         });
   }
 
-  private String literalFieldInvalid = "field-invalid";
-
   public void createAccount() {
     List<Constraint> nomeConstr = nomeField.validate();
     List<Constraint> cognomeConstr = cognomeField.validate();
@@ -132,9 +127,9 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     showError(emailConstr, emailField, validateEmail);
     showError(passwordConstr, passwordField, validatePassword);
     if (!passwordConstr.isEmpty()) {
-      confermaPasswordField.getStyleClass().add(literalFieldInvalid);
+      confermaPasswordField.getStyleClass().add(LITERAL_FIELD_INVALID);
     } else {
-      confermaPasswordField.getStyleClass().remove(literalFieldInvalid);
+      confermaPasswordField.getStyleClass().remove(LITERAL_FIELD_INVALID);
     }
     showError(ibanConstr, ibanField, validateIban);
     showError(dateConstr, dataScadenzaField, validateDate);
@@ -166,7 +161,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
     // todo: aggiungerlo nel db se ritorna un errore mostrare un errore se no redirect alla home
     try {
-      Connection.postDataToBacked(newUtente, "utenti/");
+      Connection.postPutDataToBacked(newUtente, "utenti/");
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage());
       alert.showAndWait();
@@ -280,7 +275,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .addListener(
             (observableValue, oldValue, newValue) -> {
               if (Boolean.TRUE.equals(newValue)) {
-                confermaPasswordField.getStyleClass().remove(literalFieldInvalid);
+                confermaPasswordField.getStyleClass().remove(LITERAL_FIELD_INVALID);
                 removeClassInvalid(passwordField, validatePassword);
               }
             });

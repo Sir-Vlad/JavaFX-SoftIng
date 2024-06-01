@@ -135,13 +135,14 @@ public class LoginController extends ValidateForm implements Initializable {
   }
 
   private void saveUtente() throws IOException {
-    String path = "src/main/resources/it/prova/javafxsofting/data";
+    final String pathStr = "src/main/resources/it/prova/javafxsofting/data";
+    Path path = Path.of(pathStr);
     try {
-      Files.createDirectory(Path.of(path));
+      Files.createDirectory(path);
     } catch (FileAlreadyExistsException ignored) {
     }
 
-    Path fileUtente = Files.createFile(Path.of(path + "/" + "utente.txt"));
+    Path fileUtente = Files.createFile(path.resolve("utente.txt"));
     Files.write(fileUtente, App.getUtente().getEmail().getBytes());
   }
 

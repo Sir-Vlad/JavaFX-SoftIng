@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
   @Getter @Setter private static Utente utente = null;
-  @Getter @Setter private static Logger log = Logger.getLogger(App.class.getName());
+  @Getter private static Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -45,11 +45,16 @@ public class App extends javafx.application.Application {
     launch(args);
   }
 
-  private static void checkRememberUtente() throws Exception {
+  private static void checkRememberUtente() {
     File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
     if (path.exists()) {
-      List<String> text = Files.readAllLines(Path.of(path.getPath()));
-      App.setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+      List<String> text = null;
+      try {
+        text = Files.readAllLines(Path.of(path.getPath()));
+        App.setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+      } catch (Exception ignored) {
+
+      }
     }
   }
 
@@ -67,7 +72,7 @@ public class App extends javafx.application.Application {
 
   @Override
   public void init() throws Exception {
-    //    ScegliModelloController.fetchData(); // debug
+    // ScegliModelloController.fetchData(); // debug
     checkRememberUtente();
   }
 
@@ -146,22 +151,22 @@ public class App extends javafx.application.Application {
         "login",
         FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
 
-    //    ScreenController.addScreen(
-    //        "registrazione",
-    //        FXMLLoader.load(
-    //            Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
+    ScreenController.addScreen(
+        "registrazione",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
     // // debug
 
-    //    ScreenController.addScreen(
-    //        "concessionari",
-    //        FXMLLoader.load(
-    //            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+    ScreenController.addScreen(
+        "concessionari",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
     // // debug
 
-    //    ScreenController.addScreen(
-    //        "usato",
-    //
-    // FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/usato.fxml")))); //
+    ScreenController.addScreen(
+        "usato",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/usato.fxml")))); //
     // debug
   }
 }

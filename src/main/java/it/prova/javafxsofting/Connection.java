@@ -14,7 +14,6 @@ import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -23,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Connection {
 
-  @Getter @Setter private static int porta = -1;
-
-  static Gson gson =
+  static final Gson gson =
       new GsonBuilder()
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
           .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
@@ -45,6 +42,7 @@ public class Connection {
                 }
               })
           .create(); // crea gson con la corrente configurazione
+  @Getter @Setter private static int porta = -1;
 
   @Contract(value = " -> fail", pure = true)
   private Connection() {
@@ -153,12 +151,8 @@ public class Connection {
    * @param data dati da inviare
    * @param subDirectory url dove inviare i dati
    */
-  public static <T extends Serializable> void postDataToBacked(T data, String subDirectory)
+  public static <T extends Serializable> void postPutDataToBacked(T data, String subDirectory)
       throws Exception {
-    if (Connection.porta == -1) {
-      throw new RuntimeException("Connessione non disponibile");
-    }
-
     HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.POST);
 
     // Dati da inviare al backend in formato JSON
@@ -183,8 +177,41 @@ public class Connection {
         while ((responseLine = br.readLine()) != null) {
           response.append(responseLine.trim());
         }
-        System.out.println("Risposta: " + response); // Stampare la risposta dal backend
+        // fixme: non riesce a serializzare l'errore
+        ErrorResponse errorResponse = gson.fromJson(response.toString(), ErrorResponse.class);
+        throw new Exception(errorResponse.getMessage());
+      }
+    }
 
+    conn.disconnect();
+  }
+
+  public static <T extends Serializable> void putDataToBackend(T data, String subDirectory)
+      throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.PUT);
+
+    // Dati da inviare al backend in formato JSON
+    String jsonInputString = gson.toJson(data);
+
+    // invia i dati al backed
+    try (OutputStream os = conn.getOutputStream()) {
+      byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+      os.write(input, 0, input.length);
+    } catch (IOException e) {
+      throw new RuntimeException("Errore nell'invio dei dati");
+    }
+
+    // riceve la risposta dal backed
+    int responseCode = conn.getResponseCode();
+    if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
+      StringBuilder response = new StringBuilder();
+      try (BufferedReader br =
+          new BufferedReader(
+              new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+        String responseLine;
+        while ((responseLine = br.readLine()) != null) {
+          response.append(responseLine.trim());
+        }
         // fixme: non riesce a serializzare l'errore
         ErrorResponse errorResponse = gson.fromJson(response.toString(), ErrorResponse.class);
         throw new Exception(errorResponse.getMessage());

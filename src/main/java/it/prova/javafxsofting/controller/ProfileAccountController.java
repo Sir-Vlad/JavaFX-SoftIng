@@ -19,26 +19,22 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 public class ProfileAccountController implements Initializable {
+  private static final String LITERAL_ORDINI = "ordini";
+  private static final String LITERAL_PROFILE = "profile";
   @FXML private HBox imageAccount;
   @FXML private Label nameAccount;
-
   @FXML private HBox profiloBtn;
   @FXML private HBox ordiniBtn;
   @FXML private HBox preventiviBtn;
   @FXML private HBox signOutBtn;
-
   @FXML private SVGPath iconProfilo;
   @FXML private SVGPath iconOrdini;
   @FXML private SVGPath iconPreventivi;
   @FXML private SVGPath iconSignOut;
-
   @FXML private VBox content;
   @FXML private VBox sidebar;
   @FXML private MFXButton indietroBtn;
   private TabController tabController;
-
-  private String literalOrdini = "ordini";
-  private String literalProfile = "profile";
 
   @SneakyThrows
   @Override
@@ -61,7 +57,7 @@ public class ProfileAccountController implements Initializable {
     // create le tab della sidebar
     tabController = new TabController();
     tabController.addTab(
-        literalProfile,
+        LITERAL_PROFILE,
         FXMLLoader.load(
             Objects.requireNonNull(getClass().getResource("impostazioni_profilo.fxml"))),
         profiloBtn);
@@ -72,22 +68,22 @@ public class ProfileAccountController implements Initializable {
         preventiviBtn);
 
     AnchorPane anchorPane = new AnchorPane();
-    anchorPane.setId(literalOrdini);
+    anchorPane.setId(LITERAL_ORDINI);
 
-    tabController.addTab(literalOrdini, anchorPane, ordiniBtn);
+    tabController.addTab(LITERAL_ORDINI, anchorPane, ordiniBtn);
 
     // set default page open
-    content.getChildren().add(tabController.getTab(literalProfile));
+    content.getChildren().add(tabController.getTab(LITERAL_PROFILE));
     profiloBtn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
   }
 
   public void switchProfilo(MouseEvent mouseEvent) {
-    switchTab(profiloBtn, literalProfile);
+    switchTab(profiloBtn, LITERAL_PROFILE);
     mouseEvent.consume();
   }
 
   public void switchOrdini(MouseEvent mouseEvent) {
-    switchTab(ordiniBtn, literalOrdini);
+    switchTab(ordiniBtn, LITERAL_ORDINI);
     mouseEvent.consume();
   }
 
@@ -97,7 +93,7 @@ public class ProfileAccountController implements Initializable {
   }
 
   public void signOut(MouseEvent mouseEvent) {
-    ScreenController.removeScreen(literalProfile);
+    ScreenController.removeScreen(LITERAL_PROFILE);
     ScreenController.activate("login");
     mouseEvent.consume();
   }

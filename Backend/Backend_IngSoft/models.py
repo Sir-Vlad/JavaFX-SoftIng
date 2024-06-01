@@ -12,6 +12,8 @@ class Utente(models.Model):
     password = models.CharField(max_length=20, null=False, blank=False)
     nome = models.CharField(max_length=20, null=False, blank=False)
     cognome = models.CharField(max_length=20, null=False, blank=False)
+    indirizzo = models.CharField(max_length=100, null=True, blank=False)
+    numero_telefono = models.CharField(max_length=10, null=True, blank=False)
     numero_carta = models.CharField(max_length=16, null=False, blank=False)
     data_scadenza = models.DateField(null=False, blank=False)
     cvc = models.CharField(max_length=3, null=False, blank=False)

@@ -1,10 +1,11 @@
 package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class Sede {
+public class Sede implements Serializable {
   @SerializedName("nome")
   private String nome;
 

@@ -15,7 +15,8 @@
                 <Header fx:id="header"/>
                 <HBox fx:id="context" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <Pane fx:id="modelVisualize" prefWidth="700.0"/>
+                        <Pane fx:id="modelVisualize" prefWidth="700.0"
+                              style="-fx-background-color: white;"/>
                         <MFXScrollPane fx:id="scrollPane" hbarPolicy="NEVER" pannable="true"
                                        vbarPolicy="ALWAYS">
                             <content>
