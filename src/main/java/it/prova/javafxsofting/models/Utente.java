@@ -80,14 +80,14 @@ public class Utente implements Serializable {
   public String toString() {
     return String.format(
         """
-        Utente{
-          Dati personali{
+        Utente {
+          Dati personali {
             nome='%s',
             cognome='%s',
             email='%s',
             password='%s'
           },
-          Coordinate Bancarie{
+          Coordinate Bancarie {
             iban='%s',
             dataScadenza='%s,
             cvc='%s

@@ -25,7 +25,7 @@ public class Optional implements Serializable {
           nome='%s',
           descrizione='%s',
           prezzo=%d
-       }
+        }
        """,
         nome, descrizione, prezzo);
   }
