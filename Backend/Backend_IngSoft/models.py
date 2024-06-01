@@ -91,6 +91,15 @@ class Sede(models.Model):
     def __str__(self):
         return self.nome
 
+    @property
+    def indirizzo(self):
+        return {
+            "via": self.via,
+            "civico": self.civico,
+            "citta": self.citta,
+            "cap": self.cap,
+        }
+
 
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
@@ -259,6 +268,24 @@ class ImmaginiAutoNuove(AbstractImmagini):
 
 class ImmaginiAutoUsate(AbstractImmagini):
     auto = models.ForeignKey(AutoUsata, on_delete=CASCADE)
+
+    def upload_to(self, filename):
+        return f"imageAutoUsate/{filename}"
+
+    def delete(self, *args, **kwargs):
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        try:
+            this = ImmaginiAutoNuove.objects.get(id=self.id)
+            if this.image != self.image:
+                this.image.delete(save=False)
+        except ImmaginiAutoNuove.DoesNotExist:
+            pass
+        self.image.name = self.upload_to(self.image)
+        super(AbstractImmagini, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = ("image", "auto")

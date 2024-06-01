@@ -193,3 +193,10 @@ class ImmaginiAutoNuoveListAPIView(APIView):
         immagini = ImmaginiAutoNuove.objects.filter(auto=id_auto)
         serializer = ImmaginiAutoNuoveSerializer(immagini, many=True)
         return Response(serializer.data)
+
+
+class PreventiviListAPIView(APIView):
+    def get(self, request):
+        preventivi = Preventivo.objects.all()
+        serializer = PreventivoSerializer(preventivi, many=True)
+        return Response(serializer.data)

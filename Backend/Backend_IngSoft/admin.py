@@ -139,4 +139,9 @@ class ImmaginiAutoNuoveAdmin(ModelAdmin):
     pass
 
 
+@admin.register(Preventivo)
+class PreventivoAdmin(ModelAdmin):
+    pass
+
+
 # TODO: https://medium.com/django-unleashed/django-admin-displaying-images-in-your-models-bb7e9d8be105

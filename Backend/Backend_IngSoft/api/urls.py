@@ -2,6 +2,7 @@ from Backend_IngSoft.api.views import (
     ImmaginiAutoNuoveListAPIView,
     ModelliAutoListAPIView,
     OptionalAutoListAPIView,
+    PreventiviListAPIView,
     PreventiviUtenteListAPIView,
     SedeListAPIView,
     UtenteDetailAPIView,
@@ -20,12 +21,12 @@ urlpatterns = [
     ),
     path("sede/", SedeListAPIView.as_view(), name="sede-list"),
     path(
-        "utente/<int:id_utente>/preventivi",
+        "utente/<int:id_utente>/preventivi/",
         PreventiviUtenteListAPIView.as_view(),
         name="Preventivi Utente",
     ),
     path(
-        "utente/<int:id_utente>/acquisti",
+        "utente/<int:id_utente>/acquisti/",
         PreventiviUtenteListAPIView.as_view(),
         name="Acquisti Utente",
     ),
@@ -34,4 +35,5 @@ urlpatterns = [
         ImmaginiAutoNuoveListAPIView.as_view(),
         name="Immagini Auto Nuove",
     ),
+    path("preventivi/", PreventiviListAPIView.as_view(), name="preventivi-list"),
 ]

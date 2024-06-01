@@ -34,12 +34,21 @@ class OptionalSerializer(serializers.ModelSerializer):
 
 
 class SedeSerializer(serializers.ModelSerializer):
+    indirizzo = serializers.SerializerMethodField()
+
     class Meta:
         model = Sede
-        fields = "__all__"
+        fields = ["id", "nome", "indirizzo"]
+
+    def get_indirizzo(self, obj):
+        return obj.indirizzo
 
 
 class PreventivoSerializer(serializers.ModelSerializer):
+    utente = UtenteSerializer()
+    modello = ModelliAutoSerializer()
+    sede = SedeSerializer()
+
     class Meta:
         model = Preventivo
         fields = "__all__"
