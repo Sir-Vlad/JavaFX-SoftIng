@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.models.Utente;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -113,9 +114,17 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   @FXML private Label emailText;
   @FXML private Label passwordText;
 
+  private String getSubDirectory() {
+    return "utente/" + App.getUtente().getEmail() + "/";
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     nomeCompletoText.textProperty().bindBidirectional(App.getUtente().nomeCompletoProperty());
+    String indirizzo = App.getUtente().getIndirizzo();
+    indirizzoText.setText(indirizzo == null ? " ---- " : indirizzo);
+    String telefono = App.getUtente().getNumTelefono();
+    numTelefonoText.setText(telefono == null ? " ---- " : telefono);
     emailText.setText(App.getUtente().getEmail());
     passwordText.setText("* ".repeat(App.getUtente().getPassword().length()));
   }
@@ -136,10 +145,25 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 String newNome = newNomeValue.getText();
                 String newCognome = newCognomeValue.getText();
 
-                // todo: fare prima la put sul db e poi modificare i dati locali
+                Utente newUtente = new Utente(App.getUtente());
+                if (newNome.isEmpty() && newCognome.isEmpty()) {
+                  return;
+                } else if (newNome.isEmpty()) {
+                  newUtente.setCognome(newCognome);
+                } else if (newCognome.isEmpty()) {
+                  newUtente.setNome(newNome);
+                } else {
+                  newUtente.setCognome(newCognome);
+                  newUtente.setNome(newNome);
+                }
 
-                App.getUtente().setNome(newNome);
-                App.getUtente().setCognome(newCognome);
+                try {
+                  Connection.putDataToBackend(newUtente, getSubDirectory());
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+
+                App.setUtente(newUtente);
                 App.getUtente()
                     .setNomeCompleto(
                         App.getUtente().getNome() + " " + App.getUtente().getCognome());
@@ -203,13 +227,22 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 String newCittaValue = newCitta.getText();
                 String newRegioneValue = newRegione.getValue();
 
-                // todo: fare prima la put sul db e poi modificare i dati locali
-
-                indirizzoText.setText(
+                String newIndirizzo =
                     String.format(
                         "%s, %s, %s, %s",
-                        newViaValue, newCivicoValue, newCittaValue, newRegioneValue));
+                        newViaValue, newCivicoValue, newCittaValue, newRegioneValue);
 
+                Utente newUtente = new Utente(App.getUtente());
+                newUtente.setIndirizzo(newIndirizzo);
+
+                try {
+                  Connection.putDataToBackend(newIndirizzo, getSubDirectory());
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+
+                App.setUtente(newUtente);
+                indirizzoText.setText(newIndirizzo);
                 stage.close();
               });
         });
@@ -247,8 +280,16 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 String newNumTelefonoValue = newNumTelefono.getText();
                 String prefixTelefono = prefissoTelefono.getValue();
 
-                // todo: fare prima la put sul db e poi modificare i dati locali
+                Utente newUtente = new Utente(App.getUtente());
+                newUtente.setNumTelefono(newNumTelefonoValue);
 
+                try {
+                  Connection.putDataToBackend(newUtente, getSubDirectory());
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+
+                App.setUtente(newUtente);
                 numTelefonoText.setText(prefixTelefono + " " + newNumTelefonoValue);
                 stage.close();
               });
@@ -277,10 +318,20 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 }
 
                 String newEmailValue = newEmail.getText();
-                // todo: fare prima la put sul db e poi modificare i dati locali
+
+                Utente newUtente = null;
+                newUtente = new Utente(App.getUtente());
+                newUtente.setEmail(newEmailValue);
+
+                try {
+                  Connection.putDataToBackend(newUtente, getSubDirectory());
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+
+                App.setUtente(newUtente);
 
                 emailText.setText(newEmailValue);
-                App.getUtente().setEmail(newEmailValue);
                 stage.close();
               });
         });
@@ -319,14 +370,19 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                   return;
                 }
 
-                String oldPasswordValue = oldPassword.getText();
                 String newPasswordValue = newPassword.getText();
-                String confermaPasswordValue = confermaPassword.getText();
 
-                // todo: fare prima la put sul db e poi modificare i dati locali
+                Utente newUtente = new Utente(App.getUtente());
+                newUtente.setPassword(newPasswordValue);
 
+                try {
+                  Connection.putDataToBackend(newUtente, getSubDirectory());
+                } catch (Exception e) {
+                  throw new RuntimeException(e);
+                }
+
+                App.setUtente(newUtente);
                 passwordText.setText("* ".repeat(newPasswordValue.length()));
-                App.getUtente().setPassword(newPasswordValue);
                 stage.close();
               });
         });

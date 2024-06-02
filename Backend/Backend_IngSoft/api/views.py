@@ -1,5 +1,25 @@
-from Backend_IngSoft.api.serializers import *
-from Backend_IngSoft.models import ModelloAuto, Utente
+from Backend_IngSoft.api.serializers import (
+    AcquistoSerializer,
+    AutoUsataSerializer,
+    ConfigurazioneSerializer,
+    ImmaginiAutoNuoveSerializer,
+    ModelliAutoSerializer,
+    OptionalSerializer,
+    PreventivoSerializer,
+    SedeSerializer,
+    UtenteSerializer,
+)
+from Backend_IngSoft.models import (
+    Acquisto,
+    AutoUsata,
+    ImmaginiAutoNuove,
+    ModelloAuto,
+    Optional,
+    Possiede,
+    Preventivo,
+    Sede,
+    Utente,
+)
 from Backend_IngSoft.util.error import raises
 from django.http import HttpResponseNotFound
 from rest_framework import status
@@ -87,6 +107,13 @@ class OptionalAutoListAPIView(APIView):
         return Response(serializer.data)
 
 
+class OptionalsListAPIView(APIView):
+    def get(self, request):
+        optional = Optional.objects.all()
+        serializer = OptionalSerializer(optional, many=True)
+        return Response(serializer.data)
+
+
 class SedeListAPIView(APIView):
     def get(self, request):
         sede = Sede.objects.all()
@@ -107,16 +134,12 @@ class PreventiviUtenteListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, id_utente):
-        try:
-            utente = Utente.objects.get(id=id_utente)
-        except Utente.DoesNotExist:
-            return HttpResponseNotFound("Utente non esiste")
-
-        serializer = PreventivoSerializer(data=request.data)
+        serializer = ConfigurazioneSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {"message": [i for e in serializer.errors.values() for i in e]}
+
+        error = {"message": [serializer.errors]}
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -173,4 +196,11 @@ class ImmaginiAutoNuoveListAPIView(APIView):
     def get(self, request, id_auto):
         immagini = ImmaginiAutoNuove.objects.filter(auto=id_auto)
         serializer = ImmaginiAutoNuoveSerializer(immagini, many=True)
+        return Response(serializer.data)
+
+
+class PreventiviListAPIView(APIView):
+    def get(self, request):
+        preventivi = Preventivo.objects.all()
+        serializer = PreventivoSerializer(preventivi, many=True)
         return Response(serializer.data)

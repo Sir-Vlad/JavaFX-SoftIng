@@ -9,11 +9,18 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.models.Utente;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -47,7 +54,7 @@ public class LoginController extends ValidateForm implements Initializable {
   @FXML private Label validateEmail;
   @FXML private Label validatePassword;
 
-  private Logger logger = Logger.getLogger(LoginController.class.getName());
+  private final Logger logger = Logger.getLogger(LoginController.class.getName());
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -61,6 +68,11 @@ public class LoginController extends ValidateForm implements Initializable {
     // set validate field
     setValidateEmail();
     setValidatePassword();
+  }
+
+  public void switchIndietro(ActionEvent actionEvent) {
+    ScreenController.back();
+    actionEvent.consume();
   }
 
   @SneakyThrows
@@ -80,9 +92,12 @@ public class LoginController extends ValidateForm implements Initializable {
     // check nel db
     try {
       Utente utente = Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class);
-      App.setUtente(utente);
+      if (utente != null) {
+        App.setUtente(utente);
+      } else {
+        return;
+      }
     } catch (Exception e) {
-      System.out.println("Errore");
       Alert alert = new Alert(AlertType.ERROR, e.getMessage(), ButtonType.OK);
       alert.showAndWait();
       clearField();
@@ -97,7 +112,19 @@ public class LoginController extends ValidateForm implements Initializable {
       return;
     }
 
-    System.out.println(App.getUtente());
+    logger.log(
+        Level.INFO,
+        () ->
+            String.format(
+                "Utente %s %s si è loggato",
+                App.getUtente().getNome(), App.getUtente().getCognome()));
+
+    if (rememberMe.isSelected()) {
+      saveUtente();
+    } else {
+      File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
+      Files.deleteIfExists(Path.of(path.getPath()));
+    }
 
     ScreenController.addScreen(
         "profilo",
@@ -105,6 +132,18 @@ public class LoginController extends ValidateForm implements Initializable {
     clearField();
     // redirect alla pagina del profilo
     ScreenController.activate("home");
+  }
+
+  private void saveUtente() throws IOException {
+    final String pathStr = "src/main/resources/it/prova/javafxsofting/data";
+    Path path = Path.of(pathStr);
+    try {
+      Files.createDirectory(path);
+    } catch (FileAlreadyExistsException ignored) {
+    }
+
+    Path fileUtente = Files.createFile(path.resolve("utente.txt"));
+    Files.write(fileUtente, App.getUtente().getEmail().getBytes());
   }
 
   public void forgotPassword(MouseEvent mouseEvent) {

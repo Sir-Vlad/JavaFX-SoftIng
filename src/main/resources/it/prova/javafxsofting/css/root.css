@@ -52,3 +52,14 @@
 .text-field-font {
     -fx-font-family: "RACE1 Brannt Chiseled NCV";
 }
+
+#indietroBtn {
+    -fx-background-color: -my-gray-bg;
+    -fx-background-radius: 10;
+    -fx-border-color: -my-gray1;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-content-display: center;
+}

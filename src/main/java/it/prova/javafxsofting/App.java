@@ -7,10 +7,16 @@ import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.application.Preloader.StateChangeNotification;
+import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -26,19 +32,33 @@ import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
   @Getter @Setter private static Utente utente = null;
-  @Getter @Setter private static Logger log = Logger.getLogger(App.class.getName());
+  @Getter private static Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)
         .filter(arg -> arg.contains("-Dport"))
         .forEach(arg -> Connection.setPorta(Integer.parseInt(arg.split("=")[1])));
 
-    log.info("Porta: " + Connection.porta);
+    log.log(Level.INFO, "Porta: {0}", Connection.getPorta());
 
-    launch();
+    System.setProperty("javafx.preloader", SplashScreenPreloader.class.getCanonicalName());
+    launch(args);
   }
 
-  private static void deleteDirectory(File dirImage) {
+  private static void checkRememberUtente() {
+    File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
+    if (path.exists()) {
+      List<String> text = null;
+      try {
+        text = Files.readAllLines(Path.of(path.getPath()));
+        App.setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+      } catch (Exception ignored) {
+
+      }
+    }
+  }
+
+  private static void deleteDirectory(File dirImage) throws IOException {
     if (dirImage.isDirectory()) {
       File[] files = dirImage.listFiles();
       if (files != null) {
@@ -47,7 +67,15 @@ public class App extends javafx.application.Application {
         }
       }
     }
-    dirImage.delete();
+    Files.delete(dirImage.toPath());
+  }
+
+  @Override
+  public void init() throws Exception {
+    // todo: caricare anche tutte le auto usate, le sedi e gli optional
+    StaticDataStore.fetchModelliAuto();
+    StaticDataStore.fetchOptionals();
+    checkRememberUtente();
   }
 
   @Override
@@ -93,7 +121,13 @@ public class App extends javafx.application.Application {
           File dirImage =
               new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
 
-          // deleteDirectory(dirImage);
+          if (dirImage.exists()) {
+            try {
+              deleteDirectory(dirImage);
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+          }
 
           Platform.exit();
           event.consume();
@@ -101,6 +135,7 @@ public class App extends javafx.application.Application {
         });
 
     stage.show();
+    notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
   }
 
   private void createScreenController() throws IOException {
@@ -112,6 +147,7 @@ public class App extends javafx.application.Application {
         "scegliModello",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    // // debug
 
     ScreenController.addScreen(
         "login",
@@ -121,14 +157,18 @@ public class App extends javafx.application.Application {
         "registrazione",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
+    // // debug
 
     ScreenController.addScreen(
         "concessionari",
         FXMLLoader.load(
             Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+    // // debug
 
     ScreenController.addScreen(
         "usato",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/usato.fxml"))));
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/usato.fxml")))); //
+    // debug
   }
 }

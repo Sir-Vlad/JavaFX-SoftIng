@@ -12,6 +12,8 @@ class Utente(models.Model):
     password = models.CharField(max_length=20, null=False, blank=False)
     nome = models.CharField(max_length=20, null=False, blank=False)
     cognome = models.CharField(max_length=20, null=False, blank=False)
+    indirizzo = models.CharField(max_length=100, null=True, blank=False)
+    numero_telefono = models.CharField(max_length=10, null=True, blank=False)
     numero_carta = models.CharField(max_length=16, null=False, blank=False)
     data_scadenza = models.DateField(null=False, blank=False)
     cvc = models.CharField(max_length=3, null=False, blank=False)
@@ -23,7 +25,20 @@ class Utente(models.Model):
         return self.nome + " " + self.cognome
 
 
-class ModelloAuto(models.Model):
+class Auto(models.Model):
+    modello = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    # dati auto
+    altezza = models.IntegerField(null=False, blank=False)
+    lunghezza = models.IntegerField(null=False, blank=False)
+    larghezza = models.IntegerField(null=False, blank=False)
+    peso = models.IntegerField(null=False, blank=False)
+    volume_bagagliaio = models.IntegerField(null=False, blank=False)
+
+    class Meta:
+        abstract = True
+
+
+class ModelloAuto(Auto):
     class MarcaAuto(models.TextChoices):
         NISSAN = "NISSAN"
         MAZDA = "MAZDA"
@@ -33,24 +48,16 @@ class ModelloAuto(models.Model):
         AUDI = "AUDI"
         BMW = "BMW"
 
-    nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
     marca = models.CharField(
         max_length=20, null=False, blank=False, choices=MarcaAuto
     )  # lista di valori noti
-    # descrizione = models.TextField()
     prezzo_base = models.IntegerField(null=False, blank=False)
-    # dati auto
-    altezza = models.IntegerField(null=False, blank=False)
-    lunghezza = models.IntegerField(null=False, blank=False)
-    larghezza = models.IntegerField(null=False, blank=False)
-    peso = models.IntegerField(null=False, blank=False)
-    volume_bagagliaio = models.IntegerField(null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Modelli Auto"
 
     def __str__(self):
-        return self.nome + " - " + self.marca
+        return self.modello + " - " + self.marca
 
 
 class Optional(models.Model):
@@ -92,24 +99,32 @@ class Sede(models.Model):
     def __str__(self):
         return self.nome
 
+    @property
+    def indirizzo(self):
+        return {
+            "via": self.via,
+            "civico": self.civico,
+            "citta": self.citta,
+            "cap": self.cap,
+        }
+
 
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
     data_emissione = models.DateField(null=False, blank=False)
     sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
-    # detrazione = models.ManyToManyField(Detrazione, on_delete=CASCADE)
     prezzo = models.IntegerField(null=False, blank=False)
+
+    class Meta:
+        unique_together = ("utente", "modello", "data_emissione")
 
 
 class Configurazione(models.Model):
-    preventivo = models.OneToOneField(
+    preventivo = models.ForeignKey(
         Preventivo, on_delete=CASCADE, blank=False, null=False
     )
-    optional = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False)
-
-    class Meta:
-        unique_together = ("preventivo", "optional")
+    optional = models.ManyToManyField(Optional, blank=False)
 
 
 class Acquisto(models.Model):
@@ -195,28 +210,28 @@ class Ritiro(models.Model):
         verbose_name_plural = "Ritiro Auto"
 
 
-class AutoUsata(models.Model):
-    # ? utente non dovrebbe essere qui
-    utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
-    modello = models.CharField(max_length=20, null=False, blank=False)
+class AutoUsata(Auto):
     marca = models.CharField(max_length=20, null=False, blank=False)
     prezzo = models.IntegerField(
         default=0, null=False, blank=False, validators=[MinValueValidator(0)]
     )
     km_percorsi = models.IntegerField(null=False, blank=False)
     anno_immatricolazione = models.DateField(null=False, blank=False)
-    # dati auto
-    altezza = models.IntegerField(null=False, blank=False)
-    lunghezza = models.IntegerField(null=False, blank=False)
-    larghezza = models.IntegerField(null=False, blank=False)
-    peso = models.IntegerField(null=False, blank=False)
-    volume_bagagliaio = models.IntegerField(null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Auto Usate"
 
     def __str__(self):
         return self.modello + " - " + self.marca
+
+
+class PreventivoUsato(models.Model):
+    utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
+    auto = models.ForeignKey(AutoUsata, on_delete=CASCADE, null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Preventivi Auto Usate"
+        unique_together = ("utente", "auto")
 
 
 class AbstractImmagini(models.Model):
@@ -240,9 +255,8 @@ class ImmaginiAutoNuove(AbstractImmagini):
         return f"imageAutoNuove/{filename}"
 
     def delete(self, *args, **kwargs):
-        if self.image:
-            if os.path.isfile(self.image.path):
-                os.remove(self.image.path)
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
@@ -262,6 +276,24 @@ class ImmaginiAutoNuove(AbstractImmagini):
 
 class ImmaginiAutoUsate(AbstractImmagini):
     auto = models.ForeignKey(AutoUsata, on_delete=CASCADE)
+
+    def upload_to(self, filename):
+        return f"imageAutoUsate/{filename}"
+
+    def delete(self, *args, **kwargs):
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        try:
+            this = ImmaginiAutoNuove.objects.get(id=self.id)
+            if this.image != self.image:
+                this.image.delete(save=False)
+        except ImmaginiAutoNuove.DoesNotExist:
+            pass
+        self.image.name = self.upload_to(self.image)
+        super(AbstractImmagini, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = ("image", "auto")

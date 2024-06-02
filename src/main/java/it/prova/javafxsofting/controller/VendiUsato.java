@@ -7,7 +7,6 @@ import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.component.ProfileBox;
-import it.prova.javafxsofting.models.Preventivo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -150,8 +149,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (isInvalidDatiAuto && isInvalidInfoAuto) {
       return;
     }
-
-    Preventivo preventivo = new Preventivo();
   }
 
   public void scegliFoto() {
@@ -186,7 +183,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
         String rootPath = new File("instance/data").getPath();
         try {
           String newName = generateAlphaFileName() + getExtension(f.getName());
-          File newPath = Path.of(rootPath + "/" + newName).toFile();
+          File newPath = Path.of(rootPath).resolve(newName).toFile();
           // aggiunge l'immagine solo se non è stata già aggiunta, ovvero elimino la possibilità che
           // l'utente possa aggiungere due volte la stessa immagine
           File value = immagini.putIfAbsent(f, newPath);

@@ -5,9 +5,13 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.ColoriAuto;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.models.Configurazione;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Preventivo;
+import it.prova.javafxsofting.models.Sede;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -15,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,7 +28,6 @@ import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
-  private final boolean isMenuStageOpen = false;
   @FXML private Header header;
   @FXML private AnchorPane root;
   @FXML private HBox toggleColor;
@@ -44,11 +46,14 @@ public class ConfiguratorController implements Initializable {
   @FXML private Pane modelVisualize;
   @FXML private MFXButton saveConfigurazioneBtn;
 
+  private ModelloAuto auto;
+
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    ModelloAuto auto = ScegliModelloController.getAutoSelezionata();
+    auto = ScegliModelloController.getAutoSelezionata();
+    String config = "config";
     if (auto == null) {
-      ScreenController.removeScreen("config");
+      ScreenController.removeScreen(config);
       ScreenController.activate("scegliModello");
       return;
     }
@@ -56,13 +61,13 @@ public class ConfiguratorController implements Initializable {
     header.addTab(
         "Home",
         event -> {
-          ScreenController.removeScreen("config");
+          ScreenController.removeScreen(config);
           ScreenController.activate("home");
         });
     header.addTab(
         "Cambia Modello",
         event -> {
-          ScreenController.removeScreen("config");
+          ScreenController.removeScreen(config);
           ScreenController.activate("scegliModello");
         });
 
@@ -71,15 +76,14 @@ public class ConfiguratorController implements Initializable {
     String pathImage =
         "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
     URL urlImage = App.class.getResource(pathImage);
-    if (urlImage == null) {
-      System.out.println("Image not found: " + urlImage.toString());
+    if (urlImage != null) {
+      logoMarca.setStyle(
+          "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
     }
-    logoMarca.setStyle(
-        "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
 
-    fieldModelloV.setText(auto.getNome());
+    fieldModelloV.setText(auto.getModello());
     fieldMarca.setText(String.valueOf(auto.getMarca()));
-    fieldModello.setText(auto.getNome());
+    fieldModello.setText(auto.getModello());
 
     fieldAlimentazione.setText(auto.getOptionals()[0].getDescrizione());
 
@@ -97,10 +101,10 @@ public class ConfiguratorController implements Initializable {
     if (auto.getImmagini().isEmpty()) {
       resource = "immagini/fake-account.png";
     } else {
-      resource = "immagini/immaginiAutoNuove/" + auto.getImmagini().getFirst().getName();
+      resource = auto.getImmagini().getFirst().toURI().toString();
     }
 
-    ImageView imageView = new ImageView(new Image(String.valueOf(App.class.getResource(resource))));
+    ImageView imageView = new ImageView(new Image(resource));
     imageView.setPreserveRatio(true);
 
     imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
@@ -114,6 +118,15 @@ public class ConfiguratorController implements Initializable {
   @FXML
   public void salvaConfigurazione(@NotNull ActionEvent actionEvent) {
     NotImplemented.notImplemented();
+
+    // todo: validare i campi obligatori
+    //  creare il preventivo e inviarlo al db, ottenere l'id e creare la configurazione
+    //  e inviarla al db
+
+    Configurazione config = new Configurazione();
+
+    Preventivo preventivo = new Preventivo(App.getUtente(), auto, new Sede(), LocalDate.now());
+
     actionEvent.consume();
   }
 
@@ -156,14 +169,13 @@ public class ConfiguratorController implements Initializable {
       button.setOnAction(
           event -> {
             String urlPath =
-                "immagini/immaginiAutoNuove/"
-                    + auto.getImmagini().stream()
-                        .filter(file -> file.getName().startsWith(coloriAuto.getNameColor(color)))
-                        .toList()
-                        .getFirst()
-                        .getName();
-            URL url = App.class.getResource(urlPath);
-            ImageView imageView = new ImageView(new Image(String.valueOf(url)));
+                auto.getImmagini().stream()
+                    .filter(file -> file.getName().startsWith(coloriAuto.getNameColor(color)))
+                    .toList()
+                    .getFirst()
+                    .toURI()
+                    .toString();
+            ImageView imageView = new ImageView(new Image(urlPath));
             imageView.setPreserveRatio(true);
 
             imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
@@ -175,60 +187,5 @@ public class ConfiguratorController implements Initializable {
 
       toggleColor.getChildren().add(button);
     }
-
-    //    toggleGroup
-    //        .selectedToggleProperty()
-    //        .addListener(
-    //            (observable, oldValue, newValue) -> {
-    //              // Se il newValue è null riseleziono il toggle vecchio altrimenti seleziono
-    // quello
-    //              // nuovo. Questo mi serve per avere sempre un'alternativa selezionata.
-    //              if (newValue == null) {
-    //                toggleGroup.selectToggle(oldValue);
-    //              } else {
-    //                toggleGroup.selectToggle(newValue);
-    //
-    //                //                modelVisualize.setStyle(
-    //                //                    "-fx-background-color: "
-    //                //                        + "#"
-    //                //                        +
-    //                // toggleGroup.getSelectedToggle().getUserData().toString().split("0x")[1]);
-    //              }
-    //            });
-  }
-
-  private @NotNull ContextMenu createContextMenu() {
-    ContextMenu contextMenu = new ContextMenu();
-
-    MenuItem sommario = new MenuItem("Sommario");
-    sommario.setId("sommario");
-    sommario.setOnAction(
-        actionEvent -> {
-          System.out.println("Sommario");
-          actionEvent.consume();
-        });
-
-    MenuItem preventivo = new MenuItem("Preventivo");
-    preventivo.setId("preventivo");
-    preventivo.setOnAction(
-        actionEvent -> {
-          System.out.println("Preventivo");
-          actionEvent.consume();
-        });
-
-    MenuItem concessionari = new MenuItem("Concessionari");
-    concessionari.setId("concessionari");
-    concessionari.setOnAction(
-        actionEvent -> {
-          System.out.println("Concessionari vicino a te");
-          actionEvent.consume();
-        });
-
-    SeparatorMenuItem separator1 = new SeparatorMenuItem();
-    SeparatorMenuItem separator2 = new SeparatorMenuItem();
-
-    contextMenu.getItems().addAll(sommario, separator1, preventivo, separator2, concessionari);
-
-    return contextMenu;
   }
 }

@@ -1,14 +1,10 @@
 package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
-
-import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
-import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Data;
@@ -31,6 +27,12 @@ public class Utente implements Serializable {
 
   @SerializedName("password")
   private String password;
+
+  @SerializedName("indirizzo")
+  private String indirizzo;
+
+  @SerializedName("numero_telefono")
+  private String numTelefono;
 
   @SerializedName("numero_carta")
   private String iban;
@@ -65,6 +67,24 @@ public class Utente implements Serializable {
     this.cvc = cvc;
   }
 
+  public Utente(Utente newUtente) {
+    this.id = newUtente.id;
+    this.imageUtente = newUtente.imageUtente;
+
+    this.nome = newUtente.nome;
+    this.cognome = newUtente.cognome;
+    this.nomeCompleto = newUtente.nomeCompleto;
+
+    this.email = newUtente.email;
+    this.password = newUtente.password;
+    this.indirizzo = newUtente.indirizzo;
+    this.numTelefono = newUtente.numTelefono;
+
+    this.iban = newUtente.iban;
+    this.dataScadenza = newUtente.dataScadenza;
+    this.cvc = newUtente.cvc;
+  }
+
   public String getNomeCompleto() {
     return nomeCompleto.get();
   }
@@ -84,14 +104,14 @@ public class Utente implements Serializable {
   public String toString() {
     return String.format(
         """
-        Utente{
-          Dati personali{
+        Utente {
+          Dati personali {
             nome='%s',
             cognome='%s',
             email='%s',
             password='%s'
           },
-          Coordinate Bancarie{
+          Coordinate Bancarie {
             iban='%s',
             dataScadenza='%s,
             cvc='%s

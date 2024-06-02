@@ -1,18 +1,22 @@
 package it.prova.javafxsofting.models;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
+
 public enum Marca {
-  NISSAN("nissan"),
-  MAZDA("mazda"),
-  VOLKSWAGEN("volkswagen"),
-  FORD("ford"),
-  HONDA("honda"),
-  AUDI("audi"),
-  BMW("bmw"),
+  NISSAN(),
+  MAZDA(),
+  VOLKSWAGEN(),
+  FORD(),
+  HONDA(),
+  AUDI(),
+  BMW(),
   ;
 
-  Marca(String name) {}
+  @Contract(pure = true)
+  Marca() {}
 
-  public static Marca getMarca(String name) {
+  public static @Nullable Marca getMarca(String name) {
     for (Marca marca : Marca.values()) {
       if (marca.name().equalsIgnoreCase(name)) {
         return marca;

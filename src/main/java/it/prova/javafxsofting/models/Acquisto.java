@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Acquisto {
-  private String numero_fattura;
-  private int id_Utente;
-  private int id_preventivo;
+  private String numeroFattura;
+  private int idUtente;
+  private int idPreventivo;
   private int acconto;
-  private int data_ritiro;
+  private int dataRitiro;
 }
