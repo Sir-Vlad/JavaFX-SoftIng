@@ -3,13 +3,11 @@ package it.prova.javafxsofting.controller;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXSlider;
-import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.StaticDataStore;
 import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.Marca;
 import it.prova.javafxsofting.models.ModelloAuto;
-import it.prova.javafxsofting.models.Optional;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -52,28 +50,15 @@ public class ScegliModelloController implements Initializable {
   }
 
   public static void fetchData() {
-    App.getLog().info("Updating list from database");
-    List<ModelloAuto> newData;
-    try {
-      newData = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-    if (newData != null && !newData.equals(cardAuto)) {
-      // accodato
-      newData.forEach(
-          modelloAuto ->
-              modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
-
-      newData.forEach(ModelloAuto::setImmagini);
-    }
-    cardAuto.setAll(newData);
+    StaticDataStore.fetchModelliAuto();
+    cardAuto.setAll(StaticDataStore.getModelliAuto());
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     header.addTab("Home", event -> ScreenController.activate("home"));
+
+    cardAuto.setAll(StaticDataStore.getModelliAuto());
     cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
 
     settingMarcaFilter();
@@ -208,11 +193,12 @@ public class ScegliModelloController implements Initializable {
   }
 
   private void updateListFromDatabase() {
-    fetchData();
+    StaticDataStore.fetchModelliAuto();
 
     Platform.runLater(
         () -> {
           flowPane.getChildren().clear();
+          cardAuto.setAll(StaticDataStore.getModelliAuto());
           cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().add(auto));
         });
   }

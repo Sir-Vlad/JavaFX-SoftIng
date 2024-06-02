@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 
 @Data
 public class Optional implements Serializable {
+  private int id;
   private String nome;
   private String descrizione;
   private int prezzo;

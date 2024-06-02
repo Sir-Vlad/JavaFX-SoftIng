@@ -159,7 +159,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
             dataScadenzaField.getValue(),
             cvcField.getText());
 
-    // todo: aggiungerlo nel db se ritorna un errore mostrare un errore se no redirect alla home
     try {
       Connection.postPutDataToBacked(newUtente, "utenti/");
     } catch (Exception e) {

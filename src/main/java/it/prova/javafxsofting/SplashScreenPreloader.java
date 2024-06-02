@@ -15,8 +15,6 @@ import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 
 public class SplashScreenPreloader extends Preloader {
-
-  // todo: tutorial -> https://www.youtube.com/watch?v=QGMt8IoAr7c&ab_channel=CoolITHelp
   private Stage splashStage;
   private Scene scene;
 

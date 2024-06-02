@@ -7,8 +7,11 @@ import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.Configurazione;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Preventivo;
+import it.prova.javafxsofting.models.Sede;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -43,9 +46,11 @@ public class ConfiguratorController implements Initializable {
   @FXML private Pane modelVisualize;
   @FXML private MFXButton saveConfigurazioneBtn;
 
+  private ModelloAuto auto;
+
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    ModelloAuto auto = ScegliModelloController.getAutoSelezionata();
+    auto = ScegliModelloController.getAutoSelezionata();
     String config = "config";
     if (auto == null) {
       ScreenController.removeScreen(config);
@@ -76,9 +81,9 @@ public class ConfiguratorController implements Initializable {
           "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
     }
 
-    fieldModelloV.setText(auto.getNome());
+    fieldModelloV.setText(auto.getModello());
     fieldMarca.setText(String.valueOf(auto.getMarca()));
-    fieldModello.setText(auto.getNome());
+    fieldModello.setText(auto.getModello());
 
     fieldAlimentazione.setText(auto.getOptionals()[0].getDescrizione());
 
@@ -114,7 +119,13 @@ public class ConfiguratorController implements Initializable {
   public void salvaConfigurazione(@NotNull ActionEvent actionEvent) {
     NotImplemented.notImplemented();
 
+    // todo: validare i campi obligatori
+    //  creare il preventivo e inviarlo al db, ottenere l'id e creare la configurazione
+    //  e inviarla al db
+
     Configurazione config = new Configurazione();
+
+    Preventivo preventivo = new Preventivo(App.getUtente(), auto, new Sede(), LocalDate.now());
 
     actionEvent.consume();
   }

@@ -67,10 +67,10 @@ public class ProfileAccountController implements Initializable {
         FXMLLoader.load(Objects.requireNonNull(getClass().getResource("preventivi_utente.fxml"))),
         preventiviBtn);
 
-    AnchorPane anchorPane = new AnchorPane();
-    anchorPane.setId(LITERAL_ORDINI);
-
-    tabController.addTab(LITERAL_ORDINI, anchorPane, ordiniBtn);
+    tabController.addTab(
+        LITERAL_ORDINI,
+        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ordini_utente.fxml"))),
+        ordiniBtn);
 
     // set default page open
     content.getChildren().add(tabController.getTab(LITERAL_PROFILE));
@@ -104,12 +104,12 @@ public class ProfileAccountController implements Initializable {
   }
 
   private void switchTab(HBox btn, String title) {
-    tabController
-        .getButton(tabController.getKeyMain())
-        .setStyle("-fx-background: #ffffff; -fx-background-radius: 10");
-    content.getChildren().clear();
-
     if (!tabController.getKeyMain().equals(title)) {
+      tabController
+          .getButton(tabController.getKeyMain())
+          .setStyle("-fx-background: #ffffff; -fx-background-radius: 10");
+      content.getChildren().clear();
+
       AnchorPane root = tabController.getTab(title);
       btn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
       content.getChildren().add(root);

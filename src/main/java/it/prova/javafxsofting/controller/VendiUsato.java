@@ -7,7 +7,6 @@ import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.component.ProfileBox;
-import it.prova.javafxsofting.models.Preventivo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -150,8 +149,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (isInvalidDatiAuto && isInvalidInfoAuto) {
       return;
     }
-
-    Preventivo preventivo = new Preventivo();
   }
 
   public void scegliFoto() {

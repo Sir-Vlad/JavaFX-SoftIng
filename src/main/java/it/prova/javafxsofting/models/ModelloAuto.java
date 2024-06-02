@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -24,8 +26,8 @@ public class ModelloAuto implements Serializable {
   @SerializedName("id")
   private int index;
 
-  @SerializedName("nome")
-  private String nome;
+  @SerializedName("modello")
+  private String modello;
 
   @SerializedName("marca")
   private Marca marca;
@@ -52,13 +54,13 @@ public class ModelloAuto implements Serializable {
   @SerializedName("volume_bagagliaio")
   private int volumeBagagliaio;
 
-  // option
+  // optionals che un modello può avere
   @Expose(deserialize = false)
   private Optional[] optionals;
 
   public ModelloAuto(
       int index,
-      String nome,
+      String modello,
       String marca,
       int prezzoBase,
       int altezza,
@@ -66,7 +68,7 @@ public class ModelloAuto implements Serializable {
       int peso,
       int volumeBagagliaio) {
     this.index = index;
-    this.nome = nome;
+    this.modello = modello;
     this.prezzoBase = prezzoBase;
     this.marca = Marca.getMarca(marca);
     this.altezza = altezza;
@@ -96,7 +98,14 @@ public class ModelloAuto implements Serializable {
           }
         }
         """,
-        index, nome, marca, altezza, lunghezza, peso, volumeBagagliaio, Arrays.toString(optionals));
+        index,
+        modello,
+        marca,
+        altezza,
+        lunghezza,
+        peso,
+        volumeBagagliaio,
+        Arrays.toString(optionals));
   }
 
   public void setImmagini() {
@@ -121,10 +130,14 @@ public class ModelloAuto implements Serializable {
     }
 
     for (ImmagineAuto immagineAuto : immagineAutoList) {
-      String nameImmagine = pathDir.toPath() + "/" + immagineAuto.getNomeImmagine();
-      //      if (new File(nameImmagine).exists()) {
-      //        continue;
-      //      }
+      String nameImmagine = pathDir.toPath().resolve(immagineAuto.getNomeImmagine()).toString();
+
+      if (Files.exists(Path.of(nameImmagine))) {
+        File output = new File(nameImmagine);
+        immaginiList.add(output);
+        continue;
+      }
+
       String immagineBase64 = immagineAuto.getImmagineBase64();
       byte[] imageBytes = Base64.getDecoder().decode(immagineBase64);
 

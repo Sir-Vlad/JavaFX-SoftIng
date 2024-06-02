@@ -72,7 +72,9 @@ public class App extends javafx.application.Application {
 
   @Override
   public void init() throws Exception {
-    // ScegliModelloController.fetchData(); // debug
+    // todo: caricare anche tutte le auto usate, le sedi e gli optional
+    StaticDataStore.fetchModelliAuto();
+    StaticDataStore.fetchOptionals();
     checkRememberUtente();
   }
 
@@ -141,10 +143,10 @@ public class App extends javafx.application.Application {
         "home",
         FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
-    //    ScreenController.addScreen(
-    //        "scegliModello",
-    //        FXMLLoader.load(
-    //            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    ScreenController.addScreen(
+        "scegliModello",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
     // // debug
 
     ScreenController.addScreen(

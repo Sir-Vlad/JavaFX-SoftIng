@@ -35,25 +35,25 @@
                                              minWidth="-Infinity" prefWidth="50.0" resizable="false"
                                              text="ID"/>
                                 <TableColumn fx:id="modelloColumn" maxWidth="1.7976931348623157E308"
-                                             minWidth="-1.0" prefWidth="150.0" resizable="false"
+                                             minWidth="-1.0" prefWidth="130.0" resizable="false"
                                              text="Modello"/>
                                 <TableColumn fx:id="prezzoBaseColumn"
                                              maxWidth="1.7976931348623157E308" minWidth="-1.0"
                                              prefWidth="120.0" resizable="false"
                                              text="Prezzo Base"/>
-                                <TableColumn fx:id="prezzoAggiuntivoColumn"
+                                <TableColumn fx:id="prezzoOptionalsColumn"
                                              maxWidth="1.7976931348623157E308" minWidth="-1.0"
                                              prefWidth="130.0" resizable="false"
                                              text="Prezzo Aggiuntivo"/>
                                 <TableColumn fx:id="scontoColumn" maxWidth="1.7976931348623157E308"
-                                             minWidth="-1.0" prefWidth="100.0" resizable="false"
+                                             minWidth="-1.0" prefWidth="120.0" resizable="false"
                                              text="Sconto"/>
                                 <TableColumn fx:id="totPrezzoColumn"
                                              maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                             prefWidth="100.0" resizable="false" text="Totale"/>
+                                             prefWidth="120.0" resizable="false" text="Totale"/>
                                 <TableColumn fx:id="dataEmissioneColumn"
                                              maxWidth="1.7976931348623157E308" minWidth="-1.0"
-                                             prefWidth="150.0" resizable="false"
+                                             prefWidth="130.0" resizable="false"
                                              text="Data Emissione"/>
                                 <TableColumn fx:id="confermaColumn"
                                              maxWidth="1.7976931348623157E308" minWidth="-1.0"

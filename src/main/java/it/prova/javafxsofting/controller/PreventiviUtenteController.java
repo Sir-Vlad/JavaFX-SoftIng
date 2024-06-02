@@ -22,8 +22,8 @@ public class PreventiviUtenteController implements Initializable {
   @FXML private TableColumn<Preventivo, Integer> idColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> modelloColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> prezzoBaseColumn;
-  @FXML private TableColumn<Preventivo, Float> prezzoAggiuntivoColumn;
-  @FXML private TableColumn<Preventivo, Float> scontoColumn;
+  @FXML private TableColumn<Preventivo, Integer> prezzoOptionalsColumn;
+  @FXML private TableColumn<Preventivo, Integer> scontoColumn;
   @FXML private TableColumn<Preventivo, Float> totPrezzoColumn;
   @FXML private TableColumn<Preventivo, LocalDate> dataEmissioneColumn;
   @FXML private TableColumn<Preventivo, Void> confermaColumn;
@@ -38,8 +38,10 @@ public class PreventiviUtenteController implements Initializable {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    preventiviUtente.setAll(preventivi);
-
+    if (preventivi != null) {
+      preventivi.forEach(Preventivo::transformIdToObject);
+      preventiviUtente.setAll(preventivi);
+    }
     setTableView();
   }
 
@@ -47,6 +49,9 @@ public class PreventiviUtenteController implements Initializable {
     setColumnID();
     setColumnModello();
     setColumnPrezzoBase();
+    setColumnPrezzoOptionals();
+    setColumnSconto();
+    setColumnPrezzoTotale();
     setColumnDataEmissione();
     setColumnConferma();
 
@@ -98,6 +103,60 @@ public class PreventiviUtenteController implements Initializable {
             });
   }
 
+  private void setColumnPrezzoTotale() {
+    totPrezzoColumn.setCellValueFactory(new PropertyValueFactory<>("totalePrezzo"));
+    totPrezzoColumn.setCellFactory(
+        column ->
+            new TableCell<>() {
+              @Override
+              protected void updateItem(Float item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                  setText(null);
+                } else {
+                  setText(String.format("%.2f", item));
+                  setAlignment(Pos.CENTER);
+                }
+              }
+            });
+  }
+
+  private void setColumnSconto() {
+    scontoColumn.setCellFactory(
+        column ->
+            new TableCell<>() {
+              @Override
+              protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                  setText(null);
+                } else {
+                  if (item == null) setText("0 %");
+                  else setText(String.format("%d %%", item));
+                  setAlignment(Pos.CENTER);
+                }
+              }
+            });
+  }
+
+  private void setColumnPrezzoOptionals() {
+    prezzoOptionalsColumn.setCellValueFactory(new PropertyValueFactory<>("prezzoOptionals"));
+    prezzoOptionalsColumn.setCellFactory(
+        column ->
+            new TableCell<>() {
+              @Override
+              protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                  setText(null);
+                } else {
+                  setText(String.format("%d", item));
+                  setAlignment(Pos.CENTER);
+                }
+              }
+            });
+  }
+
   private void setColumnPrezzoBase() {
     prezzoBaseColumn.setCellValueFactory(new PropertyValueFactory<>("modello"));
     prezzoBaseColumn.setCellFactory(
@@ -127,7 +186,7 @@ public class PreventiviUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  setText(item.getNome());
+                  setText(item.getModello());
                   setAlignment(Pos.CENTER);
                 }
               }

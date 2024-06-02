@@ -31,7 +31,7 @@ public class CardAuto extends VBox {
       throw new RuntimeException(e);
     }
 
-    labelNomeAuto.setText(auto.getNome());
+    labelNomeAuto.setText(auto.getModello());
 
     String tipoMotore = "GPL"; // accodato: tipoMotore cardAuto
     labelTipoMotore.setText(tipoMotore);
