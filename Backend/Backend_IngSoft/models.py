@@ -25,7 +25,20 @@ class Utente(models.Model):
         return self.nome + " " + self.cognome
 
 
-class ModelloAuto(models.Model):
+class Auto(models.Model):
+    modello = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    # dati auto
+    altezza = models.IntegerField(null=False, blank=False)
+    lunghezza = models.IntegerField(null=False, blank=False)
+    larghezza = models.IntegerField(null=False, blank=False)
+    peso = models.IntegerField(null=False, blank=False)
+    volume_bagagliaio = models.IntegerField(null=False, blank=False)
+
+    class Meta:
+        abstract = True
+
+
+class ModelloAuto(Auto):
     class MarcaAuto(models.TextChoices):
         NISSAN = "NISSAN"
         MAZDA = "MAZDA"
@@ -35,23 +48,16 @@ class ModelloAuto(models.Model):
         AUDI = "AUDI"
         BMW = "BMW"
 
-    nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
     marca = models.CharField(
         max_length=20, null=False, blank=False, choices=MarcaAuto
     )  # lista di valori noti
     prezzo_base = models.IntegerField(null=False, blank=False)
-    # dati auto
-    altezza = models.IntegerField(null=False, blank=False)
-    lunghezza = models.IntegerField(null=False, blank=False)
-    larghezza = models.IntegerField(null=False, blank=False)
-    peso = models.IntegerField(null=False, blank=False)
-    volume_bagagliaio = models.IntegerField(null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Modelli Auto"
 
     def __str__(self):
-        return self.nome + " - " + self.marca
+        return self.modello + " - " + self.marca
 
 
 class Optional(models.Model):
@@ -110,15 +116,15 @@ class Preventivo(models.Model):
     sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
     prezzo = models.IntegerField(null=False, blank=False)
 
+    class Meta:
+        unique_together = ("utente", "modello", "data_emissione")
+
 
 class Configurazione(models.Model):
-    preventivo = models.OneToOneField(
+    preventivo = models.ForeignKey(
         Preventivo, on_delete=CASCADE, blank=False, null=False
     )
-    optional = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False)
-
-    class Meta:
-        unique_together = ("preventivo", "optional")
+    optional = models.ManyToManyField(Optional, blank=False)
 
 
 class Acquisto(models.Model):
@@ -204,28 +210,28 @@ class Ritiro(models.Model):
         verbose_name_plural = "Ritiro Auto"
 
 
-class AutoUsata(models.Model):
-    # ? utente non dovrebbe essere qui
-    utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
-    modello = models.CharField(max_length=20, null=False, blank=False)
+class AutoUsata(Auto):
     marca = models.CharField(max_length=20, null=False, blank=False)
     prezzo = models.IntegerField(
         default=0, null=False, blank=False, validators=[MinValueValidator(0)]
     )
     km_percorsi = models.IntegerField(null=False, blank=False)
     anno_immatricolazione = models.DateField(null=False, blank=False)
-    # dati auto
-    altezza = models.IntegerField(null=False, blank=False)
-    lunghezza = models.IntegerField(null=False, blank=False)
-    larghezza = models.IntegerField(null=False, blank=False)
-    peso = models.IntegerField(null=False, blank=False)
-    volume_bagagliaio = models.IntegerField(null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Auto Usate"
 
     def __str__(self):
         return self.modello + " - " + self.marca
+
+
+class PreventivoUsato(models.Model):
+    utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
+    auto = models.ForeignKey(AutoUsata, on_delete=CASCADE, null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Preventivi Auto Usate"
+        unique_together = ("utente", "auto")
 
 
 class AbstractImmagini(models.Model):

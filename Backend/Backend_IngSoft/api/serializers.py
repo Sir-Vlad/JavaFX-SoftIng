@@ -4,12 +4,13 @@ from io import BytesIO
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
+    Configurazione,
     ImmaginiAutoNuove,
-    Utente,
     ModelloAuto,
     Optional,
-    Sede,
     Preventivo,
+    Sede,
+    Utente,
 )
 from PIL import Image
 from rest_framework import serializers
@@ -45,13 +46,21 @@ class SedeSerializer(serializers.ModelSerializer):
 
 
 class PreventivoSerializer(serializers.ModelSerializer):
-    utente = UtenteSerializer()
-    modello = ModelliAutoSerializer()
-    sede = SedeSerializer()
+    utente = serializers.PrimaryKeyRelatedField(queryset=Utente.objects.all())
+    modello = serializers.PrimaryKeyRelatedField(queryset=ModelloAuto.objects.all())
+    sede = serializers.PrimaryKeyRelatedField(queryset=Sede.objects.all())
+    config = serializers.SerializerMethodField()
 
     class Meta:
         model = Preventivo
         fields = "__all__"
+
+    def get_config(self, obj):
+        return (
+            Configurazione.objects.filter(preventivo_id=obj.pk)
+            .values_list("optional", flat=True)
+            .distinct()
+        )
 
 
 class AcquistoSerializer(serializers.ModelSerializer):
@@ -92,3 +101,26 @@ class ImmaginiAutoNuoveSerializer(serializers.ModelSerializer):
             representation["image_base64"] = img_str
 
         return representation
+
+
+class ConfigurazioneSerializer(serializers.ModelSerializer):
+    preventivo = PreventivoSerializer()
+    optional = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Optional.objects.all(), write_only=True
+    )
+
+    class Meta:
+        model = Configurazione
+        fields = "__all__"
+
+    def create(self, validated_data):
+        optional_ids = validated_data.pop("optional", [])
+        preventivo_data = validated_data.pop("preventivo")
+
+        if Utente.objects.get(id=preventivo_data["utente"].id):
+            print("Sono qua")
+            preventivo = Preventivo.objects.create(**preventivo_data)
+            configurazione = Configurazione.objects.create(preventivo=preventivo)
+            configurazione.optional.set(optional_ids)
+            return configurazione
+        return None

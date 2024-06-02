@@ -44,7 +44,7 @@ class MarcaFilter(admin.SimpleListFilter):
 
 @admin.register(ModelloAuto)
 class ModelloAutoAdmin(ModelAdmin):
-    list_display = ("nome", "marca", "prezzo_base")
+    list_display = ("modello", "marca", "prezzo_base")
     list_filter = (MarcaFilter,)
 
 
@@ -141,6 +141,11 @@ class ImmaginiAutoNuoveAdmin(ModelAdmin):
 
 @admin.register(Preventivo)
 class PreventivoAdmin(ModelAdmin):
+    pass
+
+
+@admin.register(Configurazione)
+class ConfigurazioneAdmin(admin.ModelAdmin):
     pass
 
 
