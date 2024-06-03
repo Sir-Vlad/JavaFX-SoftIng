@@ -1,6 +1,8 @@
 import os.path
+import re
 from datetime import datetime
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import CASCADE
@@ -210,13 +212,36 @@ class Ritiro(models.Model):
         verbose_name_plural = "Ritiro Auto"
 
 
+def validate_targa(value):
+    if not re.match("^[A-Z]{2}[0-9]{3}[A-Z]{2}$", value):
+        raise ValidationError(
+            "Formato della targa non è valida. Deve essere del tipo " "AA123BB"
+        )
+
+
+def validate_not_future_date(value):
+    if value > datetime.now().date():
+        raise ValidationError("La data non può essere futura")
+
+
 class AutoUsata(Auto):
     marca = models.CharField(max_length=20, null=False, blank=False)
     prezzo = models.IntegerField(
         default=0, null=False, blank=False, validators=[MinValueValidator(0)]
     )
-    km_percorsi = models.IntegerField(null=False, blank=False)
-    anno_immatricolazione = models.DateField(null=False, blank=False)
+    km_percorsi = models.IntegerField(
+        null=False, blank=False, validators=[MinValueValidator(0)]
+    )
+    anno_immatricolazione = models.DateField(
+        null=False, blank=False, validators=[validate_not_future_date]
+    )
+    targa = models.CharField(
+        max_length=7,
+        null=False,
+        blank=False,
+        validators=[validate_targa],
+        default="AA000AA",
+    )
 
     class Meta:
         verbose_name_plural = "Auto Usate"
