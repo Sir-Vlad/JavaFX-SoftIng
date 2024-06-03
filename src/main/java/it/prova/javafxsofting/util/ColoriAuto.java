@@ -1,4 +1,4 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.util;
 
 import java.util.HashMap;
 import java.util.Map.Entry;

@@ -151,7 +151,7 @@ public class Connection {
    * @param data dati da inviare
    * @param subDirectory url dove inviare i dati
    */
-  public static <T extends Serializable> void postPutDataToBacked(T data, String subDirectory)
+  public static <T extends Serializable> void postDataToBacked(T data, String subDirectory)
       throws Exception {
     HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.POST);
 

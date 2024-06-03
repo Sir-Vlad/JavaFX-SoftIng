@@ -3,7 +3,7 @@ package it.prova.javafxsofting.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.StaticDataStore;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -87,7 +87,7 @@ public class Preventivo implements Serializable {
 
     this.modello =
         StaticDataStore.getModelliAuto().stream()
-            .filter(auto -> auto.getIndex() == modelloId)
+            .filter(auto -> auto.getId() == modelloId)
             .toList()
             .getFirst();
 

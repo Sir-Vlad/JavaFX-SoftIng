@@ -1,5 +1,6 @@
-package it.prova.javafxsofting;
+package it.prova.javafxsofting.util;
 
+import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Optional;
@@ -19,6 +20,12 @@ public class StaticDataStore {
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
 
   private StaticDataStore() {}
+
+  public static void fetchAllData() {
+    StaticDataStore.fetchModelliAuto();
+    StaticDataStore.fetchOptionals();
+    StaticDataStore.fetchAutoUsate();
+  }
 
   public static void fetchModelliAuto() {
     logger.info("Aggiornamento modelli auto");
@@ -50,6 +57,20 @@ public class StaticDataStore {
     }
     if (newOptionals != null && !newOptionals.equals(optionals)) {
       optionals = newOptionals;
+    }
+  }
+
+  public static void fetchAutoUsate() {
+    logger.info("Aggiornamento auto usate");
+    List<AutoUsata> newAutoUsate;
+    try {
+      newAutoUsate = Connection.getArrayDataFromBackend("autoUsate/", AutoUsata.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    if (newAutoUsate != null && !newAutoUsate.equals(autoUsate)) {
+      // todo: fare il fetch delle immagini
+      autoUsate = newAutoUsate;
     }
   }
 }

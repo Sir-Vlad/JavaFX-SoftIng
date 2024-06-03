@@ -26,9 +26,13 @@ public class UsatoController implements Initializable {
     mouseEvent.consume();
   }
 
+  @SneakyThrows
   public void switchCompra(MouseEvent mouseEvent) {
-    NotImplemented.notImplemented();
-    //    ScreenController.activate("compra");
+    ScreenController.addScreen(
+        "scegliUsato",
+        FXMLLoader.load(
+            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
+    ScreenController.activate("scegliUsato");
     mouseEvent.consume();
   }
 

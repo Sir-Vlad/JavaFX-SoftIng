@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -73,8 +74,7 @@ public class App extends javafx.application.Application {
   @Override
   public void init() throws Exception {
     // todo: caricare anche tutte le auto usate, le sedi e gli optional
-    StaticDataStore.fetchModelliAuto();
-    StaticDataStore.fetchOptionals();
+    StaticDataStore.fetchAllData();
     checkRememberUtente();
   }
 

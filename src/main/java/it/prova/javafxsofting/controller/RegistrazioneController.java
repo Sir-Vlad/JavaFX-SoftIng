@@ -160,7 +160,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
             cvcField.getText());
 
     try {
-      Connection.postPutDataToBacked(newUtente, "utenti/");
+      Connection.postDataToBacked(newUtente, "utenti/");
     } catch (Exception e) {
       Alert alert = new Alert(AlertType.ERROR, e.getMessage());
       alert.showAndWait();

@@ -1,22 +1,32 @@
 package it.prova.javafxsofting.models;
 
-import java.io.File;
 import java.time.LocalDate;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class AutoUsata {
-  private int index;
-  private String modello;
-  private Marca marca;
+@Getter
+@Setter
+public class AutoUsata extends Auto {
   private int prezzo;
-  private File[] immagini;
   private int kmPercorsi;
   private LocalDate annoImmatricolazione;
-  // dati auto
-  private int altezza;
-  private int lunghezza;
-  private int larghezza;
-  private int peso;
-  private int volumeBagagliaio;
+  private String targa;
+
+  public AutoUsata(
+      String modello,
+      String marca,
+      int altezza,
+      int lunghezza,
+      int larghezza,
+      int peso,
+      int volumeBagagliaio,
+      int kmPercorsi,
+      String targa,
+      LocalDate annoImmatricolazione) {
+    super(modello, marca, altezza, lunghezza, larghezza, peso, volumeBagagliaio);
+    this.prezzo = 0;
+    this.kmPercorsi = kmPercorsi;
+    this.targa = targa;
+    this.annoImmatricolazione = annoImmatricolazione;
+  }
 }
