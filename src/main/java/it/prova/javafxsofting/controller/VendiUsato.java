@@ -7,11 +7,11 @@ import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.component.Header;
-import it.prova.javafxsofting.component.ProfileBox;
 import it.prova.javafxsofting.models.AutoUsata;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.SecureRandom;
@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javafx.collections.ObservableList;
@@ -33,6 +34,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,10 +42,9 @@ public class VendiUsato extends ValidateForm implements Initializable {
   static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   static final SecureRandom RANDOM = new SecureRandom();
   private final HashMap<File, File> immagini = new HashMap<>();
+  private final Logger logger = Logger.getLogger(VendiUsato.class.getName());
   @FXML private Header header;
   private MFXTextField[] targaField = null;
-  @FXML private VBox homeBtn;
-  @FXML private ProfileBox profile;
   @FXML private VBox wrapperRoot;
   @FXML private Label modelloLabel;
   @FXML private Label marcaLabel;
@@ -198,18 +199,19 @@ public class VendiUsato extends ValidateForm implements Initializable {
       return;
     }
 
-    // fixme: cambiare il path del salvataggio dell'immagine
     // controllo se esiste la cartella dove salvare le immagini `instance/data`
     if (checkFolderImmagini()) {
       for (File f : listImmagini) {
-        String rootPath = new File("instance/data").getPath();
+        Path rootPath = Path.of("instance/immaginiAutoUsata");
         try {
           String newName = generateAlphaFileName() + getExtension(f.getName());
-          File newPath = Path.of(rootPath).resolve(newName).toFile();
+          Path newPath = rootPath.resolve(newName);
           // aggiunge l'immagine solo se non è stata già aggiunta, ovvero elimino la possibilità che
           // l'utente possa aggiungere due volte la stessa immagine
-          File value = immagini.putIfAbsent(f, newPath);
-          if (value == null) Files.copy(f.toPath(), newPath.toPath());
+          File value = immagini.putIfAbsent(f, newPath.toFile());
+          if (value == null) {
+            Files.copy(f.toPath(), newPath);
+          }
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
@@ -266,19 +268,16 @@ public class VendiUsato extends ValidateForm implements Initializable {
     showError(pesoConstr, pesoField, validatePeso);
   }
 
+  @SneakyThrows
   private boolean checkFolderImmagini() {
-    if (Files.isDirectory(new File("instance").toPath())) {
-      File folderSaveImage = new File("instance/data");
-      if (!Files.isDirectory(folderSaveImage.toPath())) {
-        try {
-          Files.createDirectory(folderSaveImage.toPath());
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      }
-      return true;
+    Path root = Path.of("instance/immaginiAutoUsata");
+    try {
+      Files.createDirectories(root);
+    } catch (FileAlreadyExistsException e) {
+      logger.info("La cartella instance esiste già");
     }
-    return false;
+
+    return Files.exists(root);
   }
 
   private void setBoundsTarga() {

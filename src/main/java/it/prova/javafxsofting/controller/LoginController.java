@@ -140,6 +140,7 @@ public class LoginController extends ValidateForm implements Initializable {
     try {
       Files.createDirectory(path);
     } catch (FileAlreadyExistsException ignored) {
+      logger.info("La directory data esiste già");
     }
 
     Path fileUtente = Files.createFile(path.resolve("utente.txt"));
