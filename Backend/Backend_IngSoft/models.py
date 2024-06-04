@@ -2,6 +2,8 @@ import os.path
 import re
 from datetime import datetime
 
+import imagehash
+from PIL import Image
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -39,6 +41,18 @@ class Auto(models.Model):
     class Meta:
         abstract = True
 
+    def clean(self):
+        super().clean()
+        optional_obbligatori = Optional.objects.filter(obbligatorio=True)
+        optional_posseduti = Possiede.objects.filter(modello=self)
+
+        for optional in optional_obbligatori:
+            if optional not in [posseduti.optional for posseduti in optional_posseduti]:
+                raise ValidationError(
+                    f"L'opzione obbligatoria '{optional.nome}' non è "
+                    f"associata all'auto {self.modello} "
+                )
+
 
 class ModelloAuto(Auto):
     class MarcaAuto(models.TextChoices):
@@ -67,6 +81,7 @@ class Optional(models.Model):
         COLORE = "colore"
         CAMBIO = "cambio"
         MOTORIZZAZIONE = "motorizzazione"
+        ALIMENTAZIONE = "alimentazione"
         DIM_CERCHI = "dimensione cerchi"
         STEREO = "stereo"
         FANALI = "fanali"
@@ -261,6 +276,7 @@ class PreventivoUsato(models.Model):
 
 class AbstractImmagini(models.Model):
     image = models.ImageField(upload_to="", default=None)
+    phash = models.CharField(max_length=64, editable=False, null=False)
 
     class Meta:
         abstract = True
@@ -276,6 +292,10 @@ class AbstractImmagini(models.Model):
 class ImmaginiAutoNuove(AbstractImmagini):
     auto = models.ForeignKey(ModelloAuto, on_delete=CASCADE)
 
+    class Meta:
+        verbose_name_plural = "Immagini Auto Nuove"
+        unique_together = ("image", "auto")
+
     def upload_to(self, filename):
         return f"imageAutoNuove/{filename}"
 
@@ -285,22 +305,28 @@ class ImmaginiAutoNuove(AbstractImmagini):
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        try:
-            this = ImmaginiAutoNuove.objects.get(id=self.id)
-            if this.image != self.image:
-                this.image.delete(save=False)
-        except ImmaginiAutoNuove.DoesNotExist:
-            pass
-        self.image.name = self.upload_to(self.image)
-        super(AbstractImmagini, self).save(*args, **kwargs)
+        if self.id:
+            try:
+                this = ImmaginiAutoNuove.objects.get(id=self.id)
+                if this.image != self.image:
+                    this.image.delete(save=False)
+            except ImmaginiAutoNuove.DoesNotExist:
+                pass
 
-    class Meta:
-        verbose_name_plural = "Immagini Auto Nuove"
-        unique_together = ("image", "auto")
+        if self.image and not self.phash:
+            image = Image.open(self.image)
+            phash = imagehash.phash(image)
+            self.phash = str(phash)
+            self.image.name = self.upload_to(self.image)
+
+        super(AbstractImmagini, self).save(*args, **kwargs)
 
 
 class ImmaginiAutoUsate(AbstractImmagini):
     auto = models.ForeignKey(AutoUsata, on_delete=CASCADE)
+
+    class Meta:
+        unique_together = ("image", "auto")
 
     def upload_to(self, filename):
         return f"imageAutoUsate/{filename}"
@@ -311,17 +337,21 @@ class ImmaginiAutoUsate(AbstractImmagini):
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        try:
-            this = ImmaginiAutoNuove.objects.get(id=self.id)
-            if this.image != self.image:
-                this.image.delete(save=False)
-        except ImmaginiAutoNuove.DoesNotExist:
-            pass
-        self.image.name = self.upload_to(self.image)
-        super(AbstractImmagini, self).save(*args, **kwargs)
+        if self.id:
+            try:
+                this = ImmaginiAutoUsate.objects.get(id=self.id)
+                if this.image != self.image:
+                    this.image.delete(save=False)
+            except ImmaginiAutoNuove.DoesNotExist:
+                pass
 
-    class Meta:
-        unique_together = ("image", "auto")
+        if self.image and not self.phash:
+            image = Image.open(self.image)
+            phash = imagehash.phash(image)
+            self.phash = str(phash)
+            self.image.name = self.upload_to(self.image)
+
+        super(AbstractImmagini, self).save(*args, **kwargs)
 
 
 class Detrazione(models.Model):

@@ -1,3 +1,8 @@
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -21,10 +26,6 @@ from Backend_IngSoft.models import (
     Utente,
 )
 from Backend_IngSoft.util.error import raises
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
