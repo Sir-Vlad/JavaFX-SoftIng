@@ -2,9 +2,10 @@ package it.prova.javafxsofting.util;
 
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.models.AutoUsata;
+import it.prova.javafxsofting.models.Concessionario;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Optional;
-import it.prova.javafxsofting.models.Sede;
+
 import java.util.List;
 import java.util.logging.Logger;
 import lombok.Data;
@@ -16,7 +17,7 @@ public final class StaticDataStore {
   @Getter private static List<ModelloAuto> modelliAuto;
   @Getter private static List<AutoUsata> autoUsate;
   @Getter private static List<Optional> optionals;
-  @Getter private static List<Sede> sedi;
+  @Getter private static List<Concessionario> sedi;
 
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
 

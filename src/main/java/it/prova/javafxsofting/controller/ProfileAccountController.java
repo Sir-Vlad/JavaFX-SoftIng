@@ -28,10 +28,12 @@ public class ProfileAccountController implements Initializable {
   @FXML private HBox profiloBtn;
   @FXML private HBox ordiniBtn;
   @FXML private HBox preventiviBtn;
+  @FXML private HBox preventiviUsatoBtn;
   @FXML private HBox signOutBtn;
   @FXML private SVGPath iconProfilo;
   @FXML private SVGPath iconOrdini;
   @FXML private SVGPath iconPreventivi;
+  @FXML private SVGPath iconPreventiviUsato;
   @FXML private SVGPath iconSignOut;
   @FXML private VBox content;
   @FXML private VBox sidebar;
@@ -54,6 +56,7 @@ public class ProfileAccountController implements Initializable {
     resize(iconProfilo, 20);
     resize(iconOrdini, 20);
     resize(iconPreventivi, 25);
+    resize(iconPreventiviUsato, 25);
     resize(iconSignOut, 20);
 
     // create le tab della sidebar
@@ -72,9 +75,18 @@ public class ProfileAccountController implements Initializable {
 
     tabController.addTab(
         LITERAL_ORDINI,
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource(PATH_DIR + "ordini_utente.fxml"))),
+        new AnchorPane(),
+        //        FXMLLoader.load(
+        //            Objects.requireNonNull(App.class.getResource(PATH_DIR +
+        // "ordini_utente.fxml"))),
         ordiniBtn);
+
+    tabController.addTab(
+        "preventiviUsato",
+        FXMLLoader.load(
+            Objects.requireNonNull(
+                App.class.getResource(PATH_DIR + "preventivi_usato_utente.fxml"))),
+        preventiviUsatoBtn);
 
     // set default page open
     content.getChildren().add(tabController.getTab(LITERAL_PROFILE));
@@ -93,6 +105,11 @@ public class ProfileAccountController implements Initializable {
 
   public void switchPreventivi(@NotNull MouseEvent mouseEvent) {
     switchTab(preventiviBtn, "preventivi");
+    mouseEvent.consume();
+  }
+
+  public void switchPreventiviUsato(@NotNull MouseEvent mouseEvent) {
+    switchTab(preventiviUsatoBtn, "preventiviUsato");
     mouseEvent.consume();
   }
 

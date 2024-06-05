@@ -207,7 +207,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     // controllo se esiste la cartella dove salvare le immagini `instance/immaginiAutoUsata`
     if (checkFolderImmagini()) {
       for (File f : listImmagini) {
-        Path rootPath = Path.of("instance/immaginiAutoUsata");
+        Path rootPath = Path.of("instance/immagini/immaginiAutoUsata");
         try {
           String newName = generateAlphaFileName() + getExtension(f.getName());
           Path newPath = rootPath.resolve(newName);
@@ -307,7 +307,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @SneakyThrows
   private boolean checkFolderImmagini() {
-    Path root = Path.of("instance/immaginiAutoUsata");
+    Path root = Path.of("instance/immagini/immaginiAutoUsata");
     try {
       Files.createDirectories(root);
     } catch (FileAlreadyExistsException e) {

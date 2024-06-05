@@ -23,7 +23,7 @@ public class Preventivo implements Serializable {
   @SerializedName("modello")
   private int modelloId;
 
-  @SerializedName("sede")
+  @SerializedName("concessionario")
   private int sedeId;
 
   @SerializedName("data_emissione")
@@ -42,7 +42,7 @@ public class Preventivo implements Serializable {
   private ModelloAuto modello;
 
   @Expose(serialize = false, deserialize = false)
-  private Sede sede;
+  private Concessionario concessionario;
 
   @Expose(serialize = false, deserialize = false)
   private List<Optional> optionals; // optional scelti nella configurazione
@@ -54,10 +54,11 @@ public class Preventivo implements Serializable {
   private float totalePrezzo;
 
   @Contract(pure = true)
-  public Preventivo(Utente utente, ModelloAuto modello, Sede sede, LocalDate dataEmissione) {
+  public Preventivo(
+      Utente utente, ModelloAuto modello, Concessionario sede, LocalDate dataEmissione) {
     this.utente = utente;
     this.modello = modello;
-    this.sede = sede;
+    this.concessionario = sede;
     this.dataEmissione = dataEmissione;
     // todo: settare il prezzo del preventivo
     this.prezzo = 0;
@@ -71,13 +72,13 @@ public class Preventivo implements Serializable {
           id=%d,
           utente=%s,
           modello=%s,
-          sede=%s,
+          concessionario=%s,
           dataEmissione=%s,
           prezzo=%d,
           config=%s
         }
         """,
-        id, utente, modello, sede, dataEmissione, prezzo, optionals);
+        id, utente, modello, concessionario, dataEmissione, prezzo, optionals);
   }
 
   public void transformIdToObject() {
@@ -99,6 +100,6 @@ public class Preventivo implements Serializable {
     this.prezzoOptionals = optionals.stream().mapToInt(Optional::getPrezzo).sum();
     this.totalePrezzo = this.getModello().getPrezzoBase() + this.prezzoOptionals;
     // todo: completare appena abbiamo la lista delle sedi
-    //    this.sede = ??
+    //    this.concessionario = ??
   }
 }

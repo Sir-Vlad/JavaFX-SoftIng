@@ -5,7 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class Sede implements Serializable {
+public class Concessionario implements Serializable {
   @SerializedName("nome")
   private String nome;
 

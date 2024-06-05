@@ -18,8 +18,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface FilterAuto {
   default <T extends Auto> void settingMarcaFilter(
-          @NotNull MFXFilterComboBox<String> marcaComboFilter, FlowPane flowPane,
-          ObservableList<T> cardAuto) {
+      @NotNull MFXFilterComboBox<String> marcaComboFilter,
+      FlowPane flowPane,
+      ObservableList<T> cardAuto) {
     ObservableList<String> marche =
         FXCollections.observableArrayList(
             Arrays.stream(Marca.values()).map(Enum::toString).toList());
@@ -52,8 +53,8 @@ public interface FilterAuto {
             });
   }
 
-  default <T extends Auto> void settingPrezzoFilter(@NotNull MFXSlider slider, FlowPane flowPane,
-                                                    ObservableList<T> cardAuto) {
+  default <T extends Auto> void settingPrezzoFilter(
+      @NotNull MFXSlider slider, FlowPane flowPane, ObservableList<T> cardAuto) {
     int[] minMaxPrezzo = minMaxPrezzoAuto(cardAuto);
     slider.setMin(minMaxPrezzo[0]);
     slider.setMax(minMaxPrezzo[1]);

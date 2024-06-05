@@ -100,9 +100,7 @@ public abstract class Auto implements Serializable {
       throw new RuntimeException(e);
     }
 
-    File pathDir =
-        new File(
-            String.format("src/main/resources/it/prova/javafxsofting/immagini/%s/", subDirectory));
+    File pathDir = new File(String.format("instance/immagini/%s/", subDirectory));
     if (!pathDir.exists() && pathDir.mkdirs()) {
       App.getLog().log(Level.INFO, "Cartella {0} creata", subDirectory);
     }

@@ -36,6 +36,7 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 public class LoginController extends ValidateForm implements Initializable {
+  private static final String PATH_REMEMBER_UTENTE = "instance/utente";
   @FXML private AnchorPane root;
   @FXML private VBox wrapperLogin;
 
@@ -122,7 +123,7 @@ public class LoginController extends ValidateForm implements Initializable {
     if (rememberMe.isSelected()) {
       saveUtente();
     } else {
-      File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
+      File path = new File(PATH_REMEMBER_UTENTE + "/utente.txt");
       Files.deleteIfExists(Path.of(path.getPath()));
     }
 
@@ -135,8 +136,7 @@ public class LoginController extends ValidateForm implements Initializable {
   }
 
   private void saveUtente() throws IOException {
-    final String pathStr = "src/main/resources/it/prova/javafxsofting/data";
-    Path path = Path.of(pathStr);
+    Path path = Path.of(PATH_REMEMBER_UTENTE);
     try {
       Files.createDirectory(path);
     } catch (FileAlreadyExistsException ignored) {

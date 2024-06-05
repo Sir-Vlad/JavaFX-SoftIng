@@ -47,7 +47,7 @@ public class App extends javafx.application.Application {
   }
 
   private static void checkRememberUtente() {
-    File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
+    File path = new File("instance/utente/utente.txt");
     if (path.exists()) {
       List<String> text = null;
       try {
@@ -56,19 +56,20 @@ public class App extends javafx.application.Application {
       } catch (Exception ignored) {
 
       }
+    } else {
+      log.info("Nessun utente registrato");
     }
   }
 
-  private static void deleteDirectory(File dirImage) throws IOException {
+  private static void deleteDirectory(@NotNull File dirImage) throws IOException {
     if (dirImage.isDirectory()) {
       File[] files = dirImage.listFiles();
       if (files != null) {
         for (File file : files) {
-          deleteDirectory(file);
+          Files.delete(Path.of(file.getPath()));
         }
       }
     }
-    Files.delete(dirImage.toPath());
   }
 
   @Override
@@ -118,12 +119,13 @@ public class App extends javafx.application.Application {
 
     stage.setOnCloseRequest(
         event -> {
-          File dirImage =
-              new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
+          File dirImageNuove = new File("instance/immagini/immaginiAutoNuove");
+          File dirImageUsate = new File("instance/immagini/immaginiAutoUsata");
 
-          if (dirImage.exists()) {
+          if (dirImageNuove.exists() || dirImageUsate.exists()) {
             try {
-              deleteDirectory(dirImage);
+              deleteDirectory(dirImageNuove);
+              deleteDirectory(dirImageUsate);
             } catch (IOException e) {
               throw new RuntimeException(e);
             }
