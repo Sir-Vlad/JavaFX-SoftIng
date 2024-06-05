@@ -73,7 +73,7 @@ public class ValidateForm {
             (observable, oldValue, newValue) -> {
               String newValueFormat = newValue;
               if (!newValue.matches("[A-Za-z]")) {
-                newValueFormat = newValue.replaceAll("\\d|\\p{P}", "");
+                newValueFormat = newValue.replaceAll("[^A-Za-z]", "");
               }
               field.setText(newValueFormat);
               updateField(field.textProperty(), field);

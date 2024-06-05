@@ -14,5 +14,7 @@
 }
 
 #wrapperRoot {
-    -fx-background-image: url(../immagini/car.jpeg);
+    -fx-background-image: url(../immagini/bg_home.jpeg);
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
 }

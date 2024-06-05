@@ -1,0 +1,5 @@
+<div class="slider">
+    {% for image in value %}
+        <img src="{{ image.image.url }}" alt="{{ image.image.name }}">
+    {% endfor %}
+</div>

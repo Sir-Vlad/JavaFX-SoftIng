@@ -4,6 +4,7 @@
 <?import it.prova.javafxsofting.component.Header?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.String?>
@@ -11,7 +12,7 @@
             stylesheets="@../css/vendiUsato.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="it.prova.javafxsofting.controller.VendiUsato">
     <children>
-        <VBox layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="0.0"
+        <VBox fx:id="wrapperRoot" layoutX="20.0" layoutY="20.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Header fx:id="header"/>
@@ -19,13 +20,13 @@
                     <children>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <MFXScrollPane fitToHeight="true" fitToWidth="true"
-                                               AnchorPane.bottomAnchor="0.0"
+                                <MFXScrollPane fx:id="wrapperBg" fitToHeight="true"
+                                               fitToWidth="true" AnchorPane.bottomAnchor="0.0"
                                                AnchorPane.leftAnchor="0.0"
                                                AnchorPane.rightAnchor="0.0"
                                                AnchorPane.topAnchor="0.0">
                                     <content>
-                                        <VBox fx:id="wrapperRoot" alignment="CENTER"
+                                        <VBox fx:id="wrapperForm" alignment="CENTER"
                                               maxWidth="1.7976931348623157E308"
                                               minWidth="-Infinity">
                                             <children>
@@ -44,10 +45,14 @@
                                                     </children>
                                                     <VBox.margin>
                                                         <Insets bottom="10.0" left="10.0"
-                                                                right="10.0" top="10.0"/>
+                                                                right="10.0" top="20.0"/>
                                                     </VBox.margin>
                                                 </HBox>
-                                                <Separator prefWidth="200.0"/>
+                                                <Separator prefWidth="200.0">
+                                                    <VBox.margin>
+                                                        <Insets left="10.0" right="10.0"/>
+                                                    </VBox.margin>
+                                                </Separator>
                                                 <HBox alignment="CENTER_LEFT">
                                                     <children>
                                                         <Text strokeType="OUTSIDE" strokeWidth="0.0"
@@ -86,6 +91,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserisci il nome del modello dell'auto "
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -173,6 +179,7 @@
                                                                                 borderGap="0.0"
                                                                                 floatMode="BORDER"
                                                                                 maxWidth="1.7976931348623157E308"
+                                                                                promptText="Inserisci i chilometri percorsi"
                                                                                 VBox.vgrow="ALWAYS">
                                                                             <VBox.margin>
                                                                                 <Insets/>
@@ -544,9 +551,12 @@
                                                                     <children>
                                                                         <HBox alignment="CENTER_LEFT"
                                                                               prefWidth="300.0"
-                                                                              spacing="40.0">
+                                                                              spacing="10.0">
                                                                             <children>
                                                                                 <Label fx:id="caricaFotoLabel"
+                                                                                       maxWidth="1.7976931348623157E308"
+                                                                                       minWidth="-Infinity"
+                                                                                       prefWidth="200.0"
                                                                                        styleClass="text-field-font, label-form-25-size"
                                                                                        text="Carica Foto">
                                                                                     <font>
@@ -557,9 +567,33 @@
                                                                                         fx:id="scegliFotoBtn"
                                                                                         onAction="#scegliFoto"
                                                                                         styleClass="button-usato"
-                                                                                        text="Scegli le foto">
+                                                                                        text="Scegli le foto"
+                                                                                        HBox.hgrow="ALWAYS">
                                                                                     <font>
                                                                                         <Font size="25.0"/>
+                                                                                    </font>
+                                                                                </MFXButton>
+                                                                                <MFXButton
+                                                                                        fx:id="infoBtn"
+                                                                                        depthLevel="LEVEL0"
+                                                                                        maxHeight="40.0"
+                                                                                        maxWidth="50.0"
+                                                                                        onMouseEntered="#showPopUp"
+                                                                                        onMouseExited="#hidePopUp"
+                                                                                        prefHeight="40.0"
+                                                                                        prefWidth="45.0"
+                                                                                        style="-fx-border-radius: 50%;"
+                                                                                        styleClass="button-usato"
+                                                                                        text="i"
+                                                                                        translateX="10.0">
+                                                                                    <cursor>
+                                                                                        <Cursor fx:constant="HAND"/>
+                                                                                    </cursor>
+                                                                                    <HBox.margin>
+                                                                                        <Insets/>
+                                                                                    </HBox.margin>
+                                                                                    <font>
+                                                                                        <Font size="20.0"/>
                                                                                     </font>
                                                                                 </MFXButton>
                                                                             </children>
@@ -602,7 +636,8 @@
                                                         </MFXButton>
                                                     </children>
                                                     <VBox.margin>
-                                                        <Insets top="35.0"/>
+                                                        <Insets bottom="10.0" right="10.0"
+                                                                top="35.0"/>
                                                     </VBox.margin>
                                                 </HBox>
                                             </children>

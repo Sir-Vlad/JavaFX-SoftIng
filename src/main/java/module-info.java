@@ -37,4 +37,9 @@ module it.prova.javafxsofting {
 
   opens it.prova.javafxsofting.serializzatori to
       javafx.fxml;
+
+  exports it.prova.javafxsofting.util;
+
+  opens it.prova.javafxsofting.util to
+      javafx.fxml;
 }

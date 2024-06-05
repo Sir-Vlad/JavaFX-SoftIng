@@ -1,4 +1,5 @@
 from Backend_IngSoft.api.views import (
+    AutoUsateListAPIView,
     ImmaginiAutoNuoveListAPIView,
     ModelliAutoListAPIView,
     OptionalAutoListAPIView,
@@ -18,6 +19,7 @@ urlpatterns = [
     path("preventivi/", PreventiviListAPIView.as_view(), name="preventivi-list"),
     path("optionals/", OptionalsListAPIView.as_view(), name="optionals-list"),
     path("sedi/", SedeListAPIView.as_view(), name="sede-list"),
+    path("autoUsate/", AutoUsateListAPIView.as_view(), name="auto-usate-list"),
     # endpoint per dati specifici
     path("utente/<str:email>/", UtenteDetailAPIView.as_view(), name="utente-detail"),
     path(
@@ -39,5 +41,10 @@ urlpatterns = [
         "immaginiAutoNuove/<int:id_auto>/",
         ImmaginiAutoNuoveListAPIView.as_view(),
         name="Immagini Auto Nuove",
+    ),
+    path(
+        "autoUsata/<int:id_auto>/",
+        AutoUsateListAPIView.as_view(),
+        name="auto-usate-list",
     ),
 ]

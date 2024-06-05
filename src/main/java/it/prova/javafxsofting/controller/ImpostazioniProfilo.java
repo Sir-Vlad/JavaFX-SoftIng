@@ -132,7 +132,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   public void modificaNome(ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica nome",
-        "controller/modifica_nome.fxml",
+        "controller/part_profilo_utente/modifica_nome.fxml",
         (stage, root, modificaButton) -> {
           MFXTextField newNomeValue = (MFXTextField) root.lookup("#newNomeValue");
           MFXTextField newCognomeValue = (MFXTextField) root.lookup("#newCognomeValue");
@@ -177,7 +177,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   public void modificaIndirizzo(ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Indirizzo",
-        "controller/modifica_indirizzo.fxml",
+        "controller/part_profilo_utente/modifica_indirizzo.fxml",
         (stage, root, modificaButton) -> {
           MFXTextField newVia = (MFXTextField) root.lookup("#newVia");
           MFXTextField newCivico = (MFXTextField) root.lookup("#newCivico");
@@ -252,7 +252,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   public void modificaNumTelefono(ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Telefono",
-        "controller/modifica_telefono.fxml",
+        "controller/part_profilo_utente/modifica_telefono.fxml",
         (stage, root, modificaButton) -> {
           MFXTextField newNumTelefono = (MFXTextField) root.lookup("#newTelefono");
           MFXComboBox<String> prefissoTelefono =
@@ -301,7 +301,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   public void modificaEmail(ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Email",
-        "controller/modifica_email.fxml",
+        "controller/part_profilo_utente/modifica_email.fxml",
         (stage, root, modificaButton) -> {
           MFXTextField newEmail = (MFXTextField) root.lookup("#newEmail");
           Label validateEmail = (Label) root.lookup("#validateEmail");
@@ -341,7 +341,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   public void modificaPassword(ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Password",
-        "controller/modifica_password.fxml",
+        "controller/part_profilo_utente/modifica_password.fxml",
         (stage, root, modificaButton) -> {
           MFXTextField oldPassword = (MFXTextField) root.lookup("#oldPassword");
           MFXTextField newPassword = (MFXTextField) root.lookup("#newPassword");

@@ -79,6 +79,7 @@ class ImmaginiAutoNuoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImmaginiAutoNuove
         fields = ("auto", "image")
+        read_only_fields = ("phash",)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

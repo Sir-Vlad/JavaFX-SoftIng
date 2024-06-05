@@ -1,3 +1,8 @@
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -21,10 +26,6 @@ from Backend_IngSoft.models import (
     Utente,
 )
 from Backend_IngSoft.util.error import raises
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -183,11 +184,14 @@ class AutoUsateListAPIView(APIView):
         error = {"message": [i for e in serializer.errors.values() for i in e]}
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
+
+class AutoUsataAPIView(APIView):
     def delete(self, request, id_auto):
         try:
             auto = AutoUsata.objects.get(id=id_auto)
         except AutoUsata.DoesNotExist:
             return HttpResponseNotFound("Auto non esiste")
+
         auto.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

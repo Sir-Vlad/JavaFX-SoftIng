@@ -9,7 +9,6 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.models.Utente;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
@@ -36,7 +35,8 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 public class LoginController extends ValidateForm implements Initializable {
-  @FXML private AnchorPane root;
+  private static final String PATH_REMEMBER_UTENTE = "instance/utente";
+  @FXML private AnchorPane rootLogin;
   @FXML private VBox wrapperLogin;
 
   @FXML private MFXTextField emailField;
@@ -59,7 +59,7 @@ public class LoginController extends ValidateForm implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // ? shortcuts
-    root.setOnKeyPressed(
+    rootLogin.setOnKeyPressed(
         event -> {
           if (event.getCode().equals(KeyCode.ENTER)) {
             logIn();
@@ -70,7 +70,7 @@ public class LoginController extends ValidateForm implements Initializable {
     setValidatePassword();
   }
 
-  public void switchIndietro(ActionEvent actionEvent) {
+  public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.back();
     actionEvent.consume();
   }
@@ -122,36 +122,38 @@ public class LoginController extends ValidateForm implements Initializable {
     if (rememberMe.isSelected()) {
       saveUtente();
     } else {
-      File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
-      Files.deleteIfExists(Path.of(path.getPath()));
+      Files.deleteIfExists(Path.of(PATH_REMEMBER_UTENTE).resolve("utente.txt"));
     }
 
     ScreenController.addScreen(
         "profilo",
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profilo_utente.fxml"))));
+        FXMLLoader.load(
+            Objects.requireNonNull(
+                App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml"))));
+
     clearField();
     // redirect alla pagina del profilo
     ScreenController.activate("home");
   }
 
   private void saveUtente() throws IOException {
-    final String pathStr = "src/main/resources/it/prova/javafxsofting/data";
-    Path path = Path.of(pathStr);
+    Path path = Path.of(PATH_REMEMBER_UTENTE);
     try {
       Files.createDirectory(path);
     } catch (FileAlreadyExistsException ignored) {
+      logger.info("La directory data esiste già");
     }
 
     Path fileUtente = Files.createFile(path.resolve("utente.txt"));
     Files.write(fileUtente, App.getUtente().getEmail().getBytes());
   }
 
-  public void forgotPassword(MouseEvent mouseEvent) {
+  public void forgotPassword(@NotNull MouseEvent mouseEvent) {
     NotImplemented.notImplemented();
     mouseEvent.consume();
   }
 
-  public void switchRegister(MouseEvent mouseEvent) {
+  public void switchRegister(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("registrazione");
     mouseEvent.consume();
   }

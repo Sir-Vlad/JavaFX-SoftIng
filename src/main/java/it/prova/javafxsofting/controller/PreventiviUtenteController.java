@@ -15,10 +15,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.Getter;
 
 public class PreventiviUtenteController implements Initializable {
 
-  private final ObservableList<Preventivo> preventiviUtente = FXCollections.observableArrayList();
+  @Getter
+  private static final ObservableList<Preventivo> preventiviUtente =
+      FXCollections.observableArrayList();
+
   @FXML private TableColumn<Preventivo, Integer> idColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> modelloColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> prezzoBaseColumn;

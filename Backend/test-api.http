@@ -1,0 +1,32 @@
+###
+
+POST localhost:8000/api/autoUsate/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "modello": "Fiat Punto",
+  "marcaAuto": "Fiat",
+  "altezza": 1500,
+  "lunghezza": 1500,
+  "larghezza": 1500,
+  "peso": 25,
+  "volume_bagagliaio": 12,
+  "km_percorsi": 150000,
+  "anno_immatricolazione": "2023-01-01"
+}
+
+###
+GET http://localhost:8000/api/autoUsate/
+Accept: application/json
+Content-Type: application/json
+
+###
+DELETE http://localhost:8000/api/autoUsata/1/
+
+
+###
+DELETE http://localhost:8000/api/utente/Kenna_Lesch98@example.com/
+
+###
+GET http://localhost:8000/api/immaginiAutoNuove/1/

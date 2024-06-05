@@ -1,10 +1,12 @@
 from django.contrib import admin
+
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
-from unfold.admin import ModelAdmin
+from unfold.admin import ModelAdmin, TabularInline
 
 from .models import *
+from .widgets import SliderWidget
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
@@ -42,10 +44,17 @@ class MarcaFilter(admin.SimpleListFilter):
             return queryset.filter(marca=self.value())
 
 
+class ImmaginiInline(TabularInline):
+    model = ImmaginiAutoNuove
+    extra = 1
+    formfield_overrides = {"image": {"widget": SliderWidget}}
+
+
 @admin.register(ModelloAuto)
 class ModelloAutoAdmin(ModelAdmin):
     list_display = ("modello", "marca", "prezzo_base")
     list_filter = (MarcaFilter,)
+    inlines = [ImmaginiInline]
 
 
 class TypeOptionalFilter(admin.SimpleListFilter):
@@ -146,6 +155,11 @@ class PreventivoAdmin(ModelAdmin):
 
 @admin.register(Configurazione)
 class ConfigurazioneAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Acquisto)
+class AcquistoAdmin(ModelAdmin):
     pass
 
 

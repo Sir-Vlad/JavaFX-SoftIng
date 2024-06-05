@@ -7,12 +7,14 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.jetbrains.annotations.NotNull;
 
-public class LocalDateDeserializer implements JsonDeserializer<LocalDate> {
+public final class LocalDateDeserializer implements JsonDeserializer<LocalDate> {
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   @Override
-  public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+  public @NotNull LocalDate deserialize(
+      @NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context)
       throws JsonParseException {
     return LocalDate.parse(json.getAsString(), formatter);
   }

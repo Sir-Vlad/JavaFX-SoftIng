@@ -7,8 +7,9 @@
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/form.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootLogin" prefHeight="800.0"
+            prefWidth="1200.0"
+            stylesheets="@../css/form.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="it.prova.javafxsofting.controller.LoginController">
     <children>
         <HBox prefHeight="800.0" prefWidth="1200.0">
@@ -57,7 +58,7 @@
                                         <MFXTextField fx:id="emailField" alignment="CENTER"
                                                       borderGap="0.0" floatMode="BORDER"
                                                       maxWidth="1.7976931348623157E308"
-                                                      promptText="Inserisci la username"
+                                                      promptText="Inserisci la email"
                                                       VBox.vgrow="ALWAYS">
                                             <VBox.margin>
                                                 <Insets/>

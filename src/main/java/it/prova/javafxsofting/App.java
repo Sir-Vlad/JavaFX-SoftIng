@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
   @Getter @Setter private static Utente utente = null;
-  @Getter private static Logger log = Logger.getLogger(App.class.getName());
+  @Getter private static final Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -46,7 +47,7 @@ public class App extends javafx.application.Application {
   }
 
   private static void checkRememberUtente() {
-    File path = new File("src/main/resources/it/prova/javafxsofting/data/utente.txt");
+    File path = new File("instance/utente/utente.txt");
     if (path.exists()) {
       List<String> text = null;
       try {
@@ -55,26 +56,26 @@ public class App extends javafx.application.Application {
       } catch (Exception ignored) {
 
       }
+    } else {
+      log.info("Nessun utente registrato");
     }
   }
 
-  private static void deleteDirectory(File dirImage) throws IOException {
+  private static void deleteDirectory(@NotNull File dirImage) throws IOException {
     if (dirImage.isDirectory()) {
       File[] files = dirImage.listFiles();
       if (files != null) {
         for (File file : files) {
-          deleteDirectory(file);
+          Files.delete(Path.of(file.getPath()));
         }
       }
     }
-    Files.delete(dirImage.toPath());
   }
 
   @Override
-  public void init() throws Exception {
+  public void init() {
     // todo: caricare anche tutte le auto usate, le sedi e gli optional
-    StaticDataStore.fetchModelliAuto();
-    StaticDataStore.fetchOptionals();
+    StaticDataStore.fetchAllData();
     checkRememberUtente();
   }
 
@@ -118,12 +119,13 @@ public class App extends javafx.application.Application {
 
     stage.setOnCloseRequest(
         event -> {
-          File dirImage =
-              new File("src/main/resources/it/prova/javafxsofting/immagini/immaginiAutoNuove");
+          File dirImageNuove = new File("instance/immagini/immaginiAutoNuove");
+          File dirImageUsate = new File("instance/immagini/immaginiAutoUsata");
 
-          if (dirImage.exists()) {
+          if (dirImageNuove.exists() || dirImageUsate.exists()) {
             try {
-              deleteDirectory(dirImage);
+              deleteDirectory(dirImageNuove);
+              deleteDirectory(dirImageUsate);
             } catch (IOException e) {
               throw new RuntimeException(e);
             }
@@ -166,9 +168,9 @@ public class App extends javafx.application.Application {
     // // debug
 
     ScreenController.addScreen(
-        "usato",
+        "scegliUsato",
         FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/usato.fxml")))); //
+            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml")))); //
     // debug
   }
 }

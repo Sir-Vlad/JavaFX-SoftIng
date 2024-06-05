@@ -4,6 +4,8 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -46,7 +48,8 @@ public class ProfileBox extends VBox implements Initializable {
                 "profilo",
                 FXMLLoader.load(
                     Objects.requireNonNull(
-                        App.class.getResource("controller/profilo_utente.fxml"))));
+                        App.class.getResource(
+                            "controller/part_profilo_utente/profilo_utente.fxml"))));
           } catch (IOException e) {
             throw new RuntimeException(e);
           }
@@ -77,17 +80,16 @@ public class ProfileBox extends VBox implements Initializable {
                 contextMenuAccount.setY(buttonBottomRightY);
               });
 
-          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen, 0, 0);
+          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen);
           isMenuAccountOpen = !isMenuAccountOpen;
         });
   }
 
-  private void openContextMenu(
-      MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos, double yPos) {
+  private void openContextMenu(MouseEvent mouseEvent, ContextMenu menu, boolean open) {
     if (open) {
       menu.hide();
     } else {
-      menu.show(root, Side.BOTTOM, xPos, yPos);
+      menu.show(root, Side.BOTTOM, 0, 0);
     }
     mouseEvent.consume();
   }
@@ -119,6 +121,11 @@ public class ProfileBox extends VBox implements Initializable {
       logout.setOnAction(
           actionEvent -> {
             App.setUtente(null);
+            try {
+              Files.deleteIfExists(Path.of("instance/utente/utente.txt"));
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
             ScreenController.activate("home");
             actionEvent.consume();
           });

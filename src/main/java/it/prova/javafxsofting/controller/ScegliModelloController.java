@@ -2,12 +2,10 @@ package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import io.github.palexdev.materialfx.controls.MFXSlider;
-import it.prova.javafxsofting.StaticDataStore;
 import it.prova.javafxsofting.component.CardAuto;
-import it.prova.javafxsofting.component.Header;
-import it.prova.javafxsofting.models.Marca;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.util.FilterAuto;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -25,27 +23,26 @@ import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class ScegliModelloController implements Initializable {
-  @Getter @Setter private static ModelloAuto autoSelezionata = null;
+public class ScegliModelloController extends ScegliAuto<ModelloAuto>
+    implements Initializable, FilterAuto {
   private static final ObservableList<ModelloAuto> cardAuto = FXCollections.observableArrayList();
+  private static final String ELEMENT_TUTTI = "Tutti";
+  @Getter @Setter private static ModelloAuto autoSelezionata = null;
   private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
+  ScheduledExecutorService scheduler;
   @FXML private AnchorPane root;
   @FXML private MFXScrollPane scrollPane;
-  @FXML private FlowPane flowPane;
-  @FXML private Header header;
-  @FXML private MFXFilterComboBox<String> marcaComboFilter;
-  @FXML private MFXSlider sliderMaxPrezzo;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
   private List<ModelloAuto> autoFiltered;
-  private static final String ELEMENT_TUTTI = "Tutti";
-  ScheduledExecutorService scheduler;
 
-  private List<String> getTypeAlimentazione() {
+  @Contract(" -> new")
+  private @NotNull List<String> getTypeAlimentazione() {
     return new ArrayList<>(
         cardAuto.stream()
             .map(modelloAuto -> modelloAuto.getOptionals()[0].getDescrizione())
             .distinct()
+            .sorted()
             .toList());
   }
 
@@ -55,14 +52,14 @@ public class ScegliModelloController implements Initializable {
   }
 
   @Override
+  public void setCardAuto() {
+    getCardAuto().setAll(StaticDataStore.getModelliAuto());
+  }
+
+  @Override
   public void initialize(URL location, ResourceBundle resources) {
-    header.addTab("Home", event -> ScreenController.activate("home"));
+    super.initialize(location, resources);
 
-    cardAuto.setAll(StaticDataStore.getModelliAuto());
-    cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
-
-    settingMarcaFilter();
-    settingPrezzoFilter();
     settingAlimentazioneFilter();
     settingCambioFilter();
 
@@ -74,11 +71,11 @@ public class ScegliModelloController implements Initializable {
   }
 
   private void settingAlimentazioneFilter() {
-
     List<String> a = getTypeAlimentazione();
     a.addFirst(ELEMENT_TUTTI);
     ObservableList<String> typeAlimentazione = FXCollections.observableList(a);
     alimentazioneFilter.setItems(typeAlimentazione);
+    alimentazioneFilter.getSelectionModel().selectFirst();
 
     alimentazioneFilter
         .getSelectionModel()
@@ -97,92 +94,11 @@ public class ScegliModelloController implements Initializable {
 
                 if (!autoFiltered.equals(newAutoFiltered)) {
                   autoFiltered = newAutoFiltered;
-                  flowPane.getChildren().clear();
+                  getFlowPane().getChildren().clear();
                   autoFiltered.stream()
                       .map(CardAuto::new)
-                      .forEach(auto -> flowPane.getChildren().add(auto));
+                      .forEach(auto -> getFlowPane().getChildren().add(auto));
                 }
-              }
-            });
-  }
-
-  private void settingPrezzoFilter() {
-    int[] minMaxPrezzo = minMaxPrezzoAuto();
-    sliderMaxPrezzo.setMin(minMaxPrezzo[0]);
-    sliderMaxPrezzo.setMax(minMaxPrezzo[1]);
-    sliderMaxPrezzo
-        .valueProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue != null && !newValue.equals(oldValue)) {
-                List<ModelloAuto> newAutoFiltered =
-                    cardAuto.stream()
-                        .filter(auto -> auto.getPrezzoBase() >= newValue.intValue())
-                        .toList();
-
-                if (autoFiltered == null) {
-                  autoFiltered = newAutoFiltered;
-                }
-
-                if (!autoFiltered.equals(newAutoFiltered)) {
-                  autoFiltered = newAutoFiltered;
-                  flowPane.getChildren().clear();
-                  autoFiltered.stream()
-                      .map(CardAuto::new)
-                      .forEach(auto -> flowPane.getChildren().add(auto));
-                }
-              }
-            });
-  }
-
-  @Contract(" -> new")
-  private int @NotNull [] minMaxPrezzoAuto() {
-    int max =
-        cardAuto.stream()
-            .mapToInt(ModelloAuto::getPrezzoBase)
-            .filter(modelloAuto -> modelloAuto >= 0)
-            .max()
-            .orElse(0);
-    int min =
-        cardAuto.stream()
-            .mapToInt(ModelloAuto::getPrezzoBase)
-            .filter(modelloAuto -> modelloAuto >= 0)
-            .min()
-            .orElse(0);
-    if (max == 0) {
-      max = 1;
-    }
-    return new int[] {min, max};
-  }
-
-  private void settingMarcaFilter() {
-    ObservableList<String> marche =
-        FXCollections.observableArrayList(
-            Arrays.stream(Marca.values()).map(Enum::toString).toList());
-    marche.addFirst(ELEMENT_TUTTI);
-    marcaComboFilter.setItems(marche);
-
-    marcaComboFilter
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue != null) {
-                if (newValue.equals(ELEMENT_TUTTI)) {
-                  flowPane.getChildren().clear();
-                  cardAuto.stream()
-                      .map(CardAuto::new)
-                      .forEach(auto -> flowPane.getChildren().add(auto));
-                  return;
-                }
-                List<ModelloAuto> dataFiltered =
-                    cardAuto.stream()
-                        .filter(auto -> auto.getMarca().equals(Marca.valueOf(newValue)))
-                        .toList();
-                flowPane.getChildren().clear();
-                dataFiltered.stream()
-                    .map(CardAuto::new)
-                    .forEach(auto -> flowPane.getChildren().add(auto));
               }
             });
   }
@@ -197,9 +113,11 @@ public class ScegliModelloController implements Initializable {
 
     Platform.runLater(
         () -> {
-          flowPane.getChildren().clear();
+          getFlowPane().getChildren().clear();
           cardAuto.setAll(StaticDataStore.getModelliAuto());
-          cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().add(auto));
+          cardAuto.stream()
+              .map(CardAuto::new)
+              .forEach(auto -> getFlowPane().getChildren().add(auto));
         });
   }
 }

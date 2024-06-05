@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Connection {
+public final class Connection {
 
   static final Gson gson =
       new GsonBuilder()
@@ -151,7 +151,7 @@ public class Connection {
    * @param data dati da inviare
    * @param subDirectory url dove inviare i dati
    */
-  public static <T extends Serializable> void postPutDataToBacked(T data, String subDirectory)
+  public static <T extends Serializable> void postDataToBacked(T data, String subDirectory)
       throws Exception {
     HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.POST);
 

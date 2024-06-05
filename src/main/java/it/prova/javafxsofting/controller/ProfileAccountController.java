@@ -3,6 +3,7 @@ package it.prova.javafxsofting.controller;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,19 +18,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 public class ProfileAccountController implements Initializable {
   private static final String LITERAL_ORDINI = "ordini";
-  private static final String LITERAL_PROFILE = "profile";
+  private static final String LITERAL_PROFILE = "dati_utente";
+  private static final Path PATH_DIR = Path.of("controller").resolve("part_profilo_utente");
   @FXML private HBox imageAccount;
   @FXML private Label nameAccount;
   @FXML private HBox profiloBtn;
   @FXML private HBox ordiniBtn;
   @FXML private HBox preventiviBtn;
+  @FXML private HBox preventiviUsatoBtn;
   @FXML private HBox signOutBtn;
   @FXML private SVGPath iconProfilo;
   @FXML private SVGPath iconOrdini;
   @FXML private SVGPath iconPreventivi;
+  @FXML private SVGPath iconPreventiviUsato;
   @FXML private SVGPath iconSignOut;
   @FXML private VBox content;
   @FXML private VBox sidebar;
@@ -49,52 +54,74 @@ public class ProfileAccountController implements Initializable {
     nameAccount.textProperty().bindBidirectional(App.getUtente().nomeCompletoProperty());
 
     // ridimensionamento delle icone della sidebar
-    resize(iconProfilo, 20, 20);
-    resize(iconOrdini, 20, 20);
-    resize(iconPreventivi, 20, 25);
-    resize(iconSignOut, 20, 20);
+    resize(iconProfilo, 20);
+    resize(iconOrdini, 20);
+    resize(iconPreventivi, 25);
+    resize(iconPreventiviUsato, 25);
+    resize(iconSignOut, 20);
 
     // create le tab della sidebar
     tabController = new TabController();
     tabController.addTab(
         LITERAL_PROFILE,
         FXMLLoader.load(
-            Objects.requireNonNull(getClass().getResource("impostazioni_profilo.fxml"))),
+            Objects.requireNonNull(
+                App.class.getResource(PATH_DIR.resolve("impostazioni_profilo.fxml").toString()))),
         profiloBtn);
 
     tabController.addTab(
         "preventivi",
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("preventivi_utente.fxml"))),
+        FXMLLoader.load(
+            Objects.requireNonNull(
+                App.class.getResource(PATH_DIR.resolve("preventivi_utente.fxml").toString()))),
         preventiviBtn);
 
     tabController.addTab(
         LITERAL_ORDINI,
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ordini_utente.fxml"))),
+        new AnchorPane(),
+        //        FXMLLoader.load(
+        //            Objects.requireNonNull(App.class.getResource(PATH_DIR +
+        // "ordini_utente.fxml"))),
         ordiniBtn);
+
+    tabController.addTab(
+        "preventiviUsato",
+        FXMLLoader.load(
+            Objects.requireNonNull(
+                App.class.getResource(
+                    PATH_DIR.resolve("preventivi_usato_utente.fxml").toString()))),
+        preventiviUsatoBtn);
 
     // set default page open
     content.getChildren().add(tabController.getTab(LITERAL_PROFILE));
     profiloBtn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
   }
 
-  public void switchProfilo(MouseEvent mouseEvent) {
+  public void switchProfilo(@NotNull MouseEvent mouseEvent) {
     switchTab(profiloBtn, LITERAL_PROFILE);
     mouseEvent.consume();
   }
 
-  public void switchOrdini(MouseEvent mouseEvent) {
+  public void switchOrdini(@NotNull MouseEvent mouseEvent) {
     switchTab(ordiniBtn, LITERAL_ORDINI);
     mouseEvent.consume();
   }
 
-  public void switchPreventivi(MouseEvent mouseEvent) {
+  public void switchPreventivi(@NotNull MouseEvent mouseEvent) {
     switchTab(preventiviBtn, "preventivi");
     mouseEvent.consume();
   }
 
-  public void signOut(MouseEvent mouseEvent) {
-    ScreenController.removeScreen(LITERAL_PROFILE);
-    ScreenController.activate("login");
+  public void switchPreventiviUsato(@NotNull MouseEvent mouseEvent) {
+    switchTab(preventiviUsatoBtn, "preventiviUsato");
+    mouseEvent.consume();
+  }
+
+  public void signOut(@NotNull MouseEvent mouseEvent) {
+    App.setUtente(null);
+    ScreenController.removeScreen("profilo");
+    ScreenController.activate("home");
+    // todo: far uscire una notifica
     mouseEvent.consume();
   }
 
@@ -116,10 +143,11 @@ public class ProfileAccountController implements Initializable {
     }
   }
 
-  private void resize(SVGPath svg, double width, double height) {
+  private void resize(@NotNull SVGPath svg, double height) {
     double originalWidth = svg.prefWidth(-1);
     double originalHeight = svg.prefHeight(originalWidth);
 
+    double width = 20;
     double scaleX = width / originalWidth;
     double scaleY = height / originalHeight;
 

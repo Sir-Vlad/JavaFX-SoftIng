@@ -14,3 +14,22 @@
 .label-form-30-size {
     -fx-font-size: 30;
 }
+
+#infoBtn {
+    -fx-background-color: #54B4D3;
+    -fx-background-radius: 50;
+    -fx-text-fill: white;
+    -fx-border-color: none;
+}
+
+#wrapperBg {
+    -fx-background-image: url(../immagini/bg_usato.jpeg);
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+}
+
+#wrapperForm {
+    -fx-background-color: rgba(180, 183, 183, 0.85);
+    -fx-background-radius: 25;
+    -fx-padding: 2 2 2 2;
+}
