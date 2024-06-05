@@ -35,7 +35,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 public class RegistrazioneController extends ValidateForm implements Initializable {
   private static final String LITERAL_FIELD_INVALID = "field-invalid";
   private final Logger logger = Logger.getLogger(RegistrazioneController.class.getName());
-  @FXML private AnchorPane root;
+  @FXML private AnchorPane rootRegistrazione;
   @FXML private VBox wrapperRegistrazione;
   @FXML private Label nomeLabel;
   @FXML private Label cognomeLabel;
@@ -91,7 +91,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     setValidateCvc();
 
     // shortcuts
-    root.addEventFilter(
+    rootRegistrazione.addEventFilter(
         KeyEvent.KEY_PRESSED,
         new EventHandler<>() {
           private static final KeyCombination COMBINATION =
@@ -105,7 +105,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
           }
         });
 
-    root.setOnKeyPressed(
+    rootRegistrazione.setOnKeyPressed(
         event -> {
           if (event.getCode().equals(KeyCode.ENTER)) {
             createAccount();

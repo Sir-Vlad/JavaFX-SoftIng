@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginController extends ValidateForm implements Initializable {
   private static final String PATH_REMEMBER_UTENTE = "instance/utente";
-  @FXML private AnchorPane root;
+  @FXML private AnchorPane rootLogin;
   @FXML private VBox wrapperLogin;
 
   @FXML private MFXTextField emailField;
@@ -60,7 +60,7 @@ public class LoginController extends ValidateForm implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // ? shortcuts
-    root.setOnKeyPressed(
+    rootLogin.setOnKeyPressed(
         event -> {
           if (event.getCode().equals(KeyCode.ENTER)) {
             logIn();
@@ -71,7 +71,7 @@ public class LoginController extends ValidateForm implements Initializable {
     setValidatePassword();
   }
 
-  public void switchIndietro(ActionEvent actionEvent) {
+  public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.back();
     actionEvent.consume();
   }
@@ -129,7 +129,9 @@ public class LoginController extends ValidateForm implements Initializable {
 
     ScreenController.addScreen(
         "profilo",
-        FXMLLoader.load(Objects.requireNonNull(getClass().getResource("profilo_utente.fxml"))));
+        FXMLLoader.load(
+            Objects.requireNonNull(
+                App.class.getResource("controller/part_profile_utente/profilo_utente.fxml"))));
     clearField();
     // redirect alla pagina del profilo
     ScreenController.activate("home");
@@ -147,12 +149,12 @@ public class LoginController extends ValidateForm implements Initializable {
     Files.write(fileUtente, App.getUtente().getEmail().getBytes());
   }
 
-  public void forgotPassword(MouseEvent mouseEvent) {
+  public void forgotPassword(@NotNull MouseEvent mouseEvent) {
     NotImplemented.notImplemented();
     mouseEvent.consume();
   }
 
-  public void switchRegister(MouseEvent mouseEvent) {
+  public void switchRegister(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("registrazione");
     mouseEvent.consume();
   }
