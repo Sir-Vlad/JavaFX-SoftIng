@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
   "modello": "Fiat Punto",
-  "marca": "Fiat",
+  "marcaAuto": "Fiat",
   "altezza": 1500,
   "lunghezza": 1500,
   "larghezza": 1500,

@@ -104,7 +104,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="Sede",
+            name="Concessionario",
             fields=[
                 (
                     "id",

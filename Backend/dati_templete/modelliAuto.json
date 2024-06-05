@@ -3,224 +3,224 @@
     "model": "Backend_IngSoft.modelloauto",
     "pk": 1,
     "fields": {
-      "nome": "Skyline R-34 GTT",
+      "modello": "Skyline R-34 GTT",
       "marca": "NISSAN",
       "altezza": 1360,
       "lunghezza": 4600,
       "larghezza": 1785,
       "peso": 1550,
       "volume_bagagliaio": 180,
-      "prezzo_base": 0
+      "prezzo_base": 36000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 2,
     "fields": {
-      "nome": "370Z",
+      "modello": "370Z",
       "marca": "NISSAN",
       "altezza": 1318,
       "lunghezza": 4250,
       "larghezza": 1845,
       "peso": 1310,
       "volume_bagagliaio": 235,
-      "prezzo_base": 0
+      "prezzo_base": 40000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 3,
     "fields": {
-      "nome": "RX-7 2JZ",
+      "modello": "RX-7 2JZ",
       "marca": "MAZDA",
       "altezza": 1230,
       "lunghezza": 4287,
       "larghezza": 1740,
       "peso": 1423,
       "volume_bagagliaio": 270,
-      "prezzo_base": 0
+      "prezzo_base": 77000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 4,
     "fields": {
-      "nome": "GOLF GTI",
+      "modello": "GOLF GTI",
       "marca": "VOLKSWAGEN",
       "altezza": 1478,
       "lunghezza": 4295,
       "larghezza": 1790,
       "peso": 1500,
       "volume_bagagliaio": 374,
-      "prezzo_base": 0
+      "prezzo_base": 44750
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 5,
     "fields": {
-      "nome": "GOLF R LINE GTD",
+      "modello": "GOLF R LINE GTD",
       "marca": "VOLKSWAGEN",
       "altezza": 1490,
       "lunghezza": 4280,
       "larghezza": 1790,
       "peso": 1465,
       "volume_bagagliaio": 374,
-      "prezzo_base": 0
+      "prezzo_base": 44950
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 6,
     "fields": {
-      "nome": "SCIROCCO 4",
+      "modello": "SCIROCCO 4",
       "marca": "VOLKSWAGEN",
       "altezza": 1490,
       "lunghezza": 4260,
       "larghezza": 1810,
       "peso": 1300,
       "volume_bagagliaio": 312,
-      "prezzo_base": 0
+      "prezzo_base": 13900
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 7,
     "fields": {
-      "nome": "FIESTA ST",
+      "modello": "FIESTA ST",
       "marca": "FORD",
       "altezza": 1480,
       "lunghezza": 4050,
       "larghezza": 1734,
       "peso": 1130,
       "volume_bagagliaio": 311,
-      "prezzo_base": 0
+      "prezzo_base": 20500
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 8,
     "fields": {
-      "nome": "FOCUS ST",
+      "modello": "FOCUS ST",
       "marca": "FORD",
       "altezza": 1458,
       "lunghezza": 4038,
       "larghezza": 1825,
       "peso": 1433,
       "volume_bagagliaio": 375,
-      "prezzo_base": 0
+      "prezzo_base": 40750
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 9,
     "fields": {
-      "nome": "Civic Type R",
+      "modello": "Civic Type R",
       "marca": "HONDA",
       "altezza": 1401,
       "lunghezza": 4594,
       "larghezza": 1890,
       "peso": 1429,
       "volume_bagagliaio": 410,
-      "prezzo_base": 0
+      "prezzo_base": 58000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 10,
     "fields": {
-      "nome": "RS7 Avant",
+      "modello": "RS7 Avant",
       "marca": "AUDI",
       "altezza": 1420,
       "lunghezza": 5010,
       "larghezza": 1950,
       "peso": 2065,
       "volume_bagagliaio": 535,
-      "prezzo_base": 0
+      "prezzo_base": 147300
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 11,
     "fields": {
-      "nome": "TT RS",
+      "modello": "TT RS",
       "marca": "AUDI",
       "altezza": 1340,
       "lunghezza": 4200,
       "larghezza": 1820,
       "peso": 1550,
       "volume_bagagliaio": 305,
-      "prezzo_base": 0
+      "prezzo_base": 75000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 12,
     "fields": {
-      "nome": "E-36",
+      "modello": "E-36",
       "marca": "BMW",
       "altezza": 1393,
       "lunghezza": 4433,
       "larghezza": 1695,
       "peso": 1250,
       "volume_bagagliaio": 340,
-      "prezzo_base": 0
+      "prezzo_base": 19000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 13,
     "fields": {
-      "nome": "E-46",
+      "modello": "E-46",
       "marca": "BMW",
       "altezza": 1420,
       "lunghezza": 4470,
       "larghezza": 1780,
       "peso": 1495,
       "volume_bagagliaio": 435,
-      "prezzo_base": 0
+      "prezzo_base": 105950
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 14,
     "fields": {
-      "nome": "M3 Competition",
+      "modello": "M3 Competition",
       "marca": "BMW",
       "altezza": 1438,
       "lunghezza": 4794,
       "larghezza": 1903,
       "peso": 1805,
       "volume_bagagliaio": 480,
-      "prezzo_base": 0
+      "prezzo_base": 67000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 15,
     "fields": {
-      "nome": "M2 Competition",
+      "modello": "M2 Competition",
       "marca": "BMW",
       "altezza": 1410,
       "lunghezza": 4460,
       "larghezza": 1840,
       "peso": 1625,
       "volume_bagagliaio": 390,
-      "prezzo_base": 0
+      "prezzo_base": 15000
     }
   },
   {
     "model": "Backend_IngSoft.modelloauto",
     "pk": 16,
     "fields": {
-      "nome": "E-30",
+      "modello": "E-30",
       "marca": "BMW",
       "altezza": 1380,
       "lunghezza": 4325,
       "larghezza": 1680,
       "peso": 1090,
       "volume_bagagliaio": 404,
-      "prezzo_base": 0
+      "prezzo_base": 15000
     }
   }
 ]
