@@ -4,6 +4,8 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -119,6 +121,11 @@ public class ProfileBox extends VBox implements Initializable {
       logout.setOnAction(
           actionEvent -> {
             App.setUtente(null);
+            try {
+              Files.deleteIfExists(Path.of("instance/utente/utente.txt"));
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
             ScreenController.activate("home");
             actionEvent.consume();
           });

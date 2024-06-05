@@ -9,7 +9,6 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.NotImplemented;
 import it.prova.javafxsofting.models.Utente;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
@@ -123,15 +122,15 @@ public class LoginController extends ValidateForm implements Initializable {
     if (rememberMe.isSelected()) {
       saveUtente();
     } else {
-      File path = new File(PATH_REMEMBER_UTENTE + "/utente.txt");
-      Files.deleteIfExists(Path.of(path.getPath()));
+      Files.deleteIfExists(Path.of(PATH_REMEMBER_UTENTE).resolve("utente.txt"));
     }
 
     ScreenController.addScreen(
         "profilo",
         FXMLLoader.load(
             Objects.requireNonNull(
-                App.class.getResource("controller/part_profile_utente/profilo_utente.fxml"))));
+                App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml"))));
+
     clearField();
     // redirect alla pagina del profilo
     ScreenController.activate("home");

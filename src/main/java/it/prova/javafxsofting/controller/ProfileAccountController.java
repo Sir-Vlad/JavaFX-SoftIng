@@ -3,6 +3,7 @@ package it.prova.javafxsofting.controller;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class ProfileAccountController implements Initializable {
   private static final String LITERAL_ORDINI = "ordini";
   private static final String LITERAL_PROFILE = "dati_utente";
-  private static final String PATH_DIR = "controller/part_profilo_utente/";
+  private static final Path PATH_DIR = Path.of("controller").resolve("part_profilo_utente");
   @FXML private HBox imageAccount;
   @FXML private Label nameAccount;
   @FXML private HBox profiloBtn;
@@ -64,13 +65,15 @@ public class ProfileAccountController implements Initializable {
     tabController.addTab(
         LITERAL_PROFILE,
         FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource(PATH_DIR + "impostazioni_profilo.fxml"))),
+            Objects.requireNonNull(
+                App.class.getResource(PATH_DIR.resolve("impostazioni_profilo.fxml").toString()))),
         profiloBtn);
 
     tabController.addTab(
         "preventivi",
         FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource(PATH_DIR + "preventivi_utente.fxml"))),
+            Objects.requireNonNull(
+                App.class.getResource(PATH_DIR.resolve("preventivi_utente.fxml").toString()))),
         preventiviBtn);
 
     tabController.addTab(
@@ -85,7 +88,8 @@ public class ProfileAccountController implements Initializable {
         "preventiviUsato",
         FXMLLoader.load(
             Objects.requireNonNull(
-                App.class.getResource(PATH_DIR + "preventivi_usato_utente.fxml"))),
+                App.class.getResource(
+                    PATH_DIR.resolve("preventivi_usato_utente.fxml").toString()))),
         preventiviUsatoBtn);
 
     // set default page open
