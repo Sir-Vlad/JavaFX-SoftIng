@@ -14,3 +14,10 @@
 .label-form-30-size {
     -fx-font-size: 30;
 }
+
+#infoBtn {
+    -fx-background-color: #54B4D3;
+    -fx-background-radius: 50;
+    -fx-text-fill: white;
+    -fx-border-color: none;
+}

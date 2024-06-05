@@ -31,7 +31,7 @@ public class HomeController implements Initializable {
   }
 
   public void switchUsato(MouseEvent mouseEvent) {
-    ScreenController.activate("usato");
+    ScreenController.activate("scegliUsato");
     mouseEvent.consume();
   }
 }

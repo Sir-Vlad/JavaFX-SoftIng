@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
   @Getter @Setter private static Utente utente = null;
-  @Getter private static Logger log = Logger.getLogger(App.class.getName());
+  @Getter private static final Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -72,7 +72,7 @@ public class App extends javafx.application.Application {
   }
 
   @Override
-  public void init() throws Exception {
+  public void init() {
     // todo: caricare anche tutte le auto usate, le sedi e gli optional
     StaticDataStore.fetchAllData();
     checkRememberUtente();
@@ -166,9 +166,9 @@ public class App extends javafx.application.Application {
     // // debug
 
     ScreenController.addScreen(
-        "usato",
+        "scegliUsato",
         FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/usato.fxml")))); //
+            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml")))); //
     // debug
   }
 }

@@ -34,6 +34,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Popup;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,9 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private MFXTextField volBagagliaioField;
   @FXML private MFXTextField pesoField;
   @FXML private MFXButton scegliFotoBtn;
+  @FXML private MFXButton infoBtn;
+  private Popup popup;
+  private Label popupContent;
 
   private static void alertWarning(String title, String message) {
     Alert alert = new Alert(AlertType.WARNING);
@@ -92,8 +96,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    header.addTab("Indietro", event -> ScreenController.back());
-    header.addTab("Home", event -> ScreenController.activate("home"));
+    header.addTab("Indietro", event -> ScreenController.activate("config"));
 
     setBoundsTarga();
 
@@ -119,6 +122,8 @@ public class VendiUsato extends ValidateForm implements Initializable {
     setValidateLarghezza();
     setValidateVolBagagliaio();
     setValidatePeso();
+
+    createPopUp();
 
     // shortcuts
     wrapperRoot.setOnKeyPressed(
@@ -199,7 +204,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
       return;
     }
 
-    // controllo se esiste la cartella dove salvare le immagini `instance/data`
+    // controllo se esiste la cartella dove salvare le immagini `instance/immaginiAutoUsata`
     if (checkFolderImmagini()) {
       for (File f : listImmagini) {
         Path rootPath = Path.of("instance/immaginiAutoUsata");
@@ -220,9 +225,41 @@ public class VendiUsato extends ValidateForm implements Initializable {
       alertWarning("Impossibile salvare le immagini", "Impossibile salvare le immagini");
     }
 
+    // pulisce la label per gli errori
     if (validateFoto.textProperty().isNotEmpty().get()) {
       validateFoto.setText("");
     }
+
+    // creo il testo da visualizzare per il popup di info
+    StringBuilder stringBuilder = new StringBuilder();
+    immagini
+        .keySet()
+        .forEach(
+            file -> {
+              stringBuilder.append(file.getName());
+              stringBuilder.append("\n");
+            });
+
+    popupContent.setText(stringBuilder.toString());
+  }
+
+  public void showPopUp(MouseEvent mouseEvent) {
+    if (!popup.isShowing()) {
+      popup.show(wrapperRoot, mouseEvent.getSceneX(), mouseEvent.getScreenY());
+    }
+  }
+
+  public void hidePopUp(MouseEvent mouseEvent) {
+    if (popup.isShowing()) {
+      popup.hide();
+    }
+  }
+
+  private void createPopUp() {
+    popup = new Popup();
+    popupContent = new Label("Nessuna foto selezionata");
+    popupContent.setStyle("-fx-background-color: lightgray; -fx-padding: 10;");
+    popup.getContent().add(popupContent);
   }
 
   private @NotNull AutoUsata createAutoUsata() {

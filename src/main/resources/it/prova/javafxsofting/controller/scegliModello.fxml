@@ -82,7 +82,7 @@
                                                            popupSide="OTHER_SIDE"
                                                            showTicksAtEdges="false"
                                                            sliderMode="SNAP_TO_TICKS"
-                                                           tickUnit="1000.0" unitIncrement="1000.0">
+                                                           tickUnit="5000.0" unitIncrement="5000.0">
                                                     <padding>
                                                         <Insets top="8.0"/>
                                                     </padding>

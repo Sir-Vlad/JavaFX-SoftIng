@@ -4,6 +4,7 @@
 <?import it.prova.javafxsofting.component.Header?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.String?>
@@ -19,7 +20,7 @@
                     <children>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <MFXScrollPane fitToHeight="true" fitToWidth="true"
+                                <MFXScrollPane fitToHeight="true" fitToWidth="true" vvalue="1.0"
                                                AnchorPane.bottomAnchor="0.0"
                                                AnchorPane.leftAnchor="0.0"
                                                AnchorPane.rightAnchor="0.0"
@@ -544,7 +545,7 @@
                                                                     <children>
                                                                         <HBox alignment="CENTER_LEFT"
                                                                               prefWidth="300.0"
-                                                                              spacing="40.0">
+                                                                              spacing="10.0">
                                                                             <children>
                                                                                 <Label fx:id="caricaFotoLabel"
                                                                                        styleClass="text-field-font, label-form-25-size"
@@ -560,6 +561,28 @@
                                                                                         text="Scegli le foto">
                                                                                     <font>
                                                                                         <Font size="25.0"/>
+                                                                                    </font>
+                                                                                </MFXButton>
+                                                                                <MFXButton
+                                                                                        fx:id="infoBtn"
+                                                                                        depthLevel="LEVEL0"
+                                                                                        maxHeight="40.0"
+                                                                                        maxWidth="50.0"
+                                                                                        onMouseEntered="#showPopUp"
+                                                                                        onMouseExited="#hidePopUp"
+                                                                                        prefHeight="40.0"
+                                                                                        prefWidth="45.0"
+                                                                                        style="-fx-border-radius: 50%;"
+                                                                                        styleClass="button-usato"
+                                                                                        text="i">
+                                                                                    <cursor>
+                                                                                        <Cursor fx:constant="HAND"/>
+                                                                                    </cursor>
+                                                                                    <HBox.margin>
+                                                                                        <Insets left="30.0"/>
+                                                                                    </HBox.margin>
+                                                                                    <font>
+                                                                                        <Font size="20.0"/>
                                                                                     </font>
                                                                                 </MFXButton>
                                                                             </children>

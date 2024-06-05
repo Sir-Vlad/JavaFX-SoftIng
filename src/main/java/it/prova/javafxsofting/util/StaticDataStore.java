@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.logging.Logger;
 import lombok.Data;
 import lombok.Getter;
+import org.jetbrains.annotations.Contract;
 
 @Data
-public class StaticDataStore {
+public final class StaticDataStore {
   @Getter private static List<ModelloAuto> modelliAuto;
   @Getter private static List<AutoUsata> autoUsate;
   @Getter private static List<Optional> optionals;
@@ -19,6 +20,7 @@ public class StaticDataStore {
 
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
 
+  @Contract(pure = true)
   private StaticDataStore() {}
 
   public static void fetchAllData() {

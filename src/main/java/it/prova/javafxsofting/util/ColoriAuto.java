@@ -3,8 +3,10 @@ package it.prova.javafxsofting.util;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ColoriAuto {
+public final class ColoriAuto {
   private final HashMap<String, Color> colorMap;
 
   public ColoriAuto() {
@@ -12,11 +14,11 @@ public class ColoriAuto {
     initializeColors();
   }
 
-  public Color getColor(String colorName) {
+  public Color getColor(@NotNull String colorName) {
     return colorMap.getOrDefault(colorName.toLowerCase(), Color.BLACK);
   }
 
-  public String getNameColor(Color color) {
+  public @Nullable String getNameColor(Color color) {
     for (Entry<String, Color> entry : colorMap.entrySet()) {
       String colorName = entry.getKey();
       Color colorValue = entry.getValue();

@@ -1,8 +1,10 @@
 package it.prova.javafxsofting.models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Contract;
 
 @Getter
 @Setter
@@ -28,5 +30,23 @@ public class AutoUsata extends Auto {
     this.kmPercorsi = kmPercorsi;
     this.targa = targa;
     this.annoImmatricolazione = annoImmatricolazione;
+  }
+
+  @Override
+  @Contract(value = "null -> false", pure = true)
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    AutoUsata autoUsata = (AutoUsata) o;
+    return prezzo == autoUsata.prezzo
+        && kmPercorsi == autoUsata.kmPercorsi
+        && Objects.equals(annoImmatricolazione, autoUsata.annoImmatricolazione)
+        && Objects.equals(targa, autoUsata.targa);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), prezzo, kmPercorsi, annoImmatricolazione, targa);
   }
 }

@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class CardAuto extends VBox {
+  private static final String PATH_DIR = "controller/part_configurator/";
   @FXML VBox rootCardAuto;
   @FXML Label labelNomeAuto;
   @FXML Label labelTipoMotore;
@@ -64,7 +65,7 @@ public class CardAuto extends VBox {
                   "config",
                   FXMLLoader.load(
                       Objects.requireNonNull(
-                          App.class.getResource("controller/configurator.fxml"))));
+                          App.class.getResource(PATH_DIR + "configurator.fxml"))));
             } catch (IOException e) {
               throw new RuntimeException(e);
             }

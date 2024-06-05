@@ -46,7 +46,8 @@ public class ProfileBox extends VBox implements Initializable {
                 "profilo",
                 FXMLLoader.load(
                     Objects.requireNonNull(
-                        App.class.getResource("controller/profilo_utente.fxml"))));
+                        App.class.getResource(
+                            "controller/part_profilo_utente/profilo_utente.fxml"))));
           } catch (IOException e) {
             throw new RuntimeException(e);
           }
@@ -77,17 +78,16 @@ public class ProfileBox extends VBox implements Initializable {
                 contextMenuAccount.setY(buttonBottomRightY);
               });
 
-          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen, 0, 0);
+          openContextMenu(mouseEvent, contextMenuAccount, isMenuAccountOpen);
           isMenuAccountOpen = !isMenuAccountOpen;
         });
   }
 
-  private void openContextMenu(
-      MouseEvent mouseEvent, ContextMenu menu, boolean open, double xPos, double yPos) {
+  private void openContextMenu(MouseEvent mouseEvent, ContextMenu menu, boolean open) {
     if (open) {
       menu.hide();
     } else {
-      menu.show(root, Side.BOTTOM, xPos, yPos);
+      menu.show(root, Side.BOTTOM, 0, 0);
     }
     mouseEvent.consume();
   }
