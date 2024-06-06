@@ -5,7 +5,6 @@ import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,7 +74,7 @@ public class App extends javafx.application.Application {
   @Override
   public void init() {
     // todo: caricare anche tutte le auto usate, le sedi e gli optional
-    StaticDataStore.fetchAllData();
+    //    StaticDataStore.fetchAllData();
     checkRememberUtente();
   }
 
@@ -145,10 +144,10 @@ public class App extends javafx.application.Application {
         "home",
         FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
-    ScreenController.addScreen(
-        "scegliModello",
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    //    ScreenController.addScreen(
+    //        "scegliModello",
+    //        FXMLLoader.load(
+    //            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
     // // debug
 
     ScreenController.addScreen(
@@ -167,10 +166,10 @@ public class App extends javafx.application.Application {
             Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
     // // debug
 
-    ScreenController.addScreen(
-        "scegliUsato",
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml")))); //
+    //    ScreenController.addScreen(
+    //        "scegliUsato",
+    //        FXMLLoader.load(
+    //            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml")))); //
     // debug
   }
 }
