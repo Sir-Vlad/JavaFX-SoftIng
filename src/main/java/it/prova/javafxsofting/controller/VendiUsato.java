@@ -253,6 +253,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (popup.isShowing()) {
       popup.hide();
     }
+    mouseEvent.consume();
   }
 
   private void createPopUp() {

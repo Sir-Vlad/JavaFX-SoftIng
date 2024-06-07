@@ -2,7 +2,7 @@ package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -82,8 +82,8 @@ public class Preventivo implements Serializable {
   }
 
   public void transformIdToObject() {
-    if (utenteId == App.getUtente().getId()) {
-      this.utente = App.getUtente();
+    if (utenteId == UserSession.getInstance().getUtente().getId()) {
+      this.utente = UserSession.getInstance().getUtente();
     }
 
     this.modello =
@@ -94,7 +94,7 @@ public class Preventivo implements Serializable {
 
     this.optionals =
         StaticDataStore.getOptionals().stream()
-            .filter(optional -> Arrays.stream(idRefConfig).anyMatch(id -> id == optional.getId()))
+            .filter(optional -> Arrays.stream(idRefConfig).anyMatch(opt -> opt == optional.getId()))
             .toList();
 
     this.prezzoOptionals = optionals.stream().mapToInt(Optional::getPrezzo).sum();

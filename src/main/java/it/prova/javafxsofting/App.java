@@ -28,11 +28,9 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 public class App extends javafx.application.Application {
-  @Getter @Setter private static Utente utente = null;
   @Getter private static final Logger log = Logger.getLogger(App.class.getName());
 
   public static void main(String[] args) {
@@ -52,9 +50,10 @@ public class App extends javafx.application.Application {
       List<String> text = null;
       try {
         text = Files.readAllLines(Path.of(path.getPath()));
-        App.setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+        UserSession.getInstance()
+            .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
       } catch (Exception ignored) {
-
+        log.info("Utente non trovato");
       }
     } else {
       log.info("Nessun utente registrato");

@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.Severity;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.Utente;
 import java.io.IOException;
 import java.net.URL;
@@ -115,18 +116,20 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   @FXML private Label passwordText;
 
   private String getSubDirectory() {
-    return "utente/" + App.getUtente().getEmail() + "/";
+    return "utente/" + UserSession.getInstance().getUtente().getEmail() + "/";
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    nomeCompletoText.textProperty().bindBidirectional(App.getUtente().nomeCompletoProperty());
-    String indirizzo = App.getUtente().getIndirizzo();
+    nomeCompletoText
+        .textProperty()
+        .bindBidirectional(UserSession.getInstance().getUtente().nomeCompletoProperty());
+    String indirizzo = UserSession.getInstance().getUtente().getIndirizzo();
     indirizzoText.setText(indirizzo == null ? " ---- " : indirizzo);
-    String telefono = App.getUtente().getNumTelefono();
+    String telefono = UserSession.getInstance().getUtente().getNumTelefono();
     numTelefonoText.setText(telefono == null ? " ---- " : telefono);
-    emailText.setText(App.getUtente().getEmail());
-    passwordText.setText("* ".repeat(App.getUtente().getPassword().length()));
+    emailText.setText(UserSession.getInstance().getUtente().getEmail());
+    passwordText.setText("* ".repeat(UserSession.getInstance().getUtente().getPassword().length()));
   }
 
   public void modificaNome(ActionEvent actionEvent) throws IOException {
@@ -145,7 +148,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 String newNome = newNomeValue.getText();
                 String newCognome = newCognomeValue.getText();
 
-                Utente newUtente = new Utente(App.getUtente());
+                Utente newUtente = new Utente(UserSession.getInstance().getUtente());
                 if (newNome.isEmpty() && newCognome.isEmpty()) {
                   return;
                 } else if (newNome.isEmpty()) {
@@ -163,10 +166,13 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                   throw new RuntimeException(e);
                 }
 
-                App.setUtente(newUtente);
-                App.getUtente()
+                UserSession.getInstance().setUtente(newUtente);
+                UserSession.getInstance()
+                    .getUtente()
                     .setNomeCompleto(
-                        App.getUtente().getNome() + " " + App.getUtente().getCognome());
+                        UserSession.getInstance().getUtente().getNome()
+                            + " "
+                            + UserSession.getInstance().getUtente().getCognome());
                 stage.close();
               });
         });
@@ -232,7 +238,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                         "%s, %s, %s, %s",
                         newViaValue, newCivicoValue, newCittaValue, newRegioneValue);
 
-                Utente newUtente = new Utente(App.getUtente());
+                Utente newUtente = new Utente(UserSession.getInstance().getUtente());
                 newUtente.setIndirizzo(newIndirizzo);
 
                 try {
@@ -241,7 +247,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                   throw new RuntimeException(e);
                 }
 
-                App.setUtente(newUtente);
+                UserSession.getInstance().setUtente(newUtente);
                 indirizzoText.setText(newIndirizzo);
                 stage.close();
               });
@@ -280,7 +286,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 String newNumTelefonoValue = newNumTelefono.getText();
                 String prefixTelefono = prefissoTelefono.getValue();
 
-                Utente newUtente = new Utente(App.getUtente());
+                Utente newUtente = new Utente(UserSession.getInstance().getUtente());
                 newUtente.setNumTelefono(newNumTelefonoValue);
 
                 try {
@@ -289,7 +295,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                   throw new RuntimeException(e);
                 }
 
-                App.setUtente(newUtente);
+                UserSession.getInstance().setUtente(newUtente);
                 numTelefonoText.setText(prefixTelefono + " " + newNumTelefonoValue);
                 stage.close();
               });
@@ -320,7 +326,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 String newEmailValue = newEmail.getText();
 
                 Utente newUtente = null;
-                newUtente = new Utente(App.getUtente());
+                newUtente = new Utente(UserSession.getInstance().getUtente());
                 newUtente.setEmail(newEmailValue);
 
                 try {
@@ -329,7 +335,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                   throw new RuntimeException(e);
                 }
 
-                App.setUtente(newUtente);
+                UserSession.getInstance().setUtente(newUtente);
 
                 emailText.setText(newEmailValue);
                 stage.close();
@@ -372,7 +378,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
 
                 String newPasswordValue = newPassword.getText();
 
-                Utente newUtente = new Utente(App.getUtente());
+                Utente newUtente = new Utente(UserSession.getInstance().getUtente());
                 newUtente.setPassword(newPasswordValue);
 
                 try {
@@ -381,7 +387,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                   throw new RuntimeException(e);
                 }
 
-                App.setUtente(newUtente);
+                UserSession.getInstance().setUtente(newUtente);
                 passwordText.setText("* ".repeat(newPasswordValue.length()));
                 stage.close();
               });
@@ -392,7 +398,9 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   public void cancellaAccount(ActionEvent actionEvent) {
     boolean result;
     try {
-      result = Connection.deleteDataToBackend("utente/" + App.getUtente().getEmail());
+      result =
+          Connection.deleteDataToBackend(
+              "utente/" + UserSession.getInstance().getUtente().getEmail());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -400,7 +408,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     if (result) {
       Alert alert = new Alert(AlertType.INFORMATION, "Account eliminato");
       alert.showAndWait();
-      App.setUtente(null);
+      UserSession.getInstance().setUtente(null);
       ScreenController.activate("home");
     }
 
@@ -475,7 +483,10 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
         Constraint.Builder.build()
             .setSeverity(Severity.ERROR)
             .setMessage("La password inserita non è uguale")
-            .setCondition(oldPassword.textProperty().isEqualTo(App.getUtente().getPassword()))
+            .setCondition(
+                oldPassword
+                    .textProperty()
+                    .isEqualTo(UserSession.getInstance().getUtente().getPassword()))
             .get();
 
     oldPassword.getValidator().constraint(cmp);

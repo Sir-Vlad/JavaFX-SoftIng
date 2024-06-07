@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+      prefWidth="400.0"
+      spacing="5.0" xmlns="http://javafx.com/javafx/21">
+    <children>
+        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefWidth="300.0">
+            <children>
+                <Label styleClass="text-blue" text="Email">
+                    <font>
+                        <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Label>
+                <MFXTextField fx:id="emailField" alignment="CENTER" borderGap="0.0"
+                              floatMode="BORDER" maxWidth="1.7976931348623157E308" prefWidth="300.0"
+                              promptText="Inserisci la email" VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </MFXTextField>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label fx:id="validateEmail" alignment="CENTER" textFill="RED">
+                            <font>
+                                <Font name="FiraCode Nerd Font Reg" size="13.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets left="10.0" right="10.0"/>
+            </padding>
+        </VBox>
+        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefWidth="300.0">
+            <children>
+                <Label styleClass="text-blue" text="Password">
+                    <font>
+                        <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Label>
+                <MFXPasswordField fx:id="passwordField" alignment="CENTER" floatMode="BORDER"
+                                  maxWidth="1.7976931348623157E308" prefWidth="300.0"
+                                  promptText="Inserisci la password">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </MFXPasswordField>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label fx:id="validatePassword" alignment="CENTER" textFill="RED">
+                            <font>
+                                <Font name="FiraCode Nerd Font Reg" size="13.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets left="10.0" right="10.0"/>
+            </padding>
+        </VBox>
+        <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefWidth="300.0">
+            <children>
+                <Label styleClass="text-blue" text="Conferma Password">
+                    <font>
+                        <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Label>
+                <MFXPasswordField fx:id="confermaPasswordField" alignment="CENTER"
+                                  floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                                  prefWidth="300.0" promptText="Inserisci la password">
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </MFXPasswordField>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label fx:id="confermaValidatePassword" alignment="CENTER" textFill="RED">
+                            <font>
+                                <Font name="FiraCode Nerd Font Reg" size="13.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets left="10.0" right="10.0"/>
+            </padding>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+</VBox>

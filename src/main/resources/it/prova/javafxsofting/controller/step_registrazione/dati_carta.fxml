@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" prefHeight="300.0" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/21">
+    <children>
+        <VBox alignment="CENTER_LEFT">
+            <children>
+                <Label styleClass="text-field-font" text="Numero Carta">
+                    <font>
+                        <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Label>
+                <MFXTextField fx:id="ibanField" alignment="CENTER" borderGap="3.0"
+                              floatMode="BORDER" graphicTextGap="3.0"
+                              maxWidth="1.7976931348623157E308"
+                              promptText="Inserisci il numero della carta"/>
+                <HBox alignment="CENTER">
+                    <children>
+                        <Label fx:id="validateIban" alignment="CENTER" textFill="RED">
+                            <font>
+                                <Font name="FiraCode Nerd Font Reg" size="13.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </VBox>
+        <HBox spacing="10.0">
+            <children>
+                <VBox alignment="CENTER_LEFT" prefWidth="300.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="text-field-font" text="Data di Scadenza">
+                            <font>
+                                <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </Label>
+                        <HBox spacing="10.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <MFXComboBox fx:id="meseCombo" floatMode="BORDER"
+                                             maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+                                <MFXComboBox fx:id="annoCombo" floatMode="BORDER"
+                                             maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="validateDate" alignment="CENTER" textFill="RED">
+                                    <font>
+                                        <Font name="FiraCode Nerd Font Reg" size="13.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <VBox alignment="CENTER_LEFT" prefWidth="300.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label styleClass="text-field-font" text="Security Code">
+                            <font>
+                                <Font name="RACE1 Brannt Chiseled NCV" size="25.0"/>
+                            </font>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </Label>
+                        <MFXTextField fx:id="cvcField" alignment="CENTER" borderGap="0.0"
+                                      floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                                      promptText="CVC" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </MFXTextField>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <Label fx:id="validateCvc" alignment="CENTER" textFill="RED">
+                                    <font>
+                                        <Font name="FiraCode Nerd Font Reg" size="13.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</VBox>

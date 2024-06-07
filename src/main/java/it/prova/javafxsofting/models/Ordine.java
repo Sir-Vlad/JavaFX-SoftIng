@@ -2,11 +2,9 @@ package it.prova.javafxsofting.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.controller.PreventiviUtenteController;
-import lombok.Data;
-
+import it.prova.javafxsofting.UserSession;
 import java.io.Serializable;
+import lombok.Data;
 
 @Data
 public class Ordine implements Serializable {
@@ -32,12 +30,12 @@ public class Ordine implements Serializable {
   private Preventivo preventivo;
 
   public void transformIdToObject() {
-    if (utenteId == App.getUtente().getId()) {
-      this.utente = App.getUtente();
+    if (utenteId == UserSession.getInstance().getUtente().getId()) {
+      this.utente = UserSession.getInstance().getUtente();
     }
 
     this.preventivo =
-        PreventiviUtenteController.getPreventiviUtente().stream()
+        UserSession.getInstance().getPreventivi().stream()
             .filter(obj -> obj.getId() == preventivoID)
             .findFirst()
             .orElse(null);

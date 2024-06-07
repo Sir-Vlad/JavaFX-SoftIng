@@ -2,6 +2,7 @@ package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.UserSession;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
@@ -45,13 +46,18 @@ public class ProfileAccountController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     // imposto i dati dell'utente
-    if (App.getUtente() != null) {
-      nameAccount.setText(App.getUtente().getNome() + " " + App.getUtente().getCognome());
+    if (UserSession.getInstance().getUtente() != null) {
+      nameAccount.setText(
+          UserSession.getInstance().getUtente().getNome()
+              + " "
+              + UserSession.getInstance().getUtente().getCognome());
     } else {
       ScreenController.activate("login");
       return;
     }
-    nameAccount.textProperty().bindBidirectional(App.getUtente().nomeCompletoProperty());
+    nameAccount
+        .textProperty()
+        .bindBidirectional(UserSession.getInstance().getUtente().nomeCompletoProperty());
 
     // ridimensionamento delle icone della sidebar
     resize(iconProfilo, 20);
@@ -118,7 +124,7 @@ public class ProfileAccountController implements Initializable {
   }
 
   public void signOut(@NotNull MouseEvent mouseEvent) {
-    App.setUtente(null);
+    UserSession.clearSession();
     ScreenController.removeScreen("profilo");
     ScreenController.activate("home");
     // todo: far uscire una notifica

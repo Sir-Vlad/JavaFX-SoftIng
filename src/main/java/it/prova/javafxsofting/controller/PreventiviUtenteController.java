@@ -1,13 +1,16 @@
 package it.prova.javafxsofting.controller;
 
-import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Preventivo;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,14 +18,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lombok.Getter;
 
 public class PreventiviUtenteController implements Initializable {
 
-  @Getter
   private static final ObservableList<Preventivo> preventiviUtente =
-      FXCollections.observableArrayList();
+      FXCollections.observableArrayList(UserSession.getInstance().getPreventivi());
 
+  private static ScheduledExecutorService scheduler;
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
   @FXML private TableColumn<Preventivo, Integer> idColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> modelloColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> prezzoBaseColumn;
@@ -35,18 +38,8 @@ public class PreventiviUtenteController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    String subDirectory = String.format("utente/%d/preventivi/", App.getUtente().getId());
-    List<Preventivo> preventivi;
-    try {
-      preventivi = Connection.getArrayDataFromBackend(subDirectory, Preventivo.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    if (preventivi != null) {
-      preventivi.forEach(Preventivo::transformIdToObject);
-      preventiviUtente.setAll(preventivi);
-    }
     setTableView();
+    startPeriodicUpdate();
   }
 
   private void setTableView() {
@@ -213,5 +206,20 @@ public class PreventiviUtenteController implements Initializable {
                 }
               }
             });
+  }
+
+  private void startPeriodicUpdate() {
+    scheduler = Executors.newScheduledThreadPool(1);
+    scheduler.scheduleAtFixedRate(this::updatePreventivi, 5, 30, TimeUnit.MINUTES);
+  }
+
+  private void updatePreventivi() {
+    logger.info("updatePreventivi");
+    UserSession.getInstance().setPreventivi();
+    Platform.runLater(
+        () -> {
+          tableView.getItems().clear();
+          tableView.getItems().setAll(UserSession.getInstance().getPreventivi());
+        });
   }
 }

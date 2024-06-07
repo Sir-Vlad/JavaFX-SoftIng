@@ -1,11 +1,11 @@
 package it.prova.javafxsofting.controller;
 
-import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.Connection;
-import it.prova.javafxsofting.models.ModelloAuto;
-import it.prova.javafxsofting.models.Ordine;
-import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.models.Concessionario;
+import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Preventivo;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,12 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class PreventivoUsatoController implements Initializable {
   private final ObservableList<Preventivo> preventivoUsatoUtente =
@@ -36,18 +30,6 @@ public class PreventivoUsatoController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    //    String subDirectory = String.format("utente/%d/ordini/", App.getUtente().getId());
-    //    List<Preventivo> preventivoUsato;
-    //    try {
-    //      preventivoUsato = Connection.getArrayDataFromBackend(subDirectory, Ordine.class);
-    //    } catch (Exception e) {
-    //      //      throw new RuntimeException(e);
-    //      preventivoUsato = new ArrayList<>();
-    //    }
-    //    if (preventivoUsato != null) {
-    //      preventivoUsato.forEach(Ordine::transformIdToObject);
-    //      preventivoUsatoUtente.setAll(preventivoUsato);
-    //    }
     setTableView();
   }
 
@@ -74,7 +56,7 @@ public class PreventivoUsatoController implements Initializable {
                   setGraphic(null);
                 } else {
                   Circle circle = new Circle(10);
-                  if (item) {
+                  if (Boolean.TRUE.equals(item)) {
                     circle.setFill(Color.GREEN);
                   } else {
                     circle.setFill(Color.YELLOW);

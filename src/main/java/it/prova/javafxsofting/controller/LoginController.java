@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.NotImplemented;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.Utente;
 import java.io.IOException;
 import java.net.URL;
@@ -93,8 +94,9 @@ public class LoginController extends ValidateForm implements Initializable {
     try {
       Utente utente = Connection.getDataFromBackend("utente/" + emailField.getText(), Utente.class);
       if (utente != null) {
-        App.setUtente(utente);
+        UserSession.getInstance().setUtente(utente);
       } else {
+        UserSession.clearSession();
         return;
       }
     } catch (Exception e) {
@@ -104,8 +106,8 @@ public class LoginController extends ValidateForm implements Initializable {
       return;
     }
 
-    if (!emailField.getText().equals(App.getUtente().getEmail())
-        || !passwordField.getText().equals(App.getUtente().getPassword())) {
+    if (!emailField.getText().equals(UserSession.getInstance().getUtente().getEmail())
+        || !passwordField.getText().equals(UserSession.getInstance().getUtente().getPassword())) {
       Alert alert = new Alert(AlertType.ERROR, "Email o password errati", ButtonType.OK);
       alert.showAndWait();
       clearField();
@@ -117,7 +119,8 @@ public class LoginController extends ValidateForm implements Initializable {
         () ->
             String.format(
                 "Utente %s %s si è loggato",
-                App.getUtente().getNome(), App.getUtente().getCognome()));
+                UserSession.getInstance().getUtente().getNome(),
+                UserSession.getInstance().getUtente().getCognome()));
 
     if (rememberMe.isSelected()) {
       saveUtente();
@@ -145,7 +148,7 @@ public class LoginController extends ValidateForm implements Initializable {
     }
 
     Path fileUtente = Files.createFile(path.resolve("utente.txt"));
-    Files.write(fileUtente, App.getUtente().getEmail().getBytes());
+    Files.write(fileUtente, UserSession.getInstance().getUtente().getEmail().getBytes());
   }
 
   public void forgotPassword(@NotNull MouseEvent mouseEvent) {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity"
+      minWidth="-Infinity" prefWidth="600.0" spacing="5.0"
+      xmlns="http://javafx.com/javafx/21">
+    <children>
+        <HBox fx:id="h1" spacing="15.0" VBox.vgrow="ALWAYS">
+            <children>
+                <MFXTextField alignment="CENTER" editable="false" floatMode="BORDER"
+                              maxWidth="1.7976931348623157E308" text="Nome" HBox.hgrow="ALWAYS"/>
+                <MFXTextField fx:id="confermaNome" alignment="CENTER" editable="false"
+                              floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                              HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <HBox fx:id="h2" spacing="15.0">
+            <children>
+                <MFXTextField alignment="CENTER" editable="false" floatMode="BORDER"
+                              maxWidth="1.7976931348623157E308" text="Cognome" HBox.hgrow="ALWAYS"/>
+                <MFXTextField fx:id="confermaCognome" alignment="CENTER" editable="false"
+                              floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                              HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <HBox fx:id="h3" spacing="15.0">
+            <children>
+                <MFXTextField alignment="CENTER" editable="false" floatMode="BORDER"
+                              maxWidth="1.7976931348623157E308" text="Email" HBox.hgrow="ALWAYS"/>
+                <MFXTextField fx:id="confermaEmail" alignment="CENTER" editable="false"
+                              floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                              HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <HBox fx:id="h4" spacing="15.0">
+            <children>
+                <MFXTextField alignment="CENTER" editable="false" floatMode="BORDER"
+                              maxWidth="1.7976931348623157E308" text="Numero carta"
+                              HBox.hgrow="ALWAYS"/>
+                <MFXTextField fx:id="confermaIban" alignment="CENTER" editable="false"
+                              floatMode="BORDER" maxWidth="1.7976931348623157E308"
+                              HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+    </children>
+</VBox>
