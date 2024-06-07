@@ -9,6 +9,7 @@ import io.github.palexdev.materialfx.validation.Validated;
 import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.Utente;
 import java.io.IOException;
 import java.net.URL;
@@ -53,7 +54,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
                   month ->
                       month.getDisplayName(java.time.format.TextStyle.FULL, Locale.getDefault()))
               .toArray(String[]::new));
-  public AnchorPane rootRegistrazione;
+  @FXML private AnchorPane rootRegistrazione;
   private MFXTextField nomeField;
   private MFXTextField cognomeField;
   private MFXTextField emailField;
@@ -353,7 +354,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
                   return;
                 }
 
-                App.setUtente(newUtente);
+                UserSession.getInstance().setUtente(newUtente);
                 ScreenController.activate("home");
               });
           pause.play();

@@ -25,7 +25,7 @@ public class Concessionario implements Serializable {
 }
 
 @Data
-class Indirizzo {
+class Indirizzo implements Serializable {
   @SerializedName("via")
   private String via;
 

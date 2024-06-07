@@ -29,7 +29,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   private static final String ELEMENT_TUTTI = "Tutti";
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
   private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
-  ScheduledExecutorService scheduler;
+  private static ScheduledExecutorService scheduler;
   @FXML private AnchorPane root;
   @FXML private MFXScrollPane scrollPane;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;

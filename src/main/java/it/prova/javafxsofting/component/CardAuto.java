@@ -57,8 +57,8 @@ public class CardAuto extends VBox {
 
     rootCardAuto.setOnMouseClicked(
         event -> {
-          if (auto instanceof ModelloAuto) {
-            ScegliModelloController.setAutoSelezionata((ModelloAuto) auto);
+          if (auto instanceof ModelloAuto modelloAuto) {
+            ScegliModelloController.setAutoSelezionata(modelloAuto);
 
             try {
               ScreenController.addScreen(

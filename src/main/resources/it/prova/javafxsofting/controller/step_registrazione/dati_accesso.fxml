@@ -6,7 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefWidth="400.0"
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+      prefWidth="400.0"
       spacing="5.0" xmlns="http://javafx.com/javafx/21">
     <children>
         <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefWidth="300.0">

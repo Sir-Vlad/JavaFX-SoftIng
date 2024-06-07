@@ -1,6 +1,7 @@
 package it.prova.javafxsofting.component;
 
 import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.net.URL;
@@ -97,7 +98,7 @@ public class ProfileBox extends VBox implements Initializable {
   private @NotNull ContextMenu contextMenuAccount() {
     ContextMenu contextMenu = new ContextMenu();
 
-    if (App.getUtente() == null) {
+    if (UserSession.getInstance().getUtente() == null) {
       MenuItem login = new MenuItem("Login");
       login.setId("login");
       login.setOnAction(
@@ -120,7 +121,7 @@ public class ProfileBox extends VBox implements Initializable {
       logout.setId("logout");
       logout.setOnAction(
           actionEvent -> {
-            App.setUtente(null);
+            UserSession.clearSession();
             try {
               Files.deleteIfExists(Path.of("instance/utente/utente.txt"));
             } catch (IOException e) {

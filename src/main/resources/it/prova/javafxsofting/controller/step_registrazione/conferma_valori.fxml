@@ -2,7 +2,8 @@
 
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity"
       minWidth="-Infinity" prefWidth="600.0" spacing="5.0"
       xmlns="http://javafx.com/javafx/21">
     <children>
