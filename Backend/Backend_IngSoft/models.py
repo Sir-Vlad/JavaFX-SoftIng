@@ -103,7 +103,7 @@ class Optional(models.Model):
         return self.nome + " - " + self.descrizione
 
 
-class Sede(models.Model):
+class Concessionario(models.Model):
     nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
     via = models.CharField(max_length=20, null=False, blank=False)
     civico = models.CharField(max_length=5, null=False, blank=False)
@@ -130,7 +130,9 @@ class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
     data_emissione = models.DateField(null=False, blank=False)
-    sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
+    concessionario = models.ForeignKey(
+        Concessionario, on_delete=CASCADE, null=False, blank=False
+    )
     prezzo = models.IntegerField(null=False, blank=False)
 
     class Meta:
@@ -220,10 +222,10 @@ class Possiede(models.Model):
 
 class Ritiro(models.Model):
     preventivo = models.ForeignKey(Preventivo, on_delete=CASCADE)
-    sede = models.ForeignKey(Sede, on_delete=CASCADE)
+    concessionario = models.ForeignKey(Concessionario, on_delete=CASCADE)
 
     class Meta:
-        unique_together = ("preventivo", "sede")
+        unique_together = ("preventivo", "concessionario")
         verbose_name_plural = "Ritiro Auto"
 
 
@@ -241,9 +243,7 @@ def validate_not_future_date(value):
 
 class AutoUsata(Auto):
     marca = models.CharField(max_length=20, null=False, blank=False)
-    prezzo = models.IntegerField(
-        default=0, null=False, blank=False, validators=[MinValueValidator(0)]
-    )
+    prezzo = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     km_percorsi = models.IntegerField(
         null=False, blank=False, validators=[MinValueValidator(0)]
     )

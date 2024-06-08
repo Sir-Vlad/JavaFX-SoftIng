@@ -128,8 +128,8 @@ class AutoUsataAdmin(ModelAdmin):
         ]
 
 
-@admin.register(Sede)
-class SedeAdmin(ModelAdmin):
+@admin.register(Concessionario)
+class ConcessionarioAdmin(ModelAdmin):
     pass
 
 

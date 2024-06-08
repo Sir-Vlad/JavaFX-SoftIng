@@ -9,7 +9,7 @@ from Backend_IngSoft.models import (
     ModelloAuto,
     Optional,
     Preventivo,
-    Sede,
+    Concessionario,
     Utente,
 )
 from PIL import Image
@@ -34,11 +34,11 @@ class OptionalSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SedeSerializer(serializers.ModelSerializer):
+class ConcessionarioSerializer(serializers.ModelSerializer):
     indirizzo = serializers.SerializerMethodField()
 
     class Meta:
-        model = Sede
+        model = Concessionario
         fields = ["id", "nome", "indirizzo"]
 
     def get_indirizzo(self, obj):
@@ -48,7 +48,9 @@ class SedeSerializer(serializers.ModelSerializer):
 class PreventivoSerializer(serializers.ModelSerializer):
     utente = serializers.PrimaryKeyRelatedField(queryset=Utente.objects.all())
     modello = serializers.PrimaryKeyRelatedField(queryset=ModelloAuto.objects.all())
-    sede = serializers.PrimaryKeyRelatedField(queryset=Sede.objects.all())
+    concessionario = serializers.PrimaryKeyRelatedField(
+        queryset=Concessionario.objects.all()
+    )
     config = serializers.SerializerMethodField()
 
     class Meta:
