@@ -347,6 +347,17 @@ public class RegistrazioneController extends ValidateForm implements Initializab
 
                 try {
                   Connection.postDataToBacked(newUtente, "utenti/");
+                  try {
+                    UserSession.getInstance()
+                        .setUtente(
+                            Connection.getDataFromBackend(
+                                String.format("utente/%s/", newUtente.getEmail()), Utente.class));
+                  } catch (Exception e) {
+                    Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+                    alert.showAndWait();
+                    stepper.setMouseTransparent(false);
+                    return;
+                  }
                 } catch (Exception e) {
                   Alert alert = new Alert(AlertType.ERROR, e.getMessage());
                   alert.showAndWait();
@@ -354,7 +365,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
                   return;
                 }
 
-                UserSession.getInstance().setUtente(newUtente);
                 ScreenController.activate("home");
               });
           pause.play();

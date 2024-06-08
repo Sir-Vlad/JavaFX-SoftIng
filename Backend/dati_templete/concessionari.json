@@ -1,0 +1,68 @@
+[
+  {
+    "model": "Backend_IngSoft.Sede",
+    "pk": 1,
+    "fields": {
+      "nome": "Concessionario 1",
+      "via": "2398 Baby Burgs",
+      "civico": 71,
+      "citta": "Port Adoniscester",
+      "cap": "35825"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.Sede",
+    "pk": 2,
+    "fields": {
+      "nome": "Concessionario 2",
+      "via": "429 Liliana Fall",
+      "civico": 63,
+      "citta": "South Elenachester",
+      "cap": "93620-7611"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.Sede",
+    "pk": 3,
+    "fields": {
+      "nome": "Concessionario 3",
+      "via": "335 Sporer Meadow",
+      "civico": 78,
+      "citta": "O'Reillyland",
+      "cap": "42231"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.Sede",
+    "pk": 4,
+    "fields": {
+      "nome": "Concessionario 4",
+      "via": "146 Tremblay Islands",
+      "civico": 19,
+      "citta": "Lake Jarred",
+      "cap": "78552-9872"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.Sede",
+    "pk": 5,
+    "fields": {
+      "nome": "Concessionario 5",
+      "via": "844 Lemke Viaduct",
+      "civico": 78,
+      "citta": "Horacemouth",
+      "cap": "12073-8578"
+    }
+  },
+  {
+    "model": "Backend_IngSoft.Sede",
+    "pk": 6,
+    "fields": {
+      "nome": "Concessionario 6",
+      "via": "2927 Adrian Meadow",
+      "civico": 52,
+      "citta": "Harberbury",
+      "cap": "34576-7114"
+    }
+  }
+]
