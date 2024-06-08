@@ -16,39 +16,10 @@ public class Concessionario implements Serializable {
   public String toString() {
     return String.format(
         """
-        Sede {
+        Concessionario {
           nome='%s',
           indirizzo=%s
         """,
         nome, indirizzo);
-  }
-}
-
-@Data
-class Indirizzo implements Serializable {
-  @SerializedName("via")
-  private String via;
-
-  @SerializedName("civico")
-  private String civico;
-
-  @SerializedName("citta")
-  private String citta;
-
-  @SerializedName("cap")
-  private String cap;
-
-  @Override
-  public String toString() {
-    return String.format(
-        """
-        Indirizzo {
-          via='%s',
-          civico='%s',
-          citta='%s',
-          cap='%s'
-        }
-        """,
-        via, citta, cap, civico);
   }
 }

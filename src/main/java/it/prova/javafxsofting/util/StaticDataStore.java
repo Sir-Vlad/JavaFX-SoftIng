@@ -5,7 +5,6 @@ import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.Concessionario;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Optional;
-
 import java.util.List;
 import java.util.logging.Logger;
 import lombok.Data;
@@ -17,7 +16,7 @@ public final class StaticDataStore {
   @Getter private static List<ModelloAuto> modelliAuto;
   @Getter private static List<AutoUsata> autoUsate;
   @Getter private static List<Optional> optionals;
-  @Getter private static List<Concessionario> sedi;
+  @Getter private static List<Concessionario> concessionari;
 
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
 
@@ -25,9 +24,10 @@ public final class StaticDataStore {
   private StaticDataStore() {}
 
   public static void fetchAllData() {
-    StaticDataStore.fetchModelliAuto();
-    StaticDataStore.fetchOptionals();
-    StaticDataStore.fetchAutoUsate();
+    //    StaticDataStore.fetchModelliAuto();
+    //    StaticDataStore.fetchOptionals();
+    //    StaticDataStore.fetchAutoUsate();
+    StaticDataStore.fetchConcessionari();
   }
 
   public static void fetchModelliAuto() {
@@ -74,6 +74,19 @@ public final class StaticDataStore {
     if (newAutoUsate != null && !newAutoUsate.equals(autoUsate)) {
       // todo: fare il fetch delle immagini
       autoUsate = newAutoUsate;
+    }
+  }
+
+  public static void fetchConcessionari() {
+    logger.info("Aggiornamento concessionari");
+    List<Concessionario> newConcessionari;
+    try {
+      newConcessionari = Connection.getArrayDataFromBackend("concessionari/", Concessionario.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    if (newConcessionari != null && !newConcessionari.equals(concessionari)) {
+      concessionari = newConcessionari;
     }
   }
 }

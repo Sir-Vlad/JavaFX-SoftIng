@@ -73,3 +73,8 @@ Content-Type: application/json
 GET http://localhost:8000/api/modelli/
 Accept: application/json
 Content-Type: application/json
+
+###
+GET http://localhost:8000/api/optionals/
+Accept: application/json
+Content-Type: application/json

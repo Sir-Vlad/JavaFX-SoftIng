@@ -41,40 +41,6 @@ class Auto(models.Model):
     class Meta:
         abstract = True
 
-    def clean(self):
-        super().clean()
-        optional_obbligatori = Optional.objects.filter(obbligatorio=True)
-        optional_posseduti = Possiede.objects.filter(modello=self)
-
-        for optional in optional_obbligatori:
-            if optional not in [posseduti.optional for posseduti in optional_posseduti]:
-                raise ValidationError(
-                    f"L'opzione obbligatoria '{optional.nome}' non è "
-                    f"associata all'auto {self.modello} "
-                )
-
-
-class ModelloAuto(Auto):
-    class MarcaAuto(models.TextChoices):
-        NISSAN = "NISSAN"
-        MAZDA = "MAZDA"
-        VOLKSWAGEN = "VOLKSWAGEN"
-        FORD = "FORD"
-        HONDA = "HONDA"
-        AUDI = "AUDI"
-        BMW = "BMW"
-
-    marca = models.CharField(
-        max_length=20, null=False, blank=False, choices=MarcaAuto
-    )  # lista di valori noti
-    prezzo_base = models.IntegerField(null=False, blank=False)
-
-    class Meta:
-        verbose_name_plural = "Modelli Auto"
-
-    def __str__(self):
-        return self.modello + " - " + self.marca
-
 
 class Optional(models.Model):
     class Category(models.TextChoices):
@@ -94,6 +60,7 @@ class Optional(models.Model):
     nome = models.CharField(max_length=20, blank=False, choices=Category)
     descrizione = models.CharField(max_length=30, blank=False)
     prezzo = models.IntegerField(blank=False)
+    obbligatorio = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("nome", "descrizione")
@@ -101,6 +68,32 @@ class Optional(models.Model):
 
     def __str__(self):
         return self.nome + " - " + self.descrizione
+
+
+class ModelloAuto(Auto):
+    class MarcaAuto(models.TextChoices):
+        NISSAN = "NISSAN"
+        MAZDA = "MAZDA"
+        VOLKSWAGEN = "VOLKSWAGEN"
+        FORD = "FORD"
+        HONDA = "HONDA"
+        AUDI = "AUDI"
+        BMW = "BMW"
+
+    marca = models.CharField(
+        max_length=20, null=False, blank=False, choices=MarcaAuto
+    )  # lista di valori noti
+    prezzo_base = models.IntegerField(null=False, blank=False)
+    optionals = models.ManyToManyField(
+        Optional,
+        blank=False,
+    )
+
+    class Meta:
+        verbose_name_plural = "Modelli Auto"
+
+    def __str__(self):
+        return self.modello + " - " + self.marca
 
 
 class Concessionario(models.Model):
@@ -210,14 +203,6 @@ class Sconto(models.Model):
     class Meta:
         unique_together = ("periodo", "modello")
         verbose_name_plural = "Sconti"
-
-
-class Possiede(models.Model):
-    modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
-    optional = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False)
-
-    class Meta:
-        unique_together = ("modello", "optional")
 
 
 class Ritiro(models.Model):
