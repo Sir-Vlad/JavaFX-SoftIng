@@ -1,5 +1,7 @@
 package it.prova.javafxsofting.controller;
 
+import static it.prova.javafxsofting.util.Util.capitalize;
+
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.MFXStepper.MFXStepperEvent;
 import io.github.palexdev.materialfx.validation.Constraint;
@@ -41,7 +43,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.SneakyThrows;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class RegistrazioneController extends ValidateForm implements Initializable {
@@ -151,20 +152,6 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     step4.getValidator().constraint("Data must be confirmed", checkbox.selectedProperty());
 
     return List.of(step1, step2, step3, step4);
-  }
-
-  /**
-   * Formatta la stringa in input con la prima lettera maiuscola
-   *
-   * @param input stringa da formattare
-   * @return stringa formattata
-   */
-  @Contract("null -> null")
-  private String capitalize(String input) {
-    if (input == null || input.isEmpty()) {
-      return input;
-    }
-    return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
   }
 
   @SneakyThrows

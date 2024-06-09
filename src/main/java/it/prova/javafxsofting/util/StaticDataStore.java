@@ -5,11 +5,14 @@ import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.Concessionario;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import lombok.Data;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 @Data
 public final class StaticDataStore {
@@ -24,9 +27,9 @@ public final class StaticDataStore {
   private StaticDataStore() {}
 
   public static void fetchAllData() {
-    //    StaticDataStore.fetchModelliAuto();
-    //    StaticDataStore.fetchOptionals();
-    //    StaticDataStore.fetchAutoUsate();
+    StaticDataStore.fetchOptionals();
+    StaticDataStore.fetchModelliAuto();
+    StaticDataStore.fetchAutoUsate();
     StaticDataStore.fetchConcessionari();
   }
 
@@ -43,11 +46,23 @@ public final class StaticDataStore {
       // accodato
       newAutoNuove.forEach(
           modelloAuto ->
-              modelloAuto.setOptionals(new Optional[] {new Optional("Alimentazione", "GPL", 0)}));
+              modelloAuto.setOptionals(transformIdInOptionals(modelloAuto.getIdsOptionals())));
 
       newAutoNuove.forEach(ModelloAuto::setImmagini);
       modelliAuto = newAutoNuove;
     }
+  }
+
+  private static Optional @NotNull [] transformIdInOptionals(int @NotNull [] optionals) {
+    ArrayList<Optional> newOptionals =
+        new ArrayList<>(
+            getOptionals().stream()
+                .filter(
+                    optional ->
+                        Arrays.stream(optionals)
+                            .anyMatch(optional1 -> optional1 == optional.getId()))
+                .toList());
+    return newOptionals.toArray(new Optional[0]);
   }
 
   public static void fetchOptionals() {

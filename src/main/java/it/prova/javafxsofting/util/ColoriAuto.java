@@ -15,7 +15,7 @@ public final class ColoriAuto {
   }
 
   public Color getColor(@NotNull String colorName) {
-    return colorMap.getOrDefault(colorName.toLowerCase(), Color.BLACK);
+    return colorMap.getOrDefault(colorName.toUpperCase(), Color.BLACK);
   }
 
   public @Nullable String getNameColor(Color color) {

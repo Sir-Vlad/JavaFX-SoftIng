@@ -17,12 +17,12 @@
                     <children>
                         <Pane fx:id="modelVisualize" prefWidth="700.0"
                               style="-fx-background-color: white;"/>
-                        <MFXScrollPane fx:id="scrollPane" hbarPolicy="NEVER" pannable="true"
+                        <MFXScrollPane fx:id="scrollPane" hbarPolicy="NEVER" prefWidth="600.0"
                                        vbarPolicy="ALWAYS">
                             <content>
                                 <AnchorPane>
                                     <children>
-                                        <VBox AnchorPane.bottomAnchor="0.0"
+                                        <VBox prefWidth="550.0" AnchorPane.bottomAnchor="0.0"
                                               AnchorPane.leftAnchor="0.0"
                                               AnchorPane.rightAnchor="0.0"
                                               AnchorPane.topAnchor="0.0">
@@ -30,8 +30,9 @@
                                                 <HBox prefHeight="100.0" prefWidth="600.0"
                                                       VBox.vgrow="ALWAYS">
                                                     <children>
-                                                        <Pane fx:id="logoMarca" maxHeight="200.0"
-                                                              minWidth="100.0"/>
+                                                        <VBox fx:id="logoMarca" alignment="CENTER"
+                                                              disable="true" prefHeight="200.0"
+                                                              prefWidth="100.0"/>
                                                         <VBox alignment="CENTER_LEFT"
                                                               prefHeight="200.0" prefWidth="100.0"
                                                               spacing="10.0" HBox.hgrow="ALWAYS">
@@ -71,7 +72,7 @@
                                                                 </Text>
                                                             </children>
                                                         </VBox>
-                                                        <VBox spacing="20.0">
+                                                        <VBox fx:id="vboxOptionals" spacing="20.0">
                                                             <children>
                                                                 <Text strokeType="OUTSIDE"
                                                                       strokeWidth="0.0"
@@ -82,7 +83,79 @@
                                                                     </font>
                                                                 </Text>
                                                                 <VBox alignment="CENTER_LEFT"
-                                                                      prefWidth="100.0"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Motorizzazione"
+                                                                              VBox.vgrow="ALWAYS">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                        </Text>
+                                                                        <FlowPane
+                                                                                fx:id="toggleMotorizzazione"
+                                                                                columnHalignment="CENTER"
+                                                                                hgap="25.0"
+                                                                                prefWrapLength="300.0"
+                                                                                vgap="15.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Alimentazione"
+                                                                              VBox.vgrow="ALWAYS">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                        </Text>
+                                                                        <FlowPane
+                                                                                fx:id="toggleAlimentazione"
+                                                                                columnHalignment="CENTER"
+                                                                                hgap="25.0"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                prefWrapLength="300.0"
+                                                                                vgap="15.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Cambio">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                        </Text>
+                                                                        <HBox fx:id="toggleCambio"
+                                                                              alignment="CENTER_LEFT"
+                                                                              prefWidth="200.0"
+                                                                              spacing="20.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Dimensione cerchi">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                        </Text>
+                                                                        <FlowPane
+                                                                                fx:id="toggleCerchi"
+                                                                                columnHalignment="CENTER"
+                                                                                hgap="25.0"
+                                                                                prefWrapLength="300.0"
+                                                                                vgap="15.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
                                                                       spacing="15.0">
                                                                     <children>
                                                                         <Text strokeType="OUTSIDE"
@@ -93,6 +166,7 @@
                                                                             </font>
                                                                         </Text>
                                                                         <HBox fx:id="toggleColor"
+                                                                              alignment="CENTER_LEFT"
                                                                               prefWidth="200.0"
                                                                               spacing="20.0"/>
                                                                     </children>
@@ -113,10 +187,9 @@
                                                                       prefWidth="100.0"
                                                                       spacing="15.0">
                                                                     <children>
-                                                                        <Text
-                                                                                strokeType="OUTSIDE"
-                                                                                strokeWidth="0.0"
-                                                                                text="Vuoi inserire il tuo usato per avere una detrazione sul nuovo acquisto?">
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Vuoi inserire il tuo usato per avere una detrazione sul nuovo acquisto?">
                                                                             <font>
                                                                                 <Font size="15.0"/>
                                                                             </font>
@@ -144,7 +217,7 @@
                 </HBox>
                 <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;">
                     <children>
-                        <VBox alignment="CENTER" maxWidth="400.0" prefWidth="150.0">
+                        <VBox alignment="CENTER_LEFT" maxWidth="400.0" prefWidth="150.0">
                             <children>
                                 <Text fx:id="fieldModello" strokeType="OUTSIDE" strokeWidth="0.0"
                                       text="Modello Auto" textAlignment="CENTER">

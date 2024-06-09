@@ -8,19 +8,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 
-enum TipoMotore {
-  GASOLIO,
-  BENZINA,
-  IBRIDA,
-  ELETTRICA,
-  IBRICA_PLUG_IN
-}
-
 @Getter
 @Setter
 public class ModelloAuto extends Auto {
   @SerializedName("prezzo_base")
   private int prezzoBase;
+
+  @SerializedName("optionals")
+  private int[] idsOptionals;
 
   // optionals che un modello può avere
   @Expose(deserialize = false)
@@ -39,8 +34,8 @@ public class ModelloAuto extends Auto {
     this.prezzoBase = prezzoBase;
   }
 
-  @Contract(value = "null -> false", pure = true)
   @Override
+  @Contract(value = "null -> false", pure = true)
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;

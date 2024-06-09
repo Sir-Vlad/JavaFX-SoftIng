@@ -424,7 +424,7 @@
     "pk": 43,
     "fields": {
       "nome": "colore",
-      "descrizione": "nera - #000000",
+      "descrizione": "black - #000000",
       "prezzo": 0,
       "obbligatorio": true
     }
@@ -434,7 +434,7 @@
     "pk": 44,
     "fields": {
       "nome": "colore",
-      "descrizione": "bianca - #ffffff",
+      "descrizione": "white - #ffffff",
       "prezzo": 0,
       "obbligatorio": true
     }
@@ -444,7 +444,7 @@
     "pk": 45,
     "fields": {
       "nome": "colore",
-      "descrizione": "grigia - #808080",
+      "descrizione": "gray - #808080",
       "prezzo": 0,
       "obbligatorio": true
     }

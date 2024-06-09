@@ -6,36 +6,6 @@
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
             <children>
-                <VBox alignment="CENTER_LEFT" prefWidth="100.0">
-                    <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alimentazione">
-                            <font>
-                                <Font size="15.0"/>
-                            </font>
-                        </Text>
-                        <Text fx:id="fieldAlimentazione" strokeType="OUTSIDE" strokeWidth="0.0"
-                              text="Text">
-                            <font>
-                                <Font name="System Bold" size="20.0"/>
-                            </font>
-                        </Text>
-                    </children>
-                </VBox>
-                <VBox alignment="CENTER_LEFT" prefWidth="100.0">
-                    <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo Cambio">
-                            <font>
-                                <Font size="15.0"/>
-                            </font>
-                        </Text>
-                        <Text fx:id="fieldCambio" strokeType="OUTSIDE" strokeWidth="0.0"
-                              text="Text">
-                            <font>
-                                <Font name="System Bold" size="20.0"/>
-                            </font>
-                        </Text>
-                    </children>
-                </VBox>
                 <VBox alignment="CENTER_LEFT" prefWidth="308.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Altezza">
@@ -66,10 +36,6 @@
                         </Text>
                     </children>
                 </VBox>
-            </children>
-        </VBox>
-        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
-            <children>
                 <VBox alignment="CENTER_LEFT" prefWidth="100.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lunghezza">
@@ -85,6 +51,10 @@
                         </Text>
                     </children>
                 </VBox>
+            </children>
+        </VBox>
+        <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+            <children>
                 <VBox alignment="CENTER_LEFT" prefWidth="100.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Peso">
