@@ -22,34 +22,29 @@ public final class StaticDataStore {
   @Getter private static List<Concessionario> concessionari;
 
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
+  @Getter private static boolean serverAvailable = true;
 
   @Contract(pure = true)
   private StaticDataStore() {}
 
-  public static void fetchAllData() {
-    StaticDataStore.fetchOptionals();
-    StaticDataStore.fetchModelliAuto();
-    StaticDataStore.fetchAutoUsate();
-    StaticDataStore.fetchConcessionari();
+  public static void fetchAllData() throws Exception {
+    try {
+      StaticDataStore.fetchOptionals();
+      StaticDataStore.fetchModelliAuto();
+      StaticDataStore.fetchAutoUsate();
+      StaticDataStore.fetchConcessionari();
+    } catch (Exception e) {
+      serverAvailable = false;
+    }
   }
 
-  public static void fetchModelliAuto() {
-    logger.info("Aggiornamento modelli auto");
-    List<ModelloAuto> newAutoNuove;
-    try {
-      newAutoNuove = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
-    if (newAutoNuove != null && !newAutoNuove.equals(modelliAuto)) {
-      // accodato
-      newAutoNuove.forEach(
-          modelloAuto ->
-              modelloAuto.setOptionals(transformIdInOptionals(modelloAuto.getIdsOptionals())));
-
-      newAutoNuove.forEach(ModelloAuto::setImmagini);
-      modelliAuto = newAutoNuove;
+  public static void fetchAutoUsate() throws Exception {
+    logger.info("Aggiornamento auto usate");
+    List<AutoUsata> newAutoUsate;
+    newAutoUsate = Connection.getArrayDataFromBackend("autoUsate/", AutoUsata.class);
+    if (newAutoUsate != null && !newAutoUsate.equals(autoUsate)) {
+      // todo: fare il fetch delle immagini
+      autoUsate = newAutoUsate;
     }
   }
 
@@ -65,43 +60,37 @@ public final class StaticDataStore {
     return newOptionals.toArray(new Optional[0]);
   }
 
-  public static void fetchOptionals() {
-    logger.info("Aggiornamento optionals");
-    List<Optional> newOptionals;
-    try {
-      newOptionals = Connection.getArrayDataFromBackend("optionals/", Optional.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    if (newOptionals != null && !newOptionals.equals(optionals)) {
-      optionals = newOptionals;
-    }
-  }
-
-  public static void fetchAutoUsate() {
-    logger.info("Aggiornamento auto usate");
-    List<AutoUsata> newAutoUsate;
-    try {
-      newAutoUsate = Connection.getArrayDataFromBackend("autoUsate/", AutoUsata.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    if (newAutoUsate != null && !newAutoUsate.equals(autoUsate)) {
-      // todo: fare il fetch delle immagini
-      autoUsate = newAutoUsate;
-    }
-  }
-
-  public static void fetchConcessionari() {
+  public static void fetchConcessionari() throws Exception {
     logger.info("Aggiornamento concessionari");
     List<Concessionario> newConcessionari;
-    try {
-      newConcessionari = Connection.getArrayDataFromBackend("concessionari/", Concessionario.class);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    newConcessionari = Connection.getArrayDataFromBackend("concessionari/", Concessionario.class);
     if (newConcessionari != null && !newConcessionari.equals(concessionari)) {
       concessionari = newConcessionari;
+    }
+  }
+
+  public static void fetchModelliAuto() throws Exception {
+    logger.info("Aggiornamento modelli auto");
+    List<ModelloAuto> newAutoNuove;
+    newAutoNuove = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
+
+    if (newAutoNuove != null && !newAutoNuove.equals(modelliAuto)) {
+      // accodato
+      newAutoNuove.forEach(
+          modelloAuto ->
+              modelloAuto.setOptionals(transformIdInOptionals(modelloAuto.getIdsOptionals())));
+
+      newAutoNuove.forEach(ModelloAuto::setImmagini);
+      modelliAuto = newAutoNuove;
+    }
+  }
+
+  public static void fetchOptionals() throws Exception {
+    logger.info("Aggiornamento optionals");
+    List<Optional> newOptionals;
+    newOptionals = Connection.getArrayDataFromBackend("optionals/", Optional.class);
+    if (newOptionals != null && !newOptionals.equals(optionals)) {
+      optionals = newOptionals;
     }
   }
 }

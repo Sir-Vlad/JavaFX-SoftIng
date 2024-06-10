@@ -135,8 +135,14 @@ public class LoginController extends ValidateForm implements Initializable {
                 App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml"))));
 
     clearField();
-    // redirect alla pagina del profilo
-    ScreenController.activate("home");
+
+    System.out.println(ScreenController.getBackPage().equals("config"));
+
+    if (ScreenController.getBackPage().equals("config")) {
+      ScreenController.activate("config");
+    } else {
+      ScreenController.activate("home");
+    }
   }
 
   private void saveUtente() throws IOException {

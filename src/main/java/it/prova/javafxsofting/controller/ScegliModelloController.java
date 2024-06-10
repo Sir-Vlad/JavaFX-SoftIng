@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -32,6 +34,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
   private List<ModelloAuto> autoFiltered;
+  private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
 
   @Contract(" -> new")
   private @NotNull List<String> getTypeAlimentazione() {
@@ -86,7 +89,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
             });
   }
 
-  public void fetchData() {
+  public void fetchData() throws Exception {
     StaticDataStore.fetchModelliAuto();
     getCardAuto().setAll(StaticDataStore.getModelliAuto());
   }
@@ -126,7 +129,12 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   }
 
   private void updateListFromDatabase() {
-    StaticDataStore.fetchModelliAuto();
+    try {
+      StaticDataStore.fetchModelliAuto();
+    } catch (Exception e) {
+      logger.warning("Errore durante l'aggiornamento della lista");
+      logger.log(Level.SEVERE, e.getMessage(), e);
+    }
 
     Platform.runLater(
         () -> {

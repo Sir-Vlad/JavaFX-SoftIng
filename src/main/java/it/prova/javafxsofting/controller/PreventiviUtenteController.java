@@ -5,6 +5,7 @@ import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Preventivo;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,6 +39,21 @@ public class PreventiviUtenteController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    UserSession.getInstance()
+        .addListener(
+            new UserSession.PreventivoListener() {
+              @Override
+              public void onPreventivoChange(List<Preventivo> preventivi) {
+                System.out.println("onPreventivoChange");
+                updateTableView();
+              }
+
+              @Override
+              public void onPreventivoAdded(Preventivo preventivo) {
+                preventiviUtente.add(preventivo);
+              }
+            });
+
     setTableView();
     startPeriodicUpdate();
   }
@@ -216,10 +232,16 @@ public class PreventiviUtenteController implements Initializable {
   private void updatePreventivi() {
     logger.info("updatePreventivi");
     UserSession.getInstance().setPreventivi();
+    updateTableView();
+  }
+
+  private void updateTableView() {
+    logger.info("updateTableView");
+    preventiviUtente.setAll(UserSession.getInstance().getPreventivi());
     Platform.runLater(
         () -> {
           tableView.getItems().clear();
-          tableView.getItems().setAll(UserSession.getInstance().getPreventivi());
+          tableView.getItems().setAll(preventiviUtente);
         });
   }
 }

@@ -1,16 +1,31 @@
 @import "root.css";
 
+/* Style del toggle */
 .toggle-button-selected {
-    -fx-background-color: red;
+    -fx-background-color: -my-blue-text;
+    -fx-font-weight: bold;
 }
 
+/* Style del nome delle optional */
 .name-optional {
     -fx-font-size: 20;
     -fx-fill: rgb(82, 80, 80);
 }
 
+/* Style del titolo */
 .title-part {
     -fx-font-size: 30;
     -fx-font-weight: bold;
     -fx-fill: -my-blue-text; /* colora il testo */
+}
+
+/* Riassegnamento di una var della libreria materialfx  */
+.mfx-list-cell:hover {
+    -fx-background-color: #F5F5F5;
+    -fx-border-color: #F5F5F5;
+}
+
+.mfx-list-cell:selected {
+    -fx-background-color: -my-blue-text-80-opacity;
+    -fx-border-color: #E1E1E1;
 }

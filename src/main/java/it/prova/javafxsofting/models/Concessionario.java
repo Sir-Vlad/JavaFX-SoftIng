@@ -6,6 +6,9 @@ import lombok.Data;
 
 @Data
 public class Concessionario implements Serializable {
+  @SerializedName("id")
+  private int id;
+
   @SerializedName("nome")
   private String nome;
 

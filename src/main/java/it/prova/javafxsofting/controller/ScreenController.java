@@ -4,12 +4,13 @@ import java.util.*;
 import java.util.Map.Entry;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 
 public class ScreenController {
   private static final HashMap<String, Pane> SCREEN_MAP = new HashMap<>();
   private static Scene main = null;
-  private static String backPage = null;
+  @Getter private static String backPage = null;
 
   @Contract(value = " -> fail", pure = true)
   private ScreenController() {
@@ -24,7 +25,7 @@ public class ScreenController {
     if (backPage == null) {
       backPage = "home";
     } else {
-      backPage = getBackPage(name);
+      backPage = getNameBackPage(name);
     }
     main.setRoot(SCREEN_MAP.get(name));
   }
@@ -44,7 +45,7 @@ public class ScreenController {
     SCREEN_MAP.remove(name);
   }
 
-  private static String getBackPage(String name) {
+  public static String getNameBackPage(String name) {
     var page =
         SCREEN_MAP.entrySet().stream()
             .filter(pane -> Objects.equals(pane.getValue(), main.getRoot()))

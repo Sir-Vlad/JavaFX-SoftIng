@@ -4,8 +4,10 @@ import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import it.prova.javafxsofting.errori.ErrorResponse;
+import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
+import it.prova.javafxsofting.serializzatori.PreventivoSerializer;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.*;
@@ -26,6 +28,8 @@ public final class Connection {
       new GsonBuilder()
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
           .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
+          .registerTypeAdapter(Preventivo.class, new PreventivoSerializer())
+          .setPrettyPrinting()
           .setDateFormat(DateFormat.LONG)
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
           .setExclusionStrategies(
@@ -177,6 +181,7 @@ public final class Connection {
         while ((responseLine = br.readLine()) != null) {
           response.append(responseLine.trim());
         }
+        System.out.println("Response: " + response);
         // fixme: non riesce a serializzare l'errore
         ErrorResponse errorResponse = gson.fromJson(response.toString(), ErrorResponse.class);
         throw new Exception(errorResponse.getMessage());

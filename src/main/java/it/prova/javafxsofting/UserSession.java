@@ -3,6 +3,7 @@ package it.prova.javafxsofting;
 import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.models.Utente;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import lombok.AccessLevel;
@@ -22,6 +23,8 @@ public class UserSession {
   @Setter(AccessLevel.NONE)
   private Logger logger = Logger.getLogger(this.getClass().getName());
 
+  private List<PreventivoListener> listeners = new ArrayList<>();
+
   @Contract(pure = true)
   private UserSession() {}
 
@@ -34,7 +37,7 @@ public class UserSession {
 
   public List<Preventivo> getPreventivi() {
     if (getInstance().preventivi == null) {
-      getInstance().preventivi = fetchPreventivi();
+      getInstance().setPreventivi();
     }
 
     return getInstance().preventivi;
@@ -46,6 +49,7 @@ public class UserSession {
 
   public void setPreventivi() {
     preventivi = fetchPreventivi();
+    notifyListeners();
   }
 
   private List<Preventivo> fetchPreventivi() {
@@ -61,5 +65,21 @@ public class UserSession {
       data.forEach(Preventivo::transformIdToObject);
     }
     return data;
+  }
+
+  public void addListener(PreventivoListener listener) {
+    listeners.add(listener);
+  }
+
+  private void notifyListeners() {
+    for (PreventivoListener listener : listeners) {
+      listener.onPreventivoChange(new ArrayList<>(preventivi));
+    }
+  }
+
+  public interface PreventivoListener {
+    void onPreventivoChange(List<Preventivo> preventivi);
+
+    void onPreventivoAdded(Preventivo preventivo);
   }
 }
