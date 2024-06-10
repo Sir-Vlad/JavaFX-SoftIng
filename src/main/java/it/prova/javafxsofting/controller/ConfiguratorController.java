@@ -3,17 +3,24 @@ package it.prova.javafxsofting.controller;
 import static it.prova.javafxsofting.util.Util.capitalize;
 
 import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.cell.MFXListCell;
+import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
+import io.github.palexdev.mfxresources.fonts.MFXFontIcon;
 import it.prova.javafxsofting.App;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
-import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.*;
 import it.prova.javafxsofting.models.Optional;
 import it.prova.javafxsofting.util.ColoriAuto;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public class ConfiguratorController implements Initializable {
   private static final String PATH_DIR = "controller/part_configurator/";
   private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
+
   @FXML private VBox vboxOptionals;
   @FXML private VBox infoTecnicheBox;
   @FXML private HBox flagDetrazione;
@@ -48,10 +56,11 @@ public class ConfiguratorController implements Initializable {
   @FXML private FlowPane toggleCerchi;
   @FXML private Pane modelVisualize;
   @FXML private MFXScrollPane scrollPane;
-  @FXML private VBox logoMarca;
+  @FXML private StackPane logoMarca;
   @FXML private Text fieldModello;
   @FXML private Text fieldMarca;
   @FXML private Text fieldModelloV;
+  @FXML private MFXListView<Concessionario> listConcessionaria;
   @FXML private MFXButton saveConfigurazioneBtn;
 
   private ModelloAuto auto;
@@ -197,7 +206,9 @@ public class ConfiguratorController implements Initializable {
     URL urlImage = App.class.getResource(pathImage);
     if (urlImage != null) {
       logoMarca.setStyle(
-          "-fx-background-image: url(" + urlImage + "); -fx-background-repeat: no-repeat");
+          "-fx-background-image: url("
+              + urlImage
+              + "); -fx-background-repeat: no-repeat; -fx-background-position: center center");
     }
     scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
     scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
@@ -209,6 +220,7 @@ public class ConfiguratorController implements Initializable {
     setCerchi(auto);
     setColorOptions(auto);
     setOptionals(auto);
+    setComboConcessionario();
     setDetrazioneUsato();
 
     // immagine dell'auto a destra
@@ -240,7 +252,39 @@ public class ConfiguratorController implements Initializable {
       ScreenController.activate("vendiUsato");
     }
 
+    Preventivo preventivo =
+        new Preventivo(
+            UserSession.getInstance().getUtente(),
+            auto,
+            listConcessionaria.getSelectionModel().getSelectedValue(),
+            LocalDate.now());
+
+    System.out.println(preventivo);
+
     actionEvent.consume();
+  }
+
+  private void setComboConcessionario() {
+    listConcessionaria.setItems(
+        FXCollections.observableArrayList(StaticDataStore.getConcessionari()));
+    listConcessionaria.setConverter(
+        FunctionalStringConverter.to(
+            concessionario -> {
+              if (concessionario != null) {
+                Indirizzo indirizzo = concessionario.getIndirizzo();
+                return String.format(
+                    "%s - %s, %s - %s",
+                    concessionario.getNome(),
+                    indirizzo.getVia(),
+                    indirizzo.getCivico(),
+                    indirizzo.getCitta());
+              }
+              return "";
+            }));
+    listConcessionaria.setCellFactory(
+        concessionario -> new ConcessionarioCellFactory(listConcessionaria, concessionario));
+    listConcessionaria.features().enableBounceEffect();
+    listConcessionaria.features().enableSmoothScrolling(0.5);
   }
 
   private void createToggleOption(
@@ -291,6 +335,7 @@ public class ConfiguratorController implements Initializable {
               // Aggiorno il valore del campo di testo
               prezzo.setText(decimalFormat.format(newPrezzo) + " €");
             });
+    toggleGroup.getToggles().getFirst().setSelected(true);
   }
 
   private void setDetrazioneUsato() {
@@ -352,5 +397,25 @@ public class ConfiguratorController implements Initializable {
     fieldLunghezza.setText(auto.getLunghezza() + " mm");
     fieldPeso.setText(auto.getPeso() + " kg");
     fieldVolBagagliaio.setText(auto.getVolumeBagagliaio() + " L");
+  }
+
+  private static class ConcessionarioCellFactory extends MFXListCell<Concessionario> {
+    private final MFXFontIcon icon;
+
+    public ConcessionarioCellFactory(
+        MFXListView<Concessionario> listView, Concessionario concessionario) {
+      super(listView, concessionario);
+
+      icon = new MFXFontIcon("fas-car", 18);
+      render(concessionario);
+    }
+
+    @Override
+    protected void render(Concessionario data) {
+      super.render(data);
+      if (icon != null) {
+        getChildren().addFirst(icon);
+      }
+    }
   }
 }

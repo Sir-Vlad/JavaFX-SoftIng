@@ -1,0 +1,16 @@
+@import "root.css";
+
+.toggle-button-selected {
+    -fx-background-color: red;
+}
+
+.name-optional {
+    -fx-font-size: 20;
+    -fx-fill: rgb(82, 80, 80);
+}
+
+.title-part {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+    -fx-fill: -my-blue-text; /* colora il testo */
+}

@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Optional;
 import it.prova.javafxsofting.util.FilterAuto;
 import it.prova.javafxsofting.util.StaticDataStore;
 import java.net.URL;
@@ -11,10 +12,8 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.*;
@@ -25,10 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     implements Initializable, FilterAuto {
-  private static final ObservableList<ModelloAuto> cardAuto = FXCollections.observableArrayList();
   private static final String ELEMENT_TUTTI = "Tutti";
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
-  private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
   private static ScheduledExecutorService scheduler;
   @FXML private AnchorPane root;
   @FXML private MFXScrollPane scrollPane;
@@ -39,16 +36,59 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   @Contract(" -> new")
   private @NotNull List<String> getTypeAlimentazione() {
     return new ArrayList<>(
-        cardAuto.stream()
-            .map(modelloAuto -> modelloAuto.getOptionals()[0].getDescrizione())
-            .distinct()
-            .sorted()
+        StaticDataStore.getOptionals().stream()
+            .filter(optional -> optional.getNome().equals("alimentazione"))
+            .map(Optional::getDescrizione)
+            .map(String::toUpperCase)
             .toList());
   }
 
-  public static void fetchData() {
+  @Contract(" -> new")
+  private @NotNull List<String> getTypeCambio() {
+    return new ArrayList<>(
+        StaticDataStore.getOptionals().stream()
+            .filter(optional -> optional.getNome().equals("cambio"))
+            .map(Optional::getDescrizione)
+            .map(String::toUpperCase)
+            .toList());
+  }
+
+  private void setTypeFilter(@NotNull MFXFilterComboBox<String> filter) {
+    filter.getSelectionModel().selectFirst();
+
+    filter
+        .getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue != null) {
+                List<ModelloAuto> newAutoFiltered =
+                    getCardAuto().stream()
+                        .filter(
+                            auto ->
+                                Arrays.stream(auto.getOptionals())
+                                    .filter(optional -> optional.getDescrizione().equals(newValue))
+                                    .isParallel())
+                        .toList();
+
+                if (autoFiltered == null) {
+                  autoFiltered = newAutoFiltered;
+                }
+
+                if (!autoFiltered.equals(newAutoFiltered)) {
+                  autoFiltered = newAutoFiltered;
+                  getFlowPane().getChildren().clear();
+                  autoFiltered.stream()
+                      .map(CardAuto::new)
+                      .forEach(auto -> getFlowPane().getChildren().add(auto));
+                }
+              }
+            });
+  }
+
+  public void fetchData() {
     StaticDataStore.fetchModelliAuto();
-    cardAuto.setAll(StaticDataStore.getModelliAuto());
+    getCardAuto().setAll(StaticDataStore.getModelliAuto());
   }
 
   @Override
@@ -67,40 +107,17 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   }
 
   private void settingCambioFilter() {
-    // todo: da implementare
+    List<String> cambio = getTypeCambio();
+    cambio.addFirst(ELEMENT_TUTTI);
+    cambioFilter.setItems(FXCollections.observableList(cambio));
+    setTypeFilter(cambioFilter);
   }
 
   private void settingAlimentazioneFilter() {
-    List<String> a = getTypeAlimentazione();
-    a.addFirst(ELEMENT_TUTTI);
-    ObservableList<String> typeAlimentazione = FXCollections.observableList(a);
-    alimentazioneFilter.setItems(typeAlimentazione);
-    alimentazioneFilter.getSelectionModel().selectFirst();
-
-    alimentazioneFilter
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue != null) {
-                List<ModelloAuto> newAutoFiltered =
-                    cardAuto.stream()
-                        .filter(auto -> auto.getOptionals()[0].getDescrizione().equals(newValue))
-                        .toList();
-
-                if (autoFiltered == null) {
-                  autoFiltered = newAutoFiltered;
-                }
-
-                if (!autoFiltered.equals(newAutoFiltered)) {
-                  autoFiltered = newAutoFiltered;
-                  getFlowPane().getChildren().clear();
-                  autoFiltered.stream()
-                      .map(CardAuto::new)
-                      .forEach(auto -> getFlowPane().getChildren().add(auto));
-                }
-              }
-            });
+    List<String> alimentazione = getTypeAlimentazione();
+    alimentazione.addFirst(ELEMENT_TUTTI);
+    alimentazioneFilter.setItems(FXCollections.observableList(alimentazione));
+    setTypeFilter(alimentazioneFilter);
   }
 
   private void startPeriodicUpdate() {
@@ -114,8 +131,8 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     Platform.runLater(
         () -> {
           getFlowPane().getChildren().clear();
-          cardAuto.setAll(StaticDataStore.getModelliAuto());
-          cardAuto.stream()
+          getCardAuto().setAll(StaticDataStore.getModelliAuto());
+          getCardAuto().stream()
               .map(CardAuto::new)
               .forEach(auto -> getFlowPane().getChildren().add(auto));
         });
