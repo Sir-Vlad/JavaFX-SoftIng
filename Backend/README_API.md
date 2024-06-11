@@ -87,6 +87,12 @@
     - **preventivo**: campo che contiene i campi del preventivo
     - **optional**: campo che contiene gli id degli optional
 
+### Return HTTP Code
+
+- `201 - CREATED`: quando la post è andata a buon fine
+- `400 - BAD REQUEST`: errore generico
+- `409 - CONFLICT`: quando le chiavi esportate non esistono o ci sono conflitti di unique
+
 ## Ordini
 
 - `GET api/utente/<int:id>/ordini/`

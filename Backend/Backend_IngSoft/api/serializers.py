@@ -1,6 +1,4 @@
 import base64
-from io import BytesIO
-
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
@@ -13,6 +11,7 @@ from Backend_IngSoft.models import (
     Utente,
 )
 from PIL import Image
+from io import BytesIO
 from rest_framework import serializers
 
 
@@ -121,7 +120,6 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
         preventivo_data = validated_data.pop("preventivo")
 
         if Utente.objects.get(id=preventivo_data["utente"].id):
-            print("Sono qua")
             preventivo = Preventivo.objects.create(**preventivo_data)
             configurazione = Configurazione.objects.create(preventivo=preventivo)
             configurazione.optional.set(optional_ids)

@@ -39,12 +39,12 @@ public class PreventiviUtenteController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    /*Aggiorna la tabella dei preventivi quando si aggiunge un nuovo preventivo*/
     UserSession.getInstance()
         .addListener(
             new UserSession.PreventivoListener() {
               @Override
               public void onPreventivoChange(List<Preventivo> preventivi) {
-                System.out.println("onPreventivoChange");
                 updateTableView();
               }
 

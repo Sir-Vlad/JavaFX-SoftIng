@@ -1,9 +1,8 @@
+import imagehash
 import os.path
 import re
-from datetime import datetime
-
-import imagehash
 from PIL import Image
+from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -122,14 +121,18 @@ class Concessionario(models.Model):
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
-    data_emissione = models.DateField(null=False, blank=False)
+    data_emissione = models.DateField(null=True)
     concessionario = models.ForeignKey(
         Concessionario, on_delete=CASCADE, null=False, blank=False
     )
     prezzo = models.IntegerField(null=False, blank=False)
+    valid = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("utente", "modello", "data_emissione")
+        pass
+        # TODO: capire come rendere univoco un preventivo
+        #   possibile idea guardare modello, utente e optional
+        # unique_together = ("utente", "modello")
 
 
 class Configurazione(models.Model):

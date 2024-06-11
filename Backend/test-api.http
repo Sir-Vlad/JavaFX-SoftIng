@@ -1,5 +1,4 @@
 ###
-
 POST localhost:8000/api/autoUsate/
 Accept: application/json
 Content-Type: application/json
@@ -51,11 +50,10 @@ Content-Type: application/json
 
 {
   "preventivo": {
-    "utente": 100,
+    "utente": 11,
     "concessionario": 1,
     "modello": 1,
-    "prezzo": 20000,
-    "data_emissione": "2023-11-20"
+    "prezzo": 20000
   },
   "optional": [
     1,

@@ -93,16 +93,7 @@ class OptionalAutoListAPIView(APIView):
         except ModelloAuto.DoesNotExist:
             return HttpResponseNotFound("Auto non esiste")
 
-        optional = Possiede.objects.filter(modello_id=auto.id)
-
-        list_optional = []
-        for opt in optional:
-            list_optional.append(Optional.objects.filter(id=opt.optional_id))
-
-        # unpacking query
-        list_optional = [i for q in list_optional for i in q]
-
-        serializer = OptionalSerializer(list_optional, many=True)
+        serializer = OptionalSerializer(auto.optionals, many=True)
         return Response(serializer.data)
 
 
@@ -118,6 +109,10 @@ class ConcessionarioListAPIView(APIView):
         concessionario = Concessionario.objects.all()
         serializer = ConcessionarioSerializer(concessionario, many=True)
         return Response(serializer.data)
+
+
+def is_field_error(field_data, field_names):
+    return field_data and any(field in field_data for field in field_names)
 
 
 class PreventiviUtenteListAPIView(APIView):
@@ -138,21 +133,14 @@ class PreventiviUtenteListAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        error: dict = dict.fromkeys(
-            [
-                "message",
-            ]
-        )
-        if "preventivo" in [k for k in serializer.errors.keys()]:
-            field = serializer.errors.get("preventivo")
-            if field is not None and "utente" in field:
-                error["message"] = field
-                return Response(error, status=status.HTTP_400_BAD_REQUEST)
-            error["message"] = "Errore nel preventivo"
-            return Response("Errore nel preventivo", status=status.HTTP_400_BAD_REQUEST)
+        field_names = ("utente", "modello", "concessionario", "non_field_errors")
 
-        error = {"message": [serializer.errors]}
-        return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        if "preventivo" in serializer.errors.keys():
+            field_data = serializer.errors.get("preventivo")
+            if is_field_error(field_data, field_names):
+                return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AcquistoUtenteListAPIView(APIView):
@@ -177,8 +165,7 @@ class AcquistoUtenteListAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {"message": [i for e in serializer.errors.values() for i in e]}
-        return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AutoUsateListAPIView(APIView):
@@ -192,7 +179,6 @@ class AutoUsateListAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # error = {"message": [i for e in serializer.errors.values() for i in e]}
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

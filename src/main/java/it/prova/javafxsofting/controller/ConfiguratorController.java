@@ -1,7 +1,9 @@
 package it.prova.javafxsofting.controller;
 
+import static it.prova.javafxsofting.Connection.gson;
 import static it.prova.javafxsofting.util.Util.capitalize;
 
+import com.google.gson.reflect.TypeToken;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -10,12 +12,14 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.errori.ErrorResponse;
 import it.prova.javafxsofting.models.*;
 import it.prova.javafxsofting.models.Optional;
 import it.prova.javafxsofting.util.ColoriAuto;
 import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -173,7 +177,25 @@ public class ConfiguratorController implements Initializable {
           preventivo,
           String.format("utente/%s/preventivi/", UserSession.getInstance().getUtente().getId()));
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      List<ErrorResponse> errorResponses = new ArrayList<>();
+      Type type = new TypeToken<Map<String, Map<String, List<String>>>>() {}.getType();
+      Map<String, Map<String, List<String>>> errorMap = gson.fromJson(e.getMessage(), type);
+
+      errorMap.forEach(
+          (key, value) -> {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setErrors(value);
+            errorResponses.add(errorResponse);
+          });
+
+      if (errorResponses.stream().anyMatch(r -> r.getErrors().containsKey("non_field_errors"))) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore");
+        alert.setHeaderText("Errore durante l'inserimento del preventivo");
+        alert.setContentText("Il preventivo esiste già");
+        alert.showAndWait();
+        return;
+      }
     }
 
     UserSession.getInstance().setPreventivi();
@@ -336,7 +358,8 @@ public class ConfiguratorController implements Initializable {
         .filter(
             node2 -> node2 instanceof MFXRectangleToggleNode toggleNode && toggleNode.isSelected())
         .map(MFXRectangleToggleNode.class::cast)
-        .map(toggleNode -> (Optional) toggleNode.getUserData())
+        .map(Node::getUserData)
+        .map(Optional.class::cast)
         .toList();
   }
 
