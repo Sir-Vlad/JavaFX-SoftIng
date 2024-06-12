@@ -1,8 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="443.0"
-            prefWidth="711.0" xmlns="http://javafx.com/javafx/21"
+<?import it.prova.javafxsofting.component.Header?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0"
+            stylesheets="@../css/concessionari.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="it.prova.javafxsofting.controller.ConcessionariController">
-
+    <children>
+        <VBox layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Header fx:id="header"/>
+                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                            VBox.vgrow="ALWAYS">
+                    <children>
+                        <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Pane fx:id="wrapperRoot" prefHeight="200.0" prefWidth="200.0"/>
+                                <VBox>
+                                    <children>
+                                        <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="nomeColumn"
+                                                             maxWidth="1.7976931348623157E308"
+                                                             prefWidth="450.0" resizable="false"
+                                                             text="Nome"/>
+                                                <TableColumn fx:id="viaColumn"
+                                                             maxWidth="1.7976931348623157E308"
+                                                             prefWidth="200.0" resizable="false"
+                                                             text="Via"/>
+                                                <TableColumn fx:id="civicoColumn"
+                                                             maxWidth="1.7976931348623157E308"
+                                                             prefWidth="75.0" resizable="false"
+                                                             text="Civico"/>
+                                                <TableColumn fx:id="cittaColumn"
+                                                             maxWidth="1.7976931348623157E308"
+                                                             prefWidth="300.0" resizable="false"
+                                                             text="Città"/>
+                                                <TableColumn fx:id="capColumn"
+                                                             maxWidth="1.7976931348623157E308"
+                                                             minWidth="-1.0" prefWidth="143.0"
+                                                             resizable="false" text="CAP"/>
+                                            </columns>
+                                            <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                            </columnResizePolicy>
+                                        </TableView>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                                    </padding>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                    </children>
+                </AnchorPane>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>

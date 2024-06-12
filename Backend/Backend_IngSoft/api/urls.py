@@ -1,12 +1,14 @@
 from Backend_IngSoft.api.views import (
+    AcquistoUtenteListAPIView,
     AutoUsateListAPIView,
+    ConcessionarioListAPIView,
     ImmaginiAutoNuoveListAPIView,
     ModelliAutoListAPIView,
     OptionalAutoListAPIView,
     OptionalsListAPIView,
     PreventiviListAPIView,
     PreventiviUtenteListAPIView,
-    SedeListAPIView,
+    PreventivoAutoUsateAPIView,
     UtenteDetailAPIView,
     UtenteListCreateAPIView,
 )
@@ -18,7 +20,9 @@ urlpatterns = [
     path("modelli/", ModelliAutoListAPIView.as_view(), name="modelli-list"),
     path("preventivi/", PreventiviListAPIView.as_view(), name="preventivi-list"),
     path("optionals/", OptionalsListAPIView.as_view(), name="optionals-list"),
-    path("sedi/", SedeListAPIView.as_view(), name="sede-list"),
+    path(
+        "concessionari/", ConcessionarioListAPIView.as_view(), name="concessionari-list"
+    ),
     path("autoUsate/", AutoUsateListAPIView.as_view(), name="auto-usate-list"),
     # endpoint per dati specifici
     path("utente/<str:email>/", UtenteDetailAPIView.as_view(), name="utente-detail"),
@@ -33,8 +37,13 @@ urlpatterns = [
         name="Preventivi Utente",
     ),
     path(
-        "utente/<int:id_utente>/acquisti/",
-        PreventiviUtenteListAPIView.as_view(),
+        "utente/<int:id_utente>/preventiviUsato/",
+        PreventivoAutoUsateAPIView.as_view(),
+        name="Preventivi Auto Usate Utente",
+    ),
+    path(
+        "utente/<int:id_utente>/ordini/",
+        AcquistoUtenteListAPIView.as_view(),
         name="Acquisti Utente",
     ),
     path(

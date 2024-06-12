@@ -1,9 +1,8 @@
+import imagehash
 import os.path
 import re
-from datetime import datetime
-
-import imagehash
 from PIL import Image
+from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -41,40 +40,6 @@ class Auto(models.Model):
     class Meta:
         abstract = True
 
-    def clean(self):
-        super().clean()
-        optional_obbligatori = Optional.objects.filter(obbligatorio=True)
-        optional_posseduti = Possiede.objects.filter(modello=self)
-
-        for optional in optional_obbligatori:
-            if optional not in [posseduti.optional for posseduti in optional_posseduti]:
-                raise ValidationError(
-                    f"L'opzione obbligatoria '{optional.nome}' non è "
-                    f"associata all'auto {self.modello} "
-                )
-
-
-class ModelloAuto(Auto):
-    class MarcaAuto(models.TextChoices):
-        NISSAN = "NISSAN"
-        MAZDA = "MAZDA"
-        VOLKSWAGEN = "VOLKSWAGEN"
-        FORD = "FORD"
-        HONDA = "HONDA"
-        AUDI = "AUDI"
-        BMW = "BMW"
-
-    marca = models.CharField(
-        max_length=20, null=False, blank=False, choices=MarcaAuto
-    )  # lista di valori noti
-    prezzo_base = models.IntegerField(null=False, blank=False)
-
-    class Meta:
-        verbose_name_plural = "Modelli Auto"
-
-    def __str__(self):
-        return self.modello + " - " + self.marca
-
 
 class Optional(models.Model):
     class Category(models.TextChoices):
@@ -94,6 +59,7 @@ class Optional(models.Model):
     nome = models.CharField(max_length=20, blank=False, choices=Category)
     descrizione = models.CharField(max_length=30, blank=False)
     prezzo = models.IntegerField(blank=False)
+    obbligatorio = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("nome", "descrizione")
@@ -103,7 +69,33 @@ class Optional(models.Model):
         return self.nome + " - " + self.descrizione
 
 
-class Sede(models.Model):
+class ModelloAuto(Auto):
+    class MarcaAuto(models.TextChoices):
+        NISSAN = "NISSAN"
+        MAZDA = "MAZDA"
+        VOLKSWAGEN = "VOLKSWAGEN"
+        FORD = "FORD"
+        HONDA = "HONDA"
+        AUDI = "AUDI"
+        BMW = "BMW"
+
+    marca = models.CharField(
+        max_length=20, null=False, blank=False, choices=MarcaAuto
+    )  # lista di valori noti
+    prezzo_base = models.IntegerField(null=False, blank=False)
+    optionals = models.ManyToManyField(
+        Optional,
+        blank=False,
+    )
+
+    class Meta:
+        verbose_name_plural = "Modelli Auto"
+
+    def __str__(self):
+        return self.modello + " - " + self.marca
+
+
+class Concessionario(models.Model):
     nome = models.CharField(max_length=20, unique=True, null=False, blank=False)
     via = models.CharField(max_length=20, null=False, blank=False)
     civico = models.CharField(max_length=5, null=False, blank=False)
@@ -129,12 +121,18 @@ class Sede(models.Model):
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
-    data_emissione = models.DateField(null=False, blank=False)
-    sede = models.ForeignKey(Sede, on_delete=CASCADE, null=False, blank=False)
+    data_emissione = models.DateField(null=True)
+    concessionario = models.ForeignKey(
+        Concessionario, on_delete=CASCADE, null=False, blank=False
+    )
     prezzo = models.IntegerField(null=False, blank=False)
+    valid = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ("utente", "modello", "data_emissione")
+        pass
+        # TODO: capire come rendere univoco un preventivo
+        #   possibile idea guardare modello, utente e optional
+        # unique_together = ("utente", "modello")
 
 
 class Configurazione(models.Model):
@@ -210,20 +208,12 @@ class Sconto(models.Model):
         verbose_name_plural = "Sconti"
 
 
-class Possiede(models.Model):
-    modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
-    optional = models.ForeignKey(Optional, on_delete=CASCADE, null=False, blank=False)
-
-    class Meta:
-        unique_together = ("modello", "optional")
-
-
 class Ritiro(models.Model):
     preventivo = models.ForeignKey(Preventivo, on_delete=CASCADE)
-    sede = models.ForeignKey(Sede, on_delete=CASCADE)
+    concessionario = models.ForeignKey(Concessionario, on_delete=CASCADE)
 
     class Meta:
-        unique_together = ("preventivo", "sede")
+        unique_together = ("preventivo", "concessionario")
         verbose_name_plural = "Ritiro Auto"
 
 
@@ -241,9 +231,7 @@ def validate_not_future_date(value):
 
 class AutoUsata(Auto):
     marca = models.CharField(max_length=20, null=False, blank=False)
-    prezzo = models.IntegerField(
-        default=0, null=False, blank=False, validators=[MinValueValidator(0)]
-    )
+    prezzo = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     km_percorsi = models.IntegerField(
         null=False, blank=False, validators=[MinValueValidator(0)]
     )

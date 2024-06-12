@@ -6,7 +6,7 @@
       "nome": "motorizzazione",
       "descrizione": "1200 aspirato",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -16,7 +16,7 @@
       "nome": "motorizzazione",
       "descrizione": "1600 aspirato",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -26,7 +26,7 @@
       "nome": "motorizzazione",
       "descrizione": "1800 aspirato",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -36,7 +36,7 @@
       "nome": "motorizzazione",
       "descrizione": "1800 turno",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -46,7 +46,7 @@
       "nome": "motorizzazione",
       "descrizione": "2000 turbo",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -56,7 +56,7 @@
       "nome": "motorizzazione",
       "descrizione": "3000 turbo",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -66,7 +66,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "15",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -76,7 +76,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "16",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -86,7 +86,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "17",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -96,7 +96,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "18",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -106,7 +106,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "19",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -116,7 +116,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "20",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -126,7 +126,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "22",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -136,7 +136,7 @@
       "nome": "dimensione cerchi",
       "descrizione": "25",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": true
     }
   },
   {
@@ -146,7 +146,7 @@
       "nome": "cambio",
       "descrizione": "di serie",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -156,7 +156,7 @@
       "nome": "cambio",
       "descrizione": "manuele",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -166,7 +166,7 @@
       "nome": "cambio",
       "descrizione": "automatico DSG",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -176,7 +176,7 @@
       "nome": "stereo",
       "descrizione": "di serie",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -186,7 +186,7 @@
       "nome": "stereo",
       "descrizione": "BOSE audio",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -196,7 +196,7 @@
       "nome": "stereo",
       "descrizione": "PIONEER audio",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -206,7 +206,7 @@
       "nome": "fanali",
       "descrizione": "di serie (alogeni)",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -216,7 +216,7 @@
       "nome": "fanali",
       "descrizione": "alogeni oscurati",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -226,7 +226,7 @@
       "nome": "fanali",
       "descrizione": "led",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -236,7 +236,7 @@
       "nome": "fanali",
       "descrizione": "led oscurati",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -246,7 +246,7 @@
       "nome": "fanali",
       "descrizione": "led dinamici",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -256,7 +256,7 @@
       "nome": "finestrini",
       "descrizione": "di serie",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -266,7 +266,7 @@
       "nome": "finestrini",
       "descrizione": "oscurati 50%",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -276,7 +276,7 @@
       "nome": "finestrini",
       "descrizione": "oscurati 75%",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -286,7 +286,7 @@
       "nome": "finestrini",
       "descrizione": "oscurati 1%",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -296,7 +296,7 @@
       "nome": "sospensioni",
       "descrizione": "di serie",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -306,7 +306,7 @@
       "nome": "sospensioni",
       "descrizione": "assetto a ghiera regolabile",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -316,7 +316,7 @@
       "nome": "sospensioni",
       "descrizione": "assetto ad aria AirLift",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -326,7 +326,7 @@
       "nome": "scarico",
       "descrizione": "di serie",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -336,7 +336,7 @@
       "nome": "scarico",
       "descrizione": "scarico di serie con valvola bypass",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -346,7 +346,7 @@
       "nome": "scarico",
       "descrizione": "scarico artigianale con silenziatore maggiorato",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -356,7 +356,7 @@
       "nome": "scarico",
       "descrizione": "scarico artigianale diretto",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -366,7 +366,7 @@
       "nome": "sedili",
       "descrizione": "di serie",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -376,7 +376,7 @@
       "nome": "sedili",
       "descrizione": "sedili comfort con riscaldamento e condizionamento",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -386,7 +386,7 @@
       "nome": "sedili",
       "descrizione": "sedili da gara con applicazione cintura a 4 pompanti",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -396,7 +396,7 @@
       "nome": "infotainment",
       "descrizione": "di serie (radio DAB)",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -406,7 +406,7 @@
       "nome": "infotainment",
       "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -416,7 +416,7 @@
       "nome": "infotainment",
       "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto + sistema controllo-corsia e cruise-control",
       "prezzo": 0,
-      "obbligatorio": 0
+      "obbligatorio": false
     }
   },
   {
@@ -424,9 +424,9 @@
     "pk": 43,
     "fields": {
       "nome": "colore",
-      "descrizione": "nera - #000000",
+      "descrizione": "black - #000000",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -434,9 +434,9 @@
     "pk": 44,
     "fields": {
       "nome": "colore",
-      "descrizione": "bianca - #ffffff",
+      "descrizione": "white - #ffffff",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -444,29 +444,29 @@
     "pk": 45,
     "fields": {
       "nome": "colore",
-      "descrizione": "blu - #0000ff",
+      "descrizione": "gray - #808080",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
     "model": "Backend_IngSoft.optional",
     "pk": 46,
     "fields": {
-      "nome": "colore",
-      "descrizione": "grigia - #808080",
+      "nome": "alimentazione",
+      "descrizione": "gasolio",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
     "model": "Backend_IngSoft.optional",
     "pk": 47,
     "fields": {
-      "nome": "colore",
-      "descrizione": "rosso - #ff00000",
+      "nome": "alimentazione",
+      "descrizione": "benzina",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -474,9 +474,9 @@
     "pk": 48,
     "fields": {
       "nome": "alimentazione",
-      "descrizione": "gasolio",
+      "descrizione": "ibrida",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -484,9 +484,9 @@
     "pk": 49,
     "fields": {
       "nome": "alimentazione",
-      "descrizione": "benzina",
+      "descrizione": "elettrica",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   },
   {
@@ -494,29 +494,9 @@
     "pk": 50,
     "fields": {
       "nome": "alimentazione",
-      "descrizione": "ibrida",
-      "prezzo": 0,
-      "obbligatorio": 1
-    }
-  },
-  {
-    "model": "Backend_IngSoft.optional",
-    "pk": 51,
-    "fields": {
-      "nome": "alimentazione",
-      "descrizione": "elettrica",
-      "prezzo": 0,
-      "obbligatorio": 1
-    }
-  },
-  {
-    "model": "Backend_IngSoft.optional",
-    "pk": 52,
-    "fields": {
-      "nome": "alimentazione",
       "descrizione": "ibrida plug in",
       "prezzo": 0,
-      "obbligatorio": 1
+      "obbligatorio": true
     }
   }
 ]

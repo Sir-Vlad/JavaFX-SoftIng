@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
 <?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
 <?import it.prova.javafxsofting.component.Header?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="800.0" prefWidth="1200.0"
             stylesheets="@../../css/header.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="it.prova.javafxsofting.controller.ConfiguratorController">
@@ -17,12 +19,14 @@
                     <children>
                         <Pane fx:id="modelVisualize" prefWidth="700.0"
                               style="-fx-background-color: white;"/>
-                        <MFXScrollPane fx:id="scrollPane" hbarPolicy="NEVER" pannable="true"
+                        <MFXScrollPane fx:id="scrollPane" hbarPolicy="NEVER" prefWidth="600.0"
                                        vbarPolicy="ALWAYS">
                             <content>
                                 <AnchorPane>
                                     <children>
-                                        <VBox AnchorPane.bottomAnchor="0.0"
+                                        <VBox prefWidth="550.0"
+                                              stylesheets="@../../css/configurator.css"
+                                              AnchorPane.bottomAnchor="0.0"
                                               AnchorPane.leftAnchor="0.0"
                                               AnchorPane.rightAnchor="0.0"
                                               AnchorPane.topAnchor="0.0">
@@ -30,8 +34,9 @@
                                                 <HBox prefHeight="100.0" prefWidth="600.0"
                                                       VBox.vgrow="ALWAYS">
                                                     <children>
-                                                        <Pane fx:id="logoMarca" maxHeight="200.0"
-                                                              minWidth="100.0"/>
+                                                        <StackPane fx:id="logoMarca"
+                                                                   prefHeight="100.0"
+                                                                   prefWidth="100.0"/>
                                                         <VBox alignment="CENTER_LEFT"
                                                               prefHeight="200.0" prefWidth="100.0"
                                                               spacing="10.0" HBox.hgrow="ALWAYS">
@@ -68,10 +73,14 @@
                                                                     <VBox.margin>
                                                                         <Insets/>
                                                                     </VBox.margin>
+                                                                    <styleClass>
+                                                                        <String fx:value="title-part"/>
+                                                                        <String fx:value="text-field-font"/>
+                                                                    </styleClass>
                                                                 </Text>
                                                             </children>
                                                         </VBox>
-                                                        <VBox spacing="20.0">
+                                                        <VBox fx:id="vboxOptionals" spacing="20.0">
                                                             <children>
                                                                 <Text strokeType="OUTSIDE"
                                                                       strokeWidth="0.0"
@@ -80,9 +89,101 @@
                                                                         <Font name="System Bold"
                                                                               size="30.0"/>
                                                                     </font>
+                                                                    <styleClass>
+                                                                        <String fx:value="title-part"/>
+                                                                        <String fx:value="text-field-font"/>
+                                                                    </styleClass>
                                                                 </Text>
                                                                 <VBox alignment="CENTER_LEFT"
-                                                                      prefWidth="100.0"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Motorizzazione"
+                                                                              VBox.vgrow="ALWAYS">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                            <styleClass>
+                                                                                <String fx:value="name-optional"/>
+                                                                                <String fx:value="text-field-font"/>
+                                                                            </styleClass>
+                                                                        </Text>
+                                                                        <FlowPane
+                                                                                fx:id="toggleMotorizzazione"
+                                                                                columnHalignment="CENTER"
+                                                                                hgap="25.0"
+                                                                                prefWrapLength="300.0"
+                                                                                vgap="15.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Alimentazione"
+                                                                              VBox.vgrow="ALWAYS">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                            <styleClass>
+                                                                                <String fx:value="name-optional"/>
+                                                                                <String fx:value="text-field-font"/>
+                                                                            </styleClass>
+                                                                        </Text>
+                                                                        <FlowPane
+                                                                                fx:id="toggleAlimentazione"
+                                                                                columnHalignment="CENTER"
+                                                                                hgap="25.0"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                prefWrapLength="300.0"
+                                                                                vgap="15.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Cambio">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                            <styleClass>
+                                                                                <String fx:value="name-optional"/>
+                                                                                <String fx:value="text-field-font"/>
+                                                                            </styleClass>
+                                                                        </Text>
+                                                                        <HBox fx:id="toggleCambio"
+                                                                              alignment="CENTER_LEFT"
+                                                                              prefWidth="200.0"
+                                                                              spacing="20.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      spacing="15.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Dimensione cerchi">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                            <styleClass>
+                                                                                <String fx:value="name-optional"/>
+                                                                                <String fx:value="text-field-font"/>
+                                                                            </styleClass>
+                                                                        </Text>
+                                                                        <FlowPane
+                                                                                fx:id="toggleCerchi"
+                                                                                columnHalignment="CENTER"
+                                                                                hgap="25.0"
+                                                                                prefWrapLength="300.0"
+                                                                                vgap="15.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox alignment="CENTER_LEFT"
                                                                       spacing="15.0">
                                                                     <children>
                                                                         <Text strokeType="OUTSIDE"
@@ -91,10 +192,54 @@
                                                                             <font>
                                                                                 <Font size="15.0"/>
                                                                             </font>
+                                                                            <styleClass>
+                                                                                <String fx:value="name-optional"/>
+                                                                                <String fx:value="text-field-font"/>
+                                                                            </styleClass>
                                                                         </Text>
                                                                         <HBox fx:id="toggleColor"
+                                                                              alignment="CENTER_LEFT"
                                                                               prefWidth="200.0"
                                                                               spacing="20.0"/>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox spacing="20.0">
+                                                            <children>
+                                                                <Text strokeType="OUTSIDE"
+                                                                      strokeWidth="0.0"
+                                                                      text="Ritiro AUto">
+                                                                    <font>
+                                                                        <Font name="System Bold"
+                                                                              size="30.0"/>
+                                                                    </font>
+                                                                    <styleClass>
+                                                                        <String fx:value="title-part"/>
+                                                                        <String fx:value="text-field-font"/>
+                                                                    </styleClass>
+                                                                </Text>
+                                                                <VBox alignment="CENTER_LEFT"
+                                                                      prefWidth="100.0">
+                                                                    <children>
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Seleziona dove vuoi ritirare il tuo veicolo">
+                                                                            <font>
+                                                                                <Font size="15.0"/>
+                                                                            </font>
+                                                                        </Text>
+                                                                        <MFXListView
+                                                                                fx:id="listConcessionaria"
+                                                                                depthLevel="LEVEL1"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                prefHeight="200.0">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0"
+                                                                                        right="10.0"
+                                                                                        top="10.0"/>
+                                                                            </VBox.margin>
+                                                                        </MFXListView>
                                                                     </children>
                                                                 </VBox>
                                                             </children>
@@ -108,15 +253,18 @@
                                                                         <Font name="System Bold"
                                                                               size="30.0"/>
                                                                     </font>
+                                                                    <styleClass>
+                                                                        <String fx:value="title-part"/>
+                                                                        <String fx:value="text-field-font"/>
+                                                                    </styleClass>
                                                                 </Text>
                                                                 <VBox alignment="CENTER_LEFT"
                                                                       prefWidth="100.0"
                                                                       spacing="15.0">
                                                                     <children>
-                                                                        <Text
-                                                                                strokeType="OUTSIDE"
-                                                                                strokeWidth="0.0"
-                                                                                text="Vuoi inserire il tuo usato per avere una detrazione sul nuovo acquisto?">
+                                                                        <Text strokeType="OUTSIDE"
+                                                                              strokeWidth="0.0"
+                                                                              text="Vuoi inserire il tuo usato per avere una detrazione sul nuovo acquisto?">
                                                                             <font>
                                                                                 <Font size="15.0"/>
                                                                             </font>
@@ -144,7 +292,7 @@
                 </HBox>
                 <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;">
                     <children>
-                        <VBox alignment="CENTER" maxWidth="400.0" prefWidth="150.0">
+                        <VBox alignment="CENTER_LEFT" maxWidth="400.0" prefWidth="150.0">
                             <children>
                                 <Text fx:id="fieldModello" strokeType="OUTSIDE" strokeWidth="0.0"
                                       text="Modello Auto" textAlignment="CENTER">

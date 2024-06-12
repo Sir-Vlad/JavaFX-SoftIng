@@ -3,9 +3,9 @@ package it.prova.javafxsofting;
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
-import it.prova.javafxsofting.errori.ErrorResponse;
-import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
-import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
+import it.prova.javafxsofting.models.AutoUsata;
+import it.prova.javafxsofting.models.Preventivo;
+import it.prova.javafxsofting.serializzatori.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.*;
@@ -22,10 +22,14 @@ import org.jetbrains.annotations.Nullable;
 
 public final class Connection {
 
-  static final Gson gson =
+  public static final Gson gson =
       new GsonBuilder()
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
           .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
+          .registerTypeAdapter(Preventivo.class, new PreventivoSerializer())
+          .registerTypeAdapter(Preventivo.class, new PreventivoDeserializer())
+          .registerTypeAdapter(AutoUsata.class, new AutoUsataSerializer())
+          .setPrettyPrinting()
           .setDateFormat(DateFormat.LONG)
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
           .setExclusionStrategies(
@@ -150,6 +154,7 @@ public final class Connection {
    * @param <T> tipo generico che deve essere serializzatile
    * @param data dati da inviare
    * @param subDirectory url dove inviare i dati
+   * @throws Exception errore nella connessione
    */
   public static <T extends Serializable> void postDataToBacked(T data, String subDirectory)
       throws Exception {
@@ -159,31 +164,25 @@ public final class Connection {
     String jsonInputString = gson.toJson(data);
 
     // invia i dati al backed
-    try (OutputStream os = conn.getOutputStream()) {
-      byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-      os.write(input, 0, input.length);
-    } catch (IOException e) {
-      throw new RuntimeException("Errore nell'invio dei dati");
-    }
+    sendData(conn, jsonInputString);
 
     // riceve la risposta dal backed
     int responseCode = conn.getResponseCode();
-    if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
-      StringBuilder response = new StringBuilder();
-      try (BufferedReader br =
-          new BufferedReader(
-              new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
-        String responseLine;
-        while ((responseLine = br.readLine()) != null) {
-          response.append(responseLine.trim());
-        }
-        // fixme: non riesce a serializzare l'errore
-        ErrorResponse errorResponse = gson.fromJson(response.toString(), ErrorResponse.class);
-        throw new Exception(errorResponse.getMessage());
-      }
+    if (responseCode == HttpURLConnection.HTTP_CREATED) {
+      conn.disconnect();
+      return;
     }
 
+    StringBuilder response = new StringBuilder();
+    try (BufferedReader br =
+        new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+      String responseLine;
+      while ((responseLine = br.readLine()) != null) {
+        response.append(responseLine.trim());
+      }
+    }
     conn.disconnect();
+    throw new Exception(response.toString());
   }
 
   public static <T extends Serializable> void putDataToBackend(T data, String subDirectory)
@@ -194,31 +193,26 @@ public final class Connection {
     String jsonInputString = gson.toJson(data);
 
     // invia i dati al backed
-    try (OutputStream os = conn.getOutputStream()) {
-      byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-      os.write(input, 0, input.length);
-    } catch (IOException e) {
-      throw new RuntimeException("Errore nell'invio dei dati");
-    }
+    sendData(conn, jsonInputString);
 
     // riceve la risposta dal backed
     int responseCode = conn.getResponseCode();
-    if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
-      StringBuilder response = new StringBuilder();
-      try (BufferedReader br =
-          new BufferedReader(
-              new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
-        String responseLine;
-        while ((responseLine = br.readLine()) != null) {
-          response.append(responseLine.trim());
-        }
-        // fixme: non riesce a serializzare l'errore
-        ErrorResponse errorResponse = gson.fromJson(response.toString(), ErrorResponse.class);
-        throw new Exception(errorResponse.getMessage());
+    if (responseCode == HttpURLConnection.HTTP_OK) {
+      conn.disconnect();
+      return;
+    }
+
+    StringBuilder response = new StringBuilder();
+    try (BufferedReader br =
+        new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+      String responseLine;
+      while ((responseLine = br.readLine()) != null) {
+        response.append(responseLine.trim());
       }
     }
 
     conn.disconnect();
+    throw new RuntimeException(response.toString());
   }
 
   private static void error404Connection(HttpURLConnection conn, StringBuilder content)
@@ -229,7 +223,16 @@ public final class Connection {
     while ((line = bufferedReader.readLine()) != null) {
       content.append(line);
     }
-    throw new Exception(content.toString());
+    throw new RuntimeException(content.toString());
+  }
+
+  private static void sendData(HttpURLConnection conn, String jsonInputString) {
+    try (OutputStream os = conn.getOutputStream()) {
+      byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+      os.write(input, 0, input.length);
+    } catch (IOException e) {
+      throw new RuntimeException("Errore nell'invio dei dati");
+    }
   }
 
   /**

@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
@@ -32,13 +33,15 @@ public class SplashScreenPreloader extends Preloader {
         .setResolveAssets(true)
         .build()
         .setGlobal();
+
+    scene.setFill(Color.TRANSPARENT);
   }
 
   @Override
   public void start(Stage primaryStage) {
     this.splashStage = primaryStage;
     splashStage.setScene(scene);
-    splashStage.initStyle(StageStyle.UNDECORATED);
+    splashStage.initStyle(StageStyle.TRANSPARENT);
 
     splashStage
         .getIcons()

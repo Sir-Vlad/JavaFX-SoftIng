@@ -54,14 +54,35 @@ public class Preventivo implements Serializable {
   private float totalePrezzo;
 
   @Contract(pure = true)
-  public Preventivo(
-      Utente utente, ModelloAuto modello, Concessionario sede, LocalDate dataEmissione) {
+  public Preventivo(Utente utente, ModelloAuto modello, Concessionario concessionario, int prezzo) {
     this.utente = utente;
     this.modello = modello;
-    this.concessionario = sede;
+    this.concessionario = concessionario;
+    this.prezzo = prezzo;
+  }
+
+  @Contract(pure = true)
+  public Preventivo(
+      Utente utente,
+      ModelloAuto modello,
+      Concessionario concessionario,
+      LocalDate dataEmissione,
+      int prezzo) {
+    this(utente, modello, concessionario, prezzo);
     this.dataEmissione = dataEmissione;
-    // todo: settare il prezzo del preventivo
-    this.prezzo = 0;
+  }
+
+  public Preventivo(int utenteId, int modelloId, int concessionarioId, int prezzo) {
+    this.utenteId = utenteId;
+    this.modelloId = modelloId;
+    this.sedeId = concessionarioId;
+    this.prezzo = prezzo;
+  }
+
+  public Preventivo(
+      int utenteId, int modelloId, int concessionarioId, int prezzo, String dataEmissione) {
+    this(utenteId, modelloId, concessionarioId, prezzo);
+    this.dataEmissione = LocalDate.parse(dataEmissione);
   }
 
   @Override

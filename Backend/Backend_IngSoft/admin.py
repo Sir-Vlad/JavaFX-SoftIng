@@ -1,11 +1,15 @@
 from django.contrib import admin
-
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
+from django.db.models import Model
+from django.forms import Form
+from django.http import HttpRequest
+from typing import Any
 from unfold.admin import ModelAdmin, TabularInline
 
 from .models import *
+from .util.util import send_html_email
 from .widgets import SliderWidget
 
 admin.site.unregister(User)
@@ -127,9 +131,39 @@ class AutoUsataAdmin(ModelAdmin):
             "volume_bagagliaio",
         ]
 
+    def save_model(
+            self, request: HttpRequest, obj: Model, form: Form, change: Any
+    ) -> None:
+        # Controlla se l'oggetto esiste già nel database (modifica invece di creazione)
+        if change:
+            old_obj = AutoUsata.objects.get(pk=obj.pk)
+            if old_obj.prezzo != obj.prezzo:  # Controlla se il campo è stato
 
-@admin.register(Sede)
-class SedeAdmin(ModelAdmin):
+                preventivo = Detrazione.objects.get(auto_usata_id=obj.pk).preventivo
+                utente = preventivo.utente
+                modello = preventivo.modello
+                from_email = utente.email
+                template_name = "emails/valutazione_usato.html"
+
+                # modificato
+                send_html_email(
+                    "Valutazione usato",
+                    from_email,
+                    {
+                        "modello": old_obj.modello,
+                        "customer_name": f"{utente.nome} {utente.cognome}",
+                        "prezzo": obj.prezzo,
+                        "modello_nuovo": modello.modello,
+                        "prezzo_base": modello.prezzo_base,
+                        "prezzo_detrazione": (modello.prezzo_base - obj.prezzo),
+                    },
+                    template_name,
+                )
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(Concessionario)
+class ConcessionarioAdmin(ModelAdmin):
     pass
 
 

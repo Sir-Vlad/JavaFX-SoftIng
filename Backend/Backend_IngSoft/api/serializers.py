@@ -1,18 +1,18 @@
 import base64
-from io import BytesIO
-
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
+    Concessionario,
     Configurazione,
     ImmaginiAutoNuove,
     ModelloAuto,
     Optional,
     Preventivo,
-    Sede,
+    PreventivoUsato,
     Utente,
 )
 from PIL import Image
+from io import BytesIO
 from rest_framework import serializers
 
 
@@ -34,11 +34,11 @@ class OptionalSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SedeSerializer(serializers.ModelSerializer):
+class ConcessionarioSerializer(serializers.ModelSerializer):
     indirizzo = serializers.SerializerMethodField()
 
     class Meta:
-        model = Sede
+        model = Concessionario
         fields = ["id", "nome", "indirizzo"]
 
     def get_indirizzo(self, obj):
@@ -48,7 +48,9 @@ class SedeSerializer(serializers.ModelSerializer):
 class PreventivoSerializer(serializers.ModelSerializer):
     utente = serializers.PrimaryKeyRelatedField(queryset=Utente.objects.all())
     modello = serializers.PrimaryKeyRelatedField(queryset=ModelloAuto.objects.all())
-    sede = serializers.PrimaryKeyRelatedField(queryset=Sede.objects.all())
+    concessionario = serializers.PrimaryKeyRelatedField(
+        queryset=Concessionario.objects.all()
+    )
     config = serializers.SerializerMethodField()
 
     class Meta:
@@ -119,9 +121,16 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
         preventivo_data = validated_data.pop("preventivo")
 
         if Utente.objects.get(id=preventivo_data["utente"].id):
-            print("Sono qua")
+            # salvataggio dati nel db
             preventivo = Preventivo.objects.create(**preventivo_data)
             configurazione = Configurazione.objects.create(preventivo=preventivo)
             configurazione.optional.set(optional_ids)
+
             return configurazione
         return None
+
+
+class PreventiviAutoUsateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PreventivoUsato
+        fields = "__all__"

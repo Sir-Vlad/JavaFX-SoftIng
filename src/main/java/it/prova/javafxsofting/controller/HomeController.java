@@ -20,8 +20,7 @@ public class HomeController implements Initializable {
     header.addTab(
         "Concessionari",
         event -> {
-          NotImplemented.notImplemented();
-          // ScreenController.activate("concessionari");
+          ScreenController.activate("concessionari");
         });
   }
 

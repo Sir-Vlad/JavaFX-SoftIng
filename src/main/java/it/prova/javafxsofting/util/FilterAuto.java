@@ -55,9 +55,16 @@ public interface FilterAuto {
 
   default <T extends Auto> void settingPrezzoFilter(
       @NotNull MFXSlider slider, FlowPane flowPane, ObservableList<T> cardAuto) {
+    if (cardAuto.isEmpty()) {
+      slider.setMax(1);
+      return;
+    }
     int[] minMaxPrezzo = minMaxPrezzoAuto(cardAuto);
-    slider.setMin(minMaxPrezzo[0]);
-    slider.setMax(minMaxPrezzo[1]);
+    int min = minMaxPrezzo[0];
+    int max = minMaxPrezzo[1];
+
+    slider.setMin(min);
+    slider.setMax(max);
     slider
         .valueProperty()
         .addListener(

@@ -135,8 +135,12 @@ public class LoginController extends ValidateForm implements Initializable {
                 App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml"))));
 
     clearField();
-    // redirect alla pagina del profilo
-    ScreenController.activate("home");
+
+    if (ScreenController.getBackPage().equals("config")) {
+      ScreenController.activate("config");
+    } else {
+      ScreenController.activate("home");
+    }
   }
 
   private void saveUtente() throws IOException {
@@ -147,6 +151,10 @@ public class LoginController extends ValidateForm implements Initializable {
       logger.info("La directory data esiste già");
     }
 
+    // delete file if exists and create it
+    if (Files.exists(path.resolve("utente.txt"))) {
+      Files.delete(path.resolve("utente.txt"));
+    }
     Path fileUtente = Files.createFile(path.resolve("utente.txt"));
     Files.write(fileUtente, UserSession.getInstance().getUtente().getEmail().getBytes());
   }

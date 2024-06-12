@@ -1,35 +1,37 @@
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
+    ConcessionarioSerializer,
     ConfigurazioneSerializer,
     ImmaginiAutoNuoveSerializer,
     ModelliAutoSerializer,
     OptionalSerializer,
+    PreventiviAutoUsateSerializer,
     PreventivoSerializer,
-    SedeSerializer,
     UtenteSerializer,
 )
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
+    Concessionario,
+    Detrazione,
     ImmaginiAutoNuove,
     ModelloAuto,
     Optional,
-    Possiede,
     Preventivo,
-    Sede,
+    PreventivoUsato,
     Utente,
 )
 from Backend_IngSoft.util.error import raises
+from Backend_IngSoft.util.util import send_html_email
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
-    def get(self, request):
+    def get(self, request) -> Response:
         utente = Utente.objects.all()
         serializer = UtenteSerializer(utente, many=True)
         return Response(serializer.data)
@@ -95,16 +97,7 @@ class OptionalAutoListAPIView(APIView):
         except ModelloAuto.DoesNotExist:
             return HttpResponseNotFound("Auto non esiste")
 
-        optional = Possiede.objects.filter(modello_id=auto.id)
-
-        list_optional = []
-        for opt in optional:
-            list_optional.append(Optional.objects.filter(id=opt.optional_id))
-
-        # unpacking query
-        list_optional = [i for q in list_optional for i in q]
-
-        serializer = OptionalSerializer(list_optional, many=True)
+        serializer = OptionalSerializer(auto.optionals, many=True)
         return Response(serializer.data)
 
 
@@ -115,11 +108,15 @@ class OptionalsListAPIView(APIView):
         return Response(serializer.data)
 
 
-class SedeListAPIView(APIView):
+class ConcessionarioListAPIView(APIView):
     def get(self, request):
-        sede = Sede.objects.all()
-        serializer = SedeSerializer(sede, many=True)
+        concessionario = Concessionario.objects.all()
+        serializer = ConcessionarioSerializer(concessionario, many=True)
         return Response(serializer.data)
+
+
+def is_field_error(field_data, field_names):
+    return field_data and any(field in field_data for field in field_names)
 
 
 class PreventiviUtenteListAPIView(APIView):
@@ -135,13 +132,46 @@ class PreventiviUtenteListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, id_utente):
+        auto_usata_id = request.data.pop("detrazione", None)
+
         serializer = ConfigurazioneSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            conf = serializer.save()
+
+            if auto_usata_id is not None:
+                detrazione_data = Detrazione.objects.create(
+                    preventivo_id=conf.preventivo.id, auto_usata_id=auto_usata_id
+                )
+                detrazione_data.save()
+
+            # invio email
+            subject = "Preventivo creato"
+            to_email = conf.preventivo.utente.email
+            context = {
+                "customer_name": conf.preventivo.utente.nome
+                                 + " "
+                                 + conf.preventivo.utente.cognome,
+                "car_model": conf.preventivo.modello.modello,
+                "base_price": conf.preventivo.modello.prezzo_base,
+                "optionals": conf.optional.all(),
+                "total_price": conf.preventivo.prezzo,
+                "detrazione": True if auto_usata_id is not None else False,
+            }
+            # send_mail(subject, message, from_email, to_email)
+            template_name = "emails/template_email_conferma_preventivo.html"
+            send_html_email(subject, to_email, context, template_name)
+            print("email inviata")
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        error = {"message": [serializer.errors]}
-        return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        field_names = ("utente", "modello", "concessionario", "non_field_errors")
+
+        if "preventivo" in serializer.errors.keys():
+            field_data = serializer.errors.get("preventivo")
+            if is_field_error(field_data, field_names):
+                return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AcquistoUtenteListAPIView(APIView):
@@ -166,34 +196,29 @@ class AcquistoUtenteListAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {"message": [i for e in serializer.errors.values() for i in e]}
-        return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AutoUsateListAPIView(APIView):
     def get(self, request):
         auto = AutoUsata.objects.all()
         serializer = AutoUsataSerializer(auto, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = AutoUsataSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {"message": [i for e in serializer.errors.values() for i in e]}
-        return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        utente = request.data.pop("utente")
+        auto_usata = AutoUsataSerializer(data=request.data.pop("auto"))
+        if auto_usata.is_valid():
+            auto_usata.save()
 
+            preventivo_usato = PreventivoUsato.objects.create(
+                utente_id=utente,
+                auto_id=auto_usata.data["id"],
+            )
+            preventivo_usato.save()
 
-class AutoUsataAPIView(APIView):
-    def delete(self, request, id_auto):
-        try:
-            auto = AutoUsata.objects.get(id=id_auto)
-        except AutoUsata.DoesNotExist:
-            return HttpResponseNotFound("Auto non esiste")
-
-        auto.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(auto_usata.data, status=status.HTTP_201_CREATED)
+        return Response(auto_usata.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ImmaginiAutoNuoveListAPIView(APIView):
@@ -207,4 +232,11 @@ class PreventiviListAPIView(APIView):
     def get(self, request):
         preventivi = Preventivo.objects.all()
         serializer = PreventivoSerializer(preventivi, many=True)
+        return Response(serializer.data)
+
+
+class PreventivoAutoUsateAPIView(APIView):
+    def get(self, request, id_utente):
+        preventivi = PreventivoUsato.objects.filter(utente=id_utente)
+        serializer = PreventiviAutoUsateSerializer(preventivi, many=True)
         return Response(serializer.data)

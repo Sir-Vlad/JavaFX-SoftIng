@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resoconto Preventivo Auto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Resoconto Preventivo Auto</h1>
+    <p>Caro {{ customer_name }},</p>
+    <p>Grazie per aver richiesto un preventivo per la tua nuova auto. Ecco il resoconto:</p>
+    <p>Dati dell'auto</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Descrizione</th>
+            <th>Prezzo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Modello dell'auto</td>
+            <td>{{ car_model }}</td>
+        </tr>
+        <tr>
+            <td>Prezzo base</td>
+            <td>€ {{ base_price }}</td>
+        </tr>
+        <tr>
+            <td><strong>Totale</strong></td>
+            <td><strong>€ {{ total_price }}</strong></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>Dati degli optional</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrizione</th>
+            <th>Prezzo</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for optional in optionals %}
+            <tr>
+                <td>{{ optional.nome }}</td>
+                <td>{{ optional.descrizione }}</td>
+                <td>€ {{ optional.prezzo }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if detrazione %}
+        <p>Il prezzo del tuo preventivo non include la detrazione. Ti verrà inviata un'altra email
+            per avvisarti di
+            quanto è stato valutato il tuo usato e di conseguenza di quanto sarà lo sconto sul
+            modello in esame.</p>
+    {% else %}
+    {% endif %}
+    <p>Se hai domande, non esitare a contattarci.</p>
+    <p>Grazie,<br>Il team di Vendita Auto</p>
+</div>
+</body>
+</html>
