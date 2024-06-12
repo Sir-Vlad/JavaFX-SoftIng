@@ -109,7 +109,8 @@ public class PreventiviUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  setText(item.toString());
+                  if (item == null) setText("");
+                  else setText(item.toString());
                   setAlignment(Pos.CENTER);
                 }
               }

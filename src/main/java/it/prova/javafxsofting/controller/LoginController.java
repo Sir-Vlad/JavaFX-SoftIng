@@ -136,8 +136,6 @@ public class LoginController extends ValidateForm implements Initializable {
 
     clearField();
 
-    System.out.println(ScreenController.getBackPage().equals("config"));
-
     if (ScreenController.getBackPage().equals("config")) {
       ScreenController.activate("config");
     } else {
@@ -153,6 +151,10 @@ public class LoginController extends ValidateForm implements Initializable {
       logger.info("La directory data esiste già");
     }
 
+    // delete file if exists and create it
+    if (Files.exists(path.resolve("utente.txt"))) {
+      Files.delete(path.resolve("utente.txt"));
+    }
     Path fileUtente = Files.createFile(path.resolve("utente.txt"));
     Files.write(fileUtente, UserSession.getInstance().getUtente().getEmail().getBytes());
   }

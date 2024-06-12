@@ -1,6 +1,8 @@
 package it.prova.javafxsofting.serializzatori;
 
 import com.google.gson.*;
+import it.prova.javafxsofting.UserSession;
+import it.prova.javafxsofting.controller.ConfiguratorController;
 import it.prova.javafxsofting.models.Preventivo;
 import java.lang.reflect.Type;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +18,9 @@ public final class PreventivoSerializer implements JsonSerializer<Preventivo> {
     preventivo.addProperty("modello", src.getModello().getId());
     preventivo.addProperty("concessionario", src.getConcessionario().getId());
     preventivo.addProperty("prezzo", src.getPrezzo());
-    preventivo.addProperty("data_emissione", src.getDataEmissione().toString());
+    if (src.getDataEmissione() != null) {
+      preventivo.addProperty("data_emissione", src.getDataEmissione().toString());
+    }
     jsonObject.add("preventivo", preventivo);
 
     JsonArray optionals = new JsonArray();
@@ -24,6 +28,13 @@ public final class PreventivoSerializer implements JsonSerializer<Preventivo> {
       optionals.add(src.getOptionals().get(i).getId());
     }
     jsonObject.add("optional", optionals);
+
+    if (ConfiguratorController.isDetrazione()) {
+      JsonElement detrazione =
+          context.serialize(
+              UserSession.getInstance().getPreventiviUsati().getLast().getIdAutoUsata());
+      jsonObject.add("detrazione", detrazione);
+    }
 
     return jsonObject;
   }

@@ -5,10 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.Preventivo;
-import it.prova.javafxsofting.serializzatori.AutoUsataSerializer;
-import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
-import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
-import it.prova.javafxsofting.serializzatori.PreventivoSerializer;
+import it.prova.javafxsofting.serializzatori.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.*;
@@ -30,6 +27,7 @@ public final class Connection {
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
           .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
           .registerTypeAdapter(Preventivo.class, new PreventivoSerializer())
+          .registerTypeAdapter(Preventivo.class, new PreventivoDeserializer())
           .registerTypeAdapter(AutoUsata.class, new AutoUsataSerializer())
           .setPrettyPrinting()
           .setDateFormat(DateFormat.LONG)
@@ -182,9 +180,7 @@ public final class Connection {
       while ((responseLine = br.readLine()) != null) {
         response.append(responseLine.trim());
       }
-      System.out.println("Response: " + response);
     }
-
     conn.disconnect();
     throw new Exception(response.toString());
   }

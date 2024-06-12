@@ -37,6 +37,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,12 +46,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
+  /** path della cartella dove ci sono i file del configuratore */
   private static final Path PATH_DIR = Path.of("controller").resolve("part_configurator");
+
   private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
   @FXML private VBox vboxOptionals;
@@ -71,9 +75,10 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldModelloV;
   @FXML private MFXListView<Concessionario> listConcessionaria;
   @FXML private MFXButton saveConfigurazioneBtn;
-
+  /** Flag per l'aggiunta della detrazione nel preventivo */
+  @Getter private static boolean detrazione = false;
+  /** Auto selezionata all'interno del configuratore */
   private ModelloAuto auto;
-  private boolean detrazione = false;
 
   /**
    * Restituisce una lista di tutti i vBox degli optional all'interno di {@link #vboxOptionals}
@@ -157,21 +162,18 @@ public class ConfiguratorController implements Initializable {
    */
   @FXML
   public void salvaConfigurazione(@NotNull ActionEvent actionEvent) {
+    if (listConcessionaria.getSelectionModel().getSelectedValue() == null) {
+      new Alert(Alert.AlertType.ERROR, "Seleziona un concessionario").showAndWait();
+      return;
+    }
+
     if (UserSession.getInstance().getUtente() == null) {
       ScreenController.activate("login");
       return;
     }
     Preventivo preventivo;
     if (detrazione) {
-      try {
-        openVendiUsato();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
       preventivo = createPreventivoSenzaData();
-      // todo: vedere come aggiungere la detrazione al db
-      //  mettere un campo nel json di invio con "detrazione": id_auto_usata
-      //  campo che può essere anche omesso/nullo
     } else {
       preventivo = createPreventivo();
     }
@@ -208,6 +210,13 @@ public class ConfiguratorController implements Initializable {
 
     ScreenController.removeScreen("configurazione");
     ScreenController.activate("home");
+
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Informazione");
+    alert.setHeaderText("Preventivo inserito correttamente");
+    alert.setContentText("Il preventivo è stato inserito correttamente");
+    alert.showAndWait();
+
     actionEvent.consume();
   }
 
@@ -218,6 +227,11 @@ public class ConfiguratorController implements Initializable {
     return new Preventivo(utente, auto, concessionario, extractPrezzo());
   }
 
+  /**
+   * Restituisce il prezzo dell'auto dal campo di testo
+   *
+   * @return il prezzo totale dell'auto in intero
+   */
   @SneakyThrows
   private int extractPrezzo() {
     Text prezzo = (Text) root.lookup("#fieldPrezzoValue");
@@ -548,7 +562,17 @@ public class ConfiguratorController implements Initializable {
     MFXRadioButton noBtn = new MFXRadioButton("No");
 
     yesBtn.setToggleGroup(toggleGroup);
-    yesBtn.setOnAction(event -> detrazione = true);
+    yesBtn.setOnAction(
+        event -> {
+          if (yesBtn.isSelected()) {
+            detrazione = true;
+            try {
+              openVendiUsato();
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+          }
+        });
 
     noBtn.setToggleGroup(toggleGroup);
     noBtn.setOnAction(event -> detrazione = false);

@@ -2,6 +2,7 @@ package it.prova.javafxsofting;
 
 import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
+import it.prova.javafxsofting.models.PreventivoUsato;
 import it.prova.javafxsofting.models.Utente;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class UserSession {
   private Utente utente;
   private List<Preventivo> preventivi;
   private List<Ordine> ordini;
+  private List<PreventivoUsato> preventiviUsati;
 
   @Getter(AccessLevel.NONE)
   @Setter(AccessLevel.NONE)
@@ -33,6 +35,19 @@ public class UserSession {
       instance = new UserSession();
     }
     return instance;
+  }
+
+  public void setUtente(Utente utente) {
+    this.utente = utente;
+
+    if (utente != null) {
+      new Thread(
+              () -> {
+                setPreventivi();
+                setPreventiviUsati();
+              })
+          .start();
+    }
   }
 
   public List<Preventivo> getPreventivi() {
@@ -52,6 +67,10 @@ public class UserSession {
     notifyListeners();
   }
 
+  public void setPreventiviUsati() {
+    preventiviUsati = fetchPreventiviUsati();
+  }
+
   private List<Preventivo> fetchPreventivi() {
     logger.info("fetchPreventivi");
     String subDirectory = String.format("utente/%d/preventivi/", getInstance().getUtente().getId());
@@ -69,6 +88,22 @@ public class UserSession {
 
   public void addListener(PreventivoListener listener) {
     listeners.add(listener);
+  }
+
+  private List<PreventivoUsato> fetchPreventiviUsati() {
+    logger.info("fetchPreventiviUsati");
+    String subDirectory =
+        String.format("utente/%d/preventiviUsato/", getInstance().getUtente().getId());
+    List<PreventivoUsato> data;
+    try {
+      data = Connection.getArrayDataFromBackend(subDirectory, PreventivoUsato.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    if (data != null) {
+      data.forEach(PreventivoUsato::transformIdToObject);
+    }
+    return data;
   }
 
   private void notifyListeners() {

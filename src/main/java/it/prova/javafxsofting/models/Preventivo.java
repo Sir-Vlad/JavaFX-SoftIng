@@ -58,7 +58,6 @@ public class Preventivo implements Serializable {
     this.utente = utente;
     this.modello = modello;
     this.concessionario = concessionario;
-    // todo: settare il prezzo del preventivo
     this.prezzo = prezzo;
   }
 
@@ -71,6 +70,19 @@ public class Preventivo implements Serializable {
       int prezzo) {
     this(utente, modello, concessionario, prezzo);
     this.dataEmissione = dataEmissione;
+  }
+
+  public Preventivo(int utenteId, int modelloId, int concessionarioId, int prezzo) {
+    this.utenteId = utenteId;
+    this.modelloId = modelloId;
+    this.sedeId = concessionarioId;
+    this.prezzo = prezzo;
+  }
+
+  public Preventivo(
+      int utenteId, int modelloId, int concessionarioId, int prezzo, String dataEmissione) {
+    this(utenteId, modelloId, concessionarioId, prezzo);
+    this.dataEmissione = LocalDate.parse(dataEmissione);
   }
 
   @Override

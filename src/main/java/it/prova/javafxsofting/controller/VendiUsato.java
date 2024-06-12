@@ -6,6 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.FXCollectors;
 import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.Connection;
+import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.AutoUsata;
 import java.io.File;
@@ -88,12 +89,23 @@ public class VendiUsato extends ValidateForm implements Initializable {
   private Popup popup;
   private Label popupContent;
 
-  private static void alertWarning(String title, String message) {
-    Alert alert = new Alert(AlertType.WARNING);
-    alert.setTitle(title);
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-    alert.showAndWait();
+  private boolean isInvalidDatiAuto() {
+    return setValidateFoto()
+        || isFieldInvalid(altezzaField)
+        || isFieldInvalid(lunghezzaField)
+        || isFieldInvalid(larghezzaField)
+        || isFieldInvalid(volBagagliaioField)
+        || isFieldInvalid(pesoField);
+  }
+
+  private boolean isInvalidInfoAuto() {
+    return isFieldInvalid(modelloField)
+        || isFieldInvalid(marcaField)
+        || isFieldInvalid(kmPercorsiField)
+        || isFieldInvalid(targaField[0])
+        || isFieldInvalid(targaField[1])
+        || isFieldInvalid(targaField[2])
+        || isFieldInvalid(aaImmatricolazioneCombo);
   }
 
   @Override
@@ -136,49 +148,25 @@ public class VendiUsato extends ValidateForm implements Initializable {
         });
   }
 
-  public void switchHome(@NotNull MouseEvent mouseEvent) {
-    ScreenController.activate("home");
-    mouseEvent.consume();
-  }
-
   public void richiediPreventivo() {
     showErrorAll();
 
-    boolean isInvalidInfoAuto =
-        isFieldInvalid(modelloField)
-            || isFieldInvalid(marcaField)
-            || isFieldInvalid(kmPercorsiField)
-            || isFieldInvalid(targaField[0])
-            || isFieldInvalid(targaField[1])
-            || isFieldInvalid(targaField[2])
-            || isFieldInvalid(aaImmatricolazioneCombo);
-
-    boolean isInvalidDatiAuto =
-        setValidateFoto()
-            || isFieldInvalid(altezzaField)
-            || isFieldInvalid(lunghezzaField)
-            || isFieldInvalid(larghezzaField)
-            || isFieldInvalid(volBagagliaioField)
-            || isFieldInvalid(pesoField);
-
-    if (isInvalidDatiAuto && isInvalidInfoAuto) {
+    if (isInvalidDatiAuto() && isInvalidInfoAuto()) {
       return;
     }
 
     AutoUsata autoUsata = createAutoUsata();
 
-    try {
-      Connection.postDataToBacked(autoUsata, "autoUsate/");
-    } catch (Exception e) {
-      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
-      alert.showAndWait();
-      return;
-    }
+    if (postPreventivo(autoUsata)) return;
 
-    ScreenController.activate("config");
-    Alert alert =
-        new Alert(AlertType.INFORMATION, "La sua auto usata è stata inserita correttamente");
+    UserSession.getInstance().setPreventiviUsati();
+
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setHeaderText("Auto Usata inserita correttamente");
+    alert.setContentText(
+        "La sua auto usata è stata inserita correttamente. Ora la puoi usare avere una detrazione sull'auto nuova.");
     alert.showAndWait();
+    ScreenController.activate("config");
   }
 
   /** Sceglie le immagini da caricare dell'auto usata */
@@ -265,6 +253,25 @@ public class VendiUsato extends ValidateForm implements Initializable {
       popup.hide();
     }
     mouseEvent.consume();
+  }
+
+  private void alertWarning(String title, String message) {
+    Alert alert = new Alert(AlertType.WARNING);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+  }
+
+  private boolean postPreventivo(AutoUsata autoUsata) {
+    try {
+      Connection.postDataToBacked(autoUsata, "autoUsate/");
+    } catch (Exception e) {
+      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+      alert.showAndWait();
+      return true;
+    }
+    return false;
   }
 
   /** Crea il popup da visualizzare */
