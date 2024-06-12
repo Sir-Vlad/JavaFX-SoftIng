@@ -17,6 +17,7 @@ from Backend_IngSoft.models import (
     ModelloAuto,
     Optional,
     Preventivo,
+    PreventivoUsato,
     Utente,
 )
 from Backend_IngSoft.util.error import raises
@@ -172,14 +173,22 @@ class AutoUsateListAPIView(APIView):
     def get(self, request):
         auto = AutoUsata.objects.all()
         serializer = AutoUsataSerializer(auto, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = AutoUsataSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        utente = request.data.pop("utente")
+        auto_usata = AutoUsataSerializer(data=request.data.pop("auto"))
+        if auto_usata.is_valid():
+            auto_usata.save()
+
+            preventivo_usato = PreventivoUsato.objects.create(
+                utente_id=utente,
+                auto_id=auto_usata.data["id"],
+            )
+            preventivo_usato.save()
+
+            return Response(auto_usata.data, status=status.HTTP_201_CREATED)
+        return Response(auto_usata.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ImmaginiAutoNuoveListAPIView(APIView):

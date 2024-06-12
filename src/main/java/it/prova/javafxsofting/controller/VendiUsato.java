@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public class VendiUsato extends ValidateForm implements Initializable {
   static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   static final SecureRandom RANDOM = new SecureRandom();
+  private static final int MAX_PHOTO_LIMIT = 10;
   private final HashMap<File, File> immagini = new HashMap<>();
   private final Logger logger = Logger.getLogger(VendiUsato.class.getName());
   @FXML private Header header;
@@ -173,13 +175,15 @@ public class VendiUsato extends ValidateForm implements Initializable {
       return;
     }
 
-    ScreenController.activate("home");
-    Alert alert = new Alert(AlertType.INFORMATION, "La sua auto è stata inserita correttamente");
+    ScreenController.activate("config");
+    Alert alert =
+        new Alert(AlertType.INFORMATION, "La sua auto usata è stata inserita correttamente");
     alert.showAndWait();
   }
 
+  /** Sceglie le immagini da caricare dell'auto usata */
   public void scegliFoto() {
-    if (immagini.size() > 10) {
+    if (immagini.size() > MAX_PHOTO_LIMIT) {
       alertWarning("Limite massimo immagini", "Hai raggiunto il limite massimo di 10 immagini");
       return;
     }
@@ -196,7 +200,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (listImmagini == null) {
       return;
     }
-    if (listImmagini.size() > 10) {
+    if (listImmagini.size() > MAX_PHOTO_LIMIT) {
       alertWarning(
           "Limite massimo immagini",
           "Hai raggiunto il limite massimo di 10 immagini. Seleziona meno immagini.");
@@ -213,8 +217,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
           Path newPath = rootPath.resolve(newName);
           // aggiunge l'immagine solo se non è stata già aggiunta, ovvero elimino la possibilità che
           // l'utente possa aggiungere due volte la stessa immagine
-          File value = immagini.putIfAbsent(f, newPath.toFile());
-          if (value == null) {
+          if (immagini.putIfAbsent(f, newPath.toFile()) == null) {
             Files.copy(f.toPath(), newPath);
           }
         } catch (IOException e) {
@@ -232,23 +235,31 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
     // creo il testo da visualizzare per il popup di info
     StringBuilder stringBuilder = new StringBuilder();
-    immagini
-        .keySet()
-        .forEach(
-            file -> {
-              stringBuilder.append(file.getName());
-              stringBuilder.append("\n");
-            });
+    immagini.forEach(
+        (oldFile, newFile) -> {
+          stringBuilder.append(oldFile.getName());
+          stringBuilder.append("\n");
+        });
 
     popupContent.setText(stringBuilder.toString());
   }
 
+  /**
+   * Mostra il popup a delle specifiche coordinate
+   *
+   * @param mouseEvent l'oggetto MouseEvent che contiene le coordinate
+   */
   public void showPopUp(MouseEvent mouseEvent) {
     if (!popup.isShowing()) {
       popup.show(wrapperRoot, mouseEvent.getSceneX(), mouseEvent.getScreenY());
     }
   }
 
+  /**
+   * Chiude il popup
+   *
+   * @param mouseEvent evento del mouse
+   */
   public void hidePopUp(MouseEvent mouseEvent) {
     if (popup.isShowing()) {
       popup.hide();
@@ -256,6 +267,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     mouseEvent.consume();
   }
 
+  /** Crea il popup da visualizzare */
   private void createPopUp() {
     popup = new Popup();
     popupContent = new Label("Nessuna foto selezionata");
@@ -331,26 +343,30 @@ public class VendiUsato extends ValidateForm implements Initializable {
     onlyCharAlphabetical(targaFieldLastTwoLetter);
     onlyDigit(targaFieldDigit);
 
-    for (MFXTextField f : new MFXTextField[] {targaFieldFirstTwoLetter, targaFieldLastTwoLetter}) {
-      f.textProperty()
-          .addListener(
-              (observable, oldValue, newValue) -> {
-                f.setText(newValue.toUpperCase());
-                updateField(f.textProperty(), f);
-              });
-    }
+    Stream.of(targaFieldFirstTwoLetter, targaFieldLastTwoLetter)
+        .forEach(
+            field ->
+                field
+                    .textProperty()
+                    .addListener(
+                        (observable, oldValue, newValue) -> {
+                          field.setText(newValue.toUpperCase());
+                          updateField(field.textProperty(), field);
+                        }));
 
-    for (int i = 0; i < targaField.length - 1; i++) {
-      MFXTextField field = targaField[i];
-      int finalI = i;
-      field
-          .textProperty()
-          .addListener(
-              (observable, oldValue, newValue) -> {
-                if (field.getTextLimit() == field.getLength())
-                  targaField[finalI + 1].requestFocus();
-              });
-    }
+    IntStream.range(0, targaField.length - 1)
+        .forEach(
+            i -> {
+              MFXTextField field = targaField[i];
+              int nextIndex = i + 1;
+              field
+                  .textProperty()
+                  .addListener(
+                      (observable, oldValue, newValue) -> {
+                        if (field.getTextLimit() == field.getLength())
+                          targaField[nextIndex].requestFocus();
+                      });
+            });
   }
 
   private void setValueAAImmatricolazione() {
@@ -367,8 +383,8 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   private @NotNull String generateAlphaFileName() {
-    StringBuilder sb = new StringBuilder(10);
-    for (int i = 0; i < 10; i++) {
+    StringBuilder sb = new StringBuilder(MAX_PHOTO_LIMIT);
+    for (int i = 0; i < MAX_PHOTO_LIMIT; i++) {
       int index = RANDOM.nextInt(ALPHABET.length());
       sb.append(ALPHABET.charAt(index));
     }

@@ -3,7 +3,9 @@ package it.prova.javafxsofting;
 import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
+import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.Preventivo;
+import it.prova.javafxsofting.serializzatori.AutoUsataSerializer;
 import it.prova.javafxsofting.serializzatori.LocalDateDeserializer;
 import it.prova.javafxsofting.serializzatori.LocalDateSerializer;
 import it.prova.javafxsofting.serializzatori.PreventivoSerializer;
@@ -28,6 +30,7 @@ public final class Connection {
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
           .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
           .registerTypeAdapter(Preventivo.class, new PreventivoSerializer())
+          .registerTypeAdapter(AutoUsata.class, new AutoUsataSerializer())
           .setPrettyPrinting()
           .setDateFormat(DateFormat.LONG)
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

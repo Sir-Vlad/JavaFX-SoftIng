@@ -1,0 +1,5 @@
+.bg-gray {
+    -fx-background-color: rgb(111, 111, 111);
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+}

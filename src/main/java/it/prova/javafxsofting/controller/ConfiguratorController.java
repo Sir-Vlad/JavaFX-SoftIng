@@ -45,6 +45,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -160,16 +161,21 @@ public class ConfiguratorController implements Initializable {
       ScreenController.activate("login");
       return;
     }
-
+    Preventivo preventivo;
     if (detrazione) {
       try {
         openVendiUsato();
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
+      preventivo = createPreventivoSenzaData();
+      // todo: vedere come aggiungere la detrazione al db
+      //  mettere un campo nel json di invio con "detrazione": id_auto_usata
+      //  campo che può essere anche omesso/nullo
+    } else {
+      preventivo = createPreventivo();
     }
 
-    Preventivo preventivo = createPreventivo();
     addCheckOptionalToMeasure(preventivo);
 
     try {
@@ -203,6 +209,19 @@ public class ConfiguratorController implements Initializable {
     ScreenController.removeScreen("configurazione");
     ScreenController.activate("home");
     actionEvent.consume();
+  }
+
+  private @NotNull Preventivo createPreventivoSenzaData() {
+    Utente utente = UserSession.getInstance().getUtente();
+    Concessionario concessionario = listConcessionaria.getSelectionModel().getSelectedValue();
+
+    return new Preventivo(utente, auto, concessionario, extractPrezzo());
+  }
+
+  @SneakyThrows
+  private int extractPrezzo() {
+    Text prezzo = (Text) root.lookup("#fieldPrezzoValue");
+    return decimalFormat.parse(prezzo.getText().split(" ")[0]).intValue();
   }
 
   /**
@@ -340,7 +359,7 @@ public class ConfiguratorController implements Initializable {
     Concessionario concessionario = listConcessionaria.getSelectionModel().getSelectedValue();
     LocalDate currentDate = LocalDate.now();
 
-    return new Preventivo(utente, auto, concessionario, currentDate);
+    return new Preventivo(utente, auto, concessionario, currentDate, extractPrezzo());
   }
 
   /**
