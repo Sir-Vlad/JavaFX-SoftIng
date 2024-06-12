@@ -1,17 +1,18 @@
+from django.urls import path
+
 from Backend_IngSoft.api.views import (
     AcquistoUtenteListAPIView,
     AutoUsateListAPIView,
+    ConcessionarioListAPIView,
     ImmaginiAutoNuoveListAPIView,
     ModelliAutoListAPIView,
     OptionalAutoListAPIView,
     OptionalsListAPIView,
     PreventiviListAPIView,
     PreventiviUtenteListAPIView,
-    ConcessionarioListAPIView,
     UtenteDetailAPIView,
     UtenteListCreateAPIView,
 )
-from django.urls import path
 
 urlpatterns = [
     # endpoint per la lista dei dati

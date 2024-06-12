@@ -1,4 +1,9 @@
 import base64
+
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
+
+from Backend.settings import EMAIL_HOST_USER
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
@@ -120,8 +125,40 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
         preventivo_data = validated_data.pop("preventivo")
 
         if Utente.objects.get(id=preventivo_data["utente"].id):
+            # salvataggio dati nel db
             preventivo = Preventivo.objects.create(**preventivo_data)
             configurazione = Configurazione.objects.create(preventivo=preventivo)
             configurazione.optional.set(optional_ids)
+
+            # invio email
+            subject = "Preventivo creato"
+            to_email = preventivo.utente.email
+            context = {
+                "customer_name": preventivo.utente.nome
+                + " "
+                + preventivo.utente.cognome,
+                "car_model": preventivo.modello.modello,
+                "base_price": preventivo.modello.prezzo_base,
+                "optionals": configurazione.optional.all(),
+                "total_price": preventivo.prezzo,
+            }
+            # send_mail(subject, message, from_email, to_email)
+            template_name = "emails/template_email_conferma_preventivo.html"
+            send_html_email(subject, to_email, context, template_name)
+            print("email inviata")
+
             return configurazione
         return None
+
+
+def send_html_email(subject, to_email, context, template_name):
+    from django.template.loader import render_to_string
+
+    html_content = render_to_string(template_name, context)
+    text_content = strip_tags(
+        html_content
+    )  # Fallback text content for email clients that don't support HTML
+
+    email = EmailMultiAlternatives(subject, text_content, EMAIL_HOST_USER, [to_email])
+    email.attach_alternative(html_content, "text/html")
+    email.send()

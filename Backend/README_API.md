@@ -41,16 +41,19 @@
 - `POST api/autoUsate/`
     ```json
     {
-      "modello": "...",
-      "marca": "...",
-      "altezza": "..",
-      "lunghezza": "...",
-      "larghezza": "...",
-      "peso": "...",
-      "volume_bagagliaio": "...",
-      "km_percorsi": "...",
-      "anno_immatricolazione": "...",
-      "targa": "..."
+      "utente": "...",
+      "auto":{
+          "modello": "...",
+          "marca": "...",
+          "altezza": "..",
+          "lunghezza": "...",
+          "larghezza": "...",
+          "peso": "...",
+          "volume_bagagliaio": "...",
+          "km_percorsi": "...",
+          "anno_immatricolazione": "...",
+          "targa": "..."
+      }
     } 
     ```
 
