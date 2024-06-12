@@ -6,6 +6,7 @@ from Backend_IngSoft.api.serializers import (
     ImmaginiAutoNuoveSerializer,
     ModelliAutoSerializer,
     OptionalSerializer,
+    PreventiviAutoUsateSerializer,
     PreventivoSerializer,
     UtenteSerializer,
 )
@@ -13,6 +14,7 @@ from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
     Concessionario,
+    Detrazione,
     ImmaginiAutoNuove,
     ModelloAuto,
     Optional,
@@ -21,6 +23,7 @@ from Backend_IngSoft.models import (
     Utente,
 )
 from Backend_IngSoft.util.error import raises
+from Backend_IngSoft.util.util import send_html_email
 from django.http import HttpResponseNotFound
 from rest_framework import status
 from rest_framework.response import Response
@@ -129,9 +132,36 @@ class PreventiviUtenteListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, id_utente):
+        auto_usata_id = request.data.pop("detrazione", None)
+
         serializer = ConfigurazioneSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            conf = serializer.save()
+
+            if auto_usata_id is not None:
+                detrazione_data = Detrazione.objects.create(
+                    preventivo_id=conf.preventivo.id, auto_usata_id=auto_usata_id
+                )
+                detrazione_data.save()
+
+            # invio email
+            subject = "Preventivo creato"
+            to_email = conf.preventivo.utente.email
+            context = {
+                "customer_name": conf.preventivo.utente.nome
+                                 + " "
+                                 + conf.preventivo.utente.cognome,
+                "car_model": conf.preventivo.modello.modello,
+                "base_price": conf.preventivo.modello.prezzo_base,
+                "optionals": conf.optional.all(),
+                "total_price": conf.preventivo.prezzo,
+                "detrazione": True if auto_usata_id is not None else False,
+            }
+            # send_mail(subject, message, from_email, to_email)
+            template_name = "emails/template_email_conferma_preventivo.html"
+            send_html_email(subject, to_email, context, template_name)
+            print("email inviata")
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         field_names = ("utente", "modello", "concessionario", "non_field_errors")
@@ -202,4 +232,11 @@ class PreventiviListAPIView(APIView):
     def get(self, request):
         preventivi = Preventivo.objects.all()
         serializer = PreventivoSerializer(preventivi, many=True)
+        return Response(serializer.data)
+
+
+class PreventivoAutoUsateAPIView(APIView):
+    def get(self, request, id_utente):
+        preventivi = PreventivoUsato.objects.filter(utente=id_utente)
+        serializer = PreventiviAutoUsateSerializer(preventivi, many=True)
         return Response(serializer.data)

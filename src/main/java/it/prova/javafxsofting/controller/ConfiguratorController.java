@@ -75,8 +75,10 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldModelloV;
   @FXML private MFXListView<Concessionario> listConcessionaria;
   @FXML private MFXButton saveConfigurazioneBtn;
+
   /** Flag per l'aggiunta della detrazione nel preventivo */
   @Getter private static boolean detrazione = false;
+
   /** Auto selezionata all'interno del configuratore */
   private ModelloAuto auto;
 

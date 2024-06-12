@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Valutazione Usato</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h1>Valutazione {{ modello }}</h1>
+    <p>Caro {{ customer_name }},</p>
+    <p>L'avvisiamo che il suo usato è stato valutato con un valore di {{ prezzo }} €.</p>
+    <p>Il suo preventivo del modello {{ modello_nuovo }} con un valore di {{ prezzo_base }} è
+        passato a
+        {{ prezzo_detrazione }}.</p>
+    <p>Se hai domande, non esitare a contattarci.</p>
+    <p>Grazie,<br>Il team di Vendita Auto</p>
+</div>
+</body>
+</html>

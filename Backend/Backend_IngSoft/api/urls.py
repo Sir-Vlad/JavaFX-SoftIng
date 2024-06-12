@@ -1,5 +1,3 @@
-from django.urls import path
-
 from Backend_IngSoft.api.views import (
     AcquistoUtenteListAPIView,
     AutoUsateListAPIView,
@@ -10,9 +8,11 @@ from Backend_IngSoft.api.views import (
     OptionalsListAPIView,
     PreventiviListAPIView,
     PreventiviUtenteListAPIView,
+    PreventivoAutoUsateAPIView,
     UtenteDetailAPIView,
     UtenteListCreateAPIView,
 )
+from django.urls import path
 
 urlpatterns = [
     # endpoint per la lista dei dati
@@ -35,6 +35,11 @@ urlpatterns = [
         "utente/<int:id_utente>/preventivi/",
         PreventiviUtenteListAPIView.as_view(),
         name="Preventivi Utente",
+    ),
+    path(
+        "utente/<int:id_utente>/preventiviUsato/",
+        PreventivoAutoUsateAPIView.as_view(),
+        name="Preventivi Auto Usate Utente",
     ),
     path(
         "utente/<int:id_utente>/ordini/",
