@@ -1,8 +1,10 @@
+from Backend_IngSoft.api.serializers import ImmaginiAutoUsateSerializer
 from Backend_IngSoft.api.views import (
     AcquistoUtenteListAPIView,
     AutoUsateListAPIView,
     ConcessionarioListAPIView,
     ImmaginiAutoNuoveListAPIView,
+    ImmaginiAutoUsateListAPIView,
     ModelliAutoListAPIView,
     OptionalAutoListAPIView,
     OptionalsListAPIView,
@@ -50,6 +52,11 @@ urlpatterns = [
         "immaginiAutoNuove/<int:id_auto>/",
         ImmaginiAutoNuoveListAPIView.as_view(),
         name="Immagini Auto Nuove",
+    ),
+    path(
+        "immaginiAutoUsate/<int:id_auto>/",
+        ImmaginiAutoUsateListAPIView.as_view(),
+        name="Immagini Auto Usate",
     ),
     path(
         "autoUsata/<int:id_auto>/",

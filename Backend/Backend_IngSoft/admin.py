@@ -1,7 +1,9 @@
 from django.contrib import admin
+
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
+from django.db import transaction
 from django.db.models import Model
 from django.forms import Form
 from django.http import HttpRequest
@@ -48,7 +50,7 @@ class MarcaFilter(admin.SimpleListFilter):
             return queryset.filter(marca=self.value())
 
 
-class ImmaginiInline(TabularInline):
+class ImmaginiAutoNuoveInline(TabularInline):
     model = ImmaginiAutoNuove
     extra = 1
     formfield_overrides = {"image": {"widget": SliderWidget}}
@@ -58,7 +60,7 @@ class ImmaginiInline(TabularInline):
 class ModelloAutoAdmin(ModelAdmin):
     list_display = ("modello", "marca", "prezzo_base")
     list_filter = (MarcaFilter,)
-    inlines = [ImmaginiInline]
+    inlines = [ImmaginiAutoNuoveInline]
 
 
 class TypeOptionalFilter(admin.SimpleListFilter):
@@ -96,7 +98,6 @@ class PrezzoAutoUsataFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         list_of_models = set()
         queryset = AutoUsata.objects.all()
-        print(queryset)
         for entry in queryset:
             if entry.prezzo == 0:
                 list_of_models.add(("non \te", "non validate"))
@@ -111,10 +112,17 @@ class PrezzoAutoUsataFilter(admin.SimpleListFilter):
             return queryset.exclude(prezzo=0)
 
 
+class ImmaginiAutoUsateInline(TabularInline):
+    model = ImmaginiAutoUsate
+    extra = 1
+    formfield_overrides = {"image": {"widget": SliderWidget}}
+
+
 @admin.register(AutoUsata)
 class AutoUsataAdmin(ModelAdmin):
     list_display = ("modello", "prezzo")
     list_filter = (PrezzoAutoUsataFilter,)
+    inlines = [ImmaginiAutoUsateInline]
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
@@ -132,34 +140,37 @@ class AutoUsataAdmin(ModelAdmin):
         ]
 
     def save_model(
-            self, request: HttpRequest, obj: Model, form: Form, change: Any
+        self, request: HttpRequest, obj: Model, form: Form, change: Any
     ) -> None:
-        # Controlla se l'oggetto esiste già nel database (modifica invece di creazione)
-        if change:
-            old_obj = AutoUsata.objects.get(pk=obj.pk)
-            if old_obj.prezzo != obj.prezzo:  # Controlla se il campo è stato
+        with transaction.atomic():
+            # Controlla se l'oggetto esiste già nel database (modifica invece di creazione)
+            if change:
+                old_obj = AutoUsata.objects.get(pk=obj.pk)
+                if old_obj.prezzo != obj.prezzo:  # Controlla se il campo è stato
+                    preventivo = Detrazione.objects.get(auto_usata_id=obj.pk).preventivo
+                    if preventivo.data_emissione is None:
+                        preventivo.data_emissione = datetime.now()
+                        preventivo.save()
+                    utente = preventivo.utente
+                    modello = preventivo.modello
+                    from_email = utente.email
+                    template_name = "emails/valutazione_usato.html"
 
-                preventivo = Detrazione.objects.get(auto_usata_id=obj.pk).preventivo
-                utente = preventivo.utente
-                modello = preventivo.modello
-                from_email = utente.email
-                template_name = "emails/valutazione_usato.html"
-
-                # modificato
-                send_html_email(
-                    "Valutazione usato",
-                    from_email,
-                    {
-                        "modello": old_obj.modello,
-                        "customer_name": f"{utente.nome} {utente.cognome}",
-                        "prezzo": obj.prezzo,
-                        "modello_nuovo": modello.modello,
-                        "prezzo_base": modello.prezzo_base,
-                        "prezzo_detrazione": (modello.prezzo_base - obj.prezzo),
-                    },
-                    template_name,
-                )
-        super().save_model(request, obj, form, change)
+                    # modificato
+                    send_html_email(
+                        "Valutazione usato",
+                        from_email,
+                        {
+                            "modello": old_obj.modello,
+                            "customer_name": f"{utente.nome} {utente.cognome}",
+                            "prezzo": obj.prezzo,
+                            "modello_nuovo": modello.modello,
+                            "prezzo_base": modello.prezzo_base,
+                            "prezzo_detrazione": (modello.prezzo_base - obj.prezzo),
+                        },
+                        template_name,
+                    )
+            super().save_model(request, obj, form, change)
 
 
 @admin.register(Concessionario)
@@ -177,19 +188,13 @@ class RitiroAdmin(ModelAdmin):
     pass
 
 
-@admin.register(ImmaginiAutoNuove)
-class ImmaginiAutoNuoveAdmin(ModelAdmin):
-    pass
-
-
 @admin.register(Preventivo)
 class PreventivoAdmin(ModelAdmin):
-    pass
+    list_display = ("id", "utente", "modello", "prezzo", "valid")
+    list_filter = ("valid",)
 
 
-@admin.register(Configurazione)
-class ConfigurazioneAdmin(admin.ModelAdmin):
-    pass
+#     todo: in admin mettere
 
 
 @admin.register(Acquisto)

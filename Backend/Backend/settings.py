@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "Backend_IngSoft.apps.BackendIngsoftConfig",
     "django_extensions",  # serve per il grafico del db
+    "drf_extra_fields",
 ]
 
 MIDDLEWARE = [

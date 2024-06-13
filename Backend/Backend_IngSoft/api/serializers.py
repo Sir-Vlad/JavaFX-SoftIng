@@ -1,14 +1,21 @@
 import base64
+import uuid
+
+from django.db import transaction
+from drf_extra_fields.fields import Base64ImageField
+
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
     Concessionario,
     Configurazione,
     ImmaginiAutoNuove,
+    ImmaginiAutoUsate,
     ModelloAuto,
     Optional,
     Preventivo,
     PreventivoUsato,
+    Ritiro,
     Utente,
 )
 from PIL import Image
@@ -81,7 +88,6 @@ class ImmaginiAutoNuoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImmaginiAutoNuove
         fields = ("auto", "image")
-        read_only_fields = ("phash",)
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -121,10 +127,14 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
         preventivo_data = validated_data.pop("preventivo")
 
         if Utente.objects.get(id=preventivo_data["utente"].id):
-            # salvataggio dati nel db
-            preventivo = Preventivo.objects.create(**preventivo_data)
-            configurazione = Configurazione.objects.create(preventivo=preventivo)
-            configurazione.optional.set(optional_ids)
+            with transaction.atomic():
+                # salvataggio dati nel db
+                preventivo = Preventivo.objects.create(**preventivo_data)
+                configurazione = Configurazione.objects.create(preventivo=preventivo)
+                configurazione.optional.set(optional_ids)
+                ritiro = Ritiro.objects.create(
+                    preventivo=preventivo, concessionario=preventivo.concessionario
+                )
 
             return configurazione
         return None
@@ -134,3 +144,43 @@ class PreventiviAutoUsateSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreventivoUsato
         fields = "__all__"
+
+
+class ImmaginiAutoUsateSerializer(serializers.ModelSerializer):
+    image_base64 = Base64ImageField(max_length=None, use_url=True)
+
+    class Meta:
+        model = ImmaginiAutoUsate
+        fields = ("image_base64", "auto", "image")
+        fields_read_only = ("image_base64",)
+
+    def to_representation(self, instance):
+        print(type(instance))
+        representation = super().to_representation(instance)
+
+        # tolgo il campo img
+        img = representation.pop("image")
+        # aggiungo come campo il nome dell'immagine
+        representation["image_name"] = img.split("/")[-1]
+
+        # converto l'immagine in base64 e la aggiungo al dizionario'
+        if instance.image:
+            extension = img.split(".")[-1]
+            img = Image.open(instance.image)
+            buffer = BytesIO()
+            if extension == "jpeg":
+                img = img.convert("RGB")
+                img.save(buffer, format="JPEG")
+            elif extension == "png":
+                img.save(buffer, format="PNG")
+            img_str = base64.b64encode(buffer.getvalue()).decode()
+            representation["image_base64"] = img_str
+
+        return representation
+
+    def create(self, validated_data):
+        image_data = validated_data.pop("image_base64")
+
+        return ImmaginiAutoUsate.objects.create(
+            image=image_data, auto=validated_data["auto"]
+        )
