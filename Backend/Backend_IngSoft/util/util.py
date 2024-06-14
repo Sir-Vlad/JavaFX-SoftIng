@@ -13,4 +13,4 @@ def send_html_email(subject, to_email, context, template_name):
 
     email = EmailMultiAlternatives(subject, text_content, EMAIL_HOST_USER, [to_email])
     email.attach_alternative(html_content, "text/html")
-    email.send()
+    email.send(fail_silently=True)

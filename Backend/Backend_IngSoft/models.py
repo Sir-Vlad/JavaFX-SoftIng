@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 
 
 class Utente(models.Model):
-    email = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    email = models.EmailField(max_length=100, unique=True, null=False, blank=False)
     password = models.CharField(max_length=20, null=False, blank=False)
     nome = models.CharField(max_length=20, null=False, blank=False)
     cognome = models.CharField(max_length=20, null=False, blank=False)
@@ -31,11 +31,11 @@ class Utente(models.Model):
 class Auto(models.Model):
     modello = models.CharField(max_length=20, unique=True, null=False, blank=False)
     # dati auto
-    altezza = models.IntegerField(null=False, blank=False)
-    lunghezza = models.IntegerField(null=False, blank=False)
-    larghezza = models.IntegerField(null=False, blank=False)
-    peso = models.IntegerField(null=False, blank=False)
-    volume_bagagliaio = models.IntegerField(null=False, blank=False)
+    altezza = models.PositiveIntegerField(null=False, blank=False)
+    lunghezza = models.PositiveIntegerField(null=False, blank=False)
+    larghezza = models.PositiveIntegerField(null=False, blank=False)
+    peso = models.PositiveIntegerField(null=False, blank=False)
+    volume_bagagliaio = models.PositiveIntegerField(null=False, blank=False)
 
     class Meta:
         abstract = True
@@ -58,7 +58,7 @@ class Optional(models.Model):
 
     nome = models.CharField(max_length=20, blank=False, choices=Category)
     descrizione = models.CharField(max_length=30, blank=False)
-    prezzo = models.IntegerField(blank=False)
+    prezzo = models.PositiveIntegerField(blank=False)
     obbligatorio = models.BooleanField(default=False)
 
     class Meta:
@@ -82,7 +82,7 @@ class ModelloAuto(Auto):
     marca = models.CharField(
         max_length=20, null=False, blank=False, choices=MarcaAuto
     )  # lista di valori noti
-    prezzo_base = models.IntegerField(null=False, blank=False)
+    prezzo_base = models.PositiveIntegerField(null=False, blank=False)
     optionals = models.ManyToManyField(
         Optional,
         blank=False,
@@ -125,7 +125,7 @@ class Preventivo(models.Model):
     concessionario = models.ForeignKey(
         Concessionario, on_delete=CASCADE, null=False, blank=False
     )
-    prezzo = models.IntegerField(null=False, blank=False)
+    prezzo = models.PositiveIntegerField(null=False, blank=False)
     valid = models.BooleanField(default=True)
 
     class Meta:
@@ -133,6 +133,9 @@ class Preventivo(models.Model):
         # TODO: capire come rendere univoco un preventivo
         #   possibile idea guardare modello, utente e optional
         # unique_together = ("utente", "modello")
+
+    def __str__(self):
+        return "Preventivo n. " + str(self.pk)
 
 
 class Configurazione(models.Model):
@@ -150,7 +153,7 @@ class Acquisto(models.Model):
     preventivo = models.ForeignKey(
         Preventivo, on_delete=CASCADE, null=False, blank=False
     )
-    acconto = models.IntegerField(null=False, blank=False)
+    acconto = models.PositiveIntegerField(null=False, blank=False)
     data_ritiro = models.DateField(null=False, blank=False)
 
     def __str__(self):
@@ -181,7 +184,7 @@ class Periodo(models.Model):
         dicembre = "dicembre"
 
     mese = models.CharField(max_length=9, choices=Mesi, null=False, blank=False)
-    anno = models.IntegerField(
+    anno = models.PositiveIntegerField(
         choices=year_choice(),
         default=current_year(),
         null=False,
@@ -199,7 +202,7 @@ class Periodo(models.Model):
 class Sconto(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
-    percentuale_sconto = models.IntegerField(
+    percentuale_sconto = models.PositiveIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )  # valori da 1 a 100
 
@@ -231,8 +234,8 @@ def validate_not_future_date(value):
 
 class AutoUsata(Auto):
     marca = models.CharField(max_length=20, null=False, blank=False)
-    prezzo = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    km_percorsi = models.IntegerField(
+    prezzo = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
+    km_percorsi = models.PositiveIntegerField(
         null=False, blank=False, validators=[MinValueValidator(0)]
     )
     anno_immatricolazione = models.DateField(
@@ -264,7 +267,6 @@ class PreventivoUsato(models.Model):
 
 class AbstractImmagini(models.Model):
     image = models.ImageField(upload_to="", default=None)
-    phash = models.CharField(max_length=64, editable=False, null=False)
 
     class Meta:
         abstract = True
@@ -301,10 +303,7 @@ class ImmaginiAutoNuove(AbstractImmagini):
             except ImmaginiAutoNuove.DoesNotExist:
                 pass
 
-        if self.image and not self.phash:
-            image = Image.open(self.image)
-            phash = imagehash.phash(image)
-            self.phash = str(phash)
+        if self.image:
             self.image.name = self.upload_to(self.image)
 
         super(AbstractImmagini, self).save(*args, **kwargs)
@@ -333,10 +332,7 @@ class ImmaginiAutoUsate(AbstractImmagini):
             except ImmaginiAutoNuove.DoesNotExist:
                 pass
 
-        if self.image and not self.phash:
-            image = Image.open(self.image)
-            phash = imagehash.phash(image)
-            self.phash = str(phash)
+        if self.image:
             self.image.name = self.upload_to(self.image)
 
         super(AbstractImmagini, self).save(*args, **kwargs)

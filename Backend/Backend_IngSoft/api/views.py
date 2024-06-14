@@ -1,9 +1,16 @@
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
     ConcessionarioSerializer,
     ConfigurazioneSerializer,
     ImmaginiAutoNuoveSerializer,
+    ImmaginiAutoUsateSerializer,
     ModelliAutoSerializer,
     OptionalSerializer,
     PreventiviAutoUsateSerializer,
@@ -16,6 +23,7 @@ from Backend_IngSoft.models import (
     Concessionario,
     Detrazione,
     ImmaginiAutoNuove,
+    ImmaginiAutoUsate,
     ModelloAuto,
     Optional,
     Preventivo,
@@ -24,10 +32,6 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import send_html_email
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -41,10 +45,7 @@ class UtenteListCreateAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        error = {"message": [i for e in serializer.errors.values() for i in e]}
-        print(error)
-
-        return Response(error, status=status.HTTP_409_CONFLICT)
+        return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
 
 class UtenteDetailAPIView(APIView):
@@ -126,43 +127,43 @@ class PreventiviUtenteListAPIView(APIView):
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 
-        preventivi = Preventivo.objects.filter(utente_id=utente.id)
+        preventivi = Preventivo.objects.filter(utente_id=utente.id, valid=True)
 
         serializer = PreventivoSerializer(preventivi, many=True)
         return Response(serializer.data)
 
     def post(self, request, id_utente):
         auto_usata_id = request.data.pop("detrazione", None)
+        with transaction.atomic():
+            serializer = ConfigurazioneSerializer(data=request.data)
+            if serializer.is_valid():
+                conf = serializer.save()
 
-        serializer = ConfigurazioneSerializer(data=request.data)
-        if serializer.is_valid():
-            conf = serializer.save()
+                if auto_usata_id is not None:
+                    detrazione_data = Detrazione.objects.create(
+                        preventivo_id=conf.preventivo.id, auto_usata_id=auto_usata_id
+                    )
+                    detrazione_data.save()
 
-            if auto_usata_id is not None:
-                detrazione_data = Detrazione.objects.create(
-                    preventivo_id=conf.preventivo.id, auto_usata_id=auto_usata_id
-                )
-                detrazione_data.save()
+                # invio email
+                subject = "Preventivo creato"
+                to_email = conf.preventivo.utente.email
+                context = {
+                    "customer_name": conf.preventivo.utente.nome
+                    + " "
+                    + conf.preventivo.utente.cognome,
+                    "car_model": conf.preventivo.modello.modello,
+                    "base_price": conf.preventivo.modello.prezzo_base,
+                    "optionals": conf.optional.all(),
+                    "total_price": conf.preventivo.prezzo,
+                    "detrazione": True if auto_usata_id is not None else False,
+                }
+                # send_mail(subject, message, from_email, to_email)
+                template_name = "emails/template_email_conferma_preventivo.html"
+                send_html_email(subject, to_email, context, template_name)
+                print("email inviata")
 
-            # invio email
-            subject = "Preventivo creato"
-            to_email = conf.preventivo.utente.email
-            context = {
-                "customer_name": conf.preventivo.utente.nome
-                                 + " "
-                                 + conf.preventivo.utente.cognome,
-                "car_model": conf.preventivo.modello.modello,
-                "base_price": conf.preventivo.modello.prezzo_base,
-                "optionals": conf.optional.all(),
-                "total_price": conf.preventivo.prezzo,
-                "detrazione": True if auto_usata_id is not None else False,
-            }
-            # send_mail(subject, message, from_email, to_email)
-            template_name = "emails/template_email_conferma_preventivo.html"
-            send_html_email(subject, to_email, context, template_name)
-            print("email inviata")
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         field_names = ("utente", "modello", "concessionario", "non_field_errors")
 
@@ -209,13 +210,14 @@ class AutoUsateListAPIView(APIView):
         utente = request.data.pop("utente")
         auto_usata = AutoUsataSerializer(data=request.data.pop("auto"))
         if auto_usata.is_valid():
-            auto_usata.save()
+            with transaction.atomic():
+                auto_usata.save()
 
-            preventivo_usato = PreventivoUsato.objects.create(
-                utente_id=utente,
-                auto_id=auto_usata.data["id"],
-            )
-            preventivo_usato.save()
+                preventivo_usato = PreventivoUsato.objects.create(
+                    utente_id=utente,
+                    auto_id=auto_usata.data["id"],
+                )
+                preventivo_usato.save()
 
             return Response(auto_usata.data, status=status.HTTP_201_CREATED)
         return Response(auto_usata.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -240,3 +242,20 @@ class PreventivoAutoUsateAPIView(APIView):
         preventivi = PreventivoUsato.objects.filter(utente=id_utente)
         serializer = PreventiviAutoUsateSerializer(preventivi, many=True)
         return Response(serializer.data)
+
+
+class ImmaginiAutoUsateListAPIView(APIView):
+    def get(self, request, id_auto):
+        immagini = ImmaginiAutoUsate.objects.filter(auto=id_auto)
+        serializer = ImmaginiAutoUsateSerializer(immagini, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, id_auto):
+        serializer = ImmaginiAutoUsateSerializer(data=request.data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            return Response(
+                ImmaginiAutoUsateSerializer(instance).data,
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
