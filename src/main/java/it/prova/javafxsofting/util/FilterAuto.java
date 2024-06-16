@@ -65,6 +65,8 @@ public interface FilterAuto {
 
     slider.setMin(min);
     slider.setMax(max);
+    slider.setUnitIncrement(10000);
+    slider.setTickUnit(10000);
     slider
         .valueProperty()
         .addListener(

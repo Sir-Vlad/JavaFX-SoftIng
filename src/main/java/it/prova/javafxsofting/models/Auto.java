@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 @Data
 public abstract class Auto implements Serializable {
@@ -89,13 +90,13 @@ public abstract class Auto implements Serializable {
     }
   }
 
-  private ArrayList<File> fetchImmagini(int index, String subDirectory) {
+  private @NotNull ArrayList<File> fetchImmagini(int index, String subDirectory) {
     ArrayList<File> immaginiList = new ArrayList<>();
     List<ImmagineAuto> immagineAutoList;
     try {
       immagineAutoList =
           Connection.getImageFromBackend(
-              String.format("immaginiAutoNuove/%d/", index), ImmagineAuto.class);
+              String.format("%s/%d/", subDirectory, index), ImmagineAuto.class);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

@@ -1,10 +1,8 @@
 package it.prova.javafxsofting.util;
 
 import it.prova.javafxsofting.Connection;
-import it.prova.javafxsofting.models.AutoUsata;
-import it.prova.javafxsofting.models.Concessionario;
-import it.prova.javafxsofting.models.ModelloAuto;
-import it.prova.javafxsofting.models.Optional;
+import it.prova.javafxsofting.models.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Data
 public final class StaticDataStore {
   @Getter private static List<ModelloAuto> modelliAuto;
-  @Getter private static List<AutoUsata> autoUsate;
+  private static List<AutoUsata> autoUsate;
   @Getter private static List<Optional> optionals;
   @Getter private static List<Concessionario> concessionari;
 
@@ -54,7 +52,7 @@ public final class StaticDataStore {
     List<AutoUsata> newAutoUsate;
     newAutoUsate = Connection.getArrayDataFromBackend("autoUsate/", AutoUsata.class);
     if (newAutoUsate != null && !newAutoUsate.equals(autoUsate)) {
-      // todo: fare il fetch delle immagini
+      newAutoUsate.forEach(AutoUsata::setImmagini);
       autoUsate = newAutoUsate;
     }
   }

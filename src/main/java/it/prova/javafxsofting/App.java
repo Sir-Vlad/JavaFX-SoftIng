@@ -132,7 +132,7 @@ public class App extends javafx.application.Application {
     stage.setOnCloseRequest(
         event -> {
           File dirImageNuove = new File("instance/immagini/immaginiAutoNuove");
-          File dirImageUsate = new File("instance/immagini/immaginiAutoUsata");
+          File dirImageUsate = new File("instance/immagini/immaginiAutoUsate");
 
           if (dirImageNuove.exists() || dirImageUsate.exists()) {
             try {

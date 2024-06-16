@@ -2,6 +2,8 @@ package it.prova.javafxsofting.models;
 
 import java.time.LocalDate;
 import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -9,9 +11,16 @@ import org.jetbrains.annotations.Contract;
 @Getter
 @Setter
 public class AutoUsata extends Auto {
+  @SerializedName("prezzo")
   private int prezzo;
+
+  @SerializedName("km_percorsi")
   private int kmPercorsi;
+
+  @SerializedName("anno_immatricolazione")
   private LocalDate annoImmatricolazione;
+
+  @SerializedName("targa")
   private String targa;
 
   public AutoUsata(
