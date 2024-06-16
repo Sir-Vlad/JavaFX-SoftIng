@@ -1,9 +1,3 @@
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -32,6 +26,11 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import send_html_email
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -44,7 +43,7 @@ class UtenteListCreateAPIView(APIView):
         serializer = UtenteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
 
@@ -70,7 +69,7 @@ class UtenteDetailAPIView(APIView):
         serializer = UtenteSerializer(utente, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, email):
@@ -163,7 +162,7 @@ class PreventiviUtenteListAPIView(APIView):
                 send_html_email(subject, to_email, context, template_name)
                 print("email inviata")
 
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(status=status.HTTP_201_CREATED)
 
         field_names = ("utente", "modello", "concessionario", "non_field_errors")
 
@@ -196,7 +195,7 @@ class AcquistoUtenteListAPIView(APIView):
         serializer = AcquistoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -208,6 +207,7 @@ class AutoUsateListAPIView(APIView):
 
     def post(self, request):
         utente = request.data.pop("utente")
+        immagini = request.data.pop("immagini", [])
         auto_usata = AutoUsataSerializer(data=request.data.pop("auto"))
         if auto_usata.is_valid():
             with transaction.atomic():
@@ -219,7 +219,7 @@ class AutoUsateListAPIView(APIView):
                 )
                 preventivo_usato.save()
 
-            return Response(auto_usata.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         return Response(auto_usata.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -251,11 +251,10 @@ class ImmaginiAutoUsateListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, id_auto):
-        serializer = ImmaginiAutoUsateSerializer(data=request.data)
+        serializer = ImmaginiAutoUsateSerializer(data=request.data, many=True)
         if serializer.is_valid():
             instance = serializer.save()
             return Response(
-                ImmaginiAutoUsateSerializer(instance).data,
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

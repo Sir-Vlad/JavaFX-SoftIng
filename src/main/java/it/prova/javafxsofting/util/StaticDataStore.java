@@ -27,6 +27,17 @@ public final class StaticDataStore {
   @Contract(pure = true)
   private StaticDataStore() {}
 
+  public static List<AutoUsata> getAutoUsate() {
+    if (autoUsate == null) {
+      try {
+        fetchAutoUsate();
+      } catch (Exception e) {
+        serverAvailable = false;
+      }
+    }
+    return autoUsate;
+  }
+
   public static void fetchAllData() throws Exception {
     try {
       StaticDataStore.fetchOptionals();

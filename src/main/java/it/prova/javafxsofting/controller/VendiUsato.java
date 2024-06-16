@@ -9,6 +9,7 @@ import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.AutoUsata;
+import it.prova.javafxsofting.models.PreventivoUsato;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -161,6 +162,18 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
     UserSession.getInstance().setPreventiviUsati();
 
+    autoUsata.setImmagini(new ArrayList<>(immagini.values()));
+
+    PreventivoUsato preventivo =
+        UserSession.getInstance().getPreventiviUsati().stream()
+            .max((Comparator.comparingInt(PreventivoUsato::getId)))
+            .orElse(null);
+
+    if (preventivo == null) {
+      return;
+    }
+    postImmagini(preventivo.getIdAutoUsata(), autoUsata.getImmagini());
+
     Alert alert = new Alert(AlertType.INFORMATION);
     alert.setHeaderText("Auto Usata inserita correttamente");
     alert.setContentText(
@@ -255,6 +268,15 @@ public class VendiUsato extends ValidateForm implements Initializable {
     mouseEvent.consume();
   }
 
+  private void postImmagini(int idAutoUsata, ArrayList<File> immagini) {
+    try {
+      Connection.postImmaginiAutoUsateToBacked(idAutoUsata, immagini, "immaginiAutoUsate/");
+    } catch (Exception e) {
+      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+      alert.showAndWait();
+    }
+  }
+
   private void alertWarning(String title, String message) {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle(title);
@@ -287,17 +309,22 @@ public class VendiUsato extends ValidateForm implements Initializable {
         Arrays.stream(targaField).map(TextInputControl::getText).collect(Collectors.joining(""));
     LocalDate date = LocalDate.of(Integer.parseInt(aaImmatricolazioneCombo.getValue()), 1, 1);
 
-    return new AutoUsata(
-        modelloField.getText(),
-        marcaField.getText(),
-        Integer.parseInt(altezzaField.getText()),
-        Integer.parseInt(lunghezzaField.getText()),
-        Integer.parseInt(larghezzaField.getText()),
-        Integer.parseInt(pesoField.getText()),
-        Integer.parseInt(volBagagliaioField.getText()),
-        Integer.parseInt(kmPercorsiField.getText()),
-        targa,
-        date);
+    AutoUsata autoUsata =
+        new AutoUsata(
+            modelloField.getText(),
+            marcaField.getText(),
+            Integer.parseInt(altezzaField.getText()),
+            Integer.parseInt(lunghezzaField.getText()),
+            Integer.parseInt(larghezzaField.getText()),
+            Integer.parseInt(pesoField.getText()),
+            Integer.parseInt(volBagagliaioField.getText()),
+            Integer.parseInt(kmPercorsiField.getText()),
+            targa,
+            date);
+
+    autoUsata.setImmagini(new ArrayList<>(immagini.values()));
+
+    return autoUsata;
   }
 
   private void showErrorAll() {

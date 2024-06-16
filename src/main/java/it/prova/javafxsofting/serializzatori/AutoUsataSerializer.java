@@ -1,9 +1,6 @@
 package it.prova.javafxsofting.serializzatori;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.AutoUsata;
 import java.lang.reflect.Type;

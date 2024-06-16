@@ -1,9 +1,4 @@
 import base64
-
-from django.core.files.base import ContentFile
-from django.db import transaction
-from drf_extra_fields.fields import Base64ImageField
-
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
@@ -19,6 +14,8 @@ from Backend_IngSoft.models import (
     Utente,
 )
 from PIL import Image
+from django.db import transaction
+from drf_extra_fields.fields import Base64ImageField
 from io import BytesIO
 from rest_framework import serializers
 
@@ -151,7 +148,7 @@ class ImmaginiAutoUsateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImmaginiAutoUsate
-        fields = ["id", "image", "image_name", "image_base64", "auto"]
+        fields = ["image", "image_name", "image_base64", "auto"]
         read_only_fields = ["image"]
 
     def to_representation(self, instance):
