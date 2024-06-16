@@ -126,17 +126,13 @@
                                                                                 <Insets/>
                                                                             </VBox.margin>
                                                                         </Label>
-                                                                        <MFXTextField
+                                                                        <MFXFilterComboBox
                                                                                 fx:id="marcaField"
                                                                                 alignment="CENTER"
-                                                                                borderGap="0.0"
                                                                                 floatMode="BORDER"
+                                                                                maxHeight="1.7976931348623157E308"
                                                                                 maxWidth="1.7976931348623157E308"
-                                                                                VBox.vgrow="ALWAYS">
-                                                                            <VBox.margin>
-                                                                                <Insets/>
-                                                                            </VBox.margin>
-                                                                        </MFXTextField>
+                                                                                VBox.vgrow="ALWAYS"/>
                                                                         <HBox alignment="CENTER">
                                                                             <children>
                                                                                 <Label fx:id="validateMarca"
@@ -238,6 +234,7 @@
                                                                                         alignment="CENTER"
                                                                                         borderGap="0.0"
                                                                                         floatMode="BORDER"
+                                                                                        maxHeight="1.7976931348623157E308"
                                                                                         maxWidth="1.7976931348623157E308"
                                                                                         HBox.hgrow="ALWAYS"/>
                                                                             </children>
@@ -283,7 +280,9 @@
                                                                                 accessibleRole="COMBO_BOX"
                                                                                 alignment="CENTER"
                                                                                 floatMode="BORDER"
-                                                                                maxWidth="1.7976931348623157E308"/>
+                                                                                maxHeight="1.7976931348623157E308"
+                                                                                maxWidth="1.7976931348623157E308"
+                                                                                VBox.vgrow="ALWAYS"/>
                                                                         <HBox alignment="CENTER">
                                                                             <children>
                                                                                 <Label fx:id="validateAAImmatricolazione"

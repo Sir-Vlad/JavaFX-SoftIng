@@ -43,7 +43,9 @@ public class UserSession {
     if (utente != null) {
       new Thread(
               () -> {
+                logger.info("init setPreventivi");
                 setPreventivi();
+                logger.info("init setPreventiviUsati");
                 setPreventiviUsati();
               })
           .start();

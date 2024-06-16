@@ -82,6 +82,8 @@ public class PreventiviUtenteController implements Initializable {
                     event -> {
                       // todo: implementare la conferma del preventivo
                       System.out.println("preventivo confermato");
+                      Preventivo preventivo = getTableView().getItems().get(getIndex());
+                      System.out.println(preventivo);
                     });
               }
 
@@ -93,6 +95,8 @@ public class PreventiviUtenteController implements Initializable {
                 } else {
                   setGraphic(btn);
                   setAlignment(Pos.CENTER);
+                  Preventivo preventivo = getTableView().getItems().get(getIndex());
+                  btn.setDisable(preventivo.getDataEmissione() == null);
                 }
               }
             });

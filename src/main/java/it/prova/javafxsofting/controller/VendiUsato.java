@@ -9,6 +9,7 @@ import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.AutoUsata;
+import it.prova.javafxsofting.models.Marca;
 import it.prova.javafxsofting.models.PreventivoUsato;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -74,7 +76,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private Label validatePeso;
   @FXML private Label validateFoto;
   @FXML private MFXTextField modelloField;
-  @FXML private MFXTextField marcaField;
+  @FXML private MFXFilterComboBox<String> marcaField;
   @FXML private MFXTextField kmPercorsiField;
   @FXML private MFXTextField targaFieldFirstTwoLetter;
   @FXML private MFXTextField targaFieldDigit;
@@ -125,6 +127,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     onlyFloat(volBagagliaioField);
     onlyFloat(pesoField);
 
+    setValueMarca();
     setValueAAImmatricolazione();
 
     setValidateModello();
@@ -401,6 +404,16 @@ public class VendiUsato extends ValidateForm implements Initializable {
                           targaField[nextIndex].requestFocus();
                       });
             });
+  }
+
+  private void setValueMarca() {
+    marcaField
+        .getItems()
+        .setAll(
+            FXCollections.observableArrayList(
+                Arrays.stream(Marca.values()).map(Enum::name).toList()));
+
+    marcaField.getSelectionModel().selectFirst();
   }
 
   private void setValueAAImmatricolazione() {

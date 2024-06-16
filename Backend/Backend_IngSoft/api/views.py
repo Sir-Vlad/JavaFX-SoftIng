@@ -201,7 +201,7 @@ class AcquistoUtenteListAPIView(APIView):
 
 class AutoUsateListAPIView(APIView):
     def get(self, request):
-        auto = AutoUsata.objects.filter(prezzo__gt=0)
+        auto = AutoUsata.objects.all()
         serializer = AutoUsataSerializer(auto, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -1,8 +1,7 @@
-import imagehash
 import os.path
 import re
-from PIL import Image
 from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -28,8 +27,21 @@ class Utente(models.Model):
         return self.nome + " " + self.cognome
 
 
+class MarcaAuto(models.TextChoices):
+    NISSAN = "NISSAN"
+    MAZDA = "MAZDA"
+    VOLKSWAGEN = "VOLKSWAGEN"
+    FORD = "FORD"
+    HONDA = "HONDA"
+    AUDI = "AUDI"
+    BMW = "BMW"
+
+
 class Auto(models.Model):
     modello = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    marca = models.CharField(
+        max_length=20, null=False, blank=False, choices=MarcaAuto
+    )  # lista di valori noti
     # dati auto
     altezza = models.PositiveIntegerField(null=False, blank=False)
     lunghezza = models.PositiveIntegerField(null=False, blank=False)
@@ -70,18 +82,6 @@ class Optional(models.Model):
 
 
 class ModelloAuto(Auto):
-    class MarcaAuto(models.TextChoices):
-        NISSAN = "NISSAN"
-        MAZDA = "MAZDA"
-        VOLKSWAGEN = "VOLKSWAGEN"
-        FORD = "FORD"
-        HONDA = "HONDA"
-        AUDI = "AUDI"
-        BMW = "BMW"
-
-    marca = models.CharField(
-        max_length=20, null=False, blank=False, choices=MarcaAuto
-    )  # lista di valori noti
     prezzo_base = models.PositiveIntegerField(null=False, blank=False)
     optionals = models.ManyToManyField(
         Optional,
@@ -233,7 +233,6 @@ def validate_not_future_date(value):
 
 
 class AutoUsata(Auto):
-    marca = models.CharField(max_length=20, null=False, blank=False)
     prezzo = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
     km_percorsi = models.PositiveIntegerField(
         null=False, blank=False, validators=[MinValueValidator(0)]

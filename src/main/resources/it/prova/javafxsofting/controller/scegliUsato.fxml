@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
+<?import io.github.palexdev.materialfx.controls.MFXSlider?>
 <?import it.prova.javafxsofting.component.Header?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity"
-            maxWidth="-Infinity"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
             prefWidth="1200.0" stylesheets="@../css/header.css"
             xmlns="http://javafx.com/javafx/21"
@@ -91,66 +92,6 @@
                                                         <Insets left="8.0" right="15.0" top="10.0"/>
                                                     </VBox.margin>
                                                 </MFXSlider>
-                                            </children>
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
-                                        </VBox>
-                                        <VBox>
-                                            <children>
-                                                <Label text="Alimentazione">
-                                                    <font>
-                                                        <Font size="20.0"/>
-                                                    </font>
-                                                </Label>
-                                                <MFXFilterComboBox fx:id="alimentazioneFilter"
-                                                                   alignment="CENTER"
-                                                                   borderGap="0.0"
-                                                                   floatingTextGap="0.0"
-                                                                   graphicTextGap="0.0"
-                                                                   maxHeight="-Infinity"
-                                                                   maxWidth="1.7976931348623157E308"
-                                                                   minHeight="-Infinity"
-                                                                   prefHeight="30.0"
-                                                                   prefWidth="280.0">
-                                                    <padding>
-                                                        <Insets bottom="3.0" left="3.0" right="3.0"
-                                                                top="3.0"/>
-                                                    </padding>
-                                                    <font>
-                                                        <Font size="15.0"/>
-                                                    </font>
-                                                </MFXFilterComboBox>
-                                            </children>
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
-                                        </VBox>
-                                        <VBox>
-                                            <children>
-                                                <Label text="Cambio">
-                                                    <font>
-                                                        <Font size="20.0"/>
-                                                    </font>
-                                                </Label>
-                                                <MFXFilterComboBox fx:id="cambioFilter"
-                                                                   alignment="CENTER"
-                                                                   borderGap="0.0"
-                                                                   floatingTextGap="0.0"
-                                                                   graphicTextGap="0.0"
-                                                                   maxHeight="-Infinity"
-                                                                   maxWidth="1.7976931348623157E308"
-                                                                   minHeight="-Infinity"
-                                                                   prefHeight="30.0"
-                                                                   prefWidth="280.0">
-                                                    <padding>
-                                                        <Insets bottom="3.0" left="3.0" right="3.0"
-                                                                top="3.0"/>
-                                                    </padding>
-                                                    <font>
-                                                        <Font size="15.0"/>
-                                                    </font>
-                                                </MFXFilterComboBox>
                                             </children>
                                             <VBox.margin>
                                                 <Insets bottom="10.0" top="10.0"/>
