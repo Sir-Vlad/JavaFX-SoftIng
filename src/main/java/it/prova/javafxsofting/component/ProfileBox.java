@@ -128,6 +128,7 @@ public class ProfileBox extends VBox implements Initializable {
               throw new RuntimeException(e);
             }
             ScreenController.activate("home");
+            ScreenController.removeScreen("profilo");
             actionEvent.consume();
           });
       contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), logout);

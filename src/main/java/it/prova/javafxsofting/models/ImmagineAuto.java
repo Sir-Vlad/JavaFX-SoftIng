@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 @Data
 public class ImmagineAuto implements Serializable {
@@ -39,7 +40,7 @@ public class ImmagineAuto implements Serializable {
         idAuto, nomeImmagine, immagineBase64.substring(0, 20));
   }
 
-  public static ImmagineAuto create(int idAuto, File file) throws IOException {
+  public static @NotNull ImmagineAuto create(int idAuto, @NotNull File file) throws IOException {
     byte[] imageBytes = Files.readAllBytes(Path.of(file.getPath()));
     return new ImmagineAuto(idAuto, file.getName(), Base64.getEncoder().encodeToString(imageBytes));
   }

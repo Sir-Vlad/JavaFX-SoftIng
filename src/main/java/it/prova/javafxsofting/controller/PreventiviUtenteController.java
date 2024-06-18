@@ -4,6 +4,7 @@ import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Preventivo;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,7 +25,7 @@ public class PreventiviUtenteController implements Initializable {
 
   private static final ObservableList<Preventivo> preventiviUtente =
       FXCollections.observableArrayList(UserSession.getInstance().getPreventivi());
-
+  private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
   private static ScheduledExecutorService scheduler;
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   @FXML private TableColumn<Preventivo, Integer> idColumn;
@@ -80,10 +81,7 @@ public class PreventiviUtenteController implements Initializable {
               {
                 btn.setOnAction(
                     event -> {
-                      // todo: implementare la conferma del preventivo
-                      System.out.println("preventivo confermato");
-                      Preventivo preventivo = getTableView().getItems().get(getIndex());
-                      System.out.println(preventivo);
+                    
                     });
               }
 
@@ -132,7 +130,7 @@ public class PreventiviUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  setText(String.format("%.2f", item));
+                  setText(decimalFormat.format(item) + " €");
                   setAlignment(Pos.CENTER);
                 }
               }
@@ -168,7 +166,7 @@ public class PreventiviUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  setText(String.format("%d", item));
+                  setText(decimalFormat.format(item) + " €");
                   setAlignment(Pos.CENTER);
                 }
               }
@@ -186,7 +184,7 @@ public class PreventiviUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  setText("" + item.getPrezzoBase());
+                  setText(decimalFormat.format(item.getPrezzoBase()) + " €");
                   setAlignment(Pos.CENTER);
                 }
               }

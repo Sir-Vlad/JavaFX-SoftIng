@@ -160,37 +160,37 @@ public class ProfileAccountController implements Initializable {
     svg.setScaleX(scaleX);
     svg.setScaleY(scaleY);
   }
-}
 
-@Getter
-class TabController {
-  private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
-  private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
-  private AnchorPane main = null;
+  @Getter
+  static class TabController {
+    private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
+    private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
+    private AnchorPane main = null;
 
-  protected String getKeyMain() {
-    return PANE_HASH_MAP.entrySet().stream()
-        .filter(entry -> Objects.equals(entry.getValue(), main))
-        .map(Map.Entry::getKey)
-        .findAny()
-        .orElseThrow();
-  }
+    protected String getKeyMain() {
+      return PANE_HASH_MAP.entrySet().stream()
+          .filter(entry -> Objects.equals(entry.getValue(), main))
+          .map(Map.Entry::getKey)
+          .findAny()
+          .orElseThrow();
+    }
 
-  protected void removeTab(String name) {
-    PANE_HASH_MAP.remove(name);
-  }
+    protected void removeTab(String name) {
+      PANE_HASH_MAP.remove(name);
+    }
 
-  protected void addTab(String name, AnchorPane pane, Node button) {
-    PANE_HASH_MAP.put(name, pane);
-    BUTTONS_MAP.put(name, button);
-  }
+    protected void addTab(String name, AnchorPane pane, Node button) {
+      PANE_HASH_MAP.put(name, pane);
+      BUTTONS_MAP.put(name, button);
+    }
 
-  protected AnchorPane getTab(String name) {
-    main = PANE_HASH_MAP.get(name);
-    return main;
-  }
+    protected AnchorPane getTab(String name) {
+      main = PANE_HASH_MAP.get(name);
+      return main;
+    }
 
-  protected Node getButton(String name) {
-    return BUTTONS_MAP.get(name);
+    protected Node getButton(String name) {
+      return BUTTONS_MAP.get(name);
+    }
   }
 }

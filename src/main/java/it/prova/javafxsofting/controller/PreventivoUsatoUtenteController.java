@@ -3,6 +3,7 @@ package it.prova.javafxsofting.controller;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.*;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,9 +20,10 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 
-public class PreventivoUsatoController implements Initializable {
-  private final ObservableList<PreventivoUsato> preventivoUsatoUtente =
-      FXCollections.observableArrayList(UserSession.getInstance().getPreventiviUsati());
+public class PreventivoUsatoUtenteController implements Initializable {
+  private ObservableList<PreventivoUsato> preventivoUsatoUtente =
+      FXCollections.observableArrayList();
+
   @FXML private TableView<PreventivoUsato> tableView;
   @FXML private TableColumn<PreventivoUsato, Integer> idColumn;
   @FXML private TableColumn<PreventivoUsato, AutoUsata> modelloColumn;
@@ -31,6 +33,9 @@ public class PreventivoUsatoController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    if (UserSession.getInstance().getPreventiviUsati() != null) {
+      preventivoUsatoUtente.setAll(UserSession.getInstance().getPreventiviUsati());
+    }
     setTableView();
   }
 
@@ -101,7 +106,8 @@ public class PreventivoUsatoController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  setText(String.format("%d", item.getPrezzo()));
+                  DecimalFormat decimalFormat = new DecimalFormat("###,###");
+                  setText(decimalFormat.format(item.getPrezzo()) + " €");
                   setAlignment(Pos.CENTER);
                 }
               }

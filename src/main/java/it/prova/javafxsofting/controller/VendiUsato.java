@@ -113,7 +113,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    header.addTab("Indietro", event -> ScreenController.activate("config"));
+    header.addTab(
+        "Indietro",
+        event -> {
+          ScreenController.activate("config");
+          ScreenController.removeScreen("vendiUsato");
+        });
 
     setBoundsTarga();
 
@@ -153,6 +158,15 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   public void richiediPreventivo() {
+    if (UserSession.getInstance().getUtente() == null) {
+      Alert alert = new Alert(AlertType.INFORMATION);
+      alert.setHeaderText(null);
+      alert.setContentText("Effettua il login per poter effettuare il preventivo");
+      alert.showAndWait();
+      ScreenController.activate("login");
+      return;
+    }
+
     showErrorAll();
 
     if (isInvalidDatiAuto() && isInvalidInfoAuto()) {
@@ -183,6 +197,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
         "La sua auto usata è stata inserita correttamente. Ora la puoi usare avere una detrazione sull'auto nuova.");
     alert.showAndWait();
     ScreenController.activate("config");
+    ScreenController.removeScreen("vendiUsato");
   }
 
   /** Sceglie le immagini da caricare dell'auto usata */
@@ -315,7 +330,9 @@ public class VendiUsato extends ValidateForm implements Initializable {
     AutoUsata autoUsata =
         new AutoUsata(
             modelloField.getText(),
-            marcaField.getText(),
+            marcaField
+                .getSelectionModel()
+                .getSelectedItem(), // fixme: mi ritorna l'indice dell'elenco
             Integer.parseInt(altezzaField.getText()),
             Integer.parseInt(lunghezzaField.getText()),
             Integer.parseInt(larghezzaField.getText()),
@@ -407,11 +424,8 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   private void setValueMarca() {
-    marcaField
-        .getItems()
-        .setAll(
-            FXCollections.observableArrayList(
-                Arrays.stream(Marca.values()).map(Enum::name).toList()));
+    marcaField.setItems(
+        FXCollections.observableArrayList(Arrays.stream(Marca.values()).map(Enum::name).toList()));
 
     marcaField.getSelectionModel().selectFirst();
   }

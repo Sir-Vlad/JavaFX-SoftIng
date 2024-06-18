@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import org.jetbrains.annotations.NotNull;
 
 public class HomeController implements Initializable {
   @FXML private Header header;
@@ -17,19 +18,15 @@ public class HomeController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    header.addTab(
-        "Concessionari",
-        event -> {
-          ScreenController.activate("concessionari");
-        });
+    header.addTab("Concessionari", event -> ScreenController.activate("concessionari"));
   }
 
-  public void switchNuovo(MouseEvent mouseEvent) {
+  public void switchNuovo(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("scegliModello");
     mouseEvent.consume();
   }
 
-  public void switchUsato(MouseEvent mouseEvent) {
+  public void switchUsato(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("scegliUsato");
     mouseEvent.consume();
   }

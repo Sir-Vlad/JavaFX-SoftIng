@@ -73,6 +73,7 @@ public class LoginController extends ValidateForm implements Initializable {
 
   public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.back();
+    clearField();
     actionEvent.consume();
   }
 
@@ -136,10 +137,10 @@ public class LoginController extends ValidateForm implements Initializable {
 
     clearField();
 
-    if (ScreenController.getBackPage().equals("config")) {
-      ScreenController.activate("config");
-    } else {
-      ScreenController.activate("home");
+    switch (ScreenController.getBackPage()) {
+      case "config" -> ScreenController.activate("config");
+      case "vendiUsato" -> ScreenController.activate("vendiUsato");
+      default -> ScreenController.activate("home");
     }
   }
 
