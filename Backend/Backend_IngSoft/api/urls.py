@@ -2,6 +2,7 @@ from Backend_IngSoft.api.views import (
     AcquistoUtenteListAPIView,
     AutoUsateListAPIView,
     ConcessionarioListAPIView,
+    ConfermaPreventivoUtenteAPIView,
     ImmaginiAutoNuoveListAPIView,
     ImmaginiAutoUsateListAPIView,
     ModelliAutoListAPIView,
@@ -41,6 +42,11 @@ urlpatterns = [
         "utente/<int:id_utente>/preventiviUsato/",
         PreventivoAutoUsateAPIView.as_view(),
         name="Preventivi Auto Usate Utente",
+    ),
+    path(
+        "utente/<int:id_utente>/preventivo/<int:id_preventivo>/conferma/",
+        ConfermaPreventivoUtenteAPIView.as_view(),
+        name="Acquisti Utente",
     ),
     path(
         "utente/<int:id_utente>/ordini/",

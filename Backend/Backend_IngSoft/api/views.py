@@ -1,3 +1,11 @@
+from datetime import datetime, timedelta
+
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -15,6 +23,7 @@ from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
     Concessionario,
+    Configurazione,
     Detrazione,
     ImmaginiAutoNuove,
     ImmaginiAutoUsate,
@@ -26,11 +35,6 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import send_html_email
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -186,18 +190,6 @@ class AcquistoUtenteListAPIView(APIView):
         serializer = AcquistoSerializer(acquisti, many=True)
         return Response(serializer.data)
 
-    def post(self, request, id_utente):
-        try:
-            utente = Utente.objects.get(id=id_utente)
-        except Utente.DoesNotExist:
-            return HttpResponseNotFound("Utente non esiste")
-
-        serializer = AcquistoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class AutoUsateListAPIView(APIView):
     def get(self, request):
@@ -258,3 +250,66 @@ class ImmaginiAutoUsateListAPIView(APIView):
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def genera_id_fattura():
+    year = datetime.now().year  # anno corrente
+    last_acquisto: Acquisto = Acquisto.objects.last()
+    if last_acquisto is None:
+        return f"0001/{year}"
+
+    last_fattura = last_acquisto.numero_fattura
+    last_id_hex, last_year = last_fattura.split("/")
+
+    last_id = int(last_id_hex, 16)
+    last_year = int(last_year)
+
+    # se l'ultima fattura è nell'anno precedente
+    if last_year != year:
+        return f"0001/{year}"
+
+    # se l'ultima fattura è nell'anno corrente
+    last_id_hex = hex(last_id + 1)[2:].upper()
+    return f"{last_id_hex}/{last_year}"
+
+
+def get_data_ritiro(preventivo_id):
+    now = datetime.now().date()
+    configurazione: Configurazione = Configurazione.objects.filter(
+        preventivo_id=preventivo_id
+    ).first()
+    optionals = configurazione.optional.filter(obbligatorio=False).count()
+    # optionals = configurazione.optional.count()
+    days_optionals = optionals * 10
+    data_consegna = now + timedelta(days=days_optionals) + timedelta(days=30)
+    return data_consegna
+
+
+class ConfermaPreventivoUtenteAPIView(APIView):
+    def post(self, request, id_utente, id_preventivo):
+        preventivo = Preventivo.objects.get(id=id_preventivo)
+        days_diff = (preventivo.data_emissione - datetime.now().date()).days
+        if days_diff > 20:
+            return Response("Preventivo scaduto", status=status.HTTP_400_BAD_REQUEST)
+
+        utente = Utente.objects.get(id=id_utente)
+        data_ritiro = get_data_ritiro(id_preventivo)
+        numero_fattura = genera_id_fattura()
+        acconto = request.data["acconto"]
+
+        try:
+            with transaction.atomic():
+                ordine = Acquisto.objects.create(
+                    acconto=acconto,
+                    numero_fattura=numero_fattura,
+                    data_ritiro=data_ritiro,
+                    utente_id=utente.id,
+                    preventivo_id=preventivo.id,
+                )
+                ordine.save()
+                preventivo.valid = False
+                preventivo.save()
+
+                return Response(status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
