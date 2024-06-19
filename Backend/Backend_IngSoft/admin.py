@@ -144,7 +144,8 @@ class AutoUsataAdmin(ModelAdmin):
         self, request: HttpRequest, obj: Model, form: Form, change: Any
     ) -> None:
         with transaction.atomic():
-            # Controlla se l'oggetto esiste già nel database (modifica invece di creazione)
+            # Controlla se l'oggetto esiste già nel database (modifica invece di
+            # creazione)
             if change:
                 old_obj = AutoUsata.objects.get(pk=obj.pk)
                 if old_obj.prezzo != obj.prezzo:  # Controlla se il campo è stato
@@ -190,11 +191,6 @@ class RitiroAdmin(ModelAdmin):
     pass
 
 
-@admin.register(ImmaginiAutoNuove)
-class ImmaginiAutoNuoveAdmin(ModelAdmin):
-    pass
-
-
 @admin.register(Preventivo)
 class PreventivoAdmin(ModelAdmin):
     list_display = (
@@ -204,17 +200,10 @@ class PreventivoAdmin(ModelAdmin):
         "prezzo",
         "valid",
     )
-    list_filter = ("valid",)
-
-
-@admin.register(Configurazione)
-class ConfigurazioneAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ("valid", "utente", "modello__marca", "concessionario")
 
 
 @admin.register(Acquisto)
 class AcquistoAdmin(ModelAdmin):
-    pass
-
-
-# TODO: https://medium.com/django-unleashed/django-admin-displaying-images-in-your-models-bb7e9d8be105
+    list_display = ("numero_fattura", "data_ritiro")
+    list_filter = ("data_ritiro",)

@@ -1,9 +1,15 @@
-from Backend.settings import EMAIL_HOST_USER
+import os
+
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
+from jinja2 import Environment, FileSystemLoader
+import pdfkit
+
+from Backend.settings import EMAIL_HOST_USER
+from Backend_IngSoft.models import Acquisto, Configurazione
 
 
-def send_html_email(subject, to_email, context, template_name):
+def send_html_email(subject, to_email, context, template_name, pdf=None):
     from django.template.loader import render_to_string
 
     html_content = render_to_string(template_name, context)
@@ -13,4 +19,74 @@ def send_html_email(subject, to_email, context, template_name):
 
     email = EmailMultiAlternatives(subject, text_content, EMAIL_HOST_USER, [to_email])
     email.attach_alternative(html_content, "text/html")
-    email.send(fail_silently=True)
+
+    if pdf:
+        email.attach("fattura.pdf", pdf, "application/pdf")
+
+    email.send()
+
+
+def create_pdf_file(obj: Acquisto):
+    current_dir = os.getcwd()
+
+    env = Environment(loader=FileSystemLoader(current_dir))
+    template = env.get_template("templates/fattura/fattura.html")
+
+    concessionario = obj.preventivo.concessionario
+    utente = obj.utente
+    modello = obj.preventivo.modello
+    conf: Configurazione = Configurazione.objects.get(preventivo_id=obj.preventivo.id)
+    optionals = conf.optional.all()
+
+    prezzo_con_iva = modello.prezzo_base * 22 / 100
+
+    data = {
+        "numero_fattura": obj.numero_fattura,
+        "nome_concessionario": concessionario.nome,
+        "indirizzo": f"{concessionario.via}, {concessionario.civico}",
+        "cap": concessionario.cap,
+        "citta": concessionario.citta,
+        "nome_utente": f"{utente.nome} ({utente.cognome})",
+        "email": utente.email,
+        "modello": modello.modello,
+        "prezzo_base": modello.prezzo_base,
+        "optionals": optionals,
+        "prezzo_totale": modello.prezzo_base,
+        "prezzo_con_iva": prezzo_con_iva,
+        "totale": prezzo_con_iva + modello.prezzo_base,
+    }
+
+    rendered_html = template.render(data)
+
+    PATH_ROOT_FILE = f"{current_dir}/media/fatture"
+    if not os.path.exists(PATH_ROOT_FILE):
+        os.mkdir(PATH_ROOT_FILE)
+        os.mkdir(f"{PATH_ROOT_FILE}/fatture_html")
+        os.mkdir(f"{PATH_ROOT_FILE}/fatture_pdf")
+
+    path_html = (
+        f"{PATH_ROOT_FILE}/fatture_html/{obj.numero_fattura.replace('/', '-')}.html"
+    )
+
+    with open(path_html, "w") as f:
+        f.write(rendered_html)
+
+    config = pdfkit.configuration(wkhtmltopdf="/usr/bin/wkhtmltopdf")
+
+    pdfkit.from_file(
+        path_html,
+        f"{PATH_ROOT_FILE}/fatture_pdf/{obj.numero_fattura.replace('/', '-')}.pdf",
+        configuration=config,
+    )
+
+    from django.template.loader import render_to_string
+
+    # html_string = render_to_string(path_html, data)
+
+    pdf = pdfkit.from_string(
+        rendered_html,
+        False,
+        configuration=config,
+    )
+
+    return pdf

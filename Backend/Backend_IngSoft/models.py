@@ -174,9 +174,10 @@ class Acquisto(models.Model):
 
     class Meta:
         unique_together = ("numero_fattura", "preventivo")
+        verbose_name_plural = "Acquisti"
 
     def __str__(self):
-        return self.numero_fattura
+        return "Fattura n. " + self.numero_fattura
 
 
 def year_choice():

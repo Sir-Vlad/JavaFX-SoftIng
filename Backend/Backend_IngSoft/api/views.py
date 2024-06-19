@@ -34,7 +34,7 @@ from Backend_IngSoft.models import (
     Utente,
 )
 from Backend_IngSoft.util.error import raises
-from Backend_IngSoft.util.util import send_html_email
+from Backend_IngSoft.util.util import create_pdf_file, send_html_email
 
 
 class UtenteListCreateAPIView(APIView):
@@ -262,12 +262,12 @@ class ImmaginiAutoUsateListAPIView(APIView):
 
 class ConfermaPreventivoUtenteAPIView(APIView):
     def post(self, request, id_utente, id_preventivo):
-        preventivo = Preventivo.objects.get(id=id_preventivo)
+        preventivo: Preventivo = Preventivo.objects.get(id=id_preventivo)
         days_diff = (preventivo.data_emissione - datetime.now().date()).days
         if days_diff > 20:
             return Response("Preventivo scaduto", status=status.HTTP_400_BAD_REQUEST)
 
-        utente = Utente.objects.get(id=id_utente)
+        utente: Utente = Utente.objects.get(id=id_utente)
         data_ritiro = self._get_data_ritiro(id_preventivo)
         numero_fattura = self._genera_id_fattura()
         acconto = request.data["acconto"]
@@ -283,6 +283,24 @@ class ConfermaPreventivoUtenteAPIView(APIView):
                 )
 
                 Preventivo.objects.filter(id=id_preventivo).update(valid=False)
+
+                path_pdf = create_pdf_file(ordine)
+
+                send_html_email(
+                    "Fattura",
+                    utente.email,
+                    {
+                        "nome_utente": utente.nome + " " + utente.cognome,
+                        "nome_concessionario": preventivo.concessionario.nome,
+                        "marca": preventivo.modello.marca,
+                        "modello": preventivo.modello.modello,
+                        "numero_fattura": numero_fattura,
+                        "data_emissione": datetime.now().strftime("%d/%m/%Y"),
+                        "prezzo_totale": preventivo.prezzo,
+                    },
+                    "emails/fattura.html",
+                    path_pdf,
+                )
 
                 return Response(status=status.HTTP_201_CREATED)
         except Exception as e:

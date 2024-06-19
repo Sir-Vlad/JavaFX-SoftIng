@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resoconto Preventivo Auto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Invio Fattura</h1>
+    <p>Gentile {{ nome_utente }}</p>
+    <p>La ringraziamo per aver scelto {{ nome_concessionario }} per l'acquisto della Sua nuova auto. Siamo lieti di
+        allegare alla presente mail la fattura relativa al Suo recente acquisto della {{ marca }} - {{ modello }}.</p>
+    <p>Di seguito, troverà alcuni dettagli importanti relativi alla Sua fattura:</p>
+    <dl>
+        <dt>Numero Fattura</dt>
+        <dd>{{ numero_fattura }}</dd>
+        <dt>Data di Emissione</dt>
+        <dd>{{ data_emissione }}</dd>
+        <dt>Importo Totale</dt>
+        <dd>{{ prezzo_totale }}</dd>
+    </dl>
+    <p>Le ricordiamo che il nostro servizio clienti è sempre disponibile per qualsiasi necessità o chiarimento
+        riguardante il Suo acquisto.</p>
+    <p>Cordiali saluti,</p>
+    <p>Il team di Vendita Auto</p>
+</div>
+</body>
+</html>
