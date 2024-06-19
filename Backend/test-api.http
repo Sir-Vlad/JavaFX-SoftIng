@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8000/api/utente/1/preventivi/
+POST http://localhost:8000/api/utente/11/preventivi/
 Accept: application/json
 Content-Type: application/json
 
@@ -57,13 +57,15 @@ Content-Type: application/json
     "utente": 11,
     "concessionario": 1,
     "modello": 1,
-    "prezzo": 20000
+    "prezzo": 20000,
+    "data_emissione": "2023-12-02"
   },
   "optional": [
-    1,
-    8
+    3,
+    13,
+    48
   ],
-  "detrazione": 1
+  "detrazione": 2
 }
 
 

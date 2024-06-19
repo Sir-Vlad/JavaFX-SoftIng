@@ -208,7 +208,7 @@ public class ConfiguratorController implements Initializable {
       }
     }
 
-    UserSession.getInstance().setPreventivi();
+    new Thread(() -> UserSession.getInstance().setPreventivi()).start();
 
     ScreenController.removeScreen("configurazione");
     ScreenController.activate("home");

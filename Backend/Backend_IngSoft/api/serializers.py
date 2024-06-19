@@ -1,4 +1,12 @@
 import base64
+from io import BytesIO
+
+from PIL import Image
+from django.db import IntegrityError, transaction
+from django.db.models import Prefetch
+from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
@@ -13,11 +21,6 @@ from Backend_IngSoft.models import (
     Ritiro,
     Utente,
 )
-from PIL import Image
-from django.db import transaction
-from drf_extra_fields.fields import Base64ImageField
-from io import BytesIO
-from rest_framework import serializers
 
 
 class UtenteSerializer(serializers.ModelSerializer):
@@ -125,6 +128,26 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
 
         if Utente.objects.get(id=preventivo_data["utente"].id):
             with transaction.atomic():
+                # controllo se esiste già un preventivo con le stesse caratteristiche
+                preventivi_con_conf = Preventivo.objects.prefetch_related(
+                    Prefetch(
+                        "configurazione_set",
+                        queryset=Configurazione.objects.prefetch_related("optional"),
+                    )
+                )
+
+                optional_ids_user = [opt.id for opt in optional_ids]
+                for preventivo in preventivi_con_conf:
+                    optional_ids_set = set()
+                    for configurazione in preventivo.configurazione_set.all():
+                        optional_ids_set.update(
+                            opt.id for opt in configurazione.optional.all()
+                        )
+                    common_ids = optional_ids_set.intersection(optional_ids_user)
+                    if len(common_ids) == len(optional_ids_user):
+                        if preventivo.modello == preventivo_data["modello"]:
+                            raise IntegrityError("Preventivo esistente")
+
                 # salvataggio dati nel db
                 preventivo = Preventivo.objects.create(**preventivo_data)
                 configurazione = Configurazione.objects.create(preventivo=preventivo)
@@ -132,6 +155,7 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
                 ritiro = Ritiro.objects.create(
                     preventivo=preventivo, concessionario=preventivo.concessionario
                 )
+
             return configurazione
         return None
 

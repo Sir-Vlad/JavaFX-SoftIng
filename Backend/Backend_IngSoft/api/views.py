@@ -119,10 +119,6 @@ class ConcessionarioListAPIView(APIView):
         return Response(serializer.data)
 
 
-def is_field_error(field_data, field_names):
-    return field_data and any(field in field_data for field in field_names)
-
-
 class PreventiviUtenteListAPIView(APIView):
     def get(self, request, id_utente):
         try:
@@ -137,6 +133,14 @@ class PreventiviUtenteListAPIView(APIView):
 
     def post(self, request, id_utente):
         auto_usata_id = request.data.pop("detrazione", None)
+        data_emissione = request.data.get("preventivo", {}).get("data_emissione")
+
+        # controllo se il campi detrazione e data_emissione sono esclusivi
+        if (not data_emissione and not auto_usata_id) or (
+            data_emissione and auto_usata_id
+        ):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         with transaction.atomic():
             serializer = ConfigurazioneSerializer(data=request.data)
             if serializer.is_valid():
@@ -172,10 +176,14 @@ class PreventiviUtenteListAPIView(APIView):
 
         if "preventivo" in serializer.errors.keys():
             field_data = serializer.errors.get("preventivo")
-            if is_field_error(field_data, field_names):
+            if self._is_field_error(field_data, field_names):
                 return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def _is_field_error(field_data, field_names):
+        return field_data and any(field in field_data for field in field_names)
 
 
 class AcquistoUtenteListAPIView(APIView):
@@ -252,39 +260,6 @@ class ImmaginiAutoUsateListAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def genera_id_fattura():
-    year = datetime.now().year  # anno corrente
-    last_acquisto: Acquisto = Acquisto.objects.last()
-    if last_acquisto is None:
-        return f"0001/{year}"
-
-    last_fattura = last_acquisto.numero_fattura
-    last_id_hex, last_year = last_fattura.split("/")
-
-    last_id = int(last_id_hex, 16)
-    last_year = int(last_year)
-
-    # se l'ultima fattura è nell'anno precedente
-    if last_year != year:
-        return f"0001/{year}"
-
-    # se l'ultima fattura è nell'anno corrente
-    last_id_hex = hex(last_id + 1)[2:].upper()
-    return f"{last_id_hex}/{last_year}"
-
-
-def get_data_ritiro(preventivo_id):
-    now = datetime.now().date()
-    configurazione: Configurazione = Configurazione.objects.filter(
-        preventivo_id=preventivo_id
-    ).first()
-    optionals = configurazione.optional.filter(obbligatorio=False).count()
-    # optionals = configurazione.optional.count()
-    days_optionals = optionals * 10
-    data_consegna = now + timedelta(days=days_optionals) + timedelta(days=30)
-    return data_consegna
-
-
 class ConfermaPreventivoUtenteAPIView(APIView):
     def post(self, request, id_utente, id_preventivo):
         preventivo = Preventivo.objects.get(id=id_preventivo)
@@ -293,8 +268,8 @@ class ConfermaPreventivoUtenteAPIView(APIView):
             return Response("Preventivo scaduto", status=status.HTTP_400_BAD_REQUEST)
 
         utente = Utente.objects.get(id=id_utente)
-        data_ritiro = get_data_ritiro(id_preventivo)
-        numero_fattura = genera_id_fattura()
+        data_ritiro = self._get_data_ritiro(id_preventivo)
+        numero_fattura = self._genera_id_fattura()
         acconto = request.data["acconto"]
 
         try:
@@ -306,10 +281,43 @@ class ConfermaPreventivoUtenteAPIView(APIView):
                     utente_id=utente.id,
                     preventivo_id=preventivo.id,
                 )
-                ordine.save()
-                preventivo.valid = False
-                preventivo.save()
+
+                Preventivo.objects.filter(id=id_preventivo).update(valid=False)
 
                 return Response(status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def _genera_id_fattura():
+        year = datetime.now().year  # anno corrente
+        last_acquisto: Acquisto = Acquisto.objects.last()
+        if last_acquisto is None:
+            return f"0001/{year}"
+
+        last_fattura = last_acquisto.numero_fattura
+        last_id_hex, last_year = last_fattura.split("/")
+
+        last_id = int(last_id_hex, 16)
+        last_year = int(last_year)
+
+        # se l'ultima fattura è nell'anno precedente
+        if last_year != year:
+            return f"0001/{year}"
+
+        # se l'ultima fattura è nell'anno corrente
+        new_id = last_id + 1
+        new_id_hex = f"{new_id:04X}"
+        return f"{new_id_hex}/{last_year}"
+
+    @staticmethod
+    def _get_data_ritiro(preventivo_id):
+        now = datetime.now().date()
+        configurazione: Configurazione = Configurazione.objects.filter(
+            preventivo_id=preventivo_id
+        ).first()
+        optionals = configurazione.optional.filter(obbligatorio=False).count()
+        # optionals = configurazione.optional.count()
+        days_optionals = optionals * 10
+        data_consegna = now + timedelta(days=days_optionals) + timedelta(days=30)
+        return data_consegna

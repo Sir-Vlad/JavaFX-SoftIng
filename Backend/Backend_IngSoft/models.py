@@ -129,10 +129,26 @@ class Preventivo(models.Model):
     valid = models.BooleanField(default=True)
 
     class Meta:
-        pass
-        # TODO: capire come rendere univoco un preventivo
-        #   possibile idea guardare modello, utente e optional
-        # unique_together = ("utente", "modello")
+        verbose_name_plural = "Preventivi"
+
+    def clean(self):
+        super().clean()
+        self.validate_fields()
+
+    def validate_fields(self):
+        """
+        Verifica che non ci siano due preventivi uguali
+        """
+        if not self.utente:
+            raise ValidationError("Utente non specificato")
+        if not self.modello:
+            raise ValidationError("Modello non specificato")
+
+        optionals = Configurazione.objects.group_by_preventivo(self.pk).values_list(
+            "optional", flat=True
+        )
+        if not optionals:
+            raise ValidationError("Configurazione non specificata")
 
     def __str__(self):
         return "Preventivo n. " + str(self.pk)
@@ -155,6 +171,9 @@ class Acquisto(models.Model):
     )
     acconto = models.PositiveIntegerField(null=False, blank=False)
     data_ritiro = models.DateField(null=False, blank=False)
+
+    class Meta:
+        unique_together = ("numero_fattura", "preventivo")
 
     def __str__(self):
         return self.numero_fattura

@@ -120,7 +120,11 @@ public class Preventivo implements Serializable {
 
     this.prezzoOptionals = optionals.stream().mapToInt(Optional::getPrezzo).sum();
     this.totalePrezzo = this.getModello().getPrezzoBase() + this.prezzoOptionals;
-    // todo: completare appena abbiamo la lista delle sedi
-    //    this.concessionario = ??
+
+    this.concessionario =
+        StaticDataStore.getConcessionari().stream()
+            .filter(concessionario1 -> concessionario1.getId() == sedeId)
+            .findFirst()
+            .orElse(null);
   }
 }

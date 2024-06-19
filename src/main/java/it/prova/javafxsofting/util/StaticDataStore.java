@@ -84,7 +84,6 @@ public final class StaticDataStore {
     newAutoNuove = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
 
     if (newAutoNuove != null && !newAutoNuove.equals(modelliAuto)) {
-      // accodato
       newAutoNuove.forEach(
           modelloAuto ->
               modelloAuto.setOptionals(transformIdInOptionals(modelloAuto.getIdsOptionals())));
