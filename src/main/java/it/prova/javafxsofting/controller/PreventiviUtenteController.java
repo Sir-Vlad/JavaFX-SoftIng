@@ -6,13 +6,14 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
-import it.prova.javafxsofting.models.Acquisto;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -20,7 +21,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -34,19 +34,23 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class PreventiviUtenteController implements Initializable {
-
-  private static final ObservableList<Preventivo> preventiviUtente =
-      FXCollections.observableArrayList(UserSession.getInstance().getPreventivi());
+  private static final ObservableList<Preventivo> preventiviUtente = getPreventivi();
   private static ScheduledExecutorService scheduler;
+
+  static {
+    getPreventivi();
+  }
+
   private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   @FXML private AnchorPane root;
@@ -59,6 +63,20 @@ public class PreventiviUtenteController implements Initializable {
   @FXML private TableColumn<Preventivo, LocalDate> dataEmissioneColumn;
   @FXML private TableColumn<Preventivo, Void> confermaColumn;
   @FXML private TableView<Preventivo> tableView;
+
+  @Contract(" -> new")
+  private static @NotNull ObservableList<Preventivo> getPreventivi() {
+    ArrayList<Preventivo> preventivi =
+        new ArrayList<>(
+            UserSession.getInstance().getPreventivi().stream()
+                .filter(
+                    p ->
+                        p.getStato().equalsIgnoreCase("valido")
+                            || p.getStato().equalsIgnoreCase("va"))
+                .toList());
+
+    return FXCollections.observableArrayList(preventivi);
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -105,7 +123,7 @@ public class PreventiviUtenteController implements Initializable {
           if (acconto.isEmpty() || preventivo.getTotalePrezzo() - Integer.parseInt(acconto) < 0) {
             return;
           }
-          Acquisto acquisto = new Acquisto();
+          Ordine acquisto = new Ordine();
           acquisto.setAcconto(Integer.parseInt(acconto));
           loading.setVisible(true);
           PauseTransition pause = new PauseTransition(Duration.seconds(10));
@@ -326,7 +344,7 @@ public class PreventiviUtenteController implements Initializable {
   }
 
   private void updateTableView() {
-    logger.info("updateTableView");
+    logger.info("updateTableView - Preventivi");
     preventiviUtente.setAll(UserSession.getInstance().getPreventivi());
     Platform.runLater(
         () -> {

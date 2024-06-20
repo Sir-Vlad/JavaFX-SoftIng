@@ -84,10 +84,9 @@ public class ProfileAccountController implements Initializable {
 
     tabController.addTab(
         LITERAL_ORDINI,
-        new AnchorPane(),
-        //        FXMLLoader.load(
-        //            Objects.requireNonNull(App.class.getResource(PATH_DIR +
-        // "ordini_utente.fxml"))),
+        FXMLLoader.load(
+            Objects.requireNonNull(
+                App.class.getResource(PATH_DIR.resolve("ordini_utente.fxml").toString()))),
         ordiniBtn);
 
     tabController.addTab(

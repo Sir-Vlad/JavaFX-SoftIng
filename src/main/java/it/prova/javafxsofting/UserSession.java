@@ -1,9 +1,6 @@
 package it.prova.javafxsofting;
 
-import it.prova.javafxsofting.models.Ordine;
-import it.prova.javafxsofting.models.Preventivo;
-import it.prova.javafxsofting.models.PreventivoUsato;
-import it.prova.javafxsofting.models.Utente;
+import it.prova.javafxsofting.models.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -20,6 +17,7 @@ public class UserSession {
   private List<Preventivo> preventivi;
   private List<Ordine> ordini;
   private List<PreventivoUsato> preventiviUsati;
+  private List<Detrazione> detrazioni;
 
   @Getter(AccessLevel.NONE)
   @Setter(AccessLevel.NONE)
@@ -37,6 +35,22 @@ public class UserSession {
     return instance;
   }
 
+  public List<Ordine> getOrdini() {
+    if (getInstance().ordini == null) {
+      getInstance().setOrdini();
+    }
+
+    return getInstance().ordini;
+  }
+
+  public List<Preventivo> getPreventivi() {
+    if (getInstance().preventivi == null) {
+      getInstance().setPreventivi();
+    }
+
+    return getInstance().preventivi;
+  }
+
   public void setUtente(Utente utente) {
     this.utente = utente;
 
@@ -47,17 +61,13 @@ public class UserSession {
                 setPreventivi();
                 logger.info("init setPreventiviUsati");
                 setPreventiviUsati();
+                logger.info("init setOrdini");
+                setOrdini();
+                logger.info("init setDetrazioni");
+                setDetrazioni();
               })
           .start();
     }
-  }
-
-  public List<Preventivo> getPreventivi() {
-    if (getInstance().preventivi == null) {
-      getInstance().setPreventivi();
-    }
-
-    return getInstance().preventivi;
   }
 
   public static void clearSession() {
@@ -71,6 +81,41 @@ public class UserSession {
 
   public void setPreventiviUsati() {
     preventiviUsati = fetchPreventiviUsati();
+  }
+
+  public void setOrdini() {
+    ordini = fetchOrdini();
+  }
+
+  public void setDetrazioni() {
+    detrazioni = fetchDetrazioni();
+  }
+
+  private List<Detrazione> fetchDetrazioni() {
+    logger.info("fetchDetrazioni");
+    String subDirectory = String.format("utente/%d/detrazioni/", getInstance().getUtente().getId());
+    List<Detrazione> data;
+    try {
+      data = Connection.getArrayDataFromBackend(subDirectory, Detrazione.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return data;
+  }
+
+  private List<Ordine> fetchOrdini() {
+    logger.info("fetchOrdini");
+    String subDirectory = String.format("utente/%d/ordini/", getInstance().getUtente().getId());
+    List<Ordine> data;
+    try {
+      data = Connection.getArrayDataFromBackend(subDirectory, Ordine.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    if (data != null) {
+      data.forEach(Ordine::transformIdToObject);
+    }
+    return data;
   }
 
   private List<Preventivo> fetchPreventivi() {

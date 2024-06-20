@@ -1,16 +1,9 @@
-from datetime import datetime, timedelta
-
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
     ConcessionarioSerializer,
     ConfigurazioneSerializer,
+    DetrazioneSerializer,
     ImmaginiAutoNuoveSerializer,
     ImmaginiAutoUsateSerializer,
     ModelliAutoSerializer,
@@ -35,6 +28,12 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import create_pdf_file, send_html_email
+from datetime import datetime, timedelta
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -126,7 +125,7 @@ class PreventiviUtenteListAPIView(APIView):
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 
-        preventivi = Preventivo.objects.filter(utente_id=utente.id, valid=True)
+        preventivi = Preventivo.objects.filter(utente_id=utente.id)
 
         serializer = PreventivoSerializer(preventivi, many=True)
         return Response(serializer.data)
@@ -282,7 +281,7 @@ class ConfermaPreventivoUtenteAPIView(APIView):
                     preventivo_id=preventivo.id,
                 )
 
-                Preventivo.objects.filter(id=id_preventivo).update(valid=False)
+                Preventivo.objects.filter(id=id_preventivo).update(stato="PAGATO")
 
                 path_pdf = create_pdf_file(ordine)
 
@@ -339,3 +338,22 @@ class ConfermaPreventivoUtenteAPIView(APIView):
         days_optionals = optionals * 10
         data_consegna = now + timedelta(days=days_optionals) + timedelta(days=30)
         return data_consegna
+
+
+class DetrazioneListAPIView(APIView):
+    def get(self, request, id_utente):
+        preventivi_usati: list[PreventivoUsato] = list(
+            PreventivoUsato.objects.filter(utente_id=id_utente).values_list(
+                "auto_id", flat=True
+            )
+        )
+
+        if not preventivi_usati:
+            return Response(
+                "Non hai ancora acquistato auto", status=status.HTTP_400_BAD_REQUEST
+            )
+
+        autoUsate = AutoUsata.objects.filter(preventivousato__in=preventivi_usati)
+        detrazioni = Detrazione.objects.filter(auto_usata__in=autoUsate)
+        serializer = DetrazioneSerializer(detrazioni, many=True)
+        return Response(serializer.data)

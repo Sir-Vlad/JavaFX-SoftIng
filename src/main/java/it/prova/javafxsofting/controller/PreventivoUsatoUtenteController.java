@@ -21,13 +21,13 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 
 public class PreventivoUsatoUtenteController implements Initializable {
-  private ObservableList<PreventivoUsato> preventivoUsatoUtente =
+  private final ObservableList<PreventivoUsato> preventivoUsatoUtente =
       FXCollections.observableArrayList();
 
   @FXML private TableView<PreventivoUsato> tableView;
   @FXML private TableColumn<PreventivoUsato, Integer> idColumn;
   @FXML private TableColumn<PreventivoUsato, AutoUsata> modelloColumn;
-  @FXML private TableColumn<PreventivoUsato, Preventivo> preventivoColumn;
+  @FXML private TableColumn<PreventivoUsato, AutoUsata> preventivoColumn;
   @FXML private TableColumn<PreventivoUsato, AutoUsata> prezzoColumn;
   @FXML private TableColumn<PreventivoUsato, Boolean> statoColumn;
 
@@ -115,7 +115,30 @@ public class PreventivoUsatoUtenteController implements Initializable {
   }
 
   private void setColumnPreventivo() {
-    //    preventivoColumn.setCellValueFactory(new PropertyValueFactory<>("preventivo"));
+    preventivoColumn.setCellValueFactory(new PropertyValueFactory<>("autoUsata"));
+    preventivoColumn.setCellFactory(
+        column ->
+            new TableCell<>() {
+              @Override
+              protected void updateItem(AutoUsata item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                  setText(null);
+                } else {
+                  System.out.println("Item: " + item);
+                  System.out.println(UserSession.getInstance().getDetrazioni());
+                  int idPreventivo =
+                      UserSession.getInstance().getDetrazioni().stream()
+                          .filter(detrazione -> detrazione.getIdAutoUsata() == item.getId())
+                          .toList()
+                          .getFirst()
+                          .getIdPreventivo();
+
+                  setText(String.valueOf(idPreventivo));
+                  setAlignment(Pos.CENTER);
+                }
+              }
+            });
   }
 
   private void setColumnModello() {

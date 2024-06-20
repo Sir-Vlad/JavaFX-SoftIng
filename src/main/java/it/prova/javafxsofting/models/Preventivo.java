@@ -35,6 +35,9 @@ public class Preventivo implements Serializable {
   @SerializedName("config")
   private int[] idRefConfig;
 
+  @SerializedName("stato")
+  private String stato;
+
   @Expose(serialize = false, deserialize = false)
   private Utente utente;
 
@@ -124,7 +127,7 @@ public class Preventivo implements Serializable {
     this.concessionario =
         StaticDataStore.getConcessionari().stream()
             .filter(concessionario1 -> concessionario1.getId() == sedeId)
-            .findFirst()
-            .orElse(null);
+            .toList()
+            .getFirst();
   }
 }

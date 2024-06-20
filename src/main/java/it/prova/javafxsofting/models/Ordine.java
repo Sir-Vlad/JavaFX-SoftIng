@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import it.prova.javafxsofting.UserSession;
 import java.io.Serializable;
+import java.time.LocalDate;
 import lombok.Data;
 
 @Data
@@ -23,6 +24,9 @@ public class Ordine implements Serializable {
   @SerializedName("acconto")
   private int acconto;
 
+  @SerializedName("data_ritiro")
+  private LocalDate dataRitiro;
+
   @Expose(serialize = false, deserialize = false)
   private Utente utente;
 
@@ -37,7 +41,7 @@ public class Ordine implements Serializable {
     this.preventivo =
         UserSession.getInstance().getPreventivi().stream()
             .filter(obj -> obj.getId() == preventivoID)
-            .findFirst()
-            .orElse(null);
+            .toList()
+            .getFirst();
   }
 }

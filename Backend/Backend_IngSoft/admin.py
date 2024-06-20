@@ -1,7 +1,4 @@
-from typing import Any
-
 from django.contrib import admin
-
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
@@ -9,6 +6,7 @@ from django.db import transaction
 from django.db.models import Model
 from django.forms import Form
 from django.http import HttpRequest
+from typing import Any
 from unfold.admin import ModelAdmin, TabularInline
 
 from .models import *
@@ -198,9 +196,9 @@ class PreventivoAdmin(ModelAdmin):
         "utente",
         "modello",
         "prezzo",
-        "valid",
+        "stato",
     )
-    list_filter = ("valid", "utente", "modello__marca", "concessionario")
+    list_filter = ("stato", "utente", "modello__marca", "concessionario")
 
 
 @admin.register(Acquisto)

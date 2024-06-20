@@ -7,6 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import CASCADE
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 
 class Utente(models.Model):
@@ -118,6 +119,12 @@ class Concessionario(models.Model):
         }
 
 
+class StatoPreventivo(models.TextChoices):
+    PAGATO = "PG", _("Pagato")
+    VALIDO = "VA", _("Valida")
+    SCADUTO = "SC", _("Scaduto")
+
+
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
@@ -126,7 +133,9 @@ class Preventivo(models.Model):
         Concessionario, on_delete=CASCADE, null=False, blank=False
     )
     prezzo = models.PositiveIntegerField(null=False, blank=False)
-    valid = models.BooleanField(default=True)
+    stato = models.CharField(
+        max_length=2, choices=StatoPreventivo.choices, default=StatoPreventivo.VALIDO
+    )
 
     class Meta:
         verbose_name_plural = "Preventivi"

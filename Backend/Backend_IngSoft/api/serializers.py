@@ -1,17 +1,10 @@
 import base64
-from io import BytesIO
-
-from PIL import Image
-from django.db import IntegrityError, transaction
-from django.db.models import Prefetch
-from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
-
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
     Concessionario,
     Configurazione,
+    Detrazione,
     ImmaginiAutoNuove,
     ImmaginiAutoUsate,
     ModelloAuto,
@@ -21,6 +14,12 @@ from Backend_IngSoft.models import (
     Ritiro,
     Utente,
 )
+from PIL import Image
+from django.db import IntegrityError, transaction
+from django.db.models import Prefetch
+from drf_extra_fields.fields import Base64ImageField
+from io import BytesIO
+from rest_framework import serializers
 
 
 class UtenteSerializer(serializers.ModelSerializer):
@@ -226,3 +225,9 @@ class ImmaginiAutoUsateSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class DetrazioneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Detrazione
+        fields = "__all__"

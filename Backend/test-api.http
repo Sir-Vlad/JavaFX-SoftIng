@@ -7,7 +7,7 @@ Content-Type: application/json
   "utente": 1,
   "auto": {
     "modello": "Fiat Punto",
-    "marca": "Fiat",
+    "marca": "NISSAN",
     "altezza": 1500,
     "lunghezza": 1500,
     "larghezza": 1500,
@@ -57,15 +57,14 @@ Content-Type: application/json
     "utente": 11,
     "concessionario": 1,
     "modello": 1,
-    "prezzo": 20000,
-    "data_emissione": "2023-12-02"
+    "prezzo": 20000
   },
   "optional": [
     3,
     13,
     48
   ],
-  "detrazione": 2
+  "detrazione": 1
 }
 
 

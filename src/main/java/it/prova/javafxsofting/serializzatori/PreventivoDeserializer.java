@@ -24,6 +24,7 @@ public class PreventivoDeserializer implements JsonDeserializer<Preventivo> {
       preventivo = new Preventivo(utenteId, modelloId, concessionarioId, prezzo, dataEmissione);
     }
     preventivo.setId(id);
+    preventivo.setStato(jsonObject.get("stato").getAsString());
 
     JsonArray optionals = jsonObject.get("config").getAsJsonArray();
     int[] idOpt = new int[optionals.size()];
