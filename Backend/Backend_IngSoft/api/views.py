@@ -631,3 +631,57 @@ class DetrazioneListAPIView(APIView):
         detrazioni = Detrazione.objects.filter(auto_usata__in=autoUsate)
         serializer = DetrazioneSerializer(detrazioni, many=True)
         return Response(serializer.data)
+
+
+class AutoUsateComprate(APIView):
+    @swagger_auto_schema(
+        operation_description="Ritorna tutte le auto usate comprate da un utente",
+        responses={
+            200: AutoUsataSerializer,
+            402: "Auto non ancora venduta",
+            404: "Preventivo o utente non trovato",
+        },
+    )
+    def get(self, request, id_utente, id_auto):
+        try:
+            utente: Utente = Utente.objects.get(id=id_utente)
+        except Utente.DoesNotExist:
+            return HttpResponseNotFound("Utente non esiste")
+
+        try:
+            autoUsata: AutoUsata = AutoUsata.objects.get(id=id_auto)
+        except AutoUsata.DoesNotExist:
+            return HttpResponseNotFound("Auto usata non esiste")
+
+        if not autoUsata.venduta:
+            return Response(
+                "Auto non ancora venduta", status=status.HTTP_402_PAYMENT_REQUIRED
+            )
+
+        serializer = AutoUsataSerializer(autoUsata)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        operation_description="Segna un'auto usata come venduta da un utente",
+        responses={
+            201: "Auto usata acquistata",
+            402: "Auto non ancora venduta",
+            404: "Preventivo o utente non trovato",
+        },
+    )
+    def post(self, request, id_utente, id_auto):
+        try:
+            utente: Utente = Utente.objects.get(id=id_utente)
+        except Utente.DoesNotExist:
+            return HttpResponseNotFound("Utente non esiste")
+
+        try:
+            autoUsata: AutoUsata = AutoUsata.objects.get(id=id_auto)
+        except AutoUsata.DoesNotExist:
+            return HttpResponseNotFound("Auto usata non esiste")
+
+        if autoUsata.venduta:
+            return Response("Auto già venduta", status=status.HTTP_402_PAYMENT_REQUIRED)
+
+        AutoUsata.objects.filter(id=id_auto).update(venduta=True)
+        return Response(status=status.HTTP_201_CREATED)

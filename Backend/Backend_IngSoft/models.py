@@ -276,6 +276,7 @@ class AutoUsata(Auto):
         validators=[validate_targa],
         default="AA000AA",
     )
+    venduta = models.BooleanField(null=False, blank=False, default=False)
 
     class Meta:
         verbose_name_plural = "Auto Usate"

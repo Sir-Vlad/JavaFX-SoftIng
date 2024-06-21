@@ -1,4 +1,5 @@
 from Backend_IngSoft.api.views import (
+    AutoUsateComprate,
     AcquistoUtenteListAPIView,
     AutoUsateListAPIView,
     ConcessionarioListAPIView,
@@ -58,6 +59,11 @@ urlpatterns = [
         "utente/<int:id_utente>/detrazioni/",
         DetrazioneListAPIView.as_view(),
         name="Acquisti Utente",
+    ),
+    path(
+        "utente/<int:id_utente>/autoUsata/<int:id_auto>/compra/",
+        AutoUsateComprate.as_view(),
+        name="Acquisto auto usata",
     ),
     path(
         "immaginiAutoNuove/<int:id_auto>/",
