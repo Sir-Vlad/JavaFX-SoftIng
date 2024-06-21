@@ -131,6 +131,11 @@ class PreventiviUtenteListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, id_utente):
+        try:
+            _utente = Utente.objects.get(id=id_utente)
+        except Utente.DoesNotExist:
+            return HttpResponseNotFound("Utente non esiste")
+
         auto_usata_id = request.data.pop("detrazione", None)
         data_emissione = request.data.get("preventivo", {}).get("data_emissione")
 
@@ -206,7 +211,7 @@ class AutoUsateListAPIView(APIView):
 
     def post(self, request):
         utente = request.data.pop("utente")
-        immagini = request.data.pop("immagini", [])
+        print(request.data.get("auto"))
         auto_usata = AutoUsataSerializer(data=request.data.pop("auto"))
         if auto_usata.is_valid():
             with transaction.atomic():
@@ -250,9 +255,14 @@ class ImmaginiAutoUsateListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, id_auto):
+        try:
+            _auto = AutoUsata.objects.get(id=id_auto)
+        except AutoUsata.DoesNotExist:
+            return HttpResponseNotFound("Auto non esiste")
+
         serializer = ImmaginiAutoUsateSerializer(data=request.data, many=True)
         if serializer.is_valid():
-            instance = serializer.save()
+            serializer.save()
             return Response(
                 status=status.HTTP_201_CREATED,
             )
@@ -302,7 +312,7 @@ class ConfermaPreventivoUtenteAPIView(APIView):
                 )
 
                 return Response(status=status.HTTP_201_CREATED)
-        except Exception as e:
+        except Exception as _e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod

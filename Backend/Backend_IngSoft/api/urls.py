@@ -69,9 +69,4 @@ urlpatterns = [
         ImmaginiAutoUsateListAPIView.as_view(),
         name="Immagini Auto Usate",
     ),
-    path(
-        "autoUsata/<int:id_auto>/",
-        AutoUsateListAPIView.as_view(),
-        name="auto-usate-list",
-    ),
 ]

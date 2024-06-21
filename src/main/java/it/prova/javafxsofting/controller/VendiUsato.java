@@ -330,9 +330,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     AutoUsata autoUsata =
         new AutoUsata(
             modelloField.getText(),
-            marcaField
-                .getSelectionModel()
-                .getSelectedItem(), // fixme: mi ritorna l'indice dell'elenco
+            marcaField.getSelectionModel().getSelectedItem(),
             Integer.parseInt(altezzaField.getText()),
             Integer.parseInt(lunghezzaField.getText()),
             Integer.parseInt(larghezzaField.getText()),

@@ -6,8 +6,8 @@ Content-Type: application/json
 {
   "utente": 1,
   "auto": {
-    "modello": "Fiat Punto",
-    "marca": "NISSAN",
+    "modello": "Fiat Punto XL",
+    "marca": "VOLKSWAGEN",
     "altezza": 1500,
     "lunghezza": 1500,
     "larghezza": 1500,

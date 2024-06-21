@@ -41,7 +41,7 @@ class MarcaAuto(models.TextChoices):
 class Auto(models.Model):
     modello = models.CharField(max_length=20, unique=True, null=False, blank=False)
     marca = models.CharField(
-        max_length=20, null=False, blank=False, choices=MarcaAuto
+        max_length=20, null=False, blank=False, choices=MarcaAuto.choices
     )  # lista di valori noti
     # dati auto
     altezza = models.PositiveIntegerField(null=False, blank=False)

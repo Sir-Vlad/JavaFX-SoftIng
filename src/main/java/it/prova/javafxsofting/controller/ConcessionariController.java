@@ -21,6 +21,7 @@ import javafx.scene.layout.Pane;
 public class ConcessionariController implements Initializable {
   private static final ObservableList<Concessionario> concessionari =
       FXCollections.observableArrayList(StaticDataStore.getConcessionari());
+  private static final String INDIRIZZO_LITERAL = "indirizzo";
   @FXML private Pane wrapperRoot;
 
   @FXML private Header header;
@@ -52,7 +53,7 @@ public class ConcessionariController implements Initializable {
   }
 
   private void setCap() {
-    capColumn.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
+    capColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     capColumn.setCellFactory(
         column ->
             new TableCell<Concessionario, Indirizzo>() {
@@ -70,7 +71,7 @@ public class ConcessionariController implements Initializable {
   }
 
   private void setCitta() {
-    cittaColumn.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
+    cittaColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     cittaColumn.setCellFactory(
         column ->
             new TableCell<Concessionario, Indirizzo>() {
@@ -88,7 +89,7 @@ public class ConcessionariController implements Initializable {
   }
 
   private void setCivico() {
-    civicoColumn.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
+    civicoColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     civicoColumn.setCellFactory(
         column ->
             new TableCell<Concessionario, Indirizzo>() {
@@ -106,7 +107,7 @@ public class ConcessionariController implements Initializable {
   }
 
   private void setVia() {
-    viaColumn.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
+    viaColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     viaColumn.setCellFactory(
         column ->
             new TableCell<Concessionario, Indirizzo>() {

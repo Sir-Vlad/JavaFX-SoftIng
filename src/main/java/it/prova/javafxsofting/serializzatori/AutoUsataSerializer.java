@@ -17,7 +17,7 @@ public class AutoUsataSerializer implements JsonSerializer<AutoUsata> {
 
     JsonObject autoUsata = new JsonObject();
     autoUsata.addProperty("modello", src.getModello());
-    autoUsata.addProperty("marca", src.getMarca().ordinal());
+    autoUsata.addProperty("marca", src.getMarca().name());
     autoUsata.addProperty("km_percorsi", src.getKmPercorsi());
     autoUsata.addProperty("targa", src.getTarga());
 

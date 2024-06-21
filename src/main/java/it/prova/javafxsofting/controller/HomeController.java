@@ -1,6 +1,5 @@
 package it.prova.javafxsofting.controller;
 
-import it.prova.javafxsofting.*;
 import it.prova.javafxsofting.component.Header;
 import java.net.URL;
 import java.util.ResourceBundle;

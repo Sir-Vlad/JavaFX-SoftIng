@@ -82,7 +82,7 @@ public class PreventiviUtenteController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     /*Aggiorna la tabella dei preventivi quando si aggiunge un nuovo preventivo*/
     UserSession.getInstance()
-        .addListener(
+        .addListenerPreventivo(
             new UserSession.PreventivoListener() {
               @Override
               public void onPreventivoChange(List<Preventivo> preventivi) {
@@ -151,7 +151,7 @@ public class PreventiviUtenteController implements Initializable {
                 pause1.setOnFinished(
                     event1x -> {
                       updatePreventivi();
-                      // todo: aggiornare le tabella di ordini
+                      UserSession.getInstance().setOrdini();
                       stage.close();
                     });
                 pause1.play();

@@ -4,7 +4,14 @@ import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.*;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,11 +26,17 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import org.jetbrains.annotations.NotNull;
 
 public class PreventivoUsatoUtenteController implements Initializable {
-  private final ObservableList<PreventivoUsato> preventivoUsatoUtente =
-      FXCollections.observableArrayList();
+  private static final ObservableList<PreventivoUsato> preventivoUsatoUtente = getPreventiviUsati();
+  private static ScheduledExecutorService scheduler;
 
+  static {
+    getPreventiviUsati();
+  }
+
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
   @FXML private TableView<PreventivoUsato> tableView;
   @FXML private TableColumn<PreventivoUsato, Integer> idColumn;
   @FXML private TableColumn<PreventivoUsato, AutoUsata> modelloColumn;
@@ -31,12 +44,30 @@ public class PreventivoUsatoUtenteController implements Initializable {
   @FXML private TableColumn<PreventivoUsato, AutoUsata> prezzoColumn;
   @FXML private TableColumn<PreventivoUsato, Boolean> statoColumn;
 
+  private static @NotNull ObservableList<PreventivoUsato> getPreventiviUsati() {
+    ArrayList<PreventivoUsato> preventiviUsati =
+        new ArrayList<>(UserSession.getInstance().getPreventiviUsati());
+    return FXCollections.observableArrayList(preventiviUsati);
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    if (UserSession.getInstance().getPreventiviUsati() != null) {
-      preventivoUsatoUtente.setAll(UserSession.getInstance().getPreventiviUsati());
-    }
+    /*Aggiorna la tabella dei preventivi quando si aggiunge un nuovo preventivo*/
+    UserSession.getInstance()
+        .addListenerPreventivoUsato(
+            new UserSession.PreventivoUsatoListener() {
+              @Override
+              public void onPreventivoChange(List<PreventivoUsato> preventivi) {
+                updateTableView();
+              }
+
+              @Override
+              public void onPreventivoAdded(PreventivoUsato preventivo) {
+                preventivoUsatoUtente.add(preventivo);
+              }
+            });
     setTableView();
+    startPeriodicUpdate();
   }
 
   private void setTableView() {
@@ -125,8 +156,6 @@ public class PreventivoUsatoUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  System.out.println("Item: " + item);
-                  System.out.println(UserSession.getInstance().getDetrazioni());
                   int idPreventivo =
                       UserSession.getInstance().getDetrazioni().stream()
                           .filter(detrazione -> detrazione.getIdAutoUsata() == item.getId())
@@ -152,6 +181,7 @@ public class PreventivoUsatoUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
+                  System.out.println(item);
                   setText(item.getModello());
                   setAlignment(Pos.CENTER);
                 }
@@ -175,5 +205,26 @@ public class PreventivoUsatoUtenteController implements Initializable {
                 }
               }
             });
+  }
+
+  private void startPeriodicUpdate() {
+    scheduler = Executors.newScheduledThreadPool(1);
+    scheduler.scheduleAtFixedRate(this::updatePreventiviUsati, 5, 30, TimeUnit.MINUTES);
+  }
+
+  private void updatePreventiviUsati() {
+    logger.info("updatePreventiviUsati");
+    UserSession.getInstance().setPreventiviUsati();
+    updateTableView();
+  }
+
+  private void updateTableView() {
+    logger.info("updateTableView - PreventiviUsati");
+    preventivoUsatoUtente.setAll(UserSession.getInstance().getPreventiviUsati());
+    Platform.runLater(
+        () -> {
+          tableView.getItems().clear();
+          tableView.getItems().setAll(preventivoUsatoUtente);
+        });
   }
 }

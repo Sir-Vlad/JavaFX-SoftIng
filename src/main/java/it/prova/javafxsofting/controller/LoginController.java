@@ -153,10 +153,11 @@ public class LoginController extends ValidateForm implements Initializable {
     }
 
     // delete file if exists and create it
-    if (Files.exists(path.resolve("utente.txt"))) {
-      Files.delete(path.resolve("utente.txt"));
+    Path fileRemember = path.resolve("utente.txt");
+    if (Files.exists(fileRemember)) {
+      Files.delete(fileRemember);
     }
-    Path fileUtente = Files.createFile(path.resolve("utente.txt"));
+    Path fileUtente = Files.createFile(fileRemember);
     Files.write(fileUtente, UserSession.getInstance().getUtente().getEmail().getBytes());
   }
 

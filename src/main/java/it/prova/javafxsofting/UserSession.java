@@ -23,7 +23,8 @@ public class UserSession {
   @Setter(AccessLevel.NONE)
   private Logger logger = Logger.getLogger(this.getClass().getName());
 
-  private List<PreventivoListener> listeners = new ArrayList<>();
+  private List<PreventivoListener> listenersPreventivi = new ArrayList<>();
+  private List<PreventivoUsatoListener> listenersPreventiviUsati = new ArrayList<>();
 
   @Contract(pure = true)
   private UserSession() {}
@@ -76,11 +77,12 @@ public class UserSession {
 
   public void setPreventivi() {
     preventivi = fetchPreventivi();
-    notifyListeners();
+    notifyListenersPreventivo();
   }
 
   public void setPreventiviUsati() {
     preventiviUsati = fetchPreventiviUsati();
+    notifyListenersPreventivoUsato();
   }
 
   public void setOrdini() {
@@ -133,8 +135,12 @@ public class UserSession {
     return data;
   }
 
-  public void addListener(PreventivoListener listener) {
-    listeners.add(listener);
+  public void addListenerPreventivo(PreventivoListener listener) {
+    listenersPreventivi.add(listener);
+  }
+
+  public void addListenerPreventivoUsato(PreventivoUsatoListener listener) {
+    listenersPreventiviUsati.add(listener);
   }
 
   private List<PreventivoUsato> fetchPreventiviUsati() {
@@ -153,9 +159,15 @@ public class UserSession {
     return data;
   }
 
-  private void notifyListeners() {
-    for (PreventivoListener listener : listeners) {
+  private void notifyListenersPreventivo() {
+    for (PreventivoListener listener : listenersPreventivi) {
       listener.onPreventivoChange(new ArrayList<>(preventivi));
+    }
+  }
+
+  private void notifyListenersPreventivoUsato() {
+    for (PreventivoUsatoListener listener : listenersPreventiviUsati) {
+      listener.onPreventivoChange(new ArrayList<>(preventiviUsati));
     }
   }
 
@@ -163,5 +175,11 @@ public class UserSession {
     void onPreventivoChange(List<Preventivo> preventivi);
 
     void onPreventivoAdded(Preventivo preventivo);
+  }
+
+  public interface PreventivoUsatoListener {
+    void onPreventivoChange(List<PreventivoUsato> preventivi);
+
+    void onPreventivoAdded(PreventivoUsato preventivo);
   }
 }

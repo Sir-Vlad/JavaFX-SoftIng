@@ -186,7 +186,7 @@ public class OrdiniUtenteController implements Initializable {
     updateTableView();
   }
 
-  private void updateTableView() {
+  public void updateTableView() {
     logger.info("updateTableView - Ordini");
     ordiniUtente.setAll(UserSession.getInstance().getOrdini());
     Platform.runLater(
