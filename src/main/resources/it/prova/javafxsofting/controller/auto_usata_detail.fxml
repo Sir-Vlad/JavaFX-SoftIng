@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import it.prova.javafxsofting.component.Header?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import java.lang.String?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="800.0" prefWidth="1200.0"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="it.prova.javafxsofting.controller.AutoUsataDetail">
+    <children>
+        <VBox prefHeight="800.0" prefWidth="1200.0">
+            <children>
+                <Header fx:id="header"/>
+                <HBox fx:id="context" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                            <bottom>
+                                <HBox alignment="CENTER" prefHeight="50.0" spacing="20.0"
+                                      BorderPane.alignment="CENTER">
+                                    <children>
+                                        <MFXButton fx:id="prev" buttonType="RAISED"
+                                                   onAction="#prevImage" prefHeight="20.0"
+                                                   prefWidth="100.0" text="Indietro"/>
+                                        <MFXButton fx:id="next" buttonType="RAISED"
+                                                   onAction="#nextImage" prefHeight="20.0"
+                                                   prefWidth="100.0" text="Avanti"/>
+                                    </children>
+                                </HBox>
+                            </bottom>
+                            <center>
+                                <StackPane fx:id="stackPaneImage" prefHeight="150.0"
+                                           prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                            </center>
+                        </BorderPane>
+                        <VBox style="-fx-background-color: #E9E9E9;" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                            <children>
+                                <VBox fx:id="datiAuto" prefHeight="200.0" prefWidth="100.0"
+                                      spacing="20.0" stylesheets="@../css/configurator.css"
+                                      VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                                              text="dati dell'Auto">
+                                            <styleClass>
+                                                <String fx:value="title-part"/>
+                                                <String fx:value="text-field-font"/>
+                                            </styleClass>
+                                        </Text>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </VBox.margin>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #B4B7B7D9;">
+                    <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                        <VBox alignment="CENTER" prefWidth="200.0">
+                            <children>
+                                <MFXButton fx:id="acquistaAuto" alignment="CENTER"
+                                           onAction="#acquistaAuto"
+                                           buttonType="RAISED" contentDisplay="CENTER"
+                                           maxWidth="1.7976931348623157E308" rippleRadius="50.0"
+                                           rippleRadiusMultiplier="10.0" text="Acquista"
+                                           textAlignment="CENTER"/>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

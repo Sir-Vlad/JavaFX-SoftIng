@@ -210,9 +210,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     FileChooser fileChooser = new FileChooser();
 
     // decido le estensioni ammissibili
-    fileChooser
-        .getExtensionFilters()
-        .addAll(new ExtensionFilter("Image File", "*.jpeg", "*.jpg", "*.png"));
+    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.jpeg", "*.png"));
 
     // apre una finestra dove poter scegliere i file
     List<File> listImmagini = fileChooser.showOpenMultipleDialog(null);

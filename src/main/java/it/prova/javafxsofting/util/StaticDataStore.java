@@ -2,7 +2,6 @@ package it.prova.javafxsofting.util;
 
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.models.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,10 +37,10 @@ public final class StaticDataStore {
 
   public static void fetchAllData() throws Exception {
     try {
-      StaticDataStore.fetchOptionals();
-      StaticDataStore.fetchModelliAuto();
+      //      StaticDataStore.fetchOptionals();
+      //      StaticDataStore.fetchModelliAuto();
       StaticDataStore.fetchAutoUsate();
-      StaticDataStore.fetchConcessionari();
+      //      StaticDataStore.fetchConcessionari();
     } catch (Exception e) {
       serverAvailable = false;
     }

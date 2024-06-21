@@ -2,12 +2,14 @@ package it.prova.javafxsofting.component;
 
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.controller.ScegliModelloController;
+import it.prova.javafxsofting.controller.ScegliUsatoController;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Auto;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ModelloAuto;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.Objects;
 import javafx.fxml.FXML;
@@ -35,8 +37,10 @@ public class CardAuto extends VBox {
 
     labelNomeAuto.setText(auto.getModello());
 
-    String tipoMotore = "GPL"; // accodato: tipoMotore cardAuto
-    labelTipoMotore.setText(tipoMotore);
+    if (auto instanceof ModelloAuto) {
+      String tipoMotore = "GPL"; // accodato: tipoMotore cardAuto
+      labelTipoMotore.setText(tipoMotore);
+    }
 
     DecimalFormat decimalFormat = new DecimalFormat("###,###");
     int prezzo = 0;
@@ -71,6 +75,23 @@ public class CardAuto extends VBox {
             }
 
             ScreenController.activate("config");
+          } else if (auto instanceof AutoUsata autoUsata) {
+            ScegliUsatoController.setAutoSelezionata(autoUsata);
+
+            try {
+              ScreenController.addScreen(
+                  "autoUsataDetail",
+                  FXMLLoader.load(
+                      Objects.requireNonNull(
+                          App.class.getResource(
+                              Path.of("controller")
+                                  .resolve("auto_usata_detail.fxml")
+                                  .toString()))));
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+
+            ScreenController.activate("autoUsataDetail");
           }
           event.consume();
         });
