@@ -152,37 +152,37 @@ public class App extends javafx.application.Application {
     notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
   }
 
-  private void createScreenController() throws IOException {
+  private void createScreenController() {
     ScreenController.addScreen(
         "home",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
+        new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
-    //    ScreenController.addScreen(
-    //        "scegliModello",
-    //        FXMLLoader.load(
-    //            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    ScreenController.addScreen(
+        "scegliModello",
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
     // // debug
 
     ScreenController.addScreen(
         "login",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
+        new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
 
     ScreenController.addScreen(
         "registrazione",
-        FXMLLoader.load(
+        new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
     // // debug
 
-    //    ScreenController.addScreen(
-    //        "concessionari",
-    //        FXMLLoader.load(
-    //            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+    ScreenController.addScreen(
+        "concessionari",
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
     // // debug
 
     ScreenController.addScreen(
         "scegliUsato",
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml")))); //
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
     // debug
   }
 }

@@ -120,7 +120,7 @@ class ImmaginiInlineAutoUsata(TabularInline):
 @admin.register(AutoUsata)
 class AutoUsataAdmin(ModelAdmin):
     list_display = ("modello", "prezzo")
-    list_filter = (PrezzoAutoUsataFilter,)
+    list_filter = (PrezzoAutoUsataFilter, "venduta")
     inlines = [ImmaginiInlineAutoUsata]
 
     def get_readonly_fields(self, request, obj=None):

@@ -37,10 +37,10 @@ public final class StaticDataStore {
 
   public static void fetchAllData() throws Exception {
     try {
-      //      StaticDataStore.fetchOptionals();
-      //      StaticDataStore.fetchModelliAuto();
+      StaticDataStore.fetchOptionals();
+      StaticDataStore.fetchModelliAuto();
       StaticDataStore.fetchAutoUsate();
-      //      StaticDataStore.fetchConcessionari();
+      StaticDataStore.fetchConcessionari();
     } catch (Exception e) {
       serverAvailable = false;
     }

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.Objects;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -64,32 +63,18 @@ public class CardAuto extends VBox {
           if (auto instanceof ModelloAuto modelloAuto) {
             ScegliModelloController.setAutoSelezionata(modelloAuto);
 
-            try {
-              ScreenController.addScreen(
-                  "config",
-                  FXMLLoader.load(
-                      Objects.requireNonNull(
-                          App.class.getResource(PATH_DIR + "configurator.fxml"))));
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
+            ScreenController.addScreen(
+                "config", new FXMLLoader(App.class.getResource(PATH_DIR + "configurator.fxml")));
 
             ScreenController.activate("config");
           } else if (auto instanceof AutoUsata autoUsata) {
             ScegliUsatoController.setAutoSelezionata(autoUsata);
 
-            try {
-              ScreenController.addScreen(
-                  "autoUsataDetail",
-                  FXMLLoader.load(
-                      Objects.requireNonNull(
-                          App.class.getResource(
-                              Path.of("controller")
-                                  .resolve("auto_usata_detail.fxml")
-                                  .toString()))));
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
+            ScreenController.addScreen(
+                "autoUsataDetail",
+                new FXMLLoader(
+                    App.class.getResource(
+                        Path.of("controller").resolve("auto_usata_detail.fxml").toString())));
 
             ScreenController.activate("autoUsataDetail");
           }

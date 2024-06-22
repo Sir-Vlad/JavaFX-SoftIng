@@ -45,9 +45,9 @@ import org.jetbrains.annotations.NotNull;
 public class AutoUsataDetail implements Initializable {
   private static final Logger logger = Logger.getLogger(AutoUsataDetail.class.getName());
   private final List<Image> images = new ArrayList<>();
-  public StackPane stackPaneImage;
-  public VBox datiAuto;
-  public AnchorPane root;
+  @FXML private StackPane stackPaneImage;
+  @FXML private VBox datiAuto;
+  @FXML private AnchorPane root;
   @FXML private Header header;
   @FXML private MFXButton prev;
   @FXML private MFXButton next;
@@ -108,8 +108,6 @@ public class AutoUsataDetail implements Initializable {
     }
 
     openStageBuy();
-
-    // todo: update scegliusato
 
     ScreenController.removeScreen("autoUsataDetail");
     ScreenController.activate("home");
@@ -174,7 +172,17 @@ public class AutoUsataDetail implements Initializable {
                 PauseTransition pause1 = new PauseTransition(Duration.seconds(3));
                 pause1.setOnFinished(
                     event1x -> {
-                      UserSession.getInstance().setOrdini();
+                      new Thread(
+                              () -> {
+                                UserSession.getInstance().setOrdini();
+                                // update page ScegliUsato
+                                ScegliUsatoController controller =
+                                    ScreenController.getSCREEN_MAP()
+                                        .get("scegliUsato")
+                                        .getController();
+                                controller.updatePage();
+                              })
+                          .start();
                       stage.close();
                     });
                 pause1.play();

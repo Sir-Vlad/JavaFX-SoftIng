@@ -16,7 +16,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,25 +36,21 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginController extends ValidateForm implements Initializable {
   private static final String PATH_REMEMBER_UTENTE = "instance/utente";
+  private final Logger logger = Logger.getLogger(LoginController.class.getName());
   @FXML private AnchorPane rootLogin;
   @FXML private VBox wrapperLogin;
-
   @FXML private MFXTextField emailField;
   @FXML private MFXPasswordField passwordField;
   @FXML private MFXCheckbox rememberMe;
   @FXML private MFXButton logInBtn;
-
   @FXML private Text register;
   @FXML private Text textRegister;
   @FXML private Label passwordLabel;
   @FXML private Label emailLabel;
   @FXML private Label forgotPasswordLabel;
   @FXML private HBox wrapperLogInBtn;
-
   @FXML private Label validateEmail;
   @FXML private Label validatePassword;
-
-  private final Logger logger = Logger.getLogger(LoginController.class.getName());
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -131,9 +126,8 @@ public class LoginController extends ValidateForm implements Initializable {
 
     ScreenController.addScreen(
         "profilo",
-        FXMLLoader.load(
-            Objects.requireNonNull(
-                App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml"))));
+        new FXMLLoader(
+            App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml")));
 
     clearField();
 
@@ -141,6 +135,23 @@ public class LoginController extends ValidateForm implements Initializable {
       case "config" -> ScreenController.activate("config");
       case "vendiUsato" -> ScreenController.activate("vendiUsato");
       default -> ScreenController.activate("home");
+    }
+  }
+
+  public void forgotPassword(@NotNull MouseEvent mouseEvent) {
+    NotImplemented.notImplemented();
+    mouseEvent.consume();
+  }
+
+  public void switchRegister(@NotNull MouseEvent mouseEvent) {
+    ScreenController.activate("registrazione");
+    mouseEvent.consume();
+  }
+
+  @Override
+  public void showError(@NotNull List<Constraint> constraints, MFXTextField field, Label label) {
+    if (!constraints.isEmpty()) {
+      super.showError(constraints, field, label);
     }
   }
 
@@ -159,23 +170,6 @@ public class LoginController extends ValidateForm implements Initializable {
     }
     Path fileUtente = Files.createFile(fileRemember);
     Files.write(fileUtente, UserSession.getInstance().getUtente().getEmail().getBytes());
-  }
-
-  public void forgotPassword(@NotNull MouseEvent mouseEvent) {
-    NotImplemented.notImplemented();
-    mouseEvent.consume();
-  }
-
-  public void switchRegister(@NotNull MouseEvent mouseEvent) {
-    ScreenController.activate("registrazione");
-    mouseEvent.consume();
-  }
-
-  @Override
-  public void showError(@NotNull List<Constraint> constraints, MFXTextField field, Label label) {
-    if (!constraints.isEmpty()) {
-      super.showError(constraints, field, label);
-    }
   }
 
   private void clearField() {
