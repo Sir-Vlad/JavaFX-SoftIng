@@ -153,7 +153,7 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
                 preventivo = Preventivo.objects.create(**preventivo_data)
                 configurazione = Configurazione.objects.create(preventivo=preventivo)
                 configurazione.optional.set(optional_ids)
-                ritiro = Ritiro.objects.create(
+                Ritiro.objects.create(
                     preventivo=preventivo, concessionario=preventivo.concessionario
                 )
 

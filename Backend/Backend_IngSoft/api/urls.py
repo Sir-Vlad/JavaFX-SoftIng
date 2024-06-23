@@ -40,41 +40,41 @@ urlpatterns = [
     path(
         "utente/<int:id_utente>/preventivi/",
         PreventiviUtenteListAPIView.as_view(),
-        name="Preventivi Utente",
+        name="preventivi-uUtente",
     ),
     path(
         "utente/<int:id_utente>/preventiviUsato/",
         PreventivoAutoUsateAPIView.as_view(),
-        name="Preventivi Auto Usate Utente",
+        name="preventivi-auto-usate-utente",
     ),
     path(
         "utente/<int:id_utente>/preventivo/<int:id_preventivo>/conferma/",
         ConfermaPreventivoUtenteAPIView.as_view(),
-        name="Acquisti Utente",
+        name="conferma-preventivo-utente",
     ),
     path(
         "utente/<int:id_utente>/ordini/",
         AcquistoUtenteListAPIView.as_view(),
-        name="Acquisti Utente",
+        name="ordini-utente",
     ),
     path(
         "utente/<int:id_utente>/detrazioni/",
         DetrazioneListAPIView.as_view(),
-        name="Acquisti Utente",
+        name="detrazioni-utente",
     ),
     path(
         "utente/<int:id_utente>/autoUsata/<int:id_auto>/compra/",
         AutoUsateComprate.as_view(),
-        name="Acquisto auto usata",
+        name="acquisto-auto-usata-utente",
     ),
     path(
         "immaginiAutoNuove/<int:id_auto>/",
         ImmaginiAutoNuoveListAPIView.as_view(),
-        name="Immagini Auto Nuove",
+        name="immagini-auto-nuove",
     ),
     path(
         "immaginiAutoUsate/<int:id_auto>/",
         ImmaginiAutoUsateListAPIView.as_view(),
-        name="Immagini Auto Usate",
+        name="immagini-auto-usate",
     ),
 ]

@@ -40,6 +40,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+USER_NOT_EXIST = "Utente non esiste"
+AUTO_NOT_EXIST = "Auto non esiste"
+
 
 class UtenteListCreateAPIView(APIView):
     @swagger_auto_schema(
@@ -609,7 +612,6 @@ class ConfermaPreventivoUtenteAPIView(APIView):
             preventivo_id=preventivo_id
         ).first()
         optionals = configurazione.optional.filter(obbligatorio=False).count()
-        # optionals = configurazione.optional.count()
         days_optionals = optionals * 10
         data_consegna = now + timedelta(days=days_optionals) + timedelta(days=30)
         return data_consegna
@@ -632,8 +634,8 @@ class DetrazioneListAPIView(APIView):
                 "Non hai ancora acquistato auto", status=status.HTTP_404_NOT_FOUND
             )
 
-        autoUsate = AutoUsata.objects.filter(preventivousato__in=preventivi_usati)
-        detrazioni = Detrazione.objects.filter(auto_usata__in=autoUsate)
+        auto_usate = AutoUsata.objects.filter(preventivousato__in=preventivi_usati)
+        detrazioni = Detrazione.objects.filter(auto_usata__in=auto_usate)
         serializer = DetrazioneSerializer(detrazioni, many=True)
         return Response(serializer.data)
 
@@ -649,21 +651,21 @@ class AutoUsateComprate(APIView):
     )
     def get(self, request, id_utente, id_auto):
         try:
-            utente: Utente = Utente.objects.get(id=id_utente)
+            _utente: Utente = Utente.objects.get(id=id_utente)
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 
         try:
-            autoUsata: AutoUsata = AutoUsata.objects.get(id=id_auto)
+            auto_usata: AutoUsata = AutoUsata.objects.get(id=id_auto)
         except AutoUsata.DoesNotExist:
             return HttpResponseNotFound("Auto usata non esiste")
 
-        if not autoUsata.venduta:
+        if not auto_usata.venduta:
             return Response(
                 "Auto non ancora venduta", status=status.HTTP_402_PAYMENT_REQUIRED
             )
 
-        serializer = AutoUsataSerializer(autoUsata)
+        serializer = AutoUsataSerializer(auto_usata)
         return Response(serializer.data)
 
     @swagger_auto_schema(
@@ -676,16 +678,16 @@ class AutoUsateComprate(APIView):
     )
     def post(self, request, id_utente, id_auto):
         try:
-            utente: Utente = Utente.objects.get(id=id_utente)
+            _utente: Utente = Utente.objects.get(id=id_utente)
         except Utente.DoesNotExist:
             return HttpResponseNotFound("Utente non esiste")
 
         try:
-            autoUsata: AutoUsata = AutoUsata.objects.get(id=id_auto)
+            auto_usata: AutoUsata = AutoUsata.objects.get(id=id_auto)
         except AutoUsata.DoesNotExist:
             return HttpResponseNotFound("Auto usata non esiste")
 
-        if autoUsata.venduta:
+        if auto_usata.venduta:
             return Response("Auto già venduta", status=status.HTTP_402_PAYMENT_REQUIRED)
 
         AutoUsata.objects.filter(id=id_auto).update(venduta=True)

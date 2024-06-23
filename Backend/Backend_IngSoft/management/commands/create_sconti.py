@@ -12,7 +12,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "num_modelli",
             type=int,
-            help="Numero di modelli su cui " "applicare lo sconto",
+            help="Numero di modelli su cui applicare lo sconto",
         )
 
     def handle(self, *args, **kwargs):

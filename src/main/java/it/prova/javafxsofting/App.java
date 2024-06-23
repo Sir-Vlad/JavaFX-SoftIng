@@ -163,7 +163,6 @@ public class App extends javafx.application.Application {
         "scegliModello",
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
-    // // debug
 
     ScreenController.addScreen(
         "login",
@@ -173,18 +172,15 @@ public class App extends javafx.application.Application {
         "registrazione",
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
-    // // debug
 
     ScreenController.addScreen(
         "concessionari",
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
-    // // debug
 
     ScreenController.addScreen(
         "scegliUsato",
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
-    // debug
   }
 }

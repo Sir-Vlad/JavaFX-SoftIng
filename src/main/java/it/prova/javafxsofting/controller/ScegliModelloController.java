@@ -19,11 +19,13 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+@EqualsAndHashCode(callSuper = false)
 public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     implements Initializable, FilterAuto {
   private static final String ELEMENT_TUTTI = "Tutti";

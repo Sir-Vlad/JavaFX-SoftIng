@@ -221,9 +221,9 @@ public class AutoUsataDetail implements Initializable {
     images.addAll(
         ScegliUsatoController.getAutoSelezionata().getImmagini().stream()
             .map(
-                images -> {
+                img -> {
                   try {
-                    return new Image(String.valueOf(images.toURI().toURL()));
+                    return new Image(String.valueOf(img.toURI().toURL()));
                   } catch (MalformedURLException e) {
                     throw new RuntimeException(e);
                   }

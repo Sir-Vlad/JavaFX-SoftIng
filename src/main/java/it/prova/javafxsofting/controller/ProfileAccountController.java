@@ -41,7 +41,7 @@ public class ProfileAccountController implements Initializable {
   @FXML private VBox content;
   @FXML private VBox sidebar;
   @FXML private MFXButton indietroBtn;
-  @Getter private static TabController tabController;
+  @Getter private TabController tabController;
 
   @SneakyThrows
   @Override
@@ -158,7 +158,7 @@ public class ProfileAccountController implements Initializable {
   @Getter
   static class TabController {
     private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
-    public static final HashMap<String, FXMLLoader> CONTROLLER = new HashMap<>();
+    protected static final HashMap<String, FXMLLoader> CONTROLLER = new HashMap<>();
     private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
     private AnchorPane main = null;
 

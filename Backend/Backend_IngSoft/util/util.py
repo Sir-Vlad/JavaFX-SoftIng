@@ -79,10 +79,6 @@ def create_pdf_file(obj: Acquisto):
         configuration=config,
     )
 
-    from django.template.loader import render_to_string
-
-    # html_string = render_to_string(path_html, data)
-
     pdf = pdfkit.from_string(
         rendered_html,
         False,

@@ -107,19 +107,19 @@ public class PreventiviUtenteController implements Initializable {
     stage.setTitle("Conferma preventivo");
     stage.initModality(Modality.APPLICATION_MODAL);
     stage.initOwner(root.getParent().getParent().getScene().getWindow());
-    AnchorPane root;
+    AnchorPane rootSubStage;
     try {
-      root =
+      rootSubStage =
           FXMLLoader.load(
               Objects.requireNonNull(App.class.getResource("controller/pay_preventivo.fxml")));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
 
-    MFXTextField accontoField = (MFXTextField) root.lookup("#accontoField");
-    MFXButton sendAcquisto = (MFXButton) root.lookup("#sendAcquisto");
-    MFXProgressSpinner loading = (MFXProgressSpinner) root.lookup("#loading");
-    HBox wrapper = (HBox) root.lookup("#wrapper");
+    MFXTextField accontoField = (MFXTextField) rootSubStage.lookup("#accontoField");
+    MFXButton sendAcquisto = (MFXButton) rootSubStage.lookup("#sendAcquisto");
+    MFXProgressSpinner loading = (MFXProgressSpinner) rootSubStage.lookup("#loading");
+    HBox wrapper = (HBox) rootSubStage.lookup("#wrapper");
     sendAcquisto.setOnAction(
         event1 -> {
           String acconto = accontoField.getText();
@@ -164,7 +164,7 @@ public class PreventiviUtenteController implements Initializable {
               });
           pause.play();
         });
-    Scene scene = new Scene(root);
+    Scene scene = new Scene(rootSubStage);
     stage.setScene(scene);
     stage.showAndWait();
   }

@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django.contrib import admin
+
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
@@ -9,7 +12,21 @@ from django.http import HttpRequest
 from typing import Any
 from unfold.admin import ModelAdmin, TabularInline
 
-from .models import *
+from .models import (
+    Acquisto,
+    AutoUsata,
+    Concessionario,
+    Detrazione,
+    ImmaginiAutoNuove,
+    ImmaginiAutoUsate,
+    ModelloAuto,
+    Optional,
+    Periodo,
+    Preventivo,
+    Ritiro,
+    Sconto,
+    Utente,
+)
 from .util.util import send_html_email
 from .widgets import SliderWidget
 

@@ -9,9 +9,11 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@EqualsAndHashCode(callSuper = false)
 public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
   private static final Logger logger = Logger.getLogger(ScegliUsatoController.class.getName());
   @Getter @Setter private static AutoUsata autoSelezionata = null;

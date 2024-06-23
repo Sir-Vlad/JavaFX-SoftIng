@@ -45,7 +45,7 @@ class Command(BaseCommand):
                     modello_auto.optionals.set(options_instance)
 
                 self.stdout.write(
-                    self.style.SUCCESS(f"ModelloAuto " f"{modello_auto.modello}")
+                    self.style.SUCCESS(f"ModelloAuto {modello_auto.modello}")
                 )
 
         self.stdout.write(self.style.SUCCESS("Caricamento completato"))

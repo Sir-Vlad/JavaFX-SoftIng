@@ -3,6 +3,11 @@ package it.prova.javafxsofting.util;
 import org.jetbrains.annotations.Contract;
 
 public final class Util {
+  @Contract(value = " -> fail", pure = true)
+  private Util() {
+    throw new UnsupportedOperationException("Classe utilitaria");
+  }
+
   /**
    * Formatta la stringa in input con la prima lettera maiuscola
    *

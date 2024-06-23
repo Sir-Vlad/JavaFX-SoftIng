@@ -15,8 +15,8 @@ class Utente(models.Model):
     password = models.CharField(max_length=20, null=False, blank=False)
     nome = models.CharField(max_length=20, null=False, blank=False)
     cognome = models.CharField(max_length=20, null=False, blank=False)
-    indirizzo = models.CharField(max_length=100, null=True, blank=False)
-    numero_telefono = models.CharField(max_length=10, null=True, blank=False)
+    indirizzo = models.CharField(max_length=100, blank=True)
+    numero_telefono = models.CharField(max_length=10, blank=True)
     numero_carta = models.CharField(max_length=16, null=False, blank=False)
     data_scadenza = models.DateField(null=False, blank=False)
     cvc = models.CharField(max_length=3, null=False, blank=False)
@@ -255,9 +255,9 @@ class Ritiro(models.Model):
 
 
 def validate_targa(value):
-    if not re.match("^[A-Z]{2}[0-9]{3}[A-Z]{2}$", value):
+    if not re.match("^[A-Z]{2}\d{3}[A-Z]{2}$", value):
         raise ValidationError(
-            "Formato della targa non è valida. Deve essere del tipo " "AA123BB"
+            "Formato della targa non è valida. Deve essere del tipo AA123BB"
         )
 
 
