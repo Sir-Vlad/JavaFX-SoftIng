@@ -1,13 +1,3 @@
-from datetime import datetime, timedelta
-
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -20,6 +10,7 @@ from Backend_IngSoft.api.serializers import (
     OptionalSerializer,
     PreventiviAutoUsateSerializer,
     PreventivoSerializer,
+    ScontiSerializer,
     UtenteSerializer,
 )
 from Backend_IngSoft.models import (
@@ -35,10 +26,19 @@ from Backend_IngSoft.models import (
     Optional,
     Preventivo,
     PreventivoUsato,
+    Sconto,
     Utente,
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import create_pdf_file, send_html_email
+from datetime import datetime, timedelta
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -293,6 +293,11 @@ class PreventiviUtenteListAPIView(APIView):
                     )
                     detrazione_data.save()
 
+                sconto: Sconto = Sconto.objects.filter(
+                    modello_id=conf.preventivo.modello.id
+                ).first()
+                prezzo_tot = (conf.preventivo.prezzo * sconto.percentuale_sconto) / 100
+
                 # invio email
                 subject = "Preventivo creato"
                 to_email = conf.preventivo.utente.email
@@ -303,7 +308,7 @@ class PreventiviUtenteListAPIView(APIView):
                     "car_model": conf.preventivo.modello.modello,
                     "base_price": conf.preventivo.modello.prezzo_base,
                     "optionals": conf.optional.all(),
-                    "total_price": conf.preventivo.prezzo,
+                    "total_price": prezzo_tot,
                     "detrazione": True if auto_usata_id is not None else False,
                 }
                 # send_mail(subject, message, from_email, to_email)
@@ -551,7 +556,7 @@ class ConfermaPreventivoUtenteAPIView(APIView):
                     preventivo_id=preventivo.id,
                 )
 
-                Preventivo.objects.filter(id=id_preventivo).update(stato="PAGATO")
+                Preventivo.objects.filter(id=id_preventivo).update(stato="PG")
 
                 path_pdf = create_pdf_file(ordine)
 
@@ -685,3 +690,16 @@ class AutoUsateComprate(APIView):
 
         AutoUsata.objects.filter(id=id_auto).update(venduta=True)
         return Response(status=status.HTTP_201_CREATED)
+
+
+class ScontiListAPIView(APIView):
+    @swagger_auto_schema(
+        operation_description="Ritorna tutti i sconti relativi ad un modello",
+        responses={
+            200: ScontiSerializer,
+        },
+    )
+    def get(self, request):
+        sconti = Sconto.objects.all()
+        serializer = ScontiSerializer(sconti, many=True)
+        return Response(serializer.data)

@@ -6,9 +6,12 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
+import it.prova.javafxsofting.controller.ProfileAccountController.TabController;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
+import it.prova.javafxsofting.models.Sconto;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -58,7 +61,7 @@ public class PreventiviUtenteController implements Initializable {
   @FXML private TableColumn<Preventivo, ModelloAuto> modelloColumn;
   @FXML private TableColumn<Preventivo, ModelloAuto> prezzoBaseColumn;
   @FXML private TableColumn<Preventivo, Integer> prezzoOptionalsColumn;
-  @FXML private TableColumn<Preventivo, Integer> scontoColumn;
+  @FXML private TableColumn<Preventivo, ModelloAuto> scontoColumn;
   @FXML private TableColumn<Preventivo, Float> totPrezzoColumn;
   @FXML private TableColumn<Preventivo, LocalDate> dataEmissioneColumn;
   @FXML private TableColumn<Preventivo, Void> confermaColumn;
@@ -152,6 +155,9 @@ public class PreventiviUtenteController implements Initializable {
                     event1x -> {
                       updatePreventivi();
                       UserSession.getInstance().setOrdini();
+                      OrdiniUtenteController ordiniUtenteController =
+                          TabController.CONTROLLER.get("ordini").getController();
+                      ordiniUtenteController.updateTableView();
                       stage.close();
                     });
                 pause1.play();
@@ -243,17 +249,24 @@ public class PreventiviUtenteController implements Initializable {
   }
 
   private void setColumnSconto() {
+    scontoColumn.setCellValueFactory(new PropertyValueFactory<>("modello"));
     scontoColumn.setCellFactory(
         column ->
             new TableCell<>() {
               @Override
-              protected void updateItem(Integer item, boolean empty) {
+              protected void updateItem(ModelloAuto item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                   setText(null);
                 } else {
-                  if (item == null) setText("0 %");
-                  else setText(String.format("%d %%", item));
+                  Sconto sconto =
+                      StaticDataStore.getSconti().stream()
+                          .filter(s -> s.getIdModello() == item.getId())
+                          .findFirst()
+                          .orElse(null);
+
+                  if (sconto == null) setText("0 %");
+                  else setText(String.format("%d %%", sconto.getPercentualeSconto()));
                   setAlignment(Pos.CENTER);
                 }
               }
@@ -345,10 +358,10 @@ public class PreventiviUtenteController implements Initializable {
 
   private void updateTableView() {
     logger.info("updateTableView - Preventivi");
-    preventiviUtente.setAll(UserSession.getInstance().getPreventivi());
     Platform.runLater(
         () -> {
           tableView.getItems().clear();
+          preventiviUtente.setAll(getPreventivi());
           tableView.getItems().setAll(preventiviUtente);
         });
   }

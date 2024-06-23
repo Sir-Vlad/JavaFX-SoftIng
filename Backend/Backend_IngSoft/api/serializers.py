@@ -9,9 +9,11 @@ from Backend_IngSoft.models import (
     ImmaginiAutoUsate,
     ModelloAuto,
     Optional,
+    Periodo,
     Preventivo,
     PreventivoUsato,
     Ritiro,
+    Sconto,
     Utente,
 )
 from PIL import Image
@@ -231,3 +233,21 @@ class DetrazioneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Detrazione
         fields = "__all__"
+
+
+class ScontiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sconto
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        periodo_id = representation.pop("periodo")
+
+        periodo = Periodo.objects.get(id=periodo_id)
+
+        representation["mese"] = periodo.mese
+        representation["anno"] = periodo.anno
+
+        return representation

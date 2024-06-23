@@ -17,6 +17,7 @@ public final class StaticDataStore {
   private static List<AutoUsata> autoUsate;
   @Getter private static List<Optional> optionals;
   @Getter private static List<Concessionario> concessionari;
+  @Getter private static List<Sconto> sconti;
 
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
   @Getter private static boolean serverAvailable = true;
@@ -41,8 +42,23 @@ public final class StaticDataStore {
       StaticDataStore.fetchModelliAuto();
       StaticDataStore.fetchAutoUsate();
       StaticDataStore.fetchConcessionari();
+      StaticDataStore.fetchSconti();
     } catch (Exception e) {
       serverAvailable = false;
+    }
+  }
+
+  private static void fetchSconti() {
+    logger.info("Aggiornamento sconti");
+    List<Sconto> newSconti;
+    try {
+      newSconti = Connection.getArrayDataFromBackend("modelli/sconti/", Sconto.class);
+    } catch (Exception e) {
+      newSconti = null;
+    }
+    if (newSconti != null && !newSconti.equals(sconti)) {
+      newSconti.forEach(Sconto::transformIdToObject);
+      sconti = newSconti;
     }
   }
 

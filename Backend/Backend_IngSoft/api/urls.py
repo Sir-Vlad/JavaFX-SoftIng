@@ -13,6 +13,7 @@ from Backend_IngSoft.api.views import (
     PreventiviListAPIView,
     PreventiviUtenteListAPIView,
     PreventivoAutoUsateAPIView,
+    ScontiListAPIView,
     UtenteDetailAPIView,
     UtenteListCreateAPIView,
 )
@@ -22,6 +23,7 @@ urlpatterns = [
     # endpoint per la lista dei dati
     path("utenti/", UtenteListCreateAPIView.as_view(), name="utente-list"),
     path("modelli/", ModelliAutoListAPIView.as_view(), name="modelli-list"),
+    path("modelli/sconti/", ScontiListAPIView.as_view(), name="sconti-modelli-list"),
     path("preventivi/", PreventiviListAPIView.as_view(), name="preventivi-list"),
     path("optionals/", OptionalsListAPIView.as_view(), name="optionals-list"),
     path(

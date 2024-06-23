@@ -156,14 +156,15 @@ public class PreventivoUsatoUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  int idPreventivo =
-                      UserSession.getInstance().getDetrazioni().stream()
-                          .filter(detrazione -> detrazione.getIdAutoUsata() == item.getId())
-                          .toList()
-                          .getFirst()
-                          .getIdPreventivo();
+                  UserSession.getInstance()
+                      .getDetrazioni()
+                      .forEach(
+                          detrazione -> {
+                            if (detrazione.getIdAutoUsata() == item.getId()) {
+                              setText(String.valueOf(detrazione.getIdPreventivo()));
+                            }
+                          });
 
-                  setText(String.valueOf(idPreventivo));
                   setAlignment(Pos.CENTER);
                 }
               }
@@ -181,7 +182,6 @@ public class PreventivoUsatoUtenteController implements Initializable {
                 if (empty) {
                   setText(null);
                 } else {
-                  System.out.println(item);
                   setText(item.getModello());
                   setAlignment(Pos.CENTER);
                 }
@@ -220,10 +220,10 @@ public class PreventivoUsatoUtenteController implements Initializable {
 
   private void updateTableView() {
     logger.info("updateTableView - PreventiviUsati");
-    preventivoUsatoUtente.setAll(UserSession.getInstance().getPreventiviUsati());
     Platform.runLater(
         () -> {
           tableView.getItems().clear();
+          preventivoUsatoUtente.setAll(UserSession.getInstance().getPreventiviUsati());
           tableView.getItems().setAll(preventivoUsatoUtente);
         });
   }

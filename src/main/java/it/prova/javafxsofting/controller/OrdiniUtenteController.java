@@ -188,11 +188,11 @@ public class OrdiniUtenteController implements Initializable {
 
   public void updateTableView() {
     logger.info("updateTableView - Ordini");
-    ordiniUtente.setAll(UserSession.getInstance().getOrdini());
     Platform.runLater(
         () -> {
           tableView.getItems().clear();
-          tableView.getItems().setAll(ordiniUtente);
+          ordiniUtente.setAll(getOrdini());
+          tableView.setItems(ordiniUtente);
         });
   }
 }

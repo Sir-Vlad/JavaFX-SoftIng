@@ -122,7 +122,16 @@ public class Preventivo implements Serializable {
             .toList();
 
     this.prezzoOptionals = optionals.stream().mapToInt(Optional::getPrezzo).sum();
-    this.totalePrezzo = this.getModello().getPrezzoBase() + this.prezzoOptionals;
+    this.totalePrezzo = (this.getModello().getPrezzoBase() + this.prezzoOptionals);
+
+    Sconto sconto =
+        StaticDataStore.getSconti().stream()
+            .filter(s -> s.getIdModello() == modelloId)
+            .findFirst()
+            .orElse(null);
+    int percentualeSconto = sconto == null ? 0 : sconto.getPercentualeSconto();
+
+    this.totalePrezzo -= (this.totalePrezzo * percentualeSconto) / 100;
 
     this.concessionario =
         StaticDataStore.getConcessionari().stream()

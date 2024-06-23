@@ -284,7 +284,7 @@
     "pk": 29,
     "fields": {
       "nome": "finestrini",
-      "descrizione": "oscurati 1%",
+      "descrizione": "oscurati 100%",
       "prezzo": 800,
       "obbligatorio": false
     }

@@ -190,7 +190,7 @@ class Acquisto(models.Model):
 
 
 def year_choice():
-    return [(r, r) for r in range(2000, current_year() + 1)]
+    return [(r, r) for r in range(current_year(), current_year() + 5)]
 
 
 def current_year():
@@ -212,7 +212,12 @@ class Periodo(models.Model):
         novembre = "novembre"
         dicembre = "dicembre"
 
-    mese = models.CharField(max_length=9, choices=Mesi, null=False, blank=False)
+    mese = models.CharField(
+        max_length=9,
+        choices=Mesi,
+        null=False,
+        blank=False,
+    )
     anno = models.PositiveIntegerField(
         choices=year_choice(),
         default=current_year(),

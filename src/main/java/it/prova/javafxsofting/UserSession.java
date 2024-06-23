@@ -14,10 +14,10 @@ import org.jetbrains.annotations.Contract;
 public class UserSession {
   private static UserSession instance;
   private Utente utente;
-  private List<Preventivo> preventivi;
-  private List<Ordine> ordini;
-  private List<PreventivoUsato> preventiviUsati;
-  private List<Detrazione> detrazioni;
+  private List<Preventivo> preventivi = new ArrayList<>();
+  private List<Ordine> ordini = new ArrayList<>();
+  private List<PreventivoUsato> preventiviUsati = new ArrayList<>();
+  private List<Detrazione> detrazioni = new ArrayList<>();
 
   @Getter(AccessLevel.NONE)
   @Setter(AccessLevel.NONE)
@@ -64,8 +64,10 @@ public class UserSession {
                 setPreventiviUsati();
                 logger.info("init setOrdini");
                 setOrdini();
-                logger.info("init setDetrazioni");
-                setDetrazioni();
+                if (!getPreventiviUsati().isEmpty()) {
+                  logger.info("init setDetrazioni");
+                  setDetrazioni();
+                }
               })
           .start();
     }

@@ -11,6 +11,7 @@ import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.Marca;
 import it.prova.javafxsofting.models.PreventivoUsato;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -173,14 +174,24 @@ public class VendiUsato extends ValidateForm implements Initializable {
       return;
     }
 
+    // creo l'oggetto per l'auto usata
     AutoUsata autoUsata = createAutoUsata();
-
+    // lo invio al server
     if (postPreventivo(autoUsata)) return;
+    // aggiorno la lista delle auto usate
+    try {
+      StaticDataStore.fetchAutoUsate();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
 
+    // aggiorno la lista dei preventivi
     UserSession.getInstance().setPreventiviUsati();
-
+    // aggiorno la lista delle detrazioni
+    UserSession.getInstance().setDetrazioni();
+    // aggiungo le immagini all'auto usata
     autoUsata.setImmagini(new ArrayList<>(immagini.values()));
-
+    // cerco il nuovo preventivo
     PreventivoUsato preventivo =
         UserSession.getInstance().getPreventiviUsati().stream()
             .max((Comparator.comparingInt(PreventivoUsato::getId)))
@@ -189,13 +200,16 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (preventivo == null) {
       return;
     }
+    // invio le immagini dell'auto usata al server
     postImmagini(preventivo.getIdAutoUsata(), autoUsata.getImmagini());
 
+    // mostra un messaggio di successo
     Alert alert = new Alert(AlertType.INFORMATION);
     alert.setHeaderText("Auto Usata inserita correttamente");
     alert.setContentText(
         "La sua auto usata è stata inserita correttamente. Ora la puoi usare avere una detrazione sull'auto nuova.");
     alert.showAndWait();
+    // ritorno alla schermata di configurazione
     ScreenController.activate("config");
     ScreenController.removeScreen("vendiUsato");
   }

@@ -205,3 +205,8 @@ class PreventivoAdmin(ModelAdmin):
 class AcquistoAdmin(ModelAdmin):
     list_display = ("numero_fattura", "data_ritiro")
     list_filter = ("data_ritiro",)
+
+
+@admin.register(Periodo)
+class PeriodoAdmin(ModelAdmin):
+    pass

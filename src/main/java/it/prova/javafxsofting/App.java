@@ -48,28 +48,30 @@ public class App extends javafx.application.Application {
 
   private static void checkRememberUtente() {
     File path = new File("instance/utente/utente.txt");
-    if (path.exists()) {
-      List<String> text = null;
-      try {
-        text = Files.readAllLines(Path.of(path.getPath()));
-        UserSession.getInstance()
-            .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
-      } catch (Exception ignored) {
-        log.info("Utente non trovato");
-      }
-    } else {
+    if (!path.exists()) {
       log.info("Nessun utente registrato");
+      return;
+    }
+    List<String> text = null;
+    try {
+      text = Files.readAllLines(Path.of(path.getPath()));
+      UserSession.getInstance()
+          .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+    } catch (Exception ignored) {
+      log.info("Utente non trovato");
     }
   }
 
   private static void deleteDirectory(@NotNull File dirImage) throws IOException {
-    if (dirImage.isDirectory()) {
-      File[] files = dirImage.listFiles();
-      if (files != null) {
-        for (File file : files) {
-          Files.delete(Path.of(file.getPath()));
-        }
-      }
+    if (!dirImage.isDirectory()) {
+      return;
+    }
+    File[] files = dirImage.listFiles();
+    if (files == null) {
+      return;
+    }
+    for (File file : files) {
+      Files.delete(Path.of(file.getPath()));
     }
   }
 
