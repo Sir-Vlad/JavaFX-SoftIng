@@ -6,8 +6,8 @@ Content-Type: application/json
 {
   "utente": 1,
   "auto": {
-    "modello": "Fiat Punto",
-    "marca": "Fiat",
+    "modello": "Fiat Punto XL",
+    "marca": "VOLKSWAGEN",
     "altezza": 1500,
     "lunghezza": 1500,
     "larghezza": 1500,
@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8000/api/utente/1/preventivi/
+POST http://localhost:8000/api/utente/11/preventivi/
 Accept: application/json
 Content-Type: application/json
 
@@ -60,8 +60,9 @@ Content-Type: application/json
     "prezzo": 20000
   },
   "optional": [
-    1,
-    8
+    3,
+    13,
+    48
   ],
   "detrazione": 1
 }
@@ -81,3 +82,13 @@ Content-Type: application/json
 GET http://localhost:8000/api/optionals/
 Accept: application/json
 Content-Type: application/json
+
+###
+
+POST http://localhost:8000/api/utente/11/preventivo/64/conferma/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "acconto": 1500
+}

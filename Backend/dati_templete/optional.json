@@ -5,7 +5,7 @@
     "fields": {
       "nome": "motorizzazione",
       "descrizione": "1200 aspirato",
-      "prezzo": 0,
+      "prezzo": 10000,
       "obbligatorio": true
     }
   },
@@ -15,7 +15,7 @@
     "fields": {
       "nome": "motorizzazione",
       "descrizione": "1600 aspirato",
-      "prezzo": 0,
+      "prezzo": 15000,
       "obbligatorio": true
     }
   },
@@ -25,7 +25,7 @@
     "fields": {
       "nome": "motorizzazione",
       "descrizione": "1800 aspirato",
-      "prezzo": 0,
+      "prezzo": 18000,
       "obbligatorio": true
     }
   },
@@ -35,7 +35,7 @@
     "fields": {
       "nome": "motorizzazione",
       "descrizione": "1800 turno",
-      "prezzo": 0,
+      "prezzo": 18000,
       "obbligatorio": true
     }
   },
@@ -45,7 +45,7 @@
     "fields": {
       "nome": "motorizzazione",
       "descrizione": "2000 turbo",
-      "prezzo": 0,
+      "prezzo": 20000,
       "obbligatorio": true
     }
   },
@@ -55,7 +55,7 @@
     "fields": {
       "nome": "motorizzazione",
       "descrizione": "3000 turbo",
-      "prezzo": 0,
+      "prezzo": 28000,
       "obbligatorio": true
     }
   },
@@ -65,7 +65,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "15",
-      "prezzo": 0,
+      "prezzo": 200,
       "obbligatorio": true
     }
   },
@@ -75,7 +75,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "16",
-      "prezzo": 0,
+      "prezzo": 400,
       "obbligatorio": true
     }
   },
@@ -85,7 +85,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "17",
-      "prezzo": 0,
+      "prezzo": 800,
       "obbligatorio": true
     }
   },
@@ -95,7 +95,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "18",
-      "prezzo": 0,
+      "prezzo": 1000,
       "obbligatorio": true
     }
   },
@@ -105,7 +105,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "19",
-      "prezzo": 0,
+      "prezzo": 1200,
       "obbligatorio": true
     }
   },
@@ -115,7 +115,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "20",
-      "prezzo": 0,
+      "prezzo": 1400,
       "obbligatorio": true
     }
   },
@@ -125,7 +125,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "22",
-      "prezzo": 0,
+      "prezzo": 1600,
       "obbligatorio": true
     }
   },
@@ -135,7 +135,7 @@
     "fields": {
       "nome": "dimensione cerchi",
       "descrizione": "25",
-      "prezzo": 0,
+      "prezzo": 2000,
       "obbligatorio": true
     }
   },
@@ -154,8 +154,8 @@
     "pk": 16,
     "fields": {
       "nome": "cambio",
-      "descrizione": "manuele",
-      "prezzo": 0,
+      "descrizione": "manuale",
+      "prezzo": 5000,
       "obbligatorio": true
     }
   },
@@ -165,7 +165,7 @@
     "fields": {
       "nome": "cambio",
       "descrizione": "automatico DSG",
-      "prezzo": 0,
+      "prezzo": 5000,
       "obbligatorio": true
     }
   },
@@ -185,7 +185,7 @@
     "fields": {
       "nome": "stereo",
       "descrizione": "BOSE audio",
-      "prezzo": 0,
+      "prezzo": 500,
       "obbligatorio": false
     }
   },
@@ -195,7 +195,7 @@
     "fields": {
       "nome": "stereo",
       "descrizione": "PIONEER audio",
-      "prezzo": 0,
+      "prezzo": 700,
       "obbligatorio": false
     }
   },
@@ -215,7 +215,7 @@
     "fields": {
       "nome": "fanali",
       "descrizione": "alogeni oscurati",
-      "prezzo": 0,
+      "prezzo": 200,
       "obbligatorio": false
     }
   },
@@ -225,7 +225,7 @@
     "fields": {
       "nome": "fanali",
       "descrizione": "led",
-      "prezzo": 0,
+      "prezzo": 400,
       "obbligatorio": false
     }
   },
@@ -235,7 +235,7 @@
     "fields": {
       "nome": "fanali",
       "descrizione": "led oscurati",
-      "prezzo": 0,
+      "prezzo": 500,
       "obbligatorio": false
     }
   },
@@ -245,7 +245,7 @@
     "fields": {
       "nome": "fanali",
       "descrizione": "led dinamici",
-      "prezzo": 0,
+      "prezzo": 800,
       "obbligatorio": false
     }
   },
@@ -265,7 +265,7 @@
     "fields": {
       "nome": "finestrini",
       "descrizione": "oscurati 50%",
-      "prezzo": 0,
+      "prezzo": 200,
       "obbligatorio": false
     }
   },
@@ -275,7 +275,7 @@
     "fields": {
       "nome": "finestrini",
       "descrizione": "oscurati 75%",
-      "prezzo": 0,
+      "prezzo": 400,
       "obbligatorio": false
     }
   },
@@ -284,8 +284,8 @@
     "pk": 29,
     "fields": {
       "nome": "finestrini",
-      "descrizione": "oscurati 1%",
-      "prezzo": 0,
+      "descrizione": "oscurati 100%",
+      "prezzo": 800,
       "obbligatorio": false
     }
   },
@@ -305,7 +305,7 @@
     "fields": {
       "nome": "sospensioni",
       "descrizione": "assetto a ghiera regolabile",
-      "prezzo": 0,
+      "prezzo": 700,
       "obbligatorio": false
     }
   },
@@ -315,7 +315,7 @@
     "fields": {
       "nome": "sospensioni",
       "descrizione": "assetto ad aria AirLift",
-      "prezzo": 0,
+      "prezzo": 2000,
       "obbligatorio": false
     }
   },
@@ -335,7 +335,7 @@
     "fields": {
       "nome": "scarico",
       "descrizione": "scarico di serie con valvola bypass",
-      "prezzo": 0,
+      "prezzo": 500,
       "obbligatorio": false
     }
   },
@@ -345,7 +345,7 @@
     "fields": {
       "nome": "scarico",
       "descrizione": "scarico artigianale con silenziatore maggiorato",
-      "prezzo": 0,
+      "prezzo": 500,
       "obbligatorio": false
     }
   },
@@ -355,7 +355,7 @@
     "fields": {
       "nome": "scarico",
       "descrizione": "scarico artigianale diretto",
-      "prezzo": 0,
+      "prezzo": 400,
       "obbligatorio": false
     }
   },
@@ -375,7 +375,7 @@
     "fields": {
       "nome": "sedili",
       "descrizione": "sedili comfort con riscaldamento e condizionamento",
-      "prezzo": 0,
+      "prezzo": 600,
       "obbligatorio": false
     }
   },
@@ -385,7 +385,7 @@
     "fields": {
       "nome": "sedili",
       "descrizione": "sedili da gara con applicazione cintura a 4 pompanti",
-      "prezzo": 0,
+      "prezzo": 700,
       "obbligatorio": false
     }
   },
@@ -405,7 +405,7 @@
     "fields": {
       "nome": "infotainment",
       "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto",
-      "prezzo": 0,
+      "prezzo": 300,
       "obbligatorio": false
     }
   },
@@ -415,7 +415,7 @@
     "fields": {
       "nome": "infotainment",
       "descrizione": "computer di bordo con AppleCarPlay & AndroidAuto + sistema controllo-corsia e cruise-control",
-      "prezzo": 0,
+      "prezzo": 400,
       "obbligatorio": false
     }
   },

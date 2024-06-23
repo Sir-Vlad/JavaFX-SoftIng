@@ -48,28 +48,30 @@ public class App extends javafx.application.Application {
 
   private static void checkRememberUtente() {
     File path = new File("instance/utente/utente.txt");
-    if (path.exists()) {
-      List<String> text = null;
-      try {
-        text = Files.readAllLines(Path.of(path.getPath()));
-        UserSession.getInstance()
-            .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
-      } catch (Exception ignored) {
-        log.info("Utente non trovato");
-      }
-    } else {
+    if (!path.exists()) {
       log.info("Nessun utente registrato");
+      return;
+    }
+    List<String> text = null;
+    try {
+      text = Files.readAllLines(Path.of(path.getPath()));
+      UserSession.getInstance()
+          .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+    } catch (Exception ignored) {
+      log.info("Utente non trovato");
     }
   }
 
   private static void deleteDirectory(@NotNull File dirImage) throws IOException {
-    if (dirImage.isDirectory()) {
-      File[] files = dirImage.listFiles();
-      if (files != null) {
-        for (File file : files) {
-          Files.delete(Path.of(file.getPath()));
-        }
-      }
+    if (!dirImage.isDirectory()) {
+      return;
+    }
+    File[] files = dirImage.listFiles();
+    if (files == null) {
+      return;
+    }
+    for (File file : files) {
+      Files.delete(Path.of(file.getPath()));
     }
   }
 
@@ -132,7 +134,7 @@ public class App extends javafx.application.Application {
     stage.setOnCloseRequest(
         event -> {
           File dirImageNuove = new File("instance/immagini/immaginiAutoNuove");
-          File dirImageUsate = new File("instance/immagini/immaginiAutoUsata");
+          File dirImageUsate = new File("instance/immagini/immaginiAutoUsate");
 
           if (dirImageNuove.exists() || dirImageUsate.exists()) {
             try {
@@ -152,37 +154,33 @@ public class App extends javafx.application.Application {
     notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
   }
 
-  private void createScreenController() throws IOException {
+  private void createScreenController() {
     ScreenController.addScreen(
         "home",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
+        new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
     ScreenController.addScreen(
         "scegliModello",
-        FXMLLoader.load(
+        new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
-    // // debug
 
     ScreenController.addScreen(
         "login",
-        FXMLLoader.load(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
+        new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/login.fxml"))));
 
     ScreenController.addScreen(
         "registrazione",
-        FXMLLoader.load(
+        new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
-    // // debug
 
     ScreenController.addScreen(
         "concessionari",
-        FXMLLoader.load(
+        new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
-    // // debug
 
     ScreenController.addScreen(
         "scegliUsato",
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml")))); //
-    // debug
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
   }
 }

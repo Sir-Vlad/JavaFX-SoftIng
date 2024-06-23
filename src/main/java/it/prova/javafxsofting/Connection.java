@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import it.prova.javafxsofting.models.AutoUsata;
+import it.prova.javafxsofting.models.ImmagineAuto;
 import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.serializzatori.*;
 import java.io.*;
@@ -12,6 +13,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
@@ -173,6 +175,38 @@ public final class Connection {
       return;
     }
 
+    StringBuilder response = new StringBuilder();
+    try (BufferedReader br =
+        new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+      String responseLine;
+      while ((responseLine = br.readLine()) != null) {
+        response.append(responseLine.trim());
+      }
+    }
+    conn.disconnect();
+    throw new Exception(response.toString());
+  }
+
+  public static void postImmaginiAutoUsateToBacked(int idAutoUsata, List<File> immagini, String s)
+      throws Exception {
+    HttpURLConnection conn = getHttpURLConnection(s + idAutoUsata + "/", Methods.POST);
+
+    List<ImmagineAuto> immaginiAuto = new ArrayList<>();
+    for (File immagine : immagini) {
+      immaginiAuto.add(ImmagineAuto.create(idAutoUsata, immagine));
+    }
+
+    // Dati da inviare al backend in formato JSON
+    String jsonInputString = gson.toJson(immaginiAuto);
+
+    // invia i dati al backed
+    sendData(conn, jsonInputString);
+
+    int responseCode = conn.getResponseCode();
+    if (responseCode == HttpURLConnection.HTTP_CREATED) {
+      conn.disconnect();
+      return;
+    }
     StringBuilder response = new StringBuilder();
     try (BufferedReader br =
         new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {

@@ -1,9 +1,6 @@
 package it.prova.javafxsofting;
 
-import it.prova.javafxsofting.models.Ordine;
-import it.prova.javafxsofting.models.Preventivo;
-import it.prova.javafxsofting.models.PreventivoUsato;
-import it.prova.javafxsofting.models.Utente;
+import it.prova.javafxsofting.models.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -17,15 +14,17 @@ import org.jetbrains.annotations.Contract;
 public class UserSession {
   private static UserSession instance;
   private Utente utente;
-  private List<Preventivo> preventivi;
-  private List<Ordine> ordini;
-  private List<PreventivoUsato> preventiviUsati;
+  private List<Preventivo> preventivi = new ArrayList<>();
+  private List<Ordine> ordini = new ArrayList<>();
+  private List<PreventivoUsato> preventiviUsati = new ArrayList<>();
+  private List<Detrazione> detrazioni = new ArrayList<>();
 
   @Getter(AccessLevel.NONE)
   @Setter(AccessLevel.NONE)
   private Logger logger = Logger.getLogger(this.getClass().getName());
 
-  private List<PreventivoListener> listeners = new ArrayList<>();
+  private List<PreventivoListener> listenersPreventivi = new ArrayList<>();
+  private List<PreventivoUsatoListener> listenersPreventiviUsati = new ArrayList<>();
 
   @Contract(pure = true)
   private UserSession() {}
@@ -37,17 +36,12 @@ public class UserSession {
     return instance;
   }
 
-  public void setUtente(Utente utente) {
-    this.utente = utente;
-
-    if (utente != null) {
-      new Thread(
-              () -> {
-                setPreventivi();
-                setPreventiviUsati();
-              })
-          .start();
+  public List<Ordine> getOrdini() {
+    if (getInstance().ordini == null) {
+      getInstance().setOrdini();
     }
+
+    return getInstance().ordini;
   }
 
   public List<Preventivo> getPreventivi() {
@@ -58,17 +52,74 @@ public class UserSession {
     return getInstance().preventivi;
   }
 
+  public void setUtente(Utente utente) {
+    this.utente = utente;
+
+    if (utente != null) {
+      new Thread(
+              () -> {
+                logger.info("init setPreventivi");
+                setPreventivi();
+                logger.info("init setPreventiviUsati");
+                setPreventiviUsati();
+                logger.info("init setOrdini");
+                setOrdini();
+                if (!getPreventiviUsati().isEmpty()) {
+                  logger.info("init setDetrazioni");
+                  setDetrazioni();
+                }
+              })
+          .start();
+    }
+  }
+
   public static void clearSession() {
     instance = null;
   }
 
   public void setPreventivi() {
     preventivi = fetchPreventivi();
-    notifyListeners();
+    notifyListenersPreventivo();
   }
 
   public void setPreventiviUsati() {
     preventiviUsati = fetchPreventiviUsati();
+    notifyListenersPreventivoUsato();
+  }
+
+  public void setOrdini() {
+    ordini = fetchOrdini();
+  }
+
+  public void setDetrazioni() {
+    detrazioni = fetchDetrazioni();
+  }
+
+  private List<Detrazione> fetchDetrazioni() {
+    logger.info("fetchDetrazioni");
+    String subDirectory = String.format("utente/%d/detrazioni/", getInstance().getUtente().getId());
+    List<Detrazione> data;
+    try {
+      data = Connection.getArrayDataFromBackend(subDirectory, Detrazione.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return data;
+  }
+
+  private List<Ordine> fetchOrdini() {
+    logger.info("fetchOrdini");
+    String subDirectory = String.format("utente/%d/ordini/", getInstance().getUtente().getId());
+    List<Ordine> data;
+    try {
+      data = Connection.getArrayDataFromBackend(subDirectory, Ordine.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    if (data != null) {
+      data.forEach(Ordine::transformIdToObject);
+    }
+    return data;
   }
 
   private List<Preventivo> fetchPreventivi() {
@@ -86,8 +137,12 @@ public class UserSession {
     return data;
   }
 
-  public void addListener(PreventivoListener listener) {
-    listeners.add(listener);
+  public void addListenerPreventivo(PreventivoListener listener) {
+    listenersPreventivi.add(listener);
+  }
+
+  public void addListenerPreventivoUsato(PreventivoUsatoListener listener) {
+    listenersPreventiviUsati.add(listener);
   }
 
   private List<PreventivoUsato> fetchPreventiviUsati() {
@@ -106,9 +161,15 @@ public class UserSession {
     return data;
   }
 
-  private void notifyListeners() {
-    for (PreventivoListener listener : listeners) {
+  private void notifyListenersPreventivo() {
+    for (PreventivoListener listener : listenersPreventivi) {
       listener.onPreventivoChange(new ArrayList<>(preventivi));
+    }
+  }
+
+  private void notifyListenersPreventivoUsato() {
+    for (PreventivoUsatoListener listener : listenersPreventiviUsati) {
+      listener.onPreventivoChange(new ArrayList<>(preventiviUsati));
     }
   }
 
@@ -116,5 +177,11 @@ public class UserSession {
     void onPreventivoChange(List<Preventivo> preventivi);
 
     void onPreventivoAdded(Preventivo preventivo);
+  }
+
+  public interface PreventivoUsatoListener {
+    void onPreventivoChange(List<PreventivoUsato> preventivi);
+
+    void onPreventivoAdded(PreventivoUsato preventivo);
   }
 }

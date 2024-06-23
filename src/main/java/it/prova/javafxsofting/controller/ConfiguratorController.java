@@ -47,6 +47,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +78,7 @@ public class ConfiguratorController implements Initializable {
   @FXML private MFXButton saveConfigurazioneBtn;
 
   /** Flag per l'aggiunta della detrazione nel preventivo */
-  @Getter private static boolean detrazione = false;
+  @Getter @Setter private static boolean detrazione = false;
 
   /** Auto selezionata all'interno del configuratore */
   private ModelloAuto auto;
@@ -208,7 +209,7 @@ public class ConfiguratorController implements Initializable {
       }
     }
 
-    UserSession.getInstance().setPreventivi();
+    new Thread(() -> UserSession.getInstance().setPreventivi()).start();
 
     ScreenController.removeScreen("configurazione");
     ScreenController.activate("home");
@@ -240,16 +241,10 @@ public class ConfiguratorController implements Initializable {
     return decimalFormat.parse(prezzo.getText().split(" ")[0]).intValue();
   }
 
-  /**
-   * Apri la schermata per la vendita di un'auto usato
-   *
-   * @throws IOException il file non esiste o viene trovato
-   */
-  private void openVendiUsato() throws IOException {
+  /** Apri la schermata per la vendita di un'auto usato */
+  private void openVendiUsato() {
     ScreenController.addScreen(
-        "vendiUsato",
-        FXMLLoader.load(
-            Objects.requireNonNull(App.class.getResource("controller/vendiUsato.fxml"))));
+        "vendiUsato", new FXMLLoader(App.class.getResource("controller/vendiUsato.fxml")));
 
     ScreenController.activate("vendiUsato");
   }
@@ -568,11 +563,7 @@ public class ConfiguratorController implements Initializable {
         event -> {
           if (yesBtn.isSelected()) {
             detrazione = true;
-            try {
-              openVendiUsato();
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
+            openVendiUsato();
           }
         });
 

@@ -1,10 +1,7 @@
 package it.prova.javafxsofting.util;
 
 import it.prova.javafxsofting.Connection;
-import it.prova.javafxsofting.models.AutoUsata;
-import it.prova.javafxsofting.models.Concessionario;
-import it.prova.javafxsofting.models.ModelloAuto;
-import it.prova.javafxsofting.models.Optional;
+import it.prova.javafxsofting.models.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +14,10 @@ import org.jetbrains.annotations.NotNull;
 @Data
 public final class StaticDataStore {
   @Getter private static List<ModelloAuto> modelliAuto;
-  @Getter private static List<AutoUsata> autoUsate;
+  private static List<AutoUsata> autoUsate;
   @Getter private static List<Optional> optionals;
   @Getter private static List<Concessionario> concessionari;
+  @Getter private static List<Sconto> sconti;
 
   private static Logger logger = Logger.getLogger(StaticDataStore.class.getName());
   @Getter private static boolean serverAvailable = true;
@@ -27,14 +25,40 @@ public final class StaticDataStore {
   @Contract(pure = true)
   private StaticDataStore() {}
 
+  public static List<AutoUsata> getAutoUsate() {
+    if (autoUsate == null) {
+      try {
+        fetchAutoUsate();
+      } catch (Exception e) {
+        serverAvailable = false;
+      }
+    }
+    return autoUsate;
+  }
+
   public static void fetchAllData() throws Exception {
     try {
       StaticDataStore.fetchOptionals();
       StaticDataStore.fetchModelliAuto();
       StaticDataStore.fetchAutoUsate();
       StaticDataStore.fetchConcessionari();
+      StaticDataStore.fetchSconti();
     } catch (Exception e) {
       serverAvailable = false;
+    }
+  }
+
+  private static void fetchSconti() {
+    logger.info("Aggiornamento sconti");
+    List<Sconto> newSconti;
+    try {
+      newSconti = Connection.getArrayDataFromBackend("modelli/sconti/", Sconto.class);
+    } catch (Exception e) {
+      newSconti = null;
+    }
+    if (newSconti != null && !newSconti.equals(sconti)) {
+      newSconti.forEach(Sconto::transformIdToObject);
+      sconti = newSconti;
     }
   }
 
@@ -43,7 +67,7 @@ public final class StaticDataStore {
     List<AutoUsata> newAutoUsate;
     newAutoUsate = Connection.getArrayDataFromBackend("autoUsate/", AutoUsata.class);
     if (newAutoUsate != null && !newAutoUsate.equals(autoUsate)) {
-      // todo: fare il fetch delle immagini
+      newAutoUsate.forEach(AutoUsata::setImmagini);
       autoUsate = newAutoUsate;
     }
   }
@@ -75,7 +99,6 @@ public final class StaticDataStore {
     newAutoNuove = Connection.getArrayDataFromBackend("modelli/", ModelloAuto.class);
 
     if (newAutoNuove != null && !newAutoNuove.equals(modelliAuto)) {
-      // accodato
       newAutoNuove.forEach(
           modelloAuto ->
               modelloAuto.setOptionals(transformIdInOptionals(modelloAuto.getIdsOptionals())));

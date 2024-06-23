@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,16 +43,10 @@ public class ProfileBox extends VBox implements Initializable {
     profile.setId("profile");
     profile.setOnAction(
         actionEvent -> {
-          try {
-            ScreenController.addScreen(
-                "profilo",
-                FXMLLoader.load(
-                    Objects.requireNonNull(
-                        App.class.getResource(
-                            "controller/part_profilo_utente/profilo_utente.fxml"))));
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
+          ScreenController.addScreen(
+              "profilo",
+              new FXMLLoader(
+                  App.class.getResource("controller/part_profilo_utente/profilo_utente.fxml")));
           ScreenController.activate("profilo");
           actionEvent.consume();
         });
@@ -128,6 +121,7 @@ public class ProfileBox extends VBox implements Initializable {
               throw new RuntimeException(e);
             }
             ScreenController.activate("home");
+            ScreenController.removeScreen("profilo");
             actionEvent.consume();
           });
       contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), logout);

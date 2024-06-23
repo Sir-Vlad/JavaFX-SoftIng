@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
+
 from django.utils.translation import gettext_lazy as _
 from pathlib import Path
 
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-u2b8$r8623quxw4i4ch@fvb6xejj+7v=^17&&y)nqa@^!5dic8"
+SECRET_KEY = "RZ3+abTyIyDSVMridEGBTe6Al6PwXsXA9jk9qTNVnJlJHSLUiNE9rjd8/30boQUk"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,6 +50,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "Backend_IngSoft.apps.BackendIngsoftConfig",
     "django_extensions",  # serve per il grafico del db
+    "drf_extra_fields",
+    "drf_yasg",  # documentazione delle api
 ]
 
 MIDDLEWARE = [
@@ -109,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 10 * 60
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -157,3 +160,39 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "IngegneriaSoftwere@outlook.it"
 EMAIL_HOST_PASSWORD = "rootAdmin2001"
+
+# logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "debug.log"),
+            "formatter": "verbose",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file", "console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}

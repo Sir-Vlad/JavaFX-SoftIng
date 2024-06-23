@@ -1,22 +1,22 @@
-import imagehash
 import os.path
 import re
-from PIL import Image
 from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import CASCADE
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 
 class Utente(models.Model):
-    email = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    email = models.EmailField(max_length=100, unique=True, null=False, blank=False)
     password = models.CharField(max_length=20, null=False, blank=False)
     nome = models.CharField(max_length=20, null=False, blank=False)
     cognome = models.CharField(max_length=20, null=False, blank=False)
-    indirizzo = models.CharField(max_length=100, null=True, blank=False)
-    numero_telefono = models.CharField(max_length=10, null=True, blank=False)
+    indirizzo = models.CharField(max_length=100, blank=True)
+    numero_telefono = models.CharField(max_length=10, blank=True)
     numero_carta = models.CharField(max_length=16, null=False, blank=False)
     data_scadenza = models.DateField(null=False, blank=False)
     cvc = models.CharField(max_length=3, null=False, blank=False)
@@ -28,14 +28,27 @@ class Utente(models.Model):
         return self.nome + " " + self.cognome
 
 
+class MarcaAuto(models.TextChoices):
+    NISSAN = "NISSAN"
+    MAZDA = "MAZDA"
+    VOLKSWAGEN = "VOLKSWAGEN"
+    FORD = "FORD"
+    HONDA = "HONDA"
+    AUDI = "AUDI"
+    BMW = "BMW"
+
+
 class Auto(models.Model):
     modello = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    marca = models.CharField(
+        max_length=20, null=False, blank=False, choices=MarcaAuto.choices
+    )  # lista di valori noti
     # dati auto
-    altezza = models.IntegerField(null=False, blank=False)
-    lunghezza = models.IntegerField(null=False, blank=False)
-    larghezza = models.IntegerField(null=False, blank=False)
-    peso = models.IntegerField(null=False, blank=False)
-    volume_bagagliaio = models.IntegerField(null=False, blank=False)
+    altezza = models.PositiveIntegerField(null=False, blank=False)
+    lunghezza = models.PositiveIntegerField(null=False, blank=False)
+    larghezza = models.PositiveIntegerField(null=False, blank=False)
+    peso = models.PositiveIntegerField(null=False, blank=False)
+    volume_bagagliaio = models.PositiveIntegerField(null=False, blank=False)
 
     class Meta:
         abstract = True
@@ -58,7 +71,7 @@ class Optional(models.Model):
 
     nome = models.CharField(max_length=20, blank=False, choices=Category)
     descrizione = models.CharField(max_length=30, blank=False)
-    prezzo = models.IntegerField(blank=False)
+    prezzo = models.PositiveIntegerField(blank=False)
     obbligatorio = models.BooleanField(default=False)
 
     class Meta:
@@ -70,19 +83,7 @@ class Optional(models.Model):
 
 
 class ModelloAuto(Auto):
-    class MarcaAuto(models.TextChoices):
-        NISSAN = "NISSAN"
-        MAZDA = "MAZDA"
-        VOLKSWAGEN = "VOLKSWAGEN"
-        FORD = "FORD"
-        HONDA = "HONDA"
-        AUDI = "AUDI"
-        BMW = "BMW"
-
-    marca = models.CharField(
-        max_length=20, null=False, blank=False, choices=MarcaAuto
-    )  # lista di valori noti
-    prezzo_base = models.IntegerField(null=False, blank=False)
+    prezzo_base = models.PositiveIntegerField(null=False, blank=False)
     optionals = models.ManyToManyField(
         Optional,
         blank=False,
@@ -118,6 +119,12 @@ class Concessionario(models.Model):
         }
 
 
+class StatoPreventivo(models.TextChoices):
+    PAGATO = "PG", _("Pagato")
+    VALIDO = "VA", _("Valida")
+    SCADUTO = "SC", _("Scaduto")
+
+
 class Preventivo(models.Model):
     utente = models.ForeignKey(Utente, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
@@ -125,14 +132,35 @@ class Preventivo(models.Model):
     concessionario = models.ForeignKey(
         Concessionario, on_delete=CASCADE, null=False, blank=False
     )
-    prezzo = models.IntegerField(null=False, blank=False)
-    valid = models.BooleanField(default=True)
+    prezzo = models.PositiveIntegerField(null=False, blank=False)
+    stato = models.CharField(
+        max_length=2, choices=StatoPreventivo.choices, default=StatoPreventivo.VALIDO
+    )
 
     class Meta:
-        pass
-        # TODO: capire come rendere univoco un preventivo
-        #   possibile idea guardare modello, utente e optional
-        # unique_together = ("utente", "modello")
+        verbose_name_plural = "Preventivi"
+
+    def clean(self):
+        super().clean()
+        self.validate_fields()
+
+    def validate_fields(self):
+        """
+        Verifica che non ci siano due preventivi uguali
+        """
+        if not self.utente:
+            raise ValidationError("Utente non specificato")
+        if not self.modello:
+            raise ValidationError("Modello non specificato")
+
+        optionals = Configurazione.objects.group_by_preventivo(self.pk).values_list(
+            "optional", flat=True
+        )
+        if not optionals:
+            raise ValidationError("Configurazione non specificata")
+
+    def __str__(self):
+        return "Preventivo n. " + str(self.pk)
 
 
 class Configurazione(models.Model):
@@ -150,15 +178,19 @@ class Acquisto(models.Model):
     preventivo = models.ForeignKey(
         Preventivo, on_delete=CASCADE, null=False, blank=False
     )
-    acconto = models.IntegerField(null=False, blank=False)
+    acconto = models.PositiveIntegerField(null=False, blank=False)
     data_ritiro = models.DateField(null=False, blank=False)
 
+    class Meta:
+        unique_together = ("numero_fattura", "preventivo")
+        verbose_name_plural = "Acquisti"
+
     def __str__(self):
-        return self.numero_fattura
+        return "Fattura n. " + self.numero_fattura
 
 
 def year_choice():
-    return [(r, r) for r in range(2000, current_year() + 1)]
+    return [(r, r) for r in range(current_year(), current_year() + 5)]
 
 
 def current_year():
@@ -180,8 +212,13 @@ class Periodo(models.Model):
         novembre = "novembre"
         dicembre = "dicembre"
 
-    mese = models.CharField(max_length=9, choices=Mesi, null=False, blank=False)
-    anno = models.IntegerField(
+    mese = models.CharField(
+        max_length=9,
+        choices=Mesi,
+        null=False,
+        blank=False,
+    )
+    anno = models.PositiveIntegerField(
         choices=year_choice(),
         default=current_year(),
         null=False,
@@ -199,7 +236,7 @@ class Periodo(models.Model):
 class Sconto(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete=CASCADE, null=False, blank=False)
     modello = models.ForeignKey(ModelloAuto, on_delete=CASCADE, null=False, blank=False)
-    percentuale_sconto = models.IntegerField(
+    percentuale_sconto = models.PositiveIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(100)]
     )  # valori da 1 a 100
 
@@ -218,9 +255,9 @@ class Ritiro(models.Model):
 
 
 def validate_targa(value):
-    if not re.match("^[A-Z]{2}[0-9]{3}[A-Z]{2}$", value):
+    if not re.match("^[A-Z]{2}\d{3}[A-Z]{2}$", value):
         raise ValidationError(
-            "Formato della targa non è valida. Deve essere del tipo " "AA123BB"
+            "Formato della targa non è valida. Deve essere del tipo AA123BB"
         )
 
 
@@ -230,9 +267,8 @@ def validate_not_future_date(value):
 
 
 class AutoUsata(Auto):
-    marca = models.CharField(max_length=20, null=False, blank=False)
-    prezzo = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    km_percorsi = models.IntegerField(
+    prezzo = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
+    km_percorsi = models.PositiveIntegerField(
         null=False, blank=False, validators=[MinValueValidator(0)]
     )
     anno_immatricolazione = models.DateField(
@@ -245,6 +281,7 @@ class AutoUsata(Auto):
         validators=[validate_targa],
         default="AA000AA",
     )
+    venduta = models.BooleanField(null=False, blank=False, default=False)
 
     class Meta:
         verbose_name_plural = "Auto Usate"
@@ -264,7 +301,6 @@ class PreventivoUsato(models.Model):
 
 class AbstractImmagini(models.Model):
     image = models.ImageField(upload_to="", default=None)
-    phash = models.CharField(max_length=64, editable=False, null=False)
 
     class Meta:
         abstract = True
@@ -301,10 +337,7 @@ class ImmaginiAutoNuove(AbstractImmagini):
             except ImmaginiAutoNuove.DoesNotExist:
                 pass
 
-        if self.image and not self.phash:
-            image = Image.open(self.image)
-            phash = imagehash.phash(image)
-            self.phash = str(phash)
+        if self.image:
             self.image.name = self.upload_to(self.image)
 
         super(AbstractImmagini, self).save(*args, **kwargs)
@@ -333,10 +366,7 @@ class ImmaginiAutoUsate(AbstractImmagini):
             except ImmaginiAutoNuove.DoesNotExist:
                 pass
 
-        if self.image and not self.phash:
-            image = Image.open(self.image)
-            phash = imagehash.phash(image)
-            self.phash = str(phash)
+        if self.image:
             self.image.name = self.upload_to(self.image)
 
         super(AbstractImmagini, self).save(*args, **kwargs)

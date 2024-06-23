@@ -12,6 +12,7 @@ public class PreventivoDeserializer implements JsonDeserializer<Preventivo> {
     JsonObject jsonObject = json.getAsJsonObject();
     Preventivo preventivo;
 
+    int id = jsonObject.get("id").getAsInt();
     int utenteId = jsonObject.get("utente").getAsInt();
     int modelloId = jsonObject.get("modello").getAsInt();
     int concessionarioId = jsonObject.get("concessionario").getAsInt();
@@ -22,17 +23,19 @@ public class PreventivoDeserializer implements JsonDeserializer<Preventivo> {
       String dataEmissione = jsonObject.get("data_emissione").getAsString();
       preventivo = new Preventivo(utenteId, modelloId, concessionarioId, prezzo, dataEmissione);
     }
+    preventivo.setId(id);
+    preventivo.setStato(jsonObject.get("stato").getAsString());
 
     JsonArray optionals = jsonObject.get("config").getAsJsonArray();
-    int[] id = new int[optionals.size()];
+    int[] idOpt = new int[optionals.size()];
     for (int i = 0; i < optionals.size(); i++) {
       if (optionals.get(i).isJsonNull()) {
         continue;
       }
       int optionalId = optionals.get(i).getAsInt();
-      id[i] = optionalId;
+      idOpt[i] = optionalId;
     }
-    preventivo.setIdRefConfig(id);
+    preventivo.setIdRefConfig(idOpt);
 
     return preventivo;
   }

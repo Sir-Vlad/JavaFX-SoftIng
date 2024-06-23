@@ -98,9 +98,13 @@
 
 ## Ordini
 
-- `GET api/utente/<int:id>/ordini/`
-- `POST api/utente/<int:id>/ordini/`
-    - NOT IMPLEMENTED
+- `GET api/utente/<int:id>/ordini/`: ritorna tutti gli ordini di un utente
+- `POST api/utente/<int:id_utente>/preventivo/<int:id_preventivo>/conferma/`: conferma il preventivo e salva l'ordine
+    ```
+  {
+    "acconto": ...
+  }
+  ```
 
 ## Concessionari
 

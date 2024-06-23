@@ -9,6 +9,9 @@ import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.models.AutoUsata;
+import it.prova.javafxsofting.models.Marca;
+import it.prova.javafxsofting.models.PreventivoUsato;
+import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +27,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -73,7 +77,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private Label validatePeso;
   @FXML private Label validateFoto;
   @FXML private MFXTextField modelloField;
-  @FXML private MFXTextField marcaField;
+  @FXML private MFXFilterComboBox<String> marcaField;
   @FXML private MFXTextField kmPercorsiField;
   @FXML private MFXTextField targaFieldFirstTwoLetter;
   @FXML private MFXTextField targaFieldDigit;
@@ -110,7 +114,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    header.addTab("Indietro", event -> ScreenController.activate("config"));
+    header.addTab(
+        "Indietro",
+        event -> {
+          ScreenController.activate("config");
+          ScreenController.removeScreen("vendiUsato");
+        });
 
     setBoundsTarga();
 
@@ -124,6 +133,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     onlyFloat(volBagagliaioField);
     onlyFloat(pesoField);
 
+    setValueMarca();
     setValueAAImmatricolazione();
 
     setValidateModello();
@@ -149,24 +159,59 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   public void richiediPreventivo() {
+    if (UserSession.getInstance().getUtente() == null) {
+      Alert alert = new Alert(AlertType.INFORMATION);
+      alert.setHeaderText(null);
+      alert.setContentText("Effettua il login per poter effettuare il preventivo");
+      alert.showAndWait();
+      ScreenController.activate("login");
+      return;
+    }
+
     showErrorAll();
 
     if (isInvalidDatiAuto() && isInvalidInfoAuto()) {
       return;
     }
 
+    // creo l'oggetto per l'auto usata
     AutoUsata autoUsata = createAutoUsata();
-
+    // lo invio al server
     if (postPreventivo(autoUsata)) return;
+    // aggiorno la lista delle auto usate
+    try {
+      StaticDataStore.fetchAutoUsate();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
 
+    // aggiorno la lista dei preventivi
     UserSession.getInstance().setPreventiviUsati();
+    // aggiorno la lista delle detrazioni
+    UserSession.getInstance().setDetrazioni();
+    // aggiungo le immagini all'auto usata
+    autoUsata.setImmagini(new ArrayList<>(immagini.values()));
+    // cerco il nuovo preventivo
+    PreventivoUsato preventivo =
+        UserSession.getInstance().getPreventiviUsati().stream()
+            .max((Comparator.comparingInt(PreventivoUsato::getId)))
+            .orElse(null);
 
+    if (preventivo == null) {
+      return;
+    }
+    // invio le immagini dell'auto usata al server
+    postImmagini(preventivo.getIdAutoUsata(), autoUsata.getImmagini());
+
+    // mostra un messaggio di successo
     Alert alert = new Alert(AlertType.INFORMATION);
     alert.setHeaderText("Auto Usata inserita correttamente");
     alert.setContentText(
         "La sua auto usata è stata inserita correttamente. Ora la puoi usare avere una detrazione sull'auto nuova.");
     alert.showAndWait();
+    // ritorno alla schermata di configurazione
     ScreenController.activate("config");
+    ScreenController.removeScreen("vendiUsato");
   }
 
   /** Sceglie le immagini da caricare dell'auto usata */
@@ -179,9 +224,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     FileChooser fileChooser = new FileChooser();
 
     // decido le estensioni ammissibili
-    fileChooser
-        .getExtensionFilters()
-        .addAll(new ExtensionFilter("Image File", "*.jpeg", "*.jpg", "*.png"));
+    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image File", "*.jpeg", "*.png"));
 
     // apre una finestra dove poter scegliere i file
     List<File> listImmagini = fileChooser.showOpenMultipleDialog(null);
@@ -196,10 +239,10 @@ public class VendiUsato extends ValidateForm implements Initializable {
       return;
     }
 
-    // controllo se esiste la cartella dove salvare le immagini `instance/immaginiAutoUsata`
+    // controllo se esiste la cartella dove salvare le immagini `instance/immaginiAutoUsate`
     if (checkFolderImmagini()) {
       for (File f : listImmagini) {
-        Path rootPath = Path.of("instance/immagini/immaginiAutoUsata");
+        Path rootPath = Path.of("instance/immagini/immaginiAutoUsate");
         try {
           String newName = generateAlphaFileName() + getExtension(f.getName());
           Path newPath = rootPath.resolve(newName);
@@ -255,6 +298,15 @@ public class VendiUsato extends ValidateForm implements Initializable {
     mouseEvent.consume();
   }
 
+  private void postImmagini(int idAutoUsata, ArrayList<File> immagini) {
+    try {
+      Connection.postImmaginiAutoUsateToBacked(idAutoUsata, immagini, "immaginiAutoUsate/");
+    } catch (Exception e) {
+      Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+      alert.showAndWait();
+    }
+  }
+
   private void alertWarning(String title, String message) {
     Alert alert = new Alert(AlertType.WARNING);
     alert.setTitle(title);
@@ -287,17 +339,22 @@ public class VendiUsato extends ValidateForm implements Initializable {
         Arrays.stream(targaField).map(TextInputControl::getText).collect(Collectors.joining(""));
     LocalDate date = LocalDate.of(Integer.parseInt(aaImmatricolazioneCombo.getValue()), 1, 1);
 
-    return new AutoUsata(
-        modelloField.getText(),
-        marcaField.getText(),
-        Integer.parseInt(altezzaField.getText()),
-        Integer.parseInt(lunghezzaField.getText()),
-        Integer.parseInt(larghezzaField.getText()),
-        Integer.parseInt(pesoField.getText()),
-        Integer.parseInt(volBagagliaioField.getText()),
-        Integer.parseInt(kmPercorsiField.getText()),
-        targa,
-        date);
+    AutoUsata autoUsata =
+        new AutoUsata(
+            modelloField.getText(),
+            marcaField.getSelectionModel().getSelectedItem(),
+            Integer.parseInt(altezzaField.getText()),
+            Integer.parseInt(lunghezzaField.getText()),
+            Integer.parseInt(larghezzaField.getText()),
+            Integer.parseInt(pesoField.getText()),
+            Integer.parseInt(volBagagliaioField.getText()),
+            Integer.parseInt(kmPercorsiField.getText()),
+            targa,
+            date);
+
+    autoUsata.setImmagini(new ArrayList<>(immagini.values()));
+
+    return autoUsata;
   }
 
   private void showErrorAll() {
@@ -327,7 +384,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
   @SneakyThrows
   private boolean checkFolderImmagini() {
-    Path root = Path.of("instance/immagini/immaginiAutoUsata");
+    Path root = Path.of("instance/immagini/immaginiAutoUsate");
     try {
       Files.createDirectories(root);
     } catch (FileAlreadyExistsException e) {
@@ -374,6 +431,13 @@ public class VendiUsato extends ValidateForm implements Initializable {
                           targaField[nextIndex].requestFocus();
                       });
             });
+  }
+
+  private void setValueMarca() {
+    marcaField.setItems(
+        FXCollections.observableArrayList(Arrays.stream(Marca.values()).map(Enum::name).toList()));
+
+    marcaField.getSelectionModel().selectFirst();
   }
 
   private void setValueAAImmatricolazione() {

@@ -19,22 +19,24 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+@EqualsAndHashCode(callSuper = false)
 public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     implements Initializable, FilterAuto {
   private static final String ELEMENT_TUTTI = "Tutti";
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
   private static ScheduledExecutorService scheduler;
+  private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
   @FXML private AnchorPane root;
   @FXML private MFXScrollPane scrollPane;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
   private List<ModelloAuto> autoFiltered;
-  private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
 
   @Contract(" -> new")
   private @NotNull List<String> getTypeAlimentazione() {
@@ -65,26 +67,26 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
+                if (newValue.equals(ELEMENT_TUTTI)) {
+                  getFlowPane().getChildren().clear();
+                  getCardAuto().stream()
+                      .map(CardAuto::new)
+                      .forEach(auto -> getFlowPane().getChildren().add(auto));
+                  return;
+                }
                 List<ModelloAuto> newAutoFiltered =
                     getCardAuto().stream()
                         .filter(
                             auto ->
                                 Arrays.stream(auto.getOptionals())
-                                    .filter(optional -> optional.getDescrizione().equals(newValue))
-                                    .isParallel())
+                                    .anyMatch(
+                                        optional ->
+                                            optional.getDescrizione().equalsIgnoreCase(newValue)))
                         .toList();
-
-                if (autoFiltered == null) {
-                  autoFiltered = newAutoFiltered;
-                }
-
-                if (!autoFiltered.equals(newAutoFiltered)) {
-                  autoFiltered = newAutoFiltered;
-                  getFlowPane().getChildren().clear();
-                  autoFiltered.stream()
-                      .map(CardAuto::new)
-                      .forEach(auto -> getFlowPane().getChildren().add(auto));
-                }
+                getFlowPane().getChildren().clear();
+                newAutoFiltered.stream()
+                    .map(CardAuto::new)
+                    .forEach(auto -> getFlowPane().getChildren().add(auto));
               }
             });
   }

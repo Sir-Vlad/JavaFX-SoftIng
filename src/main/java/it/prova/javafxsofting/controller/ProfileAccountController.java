@@ -3,6 +3,7 @@ package it.prova.javafxsofting.controller;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.UserSession;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
@@ -40,7 +41,7 @@ public class ProfileAccountController implements Initializable {
   @FXML private VBox content;
   @FXML private VBox sidebar;
   @FXML private MFXButton indietroBtn;
-  private TabController tabController;
+  @Getter private TabController tabController;
 
   @SneakyThrows
   @Override
@@ -70,32 +71,25 @@ public class ProfileAccountController implements Initializable {
     tabController = new TabController();
     tabController.addTab(
         LITERAL_PROFILE,
-        FXMLLoader.load(
-            Objects.requireNonNull(
-                App.class.getResource(PATH_DIR.resolve("impostazioni_profilo.fxml").toString()))),
+        new FXMLLoader(
+            App.class.getResource(PATH_DIR.resolve("impostazioni_profilo.fxml").toString())),
         profiloBtn);
 
     tabController.addTab(
         "preventivi",
-        FXMLLoader.load(
-            Objects.requireNonNull(
-                App.class.getResource(PATH_DIR.resolve("preventivi_utente.fxml").toString()))),
+        new FXMLLoader(
+            App.class.getResource(PATH_DIR.resolve("preventivi_utente.fxml").toString())),
         preventiviBtn);
 
     tabController.addTab(
         LITERAL_ORDINI,
-        new AnchorPane(),
-        //        FXMLLoader.load(
-        //            Objects.requireNonNull(App.class.getResource(PATH_DIR +
-        // "ordini_utente.fxml"))),
+        new FXMLLoader(App.class.getResource(PATH_DIR.resolve("ordini_utente.fxml").toString())),
         ordiniBtn);
 
     tabController.addTab(
         "preventiviUsato",
-        FXMLLoader.load(
-            Objects.requireNonNull(
-                App.class.getResource(
-                    PATH_DIR.resolve("preventivi_usato_utente.fxml").toString()))),
+        new FXMLLoader(
+            App.class.getResource(PATH_DIR.resolve("preventivi_usato_utente.fxml").toString())),
         preventiviUsatoBtn);
 
     // set default page open
@@ -160,37 +154,39 @@ public class ProfileAccountController implements Initializable {
     svg.setScaleX(scaleX);
     svg.setScaleY(scaleY);
   }
-}
 
-@Getter
-class TabController {
-  private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
-  private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
-  private AnchorPane main = null;
+  @Getter
+  static class TabController {
+    private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
+    protected static final HashMap<String, FXMLLoader> CONTROLLER = new HashMap<>();
+    private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
+    private AnchorPane main = null;
 
-  protected String getKeyMain() {
-    return PANE_HASH_MAP.entrySet().stream()
-        .filter(entry -> Objects.equals(entry.getValue(), main))
-        .map(Map.Entry::getKey)
-        .findAny()
-        .orElseThrow();
-  }
+    protected String getKeyMain() {
+      return PANE_HASH_MAP.entrySet().stream()
+          .filter(entry -> Objects.equals(entry.getValue(), main))
+          .map(Map.Entry::getKey)
+          .findAny()
+          .orElseThrow();
+    }
 
-  protected void removeTab(String name) {
-    PANE_HASH_MAP.remove(name);
-  }
+    protected void removeTab(String name) {
+      PANE_HASH_MAP.remove(name);
+    }
 
-  protected void addTab(String name, AnchorPane pane, Node button) {
-    PANE_HASH_MAP.put(name, pane);
-    BUTTONS_MAP.put(name, button);
-  }
+    protected void addTab(String name, FXMLLoader controller, Node button) throws IOException {
+      CONTROLLER.put(name, controller);
+      PANE_HASH_MAP.put(name, controller.load());
+      BUTTONS_MAP.put(name, button);
+    }
 
-  protected AnchorPane getTab(String name) {
-    main = PANE_HASH_MAP.get(name);
-    return main;
-  }
+    protected AnchorPane getTab(String name) {
+      main = PANE_HASH_MAP.get(name);
+      return main;
+    }
 
-  protected Node getButton(String name) {
-    return BUTTONS_MAP.get(name);
+    protected Node getButton(String name) {
+      return BUTTONS_MAP.get(name);
+    }
   }
 }

@@ -35,6 +35,9 @@ public class Preventivo implements Serializable {
   @SerializedName("config")
   private int[] idRefConfig;
 
+  @SerializedName("stato")
+  private String stato;
+
   @Expose(serialize = false, deserialize = false)
   private Utente utente;
 
@@ -119,8 +122,21 @@ public class Preventivo implements Serializable {
             .toList();
 
     this.prezzoOptionals = optionals.stream().mapToInt(Optional::getPrezzo).sum();
-    this.totalePrezzo = this.getModello().getPrezzoBase() + this.prezzoOptionals;
-    // todo: completare appena abbiamo la lista delle sedi
-    //    this.concessionario = ??
+    this.totalePrezzo = (this.getModello().getPrezzoBase() + this.prezzoOptionals);
+
+    Sconto sconto =
+        StaticDataStore.getSconti().stream()
+            .filter(s -> s.getIdModello() == modelloId)
+            .findFirst()
+            .orElse(null);
+    int percentualeSconto = sconto == null ? 0 : sconto.getPercentualeSconto();
+
+    this.totalePrezzo -= (this.totalePrezzo * percentualeSconto) / 100;
+
+    this.concessionario =
+        StaticDataStore.getConcessionari().stream()
+            .filter(concessionario1 -> concessionario1.getId() == sedeId)
+            .toList()
+            .getFirst();
   }
 }
