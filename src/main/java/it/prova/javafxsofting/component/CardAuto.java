@@ -7,13 +7,12 @@ import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Auto;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Optional;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-
-import it.prova.javafxsofting.models.Optional;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -51,6 +50,8 @@ public class CardAuto extends VBox {
       } else {
         labelTipoMotore.setText("");
       }
+    } else if (auto instanceof AutoUsata) {
+      labelTipoMotore.setText("");
     }
 
     DecimalFormat decimalFormat = new DecimalFormat("###,###");

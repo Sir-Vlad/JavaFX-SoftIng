@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +46,12 @@ import org.jetbrains.annotations.NotNull;
 public class AutoUsataDetail implements Initializable {
   private static final Logger logger = Logger.getLogger(AutoUsataDetail.class.getName());
   private final List<Image> images = new ArrayList<>();
+  public Text fieldKmPercorsi;
+  public Text fieldAAImm;
+  public Text fieldTarga;
+  @FXML private StackPane logoMarca;
+  @FXML private Text fieldMarca;
+  @FXML private Text fieldModelloV;
   @FXML private StackPane stackPaneImage;
   @FXML private VBox datiAuto;
   @FXML private AnchorPane root;
@@ -78,8 +85,27 @@ public class AutoUsataDetail implements Initializable {
     header.addTab("Home", event -> ScreenController.activate("home"));
     header.addTab("Indietro", event -> ScreenController.back());
 
+    String pathImage =
+        "immagini/loghi_marche/logo-" + autoUsata.getMarca().toString().toLowerCase() + ".png";
+    URL urlImage = App.class.getResource(pathImage);
+    if (urlImage != null) {
+      logoMarca.setStyle(
+          "-fx-background-image: url("
+              + urlImage
+              + "); -fx-background-repeat: no-repeat; -fx-background-position: center center");
+    }
+
+    fieldModelloV.setText(autoUsata.getModello());
+    fieldMarca.setText(autoUsata.getMarca().toString());
+
+    fieldTarga.setText(autoUsata.getTarga());
+    fieldAAImm.setText(
+        autoUsata.getAnnoImmatricolazione().format(DateTimeFormatter.ofPattern("dd/MM/y")));
+    fieldKmPercorsi.setText(String.valueOf(autoUsata.getKmPercorsi()));
+
     loadImages();
     loadDatiAuto();
+    createBoxPrezzo(autoUsata);
   }
 
   public void prevImage(ActionEvent actionEvent) {
@@ -112,6 +138,30 @@ public class AutoUsataDetail implements Initializable {
     ScreenController.removeScreen("autoUsataDetail");
     ScreenController.activate("home");
     actionEvent.consume();
+  }
+
+  /**
+   * Crea la box per il prezzo dell'auto nell'header
+   *
+   * @param auto l'auto selezionata
+   */
+  private void createBoxPrezzo(@NotNull AutoUsata auto) {
+    VBox vbox = new VBox();
+    vbox.setPrefWidth(200);
+    vbox.setAlignment(Pos.CENTER);
+
+    Text fieldPrezzo = new Text("Prezzo");
+    Text fieldPrezzoValue = new Text();
+    fieldPrezzoValue.setId("fieldPrezzoValue");
+    fieldPrezzoValue.setStyle("-fx-font-weight: bold; -fx-font-size: 20");
+
+    vbox.getChildren().addAll(fieldPrezzo, fieldPrezzoValue);
+
+    int index = header.getChildren().size() - 1;
+    header.getChildren().add(index, vbox);
+
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+    fieldPrezzoValue.setText(decimalFormat.format(auto.getPrezzo()) + " €");
   }
 
   private void openStageBuy() {

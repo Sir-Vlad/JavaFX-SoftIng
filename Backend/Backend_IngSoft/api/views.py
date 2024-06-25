@@ -544,6 +544,7 @@ class ConfermaPreventivoUtenteAPIView(APIView):
 
         days_diff = (preventivo.data_emissione - datetime.now().date()).days
         if days_diff > 20:
+            Preventivo.objects.filter(id=id_preventivo).update(stato="SC")
             return Response("Preventivo scaduto", status=status.HTTP_406_NOT_ACCEPTABLE)
 
         try:
