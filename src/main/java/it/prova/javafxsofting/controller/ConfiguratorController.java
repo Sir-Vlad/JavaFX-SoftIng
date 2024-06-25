@@ -188,6 +188,12 @@ public class ConfiguratorController implements Initializable {
           preventivo,
           String.format("utente/%s/preventivi/", UserSession.getInstance().getUtente().getId()));
     } catch (Exception e) {
+      if (e.getMessage().equals("Errore del server")) {
+        Alert alert = new Alert(AlertType.ERROR, "Errore del server");
+        alert.setTitle("Errore");
+        alert.showAndWait();
+        return;
+      }
       List<ErrorResponse> errorResponses = new ArrayList<>();
       Type type = new TypeToken<Map<String, Map<String, List<String>>>>() {}.getType();
       Map<String, Map<String, List<String>>> errorMap = gson.fromJson(e.getMessage(), type);
@@ -207,6 +213,7 @@ public class ConfiguratorController implements Initializable {
         alert.showAndWait();
         return;
       }
+      return;
     }
 
     new Thread(() -> UserSession.getInstance().setPreventivi()).start();
@@ -512,6 +519,10 @@ public class ConfiguratorController implements Initializable {
         .selectedToggleProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
+              // se clicco sulla stesso toggle non si leva il selected
+              if (newValue == null && oldValue != null) {
+                toggleGroup.selectToggle(oldValue);
+              }
               // Recupero il valore del campo dove mostro il prezzo
               Text prezzo = (Text) root.lookup("#fieldPrezzoValue");
               int newPrezzo = calculateNewPrice(oldValue, newValue, prezzo);

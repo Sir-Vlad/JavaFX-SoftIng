@@ -123,9 +123,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
 
     setBoundsTarga();
 
-    onlyCharAlphabetical(modelloField);
-    onlyCharAlphabetical(marcaField);
-
     onlyFloat(kmPercorsiField);
     onlyFloat(altezzaField);
     onlyFloat(larghezzaField);

@@ -3,66 +3,66 @@
     "model": "Backend_IngSoft.Concessionario",
     "pk": 1,
     "fields": {
-      "nome": "Concessionario 1",
-      "via": "2398 Baby Burgs",
+      "nome": "City Auto",
+      "via": "Via Ottorino Respighi",
       "civico": 71,
-      "citta": "Port Adoniscester",
-      "cap": "35825"
+      "citta": "Modena",
+      "cap": "41100"
     }
   },
   {
     "model": "Backend_IngSoft.Concessionario",
     "pk": 2,
     "fields": {
-      "nome": "Concessionario 2",
-      "via": "429 Liliana Fall",
+      "nome": "Autlet-AutoUsate",
+      "via": "Via Roma",
       "civico": 63,
-      "citta": "South Elenachester",
-      "cap": "93620-7611"
+      "citta": "Genova",
+      "cap": "16100"
     }
   },
   {
     "model": "Backend_IngSoft.Concessionario",
     "pk": 3,
     "fields": {
-      "nome": "Concessionario 3",
-      "via": "335 Sporer Meadow",
+      "nome": "Autoequipe",
+      "via": "Via Giovanni Ciampini",
       "civico": 78,
-      "citta": "O'Reillyland",
-      "cap": "42231"
+      "citta": "Roma",
+      "cap": "00042"
     }
   },
   {
     "model": "Backend_IngSoft.Concessionario",
     "pk": 4,
     "fields": {
-      "nome": "Concessionario 4",
-      "via": "146 Tremblay Islands",
+      "nome": "SpotiCar",
+      "via": "Via Garibaldi",
       "civico": 19,
-      "citta": "Lake Jarred",
-      "cap": "78552-9872"
+      "citta": "Napoli",
+      "cap": "80013"
     }
   },
   {
     "model": "Backend_IngSoft.Concessionario",
     "pk": 5,
     "fields": {
-      "nome": "Concessionario 5",
-      "via": "844 Lemke Viaduct",
+      "nome": "AutoPiù",
+      "via": "Via Privata Decemviri",
       "civico": 78,
-      "citta": "Horacemouth",
-      "cap": "12073-8578"
+      "citta": "Milano",
+      "cap": "20019"
     }
   },
   {
     "model": "Backend_IngSoft.Concessionario",
     "pk": 6,
     "fields": {
-      "nome": "Concessionario 6",
-      "via": "2927 Adrian Meadow",
+      "nome": "MagyCar",
+      "via": "Via Piagentina",
       "civico": 52,
-      "citta": "Harberbury",
-      "cap": "34576-7114"
+      "citta": "Catania",
+      "cap": "95100"
     }
   }
 ]

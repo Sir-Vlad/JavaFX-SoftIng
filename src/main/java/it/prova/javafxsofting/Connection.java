@@ -174,7 +174,10 @@ public final class Connection {
       conn.disconnect();
       return;
     }
-
+    if (responseCode != HttpURLConnection.HTTP_INTERNAL_ERROR) {
+      conn.disconnect();
+      throw new Exception("Errore del server");
+    }
     StringBuilder response = new StringBuilder();
     try (BufferedReader br =
         new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
