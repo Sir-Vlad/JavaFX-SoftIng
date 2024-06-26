@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ImmagineAuto;
+import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.serializzatori.*;
 import java.io.*;
@@ -16,6 +17,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -23,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class Connection {
-
+  private static final Logger logger = Logger.getLogger(Connection.class.getName());
   public static final Gson gson =
       new GsonBuilder()
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
@@ -31,6 +34,7 @@ public final class Connection {
           .registerTypeAdapter(Preventivo.class, new PreventivoSerializer())
           .registerTypeAdapter(Preventivo.class, new PreventivoDeserializer())
           .registerTypeAdapter(AutoUsata.class, new AutoUsataSerializer())
+          .registerTypeAdapter(Ordine.class, new OrdineSerializer())
           .setPrettyPrinting()
           .setDateFormat(DateFormat.LONG)
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -165,6 +169,8 @@ public final class Connection {
     // Dati da inviare al backend in formato JSON
     String jsonInputString = gson.toJson(data);
 
+    logger.info(jsonInputString);
+
     // invia i dati al backed
     sendData(conn, jsonInputString);
 
@@ -185,8 +191,11 @@ public final class Connection {
       while ((responseLine = br.readLine()) != null) {
         response.append(responseLine.trim());
       }
+    } catch (IOException e) {
+
     }
     conn.disconnect();
+
     throw new Exception(response.toString());
   }
 

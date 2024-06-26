@@ -1,3 +1,13 @@
+from datetime import datetime, timedelta
+
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -31,14 +41,6 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import create_pdf_file, send_html_email
-from datetime import datetime, timedelta
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -302,16 +304,16 @@ class PreventiviUtenteListAPIView(APIView):
                         prezzo_tot = conf.preventivo.prezzo
                     else:
                         prezzo_tot = (
-                                             conf.preventivo.prezzo * sconto.percentuale_sconto
-                                     ) / 100
+                            conf.preventivo.prezzo * sconto.percentuale_sconto
+                        ) / 100
 
                     # invio email
                     subject = "Preventivo creato"
                     to_email = conf.preventivo.utente.email
                     context = {
                         "customer_name": conf.preventivo.utente.nome
-                                         + " "
-                                         + conf.preventivo.utente.cognome,
+                        + " "
+                        + conf.preventivo.utente.cognome,
                         "car_model": conf.preventivo.modello.modello,
                         "base_price": conf.preventivo.modello.prezzo_base,
                         "optionals": conf.optional.all(),
