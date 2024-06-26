@@ -174,7 +174,7 @@ public final class Connection {
       conn.disconnect();
       return;
     }
-    if (responseCode != HttpURLConnection.HTTP_INTERNAL_ERROR) {
+    if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
       conn.disconnect();
       throw new Exception("Errore del server");
     }
