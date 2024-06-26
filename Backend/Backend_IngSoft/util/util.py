@@ -32,7 +32,7 @@ def create_pdf_file(obj: Acquisto):
     logger = logging.getLogger(__name__)
 
     current_dir = os.getcwd()
-    template_dir = os.path.join(current_dir, "templates")
+    template_dir = os.path.join(current_dir, "Backend/templates")
     try:
         env = Environment(loader=FileSystemLoader(template_dir))
         template = env.get_template("fattura/fattura.html")
@@ -66,7 +66,7 @@ def create_pdf_file(obj: Acquisto):
 
     rendered_html = template.render(data)
 
-    PATH_ROOT_FILE = f"{current_dir}/media/fatture"
+    PATH_ROOT_FILE = f"{current_dir}/Backend/media/fatture"
     if not os.path.exists(PATH_ROOT_FILE):
         os.mkdir(PATH_ROOT_FILE)
         os.mkdir(f"{PATH_ROOT_FILE}/fatture_html")
