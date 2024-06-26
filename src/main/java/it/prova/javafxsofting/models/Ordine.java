@@ -33,6 +33,7 @@ public class Ordine implements Serializable {
   @Expose(serialize = false, deserialize = false)
   private Preventivo preventivo;
 
+  /** Trasforma gli id in oggetti */
   public void transformIdToObject() {
     if (utenteId == UserSession.getInstance().getUtente().getId()) {
       this.utente = UserSession.getInstance().getUtente();

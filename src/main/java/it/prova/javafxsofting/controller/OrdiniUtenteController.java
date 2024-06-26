@@ -43,6 +43,11 @@ public class OrdiniUtenteController implements Initializable {
   @FXML private TableColumn<Ordine, LocalDate> dataRitiroColumn;
   @FXML private TableColumn<Ordine, Preventivo> concessionarioColumn;
 
+  /**
+   * Trasforma la lista di ordini in una ObservableList
+   *
+   * @return la ObservableList degli ordini
+   */
   @Contract(" -> new")
   private static @NotNull ObservableList<Ordine> getOrdini() {
     ArrayList<Ordine> ordini = new ArrayList<>(UserSession.getInstance().getOrdini());

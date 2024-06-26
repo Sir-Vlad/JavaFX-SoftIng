@@ -46,27 +46,39 @@ import org.jetbrains.annotations.NotNull;
 public class AutoUsataDetail implements Initializable {
   private static final Logger logger = Logger.getLogger(AutoUsataDetail.class.getName());
   private final List<Image> images = new ArrayList<>();
-  public Text fieldKmPercorsi;
-  public Text fieldAAImm;
-  public Text fieldTarga;
+  @FXML private Header header;
+  @FXML private AnchorPane root;
+  @FXML private StackPane stackPaneImage;
   @FXML private StackPane logoMarca;
+  @FXML private VBox datiAuto;
+  @FXML private Text fieldKmPercorsi;
+  @FXML private Text fieldAAImm;
+  @FXML private Text fieldTarga;
   @FXML private Text fieldMarca;
   @FXML private Text fieldModelloV;
-  @FXML private StackPane stackPaneImage;
-  @FXML private VBox datiAuto;
-  @FXML private AnchorPane root;
-  @FXML private Header header;
   @FXML private MFXButton prev;
   @FXML private MFXButton next;
   private int currentIndex = 0;
   private AutoUsata autoUsata;
 
+  /**
+   * Setta le dimensioni dell'immagine però mantiene la proporzionalità
+   *
+   * @param imageView l'immagine da settare
+   */
   private static void setSizeImage(ImageView imageView) {
     imageView.setPreserveRatio(true);
     imageView.setFitHeight(500);
     imageView.setFitWidth(500);
   }
 
+  /**
+   * Setta l'effetto blur all'immagine precedente e successiva
+   *
+   * @param newImage l'immagine successiva
+   * @param oldImage l'immagine precedente
+   * @param motionBlur effetto blur
+   */
   private static void setBlurImage(
       @NotNull ImageView newImage, MotionBlur motionBlur, @NotNull ImageView oldImage) {
     newImage.setEffect(motionBlur);
@@ -108,6 +120,12 @@ public class AutoUsataDetail implements Initializable {
     createBoxPrezzo(autoUsata);
   }
 
+  /**
+   * Cambia l'immagine attuale con l'immagine precedente
+   *
+   * @param actionEvent l'azione dell'utente
+   */
+  @FXML
   public void prevImage(ActionEvent actionEvent) {
     if (images.isEmpty()) {
       return;
@@ -117,6 +135,12 @@ public class AutoUsataDetail implements Initializable {
     actionEvent.consume();
   }
 
+  /**
+   * Cambia l'immagine attuale con l'immagine successiva
+   *
+   * @param actionEvent l'azione dell'utente
+   */
+  @FXML
   public void nextImage(ActionEvent actionEvent) {
     if (images.isEmpty()) {
       return;
@@ -126,6 +150,12 @@ public class AutoUsataDetail implements Initializable {
     actionEvent.consume();
   }
 
+  /**
+   * Acquista l'auto selezionata
+   *
+   * @param actionEvent l'azione dell'utente
+   */
+  @FXML
   public void acquistaAuto(ActionEvent actionEvent) {
     if (UserSession.getInstance().getUtente() == null) {
       ScreenController.activate("login");
@@ -164,6 +194,7 @@ public class AutoUsataDetail implements Initializable {
     fieldPrezzoValue.setText(decimalFormat.format(auto.getPrezzo()) + " €");
   }
 
+  /** Apri la finestra per l'acquisto dell'auto usata e comunica al server l'acquisto */
   private void openStageBuy() {
     Stage stage = new Stage();
     stage.setTitle("Acquisto");
@@ -244,6 +275,7 @@ public class AutoUsataDetail implements Initializable {
     stage.showAndWait();
   }
 
+  /** Carica i dati tecnici dell'auto */
   private void loadDatiAuto() {
     HBox hBox;
     Path path = Path.of("controller", "part_configurator").resolve("dati_tecnici.fxml");
@@ -267,6 +299,7 @@ public class AutoUsataDetail implements Initializable {
     fieldVolBagagliaio.setText(autoUsata.getVolumeBagagliaio() + " L");
   }
 
+  /** Carica le immagini dell'auto usata */
   private void loadImages() {
     images.addAll(
         ScegliUsatoController.getAutoSelezionata().getImmagini().stream()
@@ -294,6 +327,11 @@ public class AutoUsataDetail implements Initializable {
     }
   }
 
+  /**
+   * Crea uno slider per le immagini
+   *
+   * @param distance la distanza tra le immagini
+   */
   private void sliderImages(double distance) {
     ImageView newImage = new ImageView(images.get(currentIndex));
     ImageView oldImage = (ImageView) stackPaneImage.getChildren().getFirst();
@@ -336,6 +374,11 @@ public class AutoUsataDetail implements Initializable {
     oldImageTransition.play();
   }
 
+  /**
+   * Abilita o disabilita i bottoni prev e next
+   *
+   * @param value true se si vuole abilitare, false altrimenti
+   */
   private void toggleButton(boolean value) {
     next.setDisable(value);
     prev.setDisable(value);

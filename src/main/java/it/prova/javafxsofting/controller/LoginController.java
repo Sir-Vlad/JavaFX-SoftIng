@@ -1,6 +1,5 @@
 package it.prova.javafxsofting.controller;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -30,7 +29,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,17 +36,9 @@ public class LoginController extends ValidateForm implements Initializable {
   private static final String PATH_REMEMBER_UTENTE = "instance/utente";
   private final Logger logger = Logger.getLogger(LoginController.class.getName());
   @FXML private AnchorPane rootLogin;
-  @FXML private VBox wrapperLogin;
   @FXML private MFXTextField emailField;
   @FXML private MFXPasswordField passwordField;
   @FXML private MFXCheckbox rememberMe;
-  @FXML private MFXButton logInBtn;
-  @FXML private Text register;
-  @FXML private Text textRegister;
-  @FXML private Label passwordLabel;
-  @FXML private Label emailLabel;
-  @FXML private Label forgotPasswordLabel;
-  @FXML private HBox wrapperLogInBtn;
   @FXML private Label validateEmail;
   @FXML private Label validatePassword;
 
@@ -66,6 +56,12 @@ public class LoginController extends ValidateForm implements Initializable {
     setValidatePassword();
   }
 
+  /**
+   * Funzione per tornare indietro
+   *
+   * @param actionEvent l'azione dell'utente
+   */
+  @FXML
   public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.back();
     clearField();
@@ -106,7 +102,6 @@ public class LoginController extends ValidateForm implements Initializable {
         || !passwordField.getText().equals(UserSession.getInstance().getUtente().getPassword())) {
       Alert alert = new Alert(AlertType.ERROR, "Email o password errati", ButtonType.OK);
       alert.showAndWait();
-      clearField();
       return;
     }
 
@@ -143,6 +138,12 @@ public class LoginController extends ValidateForm implements Initializable {
     mouseEvent.consume();
   }
 
+  /**
+   * Funzione per andare alla schermata di registrazione
+   *
+   * @param mouseEvent evento del mouse
+   */
+  @FXML
   public void switchRegister(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("registrazione");
     mouseEvent.consume();
@@ -155,6 +156,11 @@ public class LoginController extends ValidateForm implements Initializable {
     }
   }
 
+  /**
+   * Salva l'email dell'utente che si è loggato nella directory data
+   *
+   * @throws IOException eccezione se la directory data non esiste
+   */
   private void saveUtente() throws IOException {
     Path path = Path.of(PATH_REMEMBER_UTENTE);
     try {
@@ -172,6 +178,7 @@ public class LoginController extends ValidateForm implements Initializable {
     Files.write(fileUtente, UserSession.getInstance().getUtente().getEmail().getBytes());
   }
 
+  /** Pulisce i campi */
   private void clearField() {
     emailField.setText("");
     passwordField.setText("");

@@ -24,6 +24,7 @@ public class PreventivoUsato implements Serializable {
   @Expose(serialize = false, deserialize = false)
   private Utente utente;
 
+  /** Trasforma gli id in oggetti */
   public void transformIdToObject() {
     if (idUtente == UserSession.getInstance().getUtente().getId()) {
       this.utente = UserSession.getInstance().getUtente();

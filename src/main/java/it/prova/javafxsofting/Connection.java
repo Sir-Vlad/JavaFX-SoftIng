@@ -190,6 +190,14 @@ public final class Connection {
     throw new Exception(response.toString());
   }
 
+  /**
+   * Esegue una post per inviare una lista di immagini
+   *
+   * @param idAutoUsata id dell'auto usata
+   * @param immagini lista di immagini
+   * @param s url dove inviare i dati
+   * @throws Exception errore nella connessione
+   */
   public static void postImmaginiAutoUsateToBacked(int idAutoUsata, List<File> immagini, String s)
       throws Exception {
     HttpURLConnection conn = getHttpURLConnection(s + idAutoUsata + "/", Methods.POST);
@@ -222,6 +230,14 @@ public final class Connection {
     throw new Exception(response.toString());
   }
 
+  /**
+   * Esegue una put all'interno del backend
+   *
+   * @param data dati da inviare
+   * @param subDirectory url dove inviare i dati
+   * @param <T> tipo generico che deve essere serializzatile
+   * @throws Exception errore nella connessione
+   */
   public static <T extends Serializable> void putDataToBackend(T data, String subDirectory)
       throws Exception {
     HttpURLConnection conn = getHttpURLConnection(subDirectory, Methods.PUT);
@@ -252,7 +268,7 @@ public final class Connection {
     throw new RuntimeException(response.toString());
   }
 
-  private static void error404Connection(HttpURLConnection conn, StringBuilder content)
+  private static void error404Connection(@NotNull HttpURLConnection conn, StringBuilder content)
       throws Exception {
     InputStream inputStream = conn.getErrorStream();
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -263,7 +279,13 @@ public final class Connection {
     throw new RuntimeException(content.toString());
   }
 
-  private static void sendData(HttpURLConnection conn, String jsonInputString) {
+  /**
+   * Invia i dati al backend
+   *
+   * @param conn connessione HTTP
+   * @param jsonInputString dati da inviare
+   */
+  private static void sendData(@NotNull HttpURLConnection conn, @NotNull String jsonInputString) {
     try (OutputStream os = conn.getOutputStream()) {
       byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
       os.write(input, 0, input.length);

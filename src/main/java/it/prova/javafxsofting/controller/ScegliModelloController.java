@@ -36,8 +36,12 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   @FXML private MFXScrollPane scrollPane;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
-  private List<ModelloAuto> autoFiltered;
 
+  /**
+   * Estrae la lista dei tipi di alimentazione delle auto
+   *
+   * @return la lista dei tipi di alimentazione
+   */
   @Contract(" -> new")
   private @NotNull List<String> getTypeAlimentazione() {
     return new ArrayList<>(
@@ -48,6 +52,11 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
             .toList());
   }
 
+  /**
+   * Estrae la lista dei tipi di cambio delle auto
+   *
+   * @return la lista dei tipi di cambio
+   */
   @Contract(" -> new")
   private @NotNull List<String> getTypeCambio() {
     return new ArrayList<>(
@@ -58,6 +67,11 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
             .toList());
   }
 
+  /**
+   * Imposta il filtro
+   *
+   * @param filter campo del filtro da impostare
+   */
   private void setTypeFilter(@NotNull MFXFilterComboBox<String> filter) {
     filter.getSelectionModel().selectFirst();
 
@@ -91,11 +105,6 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
             });
   }
 
-  public void fetchData() throws Exception {
-    StaticDataStore.fetchModelliAuto();
-    getCardAuto().setAll(StaticDataStore.getModelliAuto());
-  }
-
   @Override
   public void setCardAuto() {
     getCardAuto().setAll(StaticDataStore.getModelliAuto());
@@ -111,6 +120,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     startPeriodicUpdate();
   }
 
+  /** Imposta il filtro del cambio */
   private void settingCambioFilter() {
     List<String> cambio = getTypeCambio();
     cambio.addFirst(ELEMENT_TUTTI);
@@ -118,6 +128,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     setTypeFilter(cambioFilter);
   }
 
+  /** Imposta il filtro dell'alimentazione */
   private void settingAlimentazioneFilter() {
     List<String> alimentazione = getTypeAlimentazione();
     alimentazione.addFirst(ELEMENT_TUTTI);

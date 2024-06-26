@@ -41,6 +41,7 @@ public class Sconto implements Serializable {
   @Expose(serialize = false, deserialize = false)
   private LocalDate periodoSconto;
 
+  /** Trasforma gli id in oggetti */
   public void transformIdToObject() {
     int numeroMese = -1;
 

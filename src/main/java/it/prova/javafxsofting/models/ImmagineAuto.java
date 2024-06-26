@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import lombok.Data;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @Data
@@ -21,6 +22,7 @@ public class ImmagineAuto implements Serializable {
   @SerializedName("image_base64")
   String immagineBase64;
 
+  @Contract(pure = true)
   public ImmagineAuto(int i, String name, String s) {
     this.idAuto = i;
     this.nomeImmagine = name;

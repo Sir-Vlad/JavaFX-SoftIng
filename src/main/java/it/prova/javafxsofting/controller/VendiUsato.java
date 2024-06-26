@@ -1,6 +1,5 @@
 package it.prova.javafxsofting.controller;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.FXCollectors;
@@ -54,17 +53,6 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private Header header;
   private MFXTextField[] targaField = null;
   @FXML private VBox wrapperRoot;
-  @FXML private Label modelloLabel;
-  @FXML private Label marcaLabel;
-  @FXML private Label kmPercorsiLabel;
-  @FXML private Label targaLabel;
-  @FXML private Label aaImmatricolazioneLabel;
-  @FXML private Label altezzaLabel;
-  @FXML private Label lunghezzaLabel;
-  @FXML private Label larghezzaLabel;
-  @FXML private Label caricaFotoLabel;
-  @FXML private Label volBagagliaioLabel;
-  @FXML private Label pesoLabel;
   @FXML private Label validateModello;
   @FXML private Label validateMarca;
   @FXML private Label validateKmPercorsi;
@@ -88,11 +76,14 @@ public class VendiUsato extends ValidateForm implements Initializable {
   @FXML private MFXTextField larghezzaField;
   @FXML private MFXTextField volBagagliaioField;
   @FXML private MFXTextField pesoField;
-  @FXML private MFXButton scegliFotoBtn;
-  @FXML private MFXButton infoBtn;
   private Popup popup;
   private Label popupContent;
 
+  /**
+   * Controlla se i campi sono vuoti o invalidi
+   *
+   * @return true se i campi sono vuoti o invalidi
+   */
   private boolean isInvalidDatiAuto() {
     return setValidateFoto()
         || isFieldInvalid(altezzaField)
@@ -102,6 +93,11 @@ public class VendiUsato extends ValidateForm implements Initializable {
         || isFieldInvalid(pesoField);
   }
 
+  /**
+   * Controlla se i campi sono vuoti o invalidi
+   *
+   * @return true se i campi sono vuoti o invalidi
+   */
   private boolean isInvalidInfoAuto() {
     return isFieldInvalid(modelloField)
         || isFieldInvalid(marcaField)
@@ -155,6 +151,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
         });
   }
 
+  /** Richiede il preventivo all'utente e lo invia al server */
   public void richiediPreventivo() {
     if (UserSession.getInstance().getUtente() == null) {
       Alert alert = new Alert(AlertType.INFORMATION);
@@ -295,6 +292,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
     mouseEvent.consume();
   }
 
+  /**
+   * Invia le immagini all'API
+   *
+   * @param idAutoUsata id dell'auto
+   * @param immagini {@link ArrayList} di {@link File}
+   */
   private void postImmagini(int idAutoUsata, ArrayList<File> immagini) {
     try {
       Connection.postImmaginiAutoUsateToBacked(idAutoUsata, immagini, "immaginiAutoUsate/");
@@ -312,6 +315,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
     alert.showAndWait();
   }
 
+  /**
+   * Invia il preventivo all'API
+   *
+   * @param autoUsata {@link AutoUsata} da inviare all'API
+   * @return true se l'operazione fallisce e false altrimenti
+   */
   private boolean postPreventivo(AutoUsata autoUsata) {
     try {
       Connection.postDataToBacked(autoUsata, "autoUsate/");
@@ -354,6 +363,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     return autoUsata;
   }
 
+  /** Mostra gli errori dei campi compilati in rosso */
   private void showErrorAll() {
     List<Constraint> modelloConstr = modelloField.validate();
     List<Constraint> marcaConstr = marcaField.validate();
@@ -379,6 +389,11 @@ public class VendiUsato extends ValidateForm implements Initializable {
     showError(pesoConstr, pesoField, validatePeso);
   }
 
+  /**
+   * Controllare che if la cartella immaginiAutoUsate esista o meno
+   *
+   * @return true se la cartella esiste, false altrimenti
+   */
   @SneakyThrows
   private boolean checkFolderImmagini() {
     Path root = Path.of("instance/immagini/immaginiAutoUsate");
@@ -450,6 +465,11 @@ public class VendiUsato extends ValidateForm implements Initializable {
     aaImmatricolazioneCombo.getSelectionModel().selectFirst();
   }
 
+  /**
+   * Genera un nome casuale per l'immagine
+   *
+   * @return il nome generato
+   */
   private @NotNull String generateAlphaFileName() {
     StringBuilder sb = new StringBuilder(MAX_PHOTO_LIMIT);
     for (int i = 0; i < MAX_PHOTO_LIMIT; i++) {
@@ -460,6 +480,12 @@ public class VendiUsato extends ValidateForm implements Initializable {
     return sb.toString();
   }
 
+  /**
+   * Estrae l'estensione dal nome di un file
+   *
+   * @param str il nome del file
+   * @return l'estensione del file
+   */
   @Contract(pure = true)
   private @NotNull String getExtension(@NotNull String str) {
     String[] split = str.split("\\.");

@@ -11,9 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class HomeController implements Initializable {
   @FXML private Header header;
-  @FXML private VBox wrapperNuovo;
-  @FXML private VBox wrapperUsato;
-  @FXML private VBox wrapperRoot;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
