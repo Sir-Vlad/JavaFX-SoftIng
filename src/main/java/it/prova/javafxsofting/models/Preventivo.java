@@ -75,6 +75,7 @@ public class Preventivo implements Serializable {
     this.dataEmissione = dataEmissione;
   }
 
+  @Contract(pure = true)
   public Preventivo(int utenteId, int modelloId, int concessionarioId, int prezzo) {
     this.utenteId = utenteId;
     this.modelloId = modelloId;
@@ -105,6 +106,7 @@ public class Preventivo implements Serializable {
         id, utente, modello, concessionario, dataEmissione, prezzo, optionals);
   }
 
+  /** Trasforma gli id in oggetti */
   public void transformIdToObject() {
     if (utenteId == UserSession.getInstance().getUtente().getId()) {
       this.utente = UserSession.getInstance().getUtente();

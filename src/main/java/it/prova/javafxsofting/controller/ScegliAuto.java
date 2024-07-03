@@ -23,6 +23,7 @@ public abstract class ScegliAuto<T extends Auto> implements Initializable, Filte
   @FXML private MFXFilterComboBox<String> marcaComboFilter;
   @FXML private MFXSlider sliderMaxPrezzo;
 
+  /** Metodo che setta automaticamente il card */
   public abstract void setCardAuto();
 
   @Override

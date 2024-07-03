@@ -113,7 +113,7 @@ public class App extends javafx.application.Application {
         .add(Objects.requireNonNull(App.class.getResource("css/root.css")).toExternalForm());
 
     stage.setResizable(false);
-    stage.setTitle("Laboratorio di Adrenalina");
+    stage.setTitle("MyNextCar");
     stage
         .getIcons()
         .add(new Image(Objects.requireNonNull(App.class.getResourceAsStream("immagini/icon.png"))));

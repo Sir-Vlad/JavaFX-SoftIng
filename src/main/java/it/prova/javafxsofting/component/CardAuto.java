@@ -7,10 +7,12 @@ import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Auto;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ModelloAuto;
+import it.prova.javafxsofting.models.Optional;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -36,9 +38,20 @@ public class CardAuto extends VBox {
 
     labelNomeAuto.setText(auto.getModello());
 
-    if (auto instanceof ModelloAuto) {
-      String tipoMotore = "GPL"; // accodato: tipoMotore cardAuto
-      labelTipoMotore.setText(tipoMotore);
+    if (auto instanceof ModelloAuto modelloAuto) {
+      Optional tipoMotore =
+          Arrays.stream(modelloAuto.getOptionals())
+              .filter(optional -> optional.getNome().equals("alimentazione"))
+              .findFirst()
+              .orElse(null);
+
+      if (tipoMotore != null) {
+        labelTipoMotore.setText(tipoMotore.getDescrizione());
+      } else {
+        labelTipoMotore.setText("");
+      }
+    } else if (auto instanceof AutoUsata) {
+      labelTipoMotore.setText("");
     }
 
     DecimalFormat decimalFormat = new DecimalFormat("###,###");

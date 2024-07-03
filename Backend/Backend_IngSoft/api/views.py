@@ -1,3 +1,13 @@
+from datetime import datetime, timedelta
+
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -31,17 +41,6 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import create_pdf_file, send_html_email
-from datetime import datetime, timedelta
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-USER_NOT_EXIST = "Utente non esiste"
-AUTO_NOT_EXIST = "Auto non esiste"
 
 
 class UtenteListCreateAPIView(APIView):
@@ -284,42 +283,51 @@ class PreventiviUtenteListAPIView(APIView):
             data_emissione and auto_usata_id
         ):
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            with transaction.atomic():
+                serializer = ConfigurazioneSerializer(data=request.data)
+                if serializer.is_valid():
+                    conf = serializer.save()
 
-        with transaction.atomic():
-            serializer = ConfigurazioneSerializer(data=request.data)
-            if serializer.is_valid():
-                conf = serializer.save()
+                    if auto_usata_id is not None:
+                        detrazione_data = Detrazione.objects.create(
+                            preventivo_id=conf.preventivo.id,
+                            auto_usata_id=auto_usata_id,
+                        )
+                        detrazione_data.save()
 
-                if auto_usata_id is not None:
-                    detrazione_data = Detrazione.objects.create(
-                        preventivo_id=conf.preventivo.id, auto_usata_id=auto_usata_id
-                    )
-                    detrazione_data.save()
+                    sconto: Sconto = Sconto.objects.filter(
+                        modello_id=conf.preventivo.modello.id
+                    ).first()
 
-                sconto: Sconto = Sconto.objects.filter(
-                    modello_id=conf.preventivo.modello.id
-                ).first()
-                prezzo_tot = (conf.preventivo.prezzo * sconto.percentuale_sconto) / 100
+                    if sconto is None:
+                        prezzo_tot = conf.preventivo.prezzo
+                    else:
+                        prezzo_tot = (
+                            conf.preventivo.prezzo * sconto.percentuale_sconto
+                        ) / 100
 
-                # invio email
-                subject = "Preventivo creato"
-                to_email = conf.preventivo.utente.email
-                context = {
-                    "customer_name": conf.preventivo.utente.nome
-                    + " "
-                    + conf.preventivo.utente.cognome,
-                    "car_model": conf.preventivo.modello.modello,
-                    "base_price": conf.preventivo.modello.prezzo_base,
-                    "optionals": conf.optional.all(),
-                    "total_price": prezzo_tot,
-                    "detrazione": True if auto_usata_id is not None else False,
-                }
-                # send_mail(subject, message, from_email, to_email)
-                template_name = "emails/template_email_conferma_preventivo.html"
-                send_html_email(subject, to_email, context, template_name)
-                print("email inviata")
+                    # invio email
+                    subject = "Preventivo creato"
+                    to_email = conf.preventivo.utente.email
+                    context = {
+                        "customer_name": conf.preventivo.utente.nome
+                        + " "
+                        + conf.preventivo.utente.cognome,
+                        "car_model": conf.preventivo.modello.modello,
+                        "base_price": conf.preventivo.modello.prezzo_base,
+                        "optionals": conf.optional.all(),
+                        "total_price": prezzo_tot,
+                        "detrazione": True if auto_usata_id is not None else False,
+                    }
+                    # send_mail(subject, message, from_email, to_email)
+                    template_name = "emails/template_email_conferma_preventivo.html"
+                    send_html_email(subject, to_email, context, template_name)
+                    print("email inviata")
 
-                return Response(status=status.HTTP_201_CREATED)
+                    return Response(status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
         field_names = ("utente", "modello", "concessionario", "non_field_errors")
 
@@ -538,6 +546,7 @@ class ConfermaPreventivoUtenteAPIView(APIView):
 
         days_diff = (preventivo.data_emissione - datetime.now().date()).days
         if days_diff > 20:
+            Preventivo.objects.filter(id=id_preventivo).update(stato="SC")
             return Response("Preventivo scaduto", status=status.HTTP_406_NOT_ACCEPTABLE)
 
         try:

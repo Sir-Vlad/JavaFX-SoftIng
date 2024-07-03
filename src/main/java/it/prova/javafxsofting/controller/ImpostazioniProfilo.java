@@ -27,7 +27,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.jetbrains.annotations.NotNull;
 
+/** Classe che gestisce il corpo della finestra */
 @FunctionalInterface
 interface BodyStage {
   void addBodyStage(Stage stage, AnchorPane root, MFXButton modificaButton);
@@ -115,7 +117,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   @FXML private Label emailText;
   @FXML private Label passwordText;
 
-  private String getSubDirectory() {
+  private @NotNull String getSubDirectory() {
     return "utente/" + UserSession.getInstance().getUtente().getEmail() + "/";
   }
 
@@ -132,7 +134,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     passwordText.setText("* ".repeat(UserSession.getInstance().getUtente().getPassword().length()));
   }
 
-  public void modificaNome(ActionEvent actionEvent) throws IOException {
+  public void modificaNome(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica nome",
         "controller/part_profilo_utente/modifica_nome.fxml",
@@ -180,7 +182,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
-  public void modificaIndirizzo(ActionEvent actionEvent) throws IOException {
+  public void modificaIndirizzo(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Indirizzo",
         "controller/part_profilo_utente/modifica_indirizzo.fxml",
@@ -255,7 +257,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
-  public void modificaNumTelefono(ActionEvent actionEvent) throws IOException {
+  public void modificaNumTelefono(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Telefono",
         "controller/part_profilo_utente/modifica_telefono.fxml",
@@ -304,7 +306,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
-  public void modificaEmail(ActionEvent actionEvent) throws IOException {
+  public void modificaEmail(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Email",
         "controller/part_profilo_utente/modifica_email.fxml",
@@ -344,7 +346,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
-  public void modificaPassword(ActionEvent actionEvent) throws IOException {
+  public void modificaPassword(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Password",
         "controller/part_profilo_utente/modifica_password.fxml",
@@ -395,6 +397,12 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  /**
+   * Cancella l'account dell'utente
+   *
+   * @param actionEvent l'azione dell'utente
+   */
+  @FXML
   public void cancellaAccount(ActionEvent actionEvent) {
     boolean result;
     try {
@@ -544,7 +552,15 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
             });
   }
 
-  private void createNewStage(String title, String pathFile, BodyStage bodyStage)
+  /**
+   * Crea una nuova stage e la visualizza
+   *
+   * @param title titolo dello stage
+   * @param pathFile path del fxml da caricare
+   * @param bodyStage body da aggiungere allo stage
+   * @throws IOException eccezione se il fxml non viene trovato
+   */
+  private void createNewStage(String title, String pathFile, @NotNull BodyStage bodyStage)
       throws IOException {
     Stage newStage = new Stage();
 

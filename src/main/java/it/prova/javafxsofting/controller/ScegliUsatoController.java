@@ -29,6 +29,7 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
                 .toList());
   }
 
+  /** Aggiorna la pagina scegli usato */
   public void updatePage() {
     try {
       StaticDataStore.fetchAutoUsate();

@@ -35,6 +35,12 @@ public class Header extends HBox {
     root.getChildren().addLast(profileBox);
   }
 
+  /**
+   * Aggiunge una tab alla header
+   *
+   * @param name testo da visualizzare
+   * @param eventHandler funzione da eseguire quando viene cliccata
+   */
   public void addTab(String name, EventHandler<MouseEvent> eventHandler) {
     VBox vBox = new VBox();
     vBox.setId(name);

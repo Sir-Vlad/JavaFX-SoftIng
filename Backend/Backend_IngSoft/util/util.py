@@ -1,9 +1,11 @@
+import logging
 import os
 
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from jinja2 import Environment, FileSystemLoader
 import pdfkit
+from jinja2.exceptions import TemplateNotFound
 
 from Backend.settings import EMAIL_HOST_USER
 from Backend_IngSoft.models import Acquisto, Configurazione
@@ -27,10 +29,16 @@ def send_html_email(subject, to_email, context, template_name, pdf=None):
 
 
 def create_pdf_file(obj: Acquisto):
-    current_dir = os.getcwd()
+    logger = logging.getLogger(__name__)
 
-    env = Environment(loader=FileSystemLoader(current_dir))
-    template = env.get_template("templates/fattura/fattura.html")
+    current_dir = os.getcwd()
+    template_dir = os.path.join(current_dir, "Backend/templates")
+    try:
+        env = Environment(loader=FileSystemLoader(template_dir))
+        template = env.get_template("fattura/fattura.html")
+    except TemplateNotFound as e:
+        logger.error("Template not found: " + str(e))
+        return
 
     concessionario = obj.preventivo.concessionario
     utente = obj.utente
@@ -58,7 +66,7 @@ def create_pdf_file(obj: Acquisto):
 
     rendered_html = template.render(data)
 
-    PATH_ROOT_FILE = f"{current_dir}/media/fatture"
+    PATH_ROOT_FILE = f"{current_dir}/Backend/media/fatture"
     if not os.path.exists(PATH_ROOT_FILE):
         os.mkdir(PATH_ROOT_FILE)
         os.mkdir(f"{PATH_ROOT_FILE}/fatture_html")

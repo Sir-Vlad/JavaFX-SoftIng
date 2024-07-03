@@ -143,6 +143,12 @@ public class ProfileAccountController implements Initializable {
     }
   }
 
+  /**
+   * Ridimensiona un SVGPath in base all'altezza dell'elemento
+   *
+   * @param svg elemento da ridimensionare
+   * @param height altezza dell'elemento da ridimensionare
+   */
   private void resize(@NotNull SVGPath svg, double height) {
     double originalWidth = svg.prefWidth(-1);
     double originalHeight = svg.prefHeight(originalWidth);

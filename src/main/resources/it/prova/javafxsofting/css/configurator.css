@@ -2,7 +2,7 @@
 
 /* Style del toggle */
 .toggle-button-selected {
-    -fx-background-color: -my-blue-text;
+    -fx-background-color: rgb(13, 59, 177, 0.75);
     -fx-font-weight: bold;
 }
 

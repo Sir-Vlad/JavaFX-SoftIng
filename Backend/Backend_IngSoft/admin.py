@@ -1,7 +1,5 @@
 from datetime import datetime
-
 from django.contrib import admin
-
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
@@ -146,6 +144,7 @@ class AutoUsataAdmin(ModelAdmin):
         return [
             "modello",
             "marca",
+            "targa",
             "anno_immatricolazione",
             "km_percorsi",
             "altezza",
@@ -153,6 +152,7 @@ class AutoUsataAdmin(ModelAdmin):
             "larghezza",
             "peso",
             "volume_bagagliaio",
+            "venduta",
         ]
 
     def save_model(

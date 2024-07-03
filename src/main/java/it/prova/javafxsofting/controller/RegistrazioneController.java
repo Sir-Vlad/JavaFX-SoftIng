@@ -44,6 +44,7 @@ import javafx.util.Duration;
 import lombok.SneakyThrows;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 public class RegistrazioneController extends ValidateForm implements Initializable {
   private static final Path DIR_FXML = Path.of("controller").resolve("step_registrazione");
@@ -71,7 +72,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     checkbox = new MFXCheckbox("Confermi i dati inseriti?");
   }
 
-  private void setPasswordField(MFXPasswordField confermaPasswordField) {
+  private void setPasswordField(@NotNull MFXPasswordField confermaPasswordField) {
     addConstraintRequired(passwordField, "Password necessaria");
     addConstraintLength(passwordField, "Password devono avere almeno 8 caratteri", 8);
 
@@ -86,6 +87,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     passwordField.getValidator().constraint(matchPassword);
   }
 
+  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     List<MFXStepperToggle> stepperToggles = createSteps();
@@ -107,13 +109,18 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         });
   }
 
-  public void switchIndietro(ActionEvent actionEvent) {
+  public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.activate("home");
     actionEvent.consume();
   }
 
-  @SneakyThrows
-  private List<MFXStepperToggle> createSteps() {
+  /**
+   * Crea una lista di MFXStepperToggle e li restituisce
+   *
+   * @return la lista di MFXStepperToggle
+   * @throws IOException se si verifica un errore di I/O
+   */
+  private @Unmodifiable List<MFXStepperToggle> createSteps() throws IOException {
     MFXStepperToggle step1 =
         new MFXStepperToggle("Step 1", new MFXFontIcon("fas-lock", 16, Color.web("#f1c40f")));
     VBox step1Box = createVboxStep1();
@@ -154,8 +161,13 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     return List.of(step1, step2, step3, step4);
   }
 
+  /**
+   * Crea il vbox per il step 3
+   *
+   * @return il vbox per il step 3
+   */
   @SneakyThrows
-  private VBox createVboxStep3() {
+  private @NotNull VBox createVboxStep3() {
     VBox step3Box =
         FXMLLoader.load(
             Objects.requireNonNull(
@@ -191,10 +203,9 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     return step3Box;
   }
 
+  /** Aggiunge i constraint di anno e mese alla scadenza */
   private void setDataScadenza() {
-
     meseCombo.setItems(mesi);
-
     // Ottenere l'anno corrente
     LocalDate currentDate = LocalDate.now();
 
@@ -206,8 +217,13 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     addConstraintRequired(annoCombo, "Il mese della scadenza è necessario");
   }
 
-  @SneakyThrows
-  private @NotNull VBox createVboxStep2() {
+  /**
+   * Crea il vbox per il step 2
+   *
+   * @return il vbox per il step 2
+   * @throws IOException eccezione in caso di problemi di caricamento del fxml
+   */
+  private @NotNull VBox createVboxStep2() throws IOException {
     VBox step2Box =
         FXMLLoader.load(
             Objects.requireNonNull(
@@ -231,6 +247,12 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     return step2Box;
   }
 
+  /**
+   * Crea il vbox per il step 1
+   *
+   * @return il vbox per il step 1
+   * @throws IOException eccezione in caso di problemi di caricamento del fxml
+   */
   private @NotNull VBox createVboxStep1() throws IOException {
     VBox step1Box =
         FXMLLoader.load(
@@ -252,6 +274,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     return step1Box;
   }
 
+  /** Setting del campo email */
   private void setEmailField() {
     emailField.setLeadingIcon(new MFXIconWrapper("fas-user", 16, Color.web("#4D4D4D"), 24));
 
@@ -274,6 +297,13 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     emailField.getValidator().constraint(emailValid);
   }
 
+  /**
+   * Aggiunge l'handler per il controllo della validazione
+   *
+   * @param node il campo da controllare
+   * @param errorLabel la label di errore
+   * @param <T> il tipo di nodo
+   */
   private <T extends Node & Validated> void nodeForValidation(T node, Label errorLabel) {
     stepper.addEventHandler(
         MFXStepperEvent.VALIDATION_FAILED_EVENT,
@@ -287,8 +317,13 @@ public class RegistrazioneController extends ValidateForm implements Initializab
     stepper.addEventHandler(MFXStepperEvent.NEXT_EVENT, event -> errorLabel.setText(""));
   }
 
-  @SneakyThrows
-  private VBox createGrid() {
+  /**
+   * Crea il vbox per il step 4
+   *
+   * @return il vbox per il step 4
+   * @throws IOException eccezione in caso di problemi di caricamento del fxml
+   */
+  private @NotNull VBox createGrid() throws IOException {
     VBox step4Grid =
         FXMLLoader.load(
             Objects.requireNonNull(

@@ -67,6 +67,11 @@ public class PreventiviUtenteController implements Initializable {
   @FXML private TableColumn<Preventivo, Void> confermaColumn;
   @FXML private TableView<Preventivo> tableView;
 
+  /**
+   * Trasforma la lista di preventivi in una ObservableList
+   *
+   * @return la ObservableList dei preventivi
+   */
   @Contract(" -> new")
   private static @NotNull ObservableList<Preventivo> getPreventivi() {
     ArrayList<Preventivo> preventivi =

@@ -51,7 +51,7 @@
                                 </HBox>
                                 <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="V 1.0.0">
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="V 1.6.9">
                                             <font>
                                                 <Font size="25.0"/>
                                             </font>

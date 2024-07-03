@@ -24,9 +24,13 @@ import org.jetbrains.annotations.NotNull;
 public class ProfileBox extends VBox implements Initializable {
   @FXML Pane immagine;
   @FXML VBox root;
+
+  /*variabile per gestire l'apertura del menu account*/
   private boolean isMenuAccountOpen = false;
+
   private ContextMenu contextMenuAccount;
 
+  /** Costruttore della classe */
   public ProfileBox() {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("profileBox.fxml"));
     loader.setRoot(this);
@@ -38,7 +42,12 @@ public class ProfileBox extends VBox implements Initializable {
     }
   }
 
-  private @NotNull MenuItem getProfile() {
+  /**
+   * Crea il pulsante del profilo
+   *
+   * @return Il pulsante del profilo
+   */
+  private @NotNull MenuItem getProfileItem() {
     MenuItem profile = new MenuItem("Profilo");
     profile.setId("profile");
     profile.setOnAction(
@@ -79,6 +88,36 @@ public class ProfileBox extends VBox implements Initializable {
         });
   }
 
+  /**
+   * Crea il pulsante di logout
+   *
+   * @return il pulsante di logout
+   */
+  private @NotNull MenuItem getLogoutItem() {
+    MenuItem logout = new MenuItem("Logout");
+    logout.setId("logout");
+    logout.setOnAction(
+        actionEvent -> {
+          UserSession.clearSession();
+          try {
+            Files.deleteIfExists(Path.of("instance/utente/utente.txt"));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+          ScreenController.activate("home");
+          ScreenController.removeScreen("profilo");
+          actionEvent.consume();
+        });
+    return logout;
+  }
+
+  /**
+   * Apertura o chiusura del contextMenu
+   *
+   * @param mouseEvent evento del mouse
+   * @param menu menu da visualizzare
+   * @param open true se si vuole visualizzare, false altrimenti
+   */
   private void openContextMenu(MouseEvent mouseEvent, ContextMenu menu, boolean open) {
     if (open) {
       menu.hide();
@@ -88,6 +127,11 @@ public class ProfileBox extends VBox implements Initializable {
     mouseEvent.consume();
   }
 
+  /**
+   * Crea il contenuto del contextMenu dell'utente
+   *
+   * @return il contextMenu
+   */
   private @NotNull ContextMenu contextMenuAccount() {
     ContextMenu contextMenu = new ContextMenu();
 
@@ -108,22 +152,8 @@ public class ProfileBox extends VBox implements Initializable {
           });
       contextMenu.getItems().addAll(login, registrazione);
     } else {
-      MenuItem profile = getProfile();
-
-      MenuItem logout = new MenuItem("Logout");
-      logout.setId("logout");
-      logout.setOnAction(
-          actionEvent -> {
-            UserSession.clearSession();
-            try {
-              Files.deleteIfExists(Path.of("instance/utente/utente.txt"));
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
-            ScreenController.activate("home");
-            ScreenController.removeScreen("profilo");
-            actionEvent.consume();
-          });
+      MenuItem profile = getProfileItem();
+      MenuItem logout = getLogoutItem();
       contextMenu.getItems().addAll(profile, new SeparatorMenuItem(), logout);
     }
 
