@@ -7,11 +7,11 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.controller.ProfileAccountController.TabController;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.models.Sconto;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -265,7 +265,7 @@ public class PreventiviUtenteController implements Initializable {
                   setText(null);
                 } else {
                   Sconto sconto =
-                      StaticDataStore.getSconti().stream()
+                      DataManager.getInstance().getSconti().stream()
                           .filter(s -> s.getIdModello() == item.getId())
                           .findFirst()
                           .orElse(null);

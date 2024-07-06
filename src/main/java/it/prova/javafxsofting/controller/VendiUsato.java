@@ -7,10 +7,10 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.Marca;
 import it.prova.javafxsofting.models.PreventivoUsato;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -174,7 +174,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (postPreventivo(autoUsata)) return;
     // aggiorno la lista delle auto usate
     try {
-      StaticDataStore.fetchAutoUsate();
+      DataManager.getInstance().getAutoUsateDAO().getAllAutoUsate();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

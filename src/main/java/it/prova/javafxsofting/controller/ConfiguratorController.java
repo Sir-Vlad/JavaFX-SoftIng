@@ -12,11 +12,11 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.errori.ErrorResponse;
 import it.prova.javafxsofting.models.*;
 import it.prova.javafxsofting.models.Optional;
 import it.prova.javafxsofting.util.ColoriAuto;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -56,8 +56,10 @@ public class ConfiguratorController implements Initializable {
   /** path della cartella dove ci sono i file del configuratore */
   private static final Path PATH_DIR = Path.of("controller").resolve("part_configurator");
 
-  private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
+  /** Flag per l'aggiunta della detrazione nel preventivo */
+  @Getter @Setter private static boolean detrazione = false;
 
+  private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
   @FXML private VBox vboxOptionals;
   @FXML private VBox infoTecnicheBox;
   @FXML private HBox flagDetrazione;
@@ -76,9 +78,6 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldModelloV;
   @FXML private MFXListView<Concessionario> listConcessionaria;
   @FXML private MFXButton saveConfigurazioneBtn;
-
-  /** Flag per l'aggiunta della detrazione nel preventivo */
-  @Getter @Setter private static boolean detrazione = false;
 
   /** Auto selezionata all'interno del configuratore */
   private ModelloAuto auto;
@@ -468,7 +467,7 @@ public class ConfiguratorController implements Initializable {
   /** Crea la lista delle concessionarie */
   private void createListViewConcessionario() {
     listConcessionaria.setItems(
-        FXCollections.observableArrayList(StaticDataStore.getConcessionari()));
+        FXCollections.observableArrayList(DataManager.getInstance().getConcessionari()));
     listConcessionaria.setConverter(
         FunctionalStringConverter.to(
             concessionario -> {

@@ -1,13 +1,5 @@
 from datetime import datetime, timedelta
 
-from django.db import transaction
-from django.http import HttpResponseNotFound
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from Backend_IngSoft.api.serializers import (
     AcquistoSerializer,
     AutoUsataSerializer,
@@ -41,6 +33,13 @@ from Backend_IngSoft.models import (
 )
 from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import create_pdf_file, send_html_email
+from django.db import transaction
+from django.http import HttpResponseNotFound
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class UtenteListCreateAPIView(APIView):
@@ -681,7 +680,7 @@ class AutoUsateComprate(APIView):
         operation_description="Segna un'auto usata come venduta da un utente",
         responses={
             201: "Auto usata acquistata",
-            402: "Auto non ancora venduta",
+            402: "Auto già venduta",
             404: "Preventivo o utente non trovato",
         },
     )

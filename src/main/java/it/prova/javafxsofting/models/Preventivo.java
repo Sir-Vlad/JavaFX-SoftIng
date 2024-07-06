@@ -3,7 +3,7 @@ package it.prova.javafxsofting.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import it.prova.javafxsofting.UserSession;
-import it.prova.javafxsofting.util.StaticDataStore;
+import it.prova.javafxsofting.data_manager.DataManager;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -108,18 +108,19 @@ public class Preventivo implements Serializable {
 
   /** Trasforma gli id in oggetti */
   public void transformIdToObject() {
+    DataManager dataManager = DataManager.getInstance();
     if (utenteId == UserSession.getInstance().getUtente().getId()) {
       this.utente = UserSession.getInstance().getUtente();
     }
 
     this.modello =
-        StaticDataStore.getModelliAuto().stream()
+        dataManager.getModelliAuto().stream()
             .filter(auto -> auto.getId() == modelloId)
             .toList()
             .getFirst();
 
     this.optionals =
-        StaticDataStore.getOptionals().stream()
+        dataManager.getOptionals().stream()
             .filter(optional -> Arrays.stream(idRefConfig).anyMatch(opt -> opt == optional.getId()))
             .toList();
 
@@ -127,7 +128,7 @@ public class Preventivo implements Serializable {
     this.totalePrezzo = (this.getModello().getPrezzoBase() + this.prezzoOptionals);
 
     Sconto sconto =
-        StaticDataStore.getSconti().stream()
+        dataManager.getSconti().stream()
             .filter(s -> s.getIdModello() == modelloId)
             .findFirst()
             .orElse(null);
@@ -136,7 +137,7 @@ public class Preventivo implements Serializable {
     this.totalePrezzo -= (this.totalePrezzo * percentualeSconto) / 100;
 
     this.concessionario =
-        StaticDataStore.getConcessionari().stream()
+        dataManager.getConcessionari().stream()
             .filter(concessionario1 -> concessionario1.getId() == sedeId)
             .toList()
             .getFirst();

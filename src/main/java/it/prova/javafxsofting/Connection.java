@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -116,6 +115,8 @@ public final class Connection {
       while ((line = bufferedReader.readLine()) != null) {
         content.append(line);
       }
+
+      conn.disconnect();
 
       if (content.isEmpty()) {
         return null;
@@ -313,10 +314,15 @@ public final class Connection {
   @NotNull
   private static HttpURLConnection getHttpURLConnection(String subDirectory, Methods methods) {
     StringBuilder subdirectory = subDirectory == null ? null : new StringBuilder(subDirectory);
+    //    String urlPath =
+    //        String.format(
+    //            "http://localhost:%d/api/%s",
+    //            Connection.porta, subdirectory == null ? "" : subdirectory);
+
     String urlPath =
         String.format(
-            "http://localhost:%d/api/%s",
-            Connection.porta, subdirectory == null ? "" : subdirectory);
+            "https://SirVlad33.pythonanywhere.com/api/%s",
+            subdirectory == null ? "" : subdirectory);
 
     HttpURLConnection conn;
     try {

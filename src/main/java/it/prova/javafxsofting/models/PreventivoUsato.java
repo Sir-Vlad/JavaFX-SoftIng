@@ -3,7 +3,7 @@ package it.prova.javafxsofting.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import it.prova.javafxsofting.UserSession;
-import it.prova.javafxsofting.util.StaticDataStore;
+import it.prova.javafxsofting.data_manager.DataManager;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -31,7 +31,7 @@ public class PreventivoUsato implements Serializable {
     }
 
     this.autoUsata =
-        StaticDataStore.getAutoUsate().stream()
+        DataManager.getInstance().getAutoUsate().stream()
             .filter(autoUsata1 -> autoUsata1.getId() == idAutoUsata)
             .findFirst()
             .orElse(null);

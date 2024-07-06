@@ -2,8 +2,8 @@ package it.prova.javafxsofting.controller;
 
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import it.prova.javafxsofting.component.CardAuto;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.AutoUsata;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -24,7 +24,7 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
   public void setCardAuto() {
     getCardAuto()
         .setAll(
-            StaticDataStore.getAutoUsate().stream()
+            DataManager.getInstance().getAutoUsate().stream()
                 .filter(autoUsata -> autoUsata.getPrezzo() > 0 && !autoUsata.isVenduta())
                 .toList());
   }
@@ -32,7 +32,7 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
   /** Aggiorna la pagina scegli usato */
   public void updatePage() {
     try {
-      StaticDataStore.fetchAutoUsate();
+      DataManager.getInstance().getAutoUsateDAO().getAllAutoUsate();
     } catch (Exception e) {
       logger.warning("Errore durante l'aggiornamento della lista");
       logger.log(Level.SEVERE, e.getMessage(), e);
