@@ -214,7 +214,7 @@ public final class Connection {
 
     List<ImmagineAuto> immaginiAuto = new ArrayList<>();
     for (File immagine : immagini) {
-      immaginiAuto.add(ImmagineAuto.create(idAutoUsata, immagine));
+      immaginiAuto.add(new ImmagineAuto(idAutoUsata, immagine));
     }
 
     // Dati da inviare al backend in formato JSON

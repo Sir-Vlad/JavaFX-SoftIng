@@ -50,7 +50,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
-  /** path della cartella dove ci sono i file del configuratore */
+  /** Path della cartella dove ci sono i file del configuratore */
   private static final Path PATH_DIR = Path.of("controller").resolve("part_configurator");
 
   /** Flag per l'aggiunta della detrazione nel preventivo */
@@ -118,15 +118,7 @@ public class ConfiguratorController implements Initializable {
 
     createBoxPrezzo(auto);
 
-    String pathImage =
-        "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
-    URL urlImage = App.class.getResource(pathImage);
-    if (urlImage != null) {
-      logoMarca.setStyle(
-          "-fx-background-image: url("
-              + urlImage
-              + "); -fx-background-repeat: no-repeat; -fx-background-position: center center");
-    }
+    setImageMarca();
     scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
     scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
@@ -141,15 +133,7 @@ public class ConfiguratorController implements Initializable {
     createChooseButtonDetrazioneUsato();
 
     // immagine dell'auto a destra
-    String resource =
-        auto.getImmagini().isEmpty()
-            ? "immagini/fake-account.png"
-            : auto.getImmagini().getFirst().toURI().toString();
-
-    ImageView imageView = new ImageView(new Image(resource));
-    imageView.setPreserveRatio(true);
-    imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
-    imageView.fitWidthProperty().bind(modelVisualize.widthProperty());
+    ImageView imageView = setImageAuto();
 
     modelVisualize.getChildren().add(imageView);
   }
@@ -204,6 +188,31 @@ public class ConfiguratorController implements Initializable {
     alert.showAndWait();
 
     actionEvent.consume();
+  }
+
+  private @NotNull ImageView setImageAuto() {
+    String resource =
+        auto.getImmagini().isEmpty()
+            ? "immagini/fake-account.png"
+            : auto.getImmagini().getFirst().toURI().toString();
+
+    ImageView imageView = new ImageView(new Image(resource));
+    imageView.setPreserveRatio(true);
+    imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
+    imageView.fitWidthProperty().bind(modelVisualize.widthProperty());
+    return imageView;
+  }
+
+  private void setImageMarca() {
+    String pathImage =
+        "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
+    URL urlImage = App.class.getResource(pathImage);
+    if (urlImage != null) {
+      logoMarca.setStyle(
+          "-fx-background-image: url("
+              + urlImage
+              + "); -fx-background-repeat: no-repeat; -fx-background-position: center center");
+    }
   }
 
   private @NotNull Preventivo createPreventivoSenzaData() {

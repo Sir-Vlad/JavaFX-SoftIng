@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import lombok.SneakyThrows;
 
-public class OptionalsDAOImpl implements OptionalDAO {
+public class OptionalDAOImpl implements OptionalDAO {
 
-  private static final Logger logger = Logger.getLogger(OptionalsDAOImpl.class.getName());
+  private static final Logger logger = Logger.getLogger(OptionalDAOImpl.class.getName());
 
   @Override
   @SneakyThrows

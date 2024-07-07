@@ -33,8 +33,8 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 public class App extends Application {
-  @Getter private static final Logger  log               = Logger.getLogger(App.class.getName());
-  private final                boolean isServerAvailable = true;
+  @Getter private static final Logger log = Logger.getLogger(App.class.getName());
+  private final boolean isServerAvailable = true;
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -47,6 +47,7 @@ public class App extends Application {
     launch(args);
   }
 
+  /** Metodo per verificare se esiste un utente precedentemente registrato nella directory data. */
   private static void checkRememberUtente() {
     File path = new File("instance/utente/utente.txt");
     if (!path.exists()) {
@@ -63,6 +64,12 @@ public class App extends Application {
     }
   }
 
+  /**
+   * Metodo per eliminare la directory data se esiste
+   *
+   * @param dirImage la directory da eliminare
+   * @throws IOException eccezione se la directory non esiste
+   */
   private static void deleteDirectory(@NotNull File dirImage) throws IOException {
     if (!dirImage.isDirectory()) {
       return;
@@ -105,6 +112,7 @@ public class App extends Application {
     root.getChildren().addAll((Node) fxmlLoader.load());
     Scene scene = new Scene(root, 1200, 800);
 
+    // set style CSS e il tema di default
     UserAgentBuilder.builder()
         .themes(JavaFXThemes.MODENA)
         .themes(MaterialFXStylesheets.forAssemble(true))
@@ -113,6 +121,7 @@ public class App extends Application {
         .build()
         .setGlobal();
 
+    // carico il mio css di base
     scene
         .getStylesheets()
         .add(Objects.requireNonNull(App.class.getResource("css/root.css")).toExternalForm());
@@ -124,9 +133,11 @@ public class App extends Application {
         .add(new Image(Objects.requireNonNull(App.class.getResourceAsStream("immagini/icon.png"))));
     stage.setScene(scene);
 
+    // crea il controller della schermata e setto la schermata iniziale
     createScreenController();
     ScreenController.setMain(scene);
 
+    // shortcut
     KeyCombination kc = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
     scene.getAccelerators().put(kc, stage::close);
 
@@ -159,6 +170,7 @@ public class App extends Application {
     notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
   }
 
+  /** Metodo per aggiungere le schermate all'applicazione */
   private void createScreenController() {
     ScreenController.addScreen(
         "home",

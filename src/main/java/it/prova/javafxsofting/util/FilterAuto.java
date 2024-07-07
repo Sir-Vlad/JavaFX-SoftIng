@@ -17,6 +17,14 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface FilterAuto {
+  /**
+   * Filtra le auto per marca
+   *
+   * @param marcaComboFilter l'oggetto {@link MFXFilterComboBox} per selezionare la marca
+   * @param flowPane il pannello da popolare
+   * @param cardAuto la lista da filtrare
+   * @param <T> il tipo di auto
+   */
   default <T extends Auto> void settingMarcaFilter(
       @NotNull MFXFilterComboBox<String> marcaComboFilter,
       FlowPane flowPane,
@@ -53,8 +61,16 @@ public interface FilterAuto {
             });
   }
 
+  /**
+   * Filtra le auto per prezzo
+   *
+   * @param slider l'oggetto {@link MFXSlider} per selezionare il prezzo
+   * @param flowPane il pannello da popolare
+   * @param cardAuto la lista da filtrare
+   * @param <T> il tipo di auto
+   */
   default <T extends Auto> void settingPrezzoFilter(
-      @NotNull MFXSlider slider, FlowPane flowPane, ObservableList<T> cardAuto) {
+      @NotNull MFXSlider slider, FlowPane flowPane, @NotNull ObservableList<T> cardAuto) {
     if (cardAuto.isEmpty()) {
       slider.setMax(1);
       return;
@@ -93,6 +109,13 @@ public interface FilterAuto {
             });
   }
 
+  /**
+   * Restituisce il minimo e il massimo prezzo dell'auto
+   *
+   * @param cardAuto la lista da cui ottenere il minimo e il massimo
+   * @return il minimo e il massimo del prezzo in un array
+   * @param <T> il tipo di auto
+   */
   @Contract("_ -> new")
   private <T extends Auto> int @NotNull [] minMaxPrezzoAuto(@NotNull ObservableList<T> cardAuto) {
     ToIntFunction<Object> func;

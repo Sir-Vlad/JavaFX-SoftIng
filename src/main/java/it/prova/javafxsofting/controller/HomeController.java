@@ -16,11 +16,13 @@ public class HomeController implements Initializable {
     header.addTab("Concessionari", event -> ScreenController.activate("concessionari"));
   }
 
+  @FXML
   public void switchNuovo(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("scegliModello");
     mouseEvent.consume();
   }
 
+  @FXML
   public void switchUsato(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("scegliUsato");
     mouseEvent.consume();

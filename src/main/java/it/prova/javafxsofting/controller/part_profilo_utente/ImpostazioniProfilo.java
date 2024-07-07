@@ -31,12 +31,6 @@ import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jetbrains.annotations.NotNull;
 
-/** Classe che gestisce il corpo della finestra */
-@FunctionalInterface
-interface BodyStage {
-  void addBodyStage(Stage stage, AnchorPane root, MFXButton modificaButton);
-}
-
 public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   static final List<String> REGIONI =
       List.of(
@@ -86,6 +80,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     passwordText.setText("* ".repeat(UserSession.getInstance().getUtente().getPassword().length()));
   }
 
+  @FXML
   public void modificaNome(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica nome",
@@ -123,10 +118,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 UserSession.getInstance().setUtente(newUtente);
                 UserSession.getInstance()
                     .getUtente()
-                    .setNomeCompleto(
-                        UserSession.getInstance().getUtente().getNome()
-                            + " "
-                            + UserSession.getInstance().getUtente().getCognome());
+                    .setNomeCompleto(newUtente.getNome() + " " + newUtente.getCognome());
                 stage.close();
               });
         });
@@ -134,6 +126,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaIndirizzo(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Indirizzo",
@@ -209,6 +202,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaNumTelefono(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Telefono",
@@ -252,6 +246,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaEmail(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Email",
@@ -292,6 +287,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaPassword(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Password",
@@ -526,5 +522,11 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     newStage.setScene(scene);
 
     newStage.showAndWait();
+  }
+
+  /** Classe che gestisce il corpo della finestra */
+  @FunctionalInterface
+  interface BodyStage {
+    void addBodyStage(Stage stage, AnchorPane root, MFXButton modificaButton);
   }
 }

@@ -23,7 +23,7 @@ public class DataManager {
 
   @Contract(pure = true)
   private DataManager() {
-    optionalsDAO = new OptionalsDAOImpl();
+    optionalsDAO = new OptionalDAOImpl();
     modelliAutoDAO = new ModelliAutoDAOImpl();
     autoUsateDAO = new AutoUsateDAOImpl();
     concessionariDAO = new ConcessionarioDAOImpl();

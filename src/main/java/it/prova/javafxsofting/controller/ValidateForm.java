@@ -11,7 +11,7 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 
-public class ValidateForm {
+public abstract class ValidateForm {
   /**
    * Metodo per mostrare il messaggio di errore
    *

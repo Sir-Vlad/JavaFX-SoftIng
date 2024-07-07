@@ -116,8 +116,8 @@ public class Preventivo implements Serializable {
     this.modello =
         dataManager.getModelliAuto().stream()
             .filter(auto -> auto.getId() == modelloId)
-            .toList()
-            .getFirst();
+            .findFirst()
+            .orElse(null);
 
     this.optionals =
         dataManager.getOptionals().stream()

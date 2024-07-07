@@ -107,6 +107,28 @@ public class PreventiviUtenteController implements Initializable {
     startPeriodicUpdate();
   }
 
+  private static void createLabelSuccess(HBox wrapper) {
+    wrapper.getChildren().clear();
+    Text text = new Text();
+    text.setTextAlignment(TextAlignment.CENTER);
+    text.setText("Preventivo confermato!");
+    text.setFont(Font.font(20));
+    wrapper.getChildren().add(text);
+    wrapper.setAlignment(Pos.CENTER);
+  }
+
+  private static void postOrdine(Preventivo preventivo, Ordine acquisto) {
+    try {
+      String url =
+          String.format(
+              "utente/%d/preventivo/%d/conferma/",
+              UserSession.getInstance().getUtente().getId(), preventivo.getId());
+      Connection.postDataToBacked(acquisto, url);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private void createStagePayPreventivo(Preventivo preventivo) {
     Stage stage = new Stage();
     stage.setTitle("Conferma preventivo");
@@ -137,23 +159,9 @@ public class PreventiviUtenteController implements Initializable {
           PauseTransition pause = new PauseTransition(Duration.seconds(10));
           pause.setOnFinished(
               event -> {
-                try {
-                  String url =
-                      String.format(
-                          "utente/%d/preventivo/%d/conferma/",
-                          UserSession.getInstance().getUtente().getId(), preventivo.getId());
-                  Connection.postDataToBacked(acquisto, url);
-                } catch (Exception e) {
-                  throw new RuntimeException(e);
-                }
+                postOrdine(preventivo, acquisto);
                 loading.setVisible(false);
-                wrapper.getChildren().clear();
-                Text text = new Text();
-                text.setTextAlignment(TextAlignment.CENTER);
-                text.setText("Preventivo confermato!");
-                text.setFont(Font.font(20));
-                wrapper.getChildren().add(text);
-                wrapper.setAlignment(Pos.CENTER);
+                createLabelSuccess(wrapper);
 
                 PauseTransition pause1 = new PauseTransition(Duration.seconds(3));
                 pause1.setOnFinished(
@@ -190,7 +198,7 @@ public class PreventiviUtenteController implements Initializable {
   private void setColumnConferma() {
     confermaColumn.setCellFactory(
         column ->
-            new TableCell<Preventivo, Void>() {
+            new TableCell<>() {
               private final Button btn = new Button("conferma");
 
               {

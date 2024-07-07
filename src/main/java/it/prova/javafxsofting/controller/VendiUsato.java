@@ -152,6 +152,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
   }
 
   /** Richiede il preventivo all'utente e lo invia al server */
+  @FXML
   public void richiediPreventivo() {
     if (UserSession.getInstance().getUtente() == null) {
       Alert alert = new Alert(AlertType.INFORMATION);
@@ -208,8 +209,13 @@ public class VendiUsato extends ValidateForm implements Initializable {
     ScreenController.removeScreen("vendiUsato");
   }
 
-  /** Sceglie le immagini da caricare dell'auto usata */
-  public void scegliFoto() {
+  /**
+   * Sceglie le immagini da caricare dell'auto usata
+   *
+   * @param mouseEvent l'azione dell'utente che ha generato l'azione del bottone
+   */
+  @FXML
+  public void scegliFoto(MouseEvent mouseEvent) {
     if (immagini.size() > MAX_PHOTO_LIMIT) {
       alertWarning("Limite massimo immagini", "Hai raggiunto il limite massimo di 10 immagini");
       return;
@@ -267,13 +273,15 @@ public class VendiUsato extends ValidateForm implements Initializable {
         });
 
     popupContent.setText(stringBuilder.toString());
+    mouseEvent.consume();
   }
 
   /**
    * Mostra il popup a delle specifiche coordinate
    *
-   * @param mouseEvent l'oggetto MouseEvent che contiene le coordinate
+   * @param mouseEvent azione del mouse dell'utente che entra nel button
    */
+  @FXML
   public void showPopUp(MouseEvent mouseEvent) {
     if (!popup.isShowing()) {
       popup.show(wrapperRoot, mouseEvent.getSceneX(), mouseEvent.getScreenY());
@@ -283,8 +291,9 @@ public class VendiUsato extends ValidateForm implements Initializable {
   /**
    * Chiude il popup
    *
-   * @param mouseEvent evento del mouse
+   * @param mouseEvent evento del mouse dell'utente che esce dal button
    */
+  @FXML
   public void hidePopUp(MouseEvent mouseEvent) {
     if (popup.isShowing()) {
       popup.hide();

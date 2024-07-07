@@ -109,6 +109,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         });
   }
 
+  @FXML
   public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.activate("home");
     actionEvent.consume();

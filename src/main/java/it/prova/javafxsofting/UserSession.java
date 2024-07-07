@@ -29,6 +29,11 @@ public class UserSession {
   @Contract(pure = true)
   private UserSession() {}
 
+  /**
+   * Restituisce l'istanza singleton se esiste, altrimenti crea una nuova
+   *
+   * @return istanza
+   */
   public static UserSession getInstance() {
     if (instance == null) {
       instance = new UserSession();
@@ -73,6 +78,7 @@ public class UserSession {
     }
   }
 
+  /** Elimina la sessione utente */
   public static void clearSession() {
     instance = null;
   }
