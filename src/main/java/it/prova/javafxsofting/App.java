@@ -5,7 +5,6 @@ import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Utente;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.application.Preloader.StateChangeNotification;
 import javafx.application.Preloader.StateChangeNotification.Type;
@@ -32,8 +32,9 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-public class App extends javafx.application.Application {
+public class App extends Application {
   @Getter private static final Logger log = Logger.getLogger(App.class.getName());
+  private final boolean isServerAvailable = true;
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -46,6 +47,7 @@ public class App extends javafx.application.Application {
     launch(args);
   }
 
+  /** Metodo per verificare se esiste un utente precedentemente registrato nella directory data. */
   private static void checkRememberUtente() {
     File path = new File("instance/utente/utente.txt");
     if (!path.exists()) {
@@ -62,6 +64,12 @@ public class App extends javafx.application.Application {
     }
   }
 
+  /**
+   * Metodo per eliminare la directory data se esiste
+   *
+   * @param dirImage la directory da eliminare
+   * @throws IOException eccezione se la directory non esiste
+   */
   private static void deleteDirectory(@NotNull File dirImage) throws IOException {
     if (!dirImage.isDirectory()) {
       return;
@@ -76,14 +84,18 @@ public class App extends javafx.application.Application {
   }
 
   @Override
-  public void init() throws Exception {
-    StaticDataStore.fetchAllData();
+  public void init() {
+    //    try {
+    //      DataManager dataManager = DataManager.getInstance();
+    //    } catch (Exception e) {
+    //      isServerAvailable = false;
+    //    }
     checkRememberUtente();
   }
 
   @Override
   public void start(@NotNull Stage stage) throws IOException {
-    if (!StaticDataStore.isServerAvailable()) {
+    if (!isServerAvailable) {
       Alert alert = new Alert(AlertType.ERROR);
       alert.setTitle("Applicazione non disponibile");
       alert.setHeaderText("Server non raggiungibile");
@@ -100,6 +112,7 @@ public class App extends javafx.application.Application {
     root.getChildren().addAll((Node) fxmlLoader.load());
     Scene scene = new Scene(root, 1200, 800);
 
+    // set style CSS e il tema di default
     UserAgentBuilder.builder()
         .themes(JavaFXThemes.MODENA)
         .themes(MaterialFXStylesheets.forAssemble(true))
@@ -108,6 +121,7 @@ public class App extends javafx.application.Application {
         .build()
         .setGlobal();
 
+    // carico il mio css di base
     scene
         .getStylesheets()
         .add(Objects.requireNonNull(App.class.getResource("css/root.css")).toExternalForm());
@@ -119,9 +133,11 @@ public class App extends javafx.application.Application {
         .add(new Image(Objects.requireNonNull(App.class.getResourceAsStream("immagini/icon.png"))));
     stage.setScene(scene);
 
+    // crea il controller della schermata e setto la schermata iniziale
     createScreenController();
     ScreenController.setMain(scene);
 
+    // shortcut
     KeyCombination kc = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);
     scene.getAccelerators().put(kc, stage::close);
 
@@ -154,15 +170,16 @@ public class App extends javafx.application.Application {
     notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
   }
 
+  /** Metodo per aggiungere le schermate all'applicazione */
   private void createScreenController() {
     ScreenController.addScreen(
         "home",
         new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
-    ScreenController.addScreen(
-        "scegliModello",
-        new FXMLLoader(
-            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    //    ScreenController.addScreen(
+    //        "scegliModello",
+    //        new FXMLLoader(
+    //            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
 
     ScreenController.addScreen(
         "login",
@@ -173,14 +190,14 @@ public class App extends javafx.application.Application {
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
 
-    ScreenController.addScreen(
-        "concessionari",
-        new FXMLLoader(
-            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+    //    ScreenController.addScreen(
+    //        "concessionari",
+    //        new FXMLLoader(
+    //            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
 
-    ScreenController.addScreen(
-        "scegliUsato",
-        new FXMLLoader(
-            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
+    //    ScreenController.addScreen(
+    //        "scegliUsato",
+    //        new FXMLLoader(
+    //            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
   }
 }

@@ -1,9 +1,9 @@
 package it.prova.javafxsofting.component;
 
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.controller.ScegliModelloController;
-import it.prova.javafxsofting.controller.ScegliUsatoController;
 import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.controller.scegli_conf_auto.ScegliModelloController;
+import it.prova.javafxsofting.controller.scegli_conf_auto.ScegliUsatoController;
 import it.prova.javafxsofting.models.Auto;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ModelloAuto;
@@ -37,39 +37,9 @@ public class CardAuto extends VBox {
     }
 
     labelNomeAuto.setText(auto.getModello());
-
-    if (auto instanceof ModelloAuto modelloAuto) {
-      Optional tipoMotore =
-          Arrays.stream(modelloAuto.getOptionals())
-              .filter(optional -> optional.getNome().equals("alimentazione"))
-              .findFirst()
-              .orElse(null);
-
-      if (tipoMotore != null) {
-        labelTipoMotore.setText(tipoMotore.getDescrizione());
-      } else {
-        labelTipoMotore.setText("");
-      }
-    } else if (auto instanceof AutoUsata) {
-      labelTipoMotore.setText("");
-    }
-
-    DecimalFormat decimalFormat = new DecimalFormat("###,###");
-    int prezzo = 0;
-    if (auto instanceof ModelloAuto modelloAuto) {
-      prezzo = modelloAuto.getPrezzoBase();
-    } else if (auto instanceof AutoUsata autoUsata) {
-      prezzo = autoUsata.getPrezzo();
-    }
-    labelPrezzo.setText(decimalFormat.format(prezzo));
-
-    URL imgURL;
-    try {
-      imgURL = auto.getImmagini().getFirst().toURI().toURL();
-    } catch (Exception e) {
-      imgURL = App.class.getResource("immagini/car.png");
-    }
-    wrapperImagine.setStyle("-fx-background-image: url(" + imgURL + "); ");
+    setTipoMotore(auto);
+    setPrezzo(auto);
+    setImage(auto);
 
     rootCardAuto.setOnMouseClicked(
         event -> {
@@ -93,5 +63,44 @@ public class CardAuto extends VBox {
           }
           event.consume();
         });
+  }
+
+  private void setImage(Auto auto) {
+    URL imgURL;
+    try {
+      imgURL = auto.getImmagini().getFirst().toURI().toURL();
+    } catch (Exception e) {
+      imgURL = App.class.getResource("immagini/car.png");
+    }
+    wrapperImagine.setStyle("-fx-background-image: url(" + imgURL + "); ");
+  }
+
+  private void setTipoMotore(Auto auto) {
+    if (auto instanceof ModelloAuto modelloAuto) {
+      Optional tipoMotore =
+          Arrays.stream(modelloAuto.getOptionals())
+              .filter(optional -> optional.getNome().equals("alimentazione"))
+              .findFirst()
+              .orElse(null);
+
+      if (tipoMotore != null) {
+        labelTipoMotore.setText(tipoMotore.getDescrizione());
+      } else {
+        labelTipoMotore.setText("");
+      }
+    } else if (auto instanceof AutoUsata) {
+      labelTipoMotore.setText("");
+    }
+  }
+
+  private void setPrezzo(Auto auto) {
+    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+    int prezzo = 0;
+    if (auto instanceof ModelloAuto modelloAuto) {
+      prezzo = modelloAuto.getPrezzoBase();
+    } else if (auto instanceof AutoUsata autoUsata) {
+      prezzo = autoUsata.getPrezzo();
+    }
+    labelPrezzo.setText(decimalFormat.format(prezzo));
   }
 }

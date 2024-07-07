@@ -1,8 +1,9 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.UserSession;
+import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -68,6 +69,53 @@ public class ProfileAccountController implements Initializable {
     resize(iconSignOut, 20);
 
     // create le tab della sidebar
+    createTabSidebar();
+
+    // set default page open
+    content.getChildren().add(tabController.getTab(LITERAL_PROFILE));
+    profiloBtn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
+  }
+
+  @FXML
+  public void switchProfilo(@NotNull MouseEvent mouseEvent) {
+    switchTab(profiloBtn, LITERAL_PROFILE);
+    mouseEvent.consume();
+  }
+
+  @FXML
+  public void switchOrdini(@NotNull MouseEvent mouseEvent) {
+    switchTab(ordiniBtn, LITERAL_ORDINI);
+    mouseEvent.consume();
+  }
+
+  @FXML
+  public void switchPreventivi(@NotNull MouseEvent mouseEvent) {
+    switchTab(preventiviBtn, "preventivi");
+    mouseEvent.consume();
+  }
+
+  @FXML
+  public void switchPreventiviUsato(@NotNull MouseEvent mouseEvent) {
+    switchTab(preventiviUsatoBtn, "preventiviUsato");
+    mouseEvent.consume();
+  }
+
+  @FXML
+  public void signOut(@NotNull MouseEvent mouseEvent) {
+    UserSession.clearSession();
+    ScreenController.removeScreen("profilo");
+    ScreenController.activate("home");
+    // todo: far uscire una notifica
+    mouseEvent.consume();
+  }
+
+  @FXML
+  public void switchIndietro(ActionEvent actionEvent) {
+    ScreenController.back();
+    actionEvent.consume();
+  }
+
+  private void createTabSidebar() throws IOException {
     tabController = new TabController();
     tabController.addTab(
         LITERAL_PROFILE,
@@ -91,43 +139,6 @@ public class ProfileAccountController implements Initializable {
         new FXMLLoader(
             App.class.getResource(PATH_DIR.resolve("preventivi_usato_utente.fxml").toString())),
         preventiviUsatoBtn);
-
-    // set default page open
-    content.getChildren().add(tabController.getTab(LITERAL_PROFILE));
-    profiloBtn.setStyle("-fx-background-color: #0D3BB1; -fx-background-radius: 10");
-  }
-
-  public void switchProfilo(@NotNull MouseEvent mouseEvent) {
-    switchTab(profiloBtn, LITERAL_PROFILE);
-    mouseEvent.consume();
-  }
-
-  public void switchOrdini(@NotNull MouseEvent mouseEvent) {
-    switchTab(ordiniBtn, LITERAL_ORDINI);
-    mouseEvent.consume();
-  }
-
-  public void switchPreventivi(@NotNull MouseEvent mouseEvent) {
-    switchTab(preventiviBtn, "preventivi");
-    mouseEvent.consume();
-  }
-
-  public void switchPreventiviUsato(@NotNull MouseEvent mouseEvent) {
-    switchTab(preventiviUsatoBtn, "preventiviUsato");
-    mouseEvent.consume();
-  }
-
-  public void signOut(@NotNull MouseEvent mouseEvent) {
-    UserSession.clearSession();
-    ScreenController.removeScreen("profilo");
-    ScreenController.activate("home");
-    // todo: far uscire una notifica
-    mouseEvent.consume();
-  }
-
-  public void switchIndietro(ActionEvent actionEvent) {
-    ScreenController.back();
-    actionEvent.consume();
   }
 
   private void switchTab(HBox btn, String title) {
@@ -163,8 +174,8 @@ public class ProfileAccountController implements Initializable {
 
   @Getter
   static class TabController {
-    private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
     protected static final HashMap<String, FXMLLoader> CONTROLLER = new HashMap<>();
+    private static final HashMap<String, AnchorPane> PANE_HASH_MAP = new HashMap<>();
     private static final HashMap<String, Node> BUTTONS_MAP = new HashMap<>();
     private AnchorPane main = null;
 

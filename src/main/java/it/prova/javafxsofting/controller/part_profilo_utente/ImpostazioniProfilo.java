@@ -1,4 +1,4 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -8,6 +8,8 @@ import io.github.palexdev.materialfx.validation.Severity;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
+import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.controller.ValidateForm;
 import it.prova.javafxsofting.models.Utente;
 import java.io.IOException;
 import java.net.URL;
@@ -28,12 +30,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jetbrains.annotations.NotNull;
-
-/** Classe che gestisce il corpo della finestra */
-@FunctionalInterface
-interface BodyStage {
-  void addBodyStage(Stage stage, AnchorPane root, MFXButton modificaButton);
-}
 
 public class ImpostazioniProfilo extends ValidateForm implements Initializable {
   static final List<String> REGIONI =
@@ -60,56 +56,6 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
           "Veneto",
           "Trentino");
 
-  static final List<String> PREFIX_TELEFONO =
-      List.of(
-          "+ 355", // Albania
-          "+ 32", // Belgio
-          "+ 359", // Bulgaria
-          "+ 45", // Danimarca
-          "+ 358", // Finlandia
-          "+ 350", // Gibilterra
-          "+ 299", // Groenlandia
-          "+ 39", // Italia
-          "+ 370", // Lituania
-          "+ 356", // Malta
-          "+ 47", // Norvegia
-          "+ 351", // Portogallo
-          "+ 40", // Romania
-          "+ 421", // Slovacchia
-          "+ 46", // Svezia
-          "+ 36", // Ungheria
-          "+ 376", // Andorra
-          "+ 375", // Bielorussia
-          "+ 357", // Cipro
-          "+ 372", // Estonia
-          "+ 33", // Francia
-          "+ 44", // Gran Bretagna
-          "+ 353", // Irlanda
-          "+ 371", // Lettonia
-          "+ 352", // Lussemburgo
-          "+ 373", // Moldavia
-          "+ 31", // Olanda
-          "+ 377", // Principato Monaco
-          "+ 7", // Russia
-          "+ 386", // Slovenia
-          "+ 41", // Svizzera
-          "+ 43", // Austria
-          "+ 387", // Bosnia Erzegovina
-          "+ 385", // Croazia
-          "+ 298", // Faer Oer Isole
-          "+ 49", // Germania
-          "+ 30", // Grecia
-          "+ 354", // Islanda
-          "+ 423", // Liechtenstein
-          "+ 389", // Macedonia
-          "+ 382", // Montenegro
-          "+ 48", // Polonia
-          "+ 420", // Repubblica Ceca
-          "+ 381", // Serbia
-          "+ 34", // Spagna
-          "+ 380" // Ucraina
-          );
-
   @FXML private AnchorPane rootProfilo;
   @FXML private Label nomeCompletoText;
   @FXML private Label indirizzoText;
@@ -134,6 +80,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     passwordText.setText("* ".repeat(UserSession.getInstance().getUtente().getPassword().length()));
   }
 
+  @FXML
   public void modificaNome(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica nome",
@@ -171,10 +118,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 UserSession.getInstance().setUtente(newUtente);
                 UserSession.getInstance()
                     .getUtente()
-                    .setNomeCompleto(
-                        UserSession.getInstance().getUtente().getNome()
-                            + " "
-                            + UserSession.getInstance().getUtente().getCognome());
+                    .setNomeCompleto(newUtente.getNome() + " " + newUtente.getCognome());
                 stage.close();
               });
         });
@@ -182,6 +126,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaIndirizzo(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Indirizzo",
@@ -257,21 +202,17 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaNumTelefono(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Telefono",
         "controller/part_profilo_utente/modifica_telefono.fxml",
         (stage, root, modificaButton) -> {
           MFXTextField newNumTelefono = (MFXTextField) root.lookup("#newTelefono");
-          MFXComboBox<String> prefissoTelefono =
-              (MFXComboBox<String>) root.lookup("#prefissoTelefono");
           Label validateTelefono = (Label) root.lookup("#validateTelefono");
 
           onlyDigit(newNumTelefono);
           newNumTelefono.setTextLimit(10);
-
-          prefissoTelefono.setItems(FXCollections.observableArrayList(PREFIX_TELEFONO));
-          prefissoTelefono.setValue("+ 39");
 
           setValidateNumTelefono(newNumTelefono, validateTelefono);
 
@@ -286,7 +227,6 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 }
 
                 String newNumTelefonoValue = newNumTelefono.getText();
-                String prefixTelefono = prefissoTelefono.getValue();
 
                 Utente newUtente = new Utente(UserSession.getInstance().getUtente());
                 newUtente.setNumTelefono(newNumTelefonoValue);
@@ -298,7 +238,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
                 }
 
                 UserSession.getInstance().setUtente(newUtente);
-                numTelefonoText.setText(prefixTelefono + " " + newNumTelefonoValue);
+                numTelefonoText.setText(newNumTelefonoValue);
                 stage.close();
               });
         });
@@ -306,6 +246,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaEmail(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Email",
@@ -346,6 +287,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     actionEvent.consume();
   }
 
+  @FXML
   public void modificaPassword(@NotNull ActionEvent actionEvent) throws IOException {
     createNewStage(
         "Modifica Password",
@@ -580,5 +522,11 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
     newStage.setScene(scene);
 
     newStage.showAndWait();
+  }
+
+  /** Classe che gestisce il corpo della finestra */
+  @FunctionalInterface
+  interface BodyStage {
+    void addBodyStage(Stage stage, AnchorPane root, MFXButton modificaButton);
   }
 }

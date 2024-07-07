@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 <AnchorPane prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.controller.PreventivoUsatoUtenteController">
+            fx:controller="it.prova.javafxsofting.controller.part_profilo_utente.PreventivoUsatoUtenteController">
     <children>
         <VBox layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="900.0"
               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

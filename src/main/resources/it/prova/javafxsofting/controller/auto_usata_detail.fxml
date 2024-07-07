@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" prefHeight="800.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx/21"
-            fx:controller="it.prova.javafxsofting.controller.AutoUsataDetail">
+            fx:controller="it.prova.javafxsofting.controller.scegli_conf_auto.AutoUsataDetail">
     <children>
         <VBox prefHeight="800.0" prefWidth="1200.0">
             <children>

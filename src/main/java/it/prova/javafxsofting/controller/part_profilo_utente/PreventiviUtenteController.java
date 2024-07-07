@@ -1,4 +1,4 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
@@ -6,12 +6,12 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
-import it.prova.javafxsofting.controller.ProfileAccountController.TabController;
+import it.prova.javafxsofting.controller.part_profilo_utente.ProfileAccountController.TabController;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Ordine;
 import it.prova.javafxsofting.models.Preventivo;
 import it.prova.javafxsofting.models.Sconto;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -107,6 +107,28 @@ public class PreventiviUtenteController implements Initializable {
     startPeriodicUpdate();
   }
 
+  private static void createLabelSuccess(HBox wrapper) {
+    wrapper.getChildren().clear();
+    Text text = new Text();
+    text.setTextAlignment(TextAlignment.CENTER);
+    text.setText("Preventivo confermato!");
+    text.setFont(Font.font(20));
+    wrapper.getChildren().add(text);
+    wrapper.setAlignment(Pos.CENTER);
+  }
+
+  private static void postOrdine(Preventivo preventivo, Ordine acquisto) {
+    try {
+      String url =
+          String.format(
+              "utente/%d/preventivo/%d/conferma/",
+              UserSession.getInstance().getUtente().getId(), preventivo.getId());
+      Connection.postDataToBacked(acquisto, url);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private void createStagePayPreventivo(Preventivo preventivo) {
     Stage stage = new Stage();
     stage.setTitle("Conferma preventivo");
@@ -137,23 +159,9 @@ public class PreventiviUtenteController implements Initializable {
           PauseTransition pause = new PauseTransition(Duration.seconds(10));
           pause.setOnFinished(
               event -> {
-                try {
-                  String url =
-                      String.format(
-                          "utente/%d/preventivo/%d/conferma/",
-                          UserSession.getInstance().getUtente().getId(), preventivo.getId());
-                  Connection.postDataToBacked(acquisto, url);
-                } catch (Exception e) {
-                  throw new RuntimeException(e);
-                }
+                postOrdine(preventivo, acquisto);
                 loading.setVisible(false);
-                wrapper.getChildren().clear();
-                Text text = new Text();
-                text.setTextAlignment(TextAlignment.CENTER);
-                text.setText("Preventivo confermato!");
-                text.setFont(Font.font(20));
-                wrapper.getChildren().add(text);
-                wrapper.setAlignment(Pos.CENTER);
+                createLabelSuccess(wrapper);
 
                 PauseTransition pause1 = new PauseTransition(Duration.seconds(3));
                 pause1.setOnFinished(
@@ -190,7 +198,7 @@ public class PreventiviUtenteController implements Initializable {
   private void setColumnConferma() {
     confermaColumn.setCellFactory(
         column ->
-            new TableCell<Preventivo, Void>() {
+            new TableCell<>() {
               private final Button btn = new Button("conferma");
 
               {
@@ -265,7 +273,7 @@ public class PreventiviUtenteController implements Initializable {
                   setText(null);
                 } else {
                   Sconto sconto =
-                      StaticDataStore.getSconti().stream()
+                      DataManager.getInstance().getSconti().stream()
                           .filter(s -> s.getIdModello() == item.getId())
                           .findFirst()
                           .orElse(null);

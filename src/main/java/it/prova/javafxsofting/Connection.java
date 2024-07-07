@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -117,6 +116,8 @@ public final class Connection {
         content.append(line);
       }
 
+      conn.disconnect();
+
       if (content.isEmpty()) {
         return null;
       }
@@ -213,7 +214,7 @@ public final class Connection {
 
     List<ImmagineAuto> immaginiAuto = new ArrayList<>();
     for (File immagine : immagini) {
-      immaginiAuto.add(ImmagineAuto.create(idAutoUsata, immagine));
+      immaginiAuto.add(new ImmagineAuto(idAutoUsata, immagine));
     }
 
     // Dati da inviare al backend in formato JSON
@@ -313,10 +314,15 @@ public final class Connection {
   @NotNull
   private static HttpURLConnection getHttpURLConnection(String subDirectory, Methods methods) {
     StringBuilder subdirectory = subDirectory == null ? null : new StringBuilder(subDirectory);
+    //    String urlPath =
+    //        String.format(
+    //            "http://localhost:%d/api/%s",
+    //            Connection.porta, subdirectory == null ? "" : subdirectory);
+
     String urlPath =
         String.format(
-            "http://localhost:%d/api/%s",
-            Connection.porta, subdirectory == null ? "" : subdirectory);
+            "https://SirVlad33.pythonanywhere.com/api/%s",
+            subdirectory == null ? "" : subdirectory);
 
     HttpURLConnection conn;
     try {

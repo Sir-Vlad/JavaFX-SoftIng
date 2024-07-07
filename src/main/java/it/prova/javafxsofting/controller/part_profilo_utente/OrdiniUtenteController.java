@@ -1,4 +1,4 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.Ordine;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class OrdiniUtenteController implements Initializable {
   private static final ObservableList<Ordine> ordiniUtente = getOrdini();
-  private static ScheduledExecutorService scheduler;
+  private static ScheduledExecutorService scheduler = null;
 
   static {
     getOrdini();

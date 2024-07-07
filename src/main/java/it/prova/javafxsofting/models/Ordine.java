@@ -42,7 +42,7 @@ public class Ordine implements Serializable {
     this.preventivo =
         UserSession.getInstance().getPreventivi().stream()
             .filter(obj -> obj.getId() == preventivoID)
-            .toList()
-            .getFirst();
+            .findFirst()
+            .orElse(null);
   }
 }

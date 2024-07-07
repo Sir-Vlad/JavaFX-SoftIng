@@ -82,6 +82,7 @@ public abstract class Auto implements Serializable {
         id, modello, marca, altezza, lunghezza, peso, volumeBagagliaio);
   }
 
+  /** Carica le immagini dell'auto sul disco */
   public void setImmagini() {
     if (this instanceof ModelloAuto) {
       this.immagini = fetchImmagini(this.id, "immaginiAutoNuove");
@@ -90,13 +91,21 @@ public abstract class Auto implements Serializable {
     }
   }
 
-  private @NotNull ArrayList<File> fetchImmagini(int index, String subDirectory) {
+  /**
+   * Recupera le immagini dall'API e le salva su disco
+   *
+   * @param idAuto id dell'auto a cui l'immagine fa riferimento
+   * @param subDirectory url del backend per le immagini ma anche il nome della cartella in cui
+   *     verranno salvate sul disco
+   * @return {@link ArrayList} di {@link File}
+   */
+  private @NotNull ArrayList<File> fetchImmagini(int idAuto, String subDirectory) {
     ArrayList<File> immaginiList = new ArrayList<>();
     List<ImmagineAuto> immagineAutoList;
     try {
       immagineAutoList =
           Connection.getImageFromBackend(
-              String.format("%s/%d/", subDirectory, index), ImmagineAuto.class);
+              String.format("%s/%d/", subDirectory, idAuto), ImmagineAuto.class);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

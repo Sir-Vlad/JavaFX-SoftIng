@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 public class HomeController implements Initializable {
@@ -17,11 +16,13 @@ public class HomeController implements Initializable {
     header.addTab("Concessionari", event -> ScreenController.activate("concessionari"));
   }
 
+  @FXML
   public void switchNuovo(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("scegliModello");
     mouseEvent.consume();
   }
 
+  @FXML
   public void switchUsato(@NotNull MouseEvent mouseEvent) {
     ScreenController.activate("scegliUsato");
     mouseEvent.consume();

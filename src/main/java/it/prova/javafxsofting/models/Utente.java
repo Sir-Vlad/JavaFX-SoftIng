@@ -67,6 +67,7 @@ public class Utente implements Serializable {
     this.cvc = cvc;
   }
 
+  @Contract(pure = true)
   public Utente(Utente newUtente) {
     this.id = newUtente.id;
     this.imageUtente = newUtente.imageUtente;

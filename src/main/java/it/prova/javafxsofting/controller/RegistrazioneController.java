@@ -109,6 +109,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         });
   }
 
+  @FXML
   public void switchIndietro(@NotNull ActionEvent actionEvent) {
     ScreenController.activate("home");
     actionEvent.consume();
@@ -367,19 +368,21 @@ public class RegistrazioneController extends ValidateForm implements Initializab
                         dataScadenza,
                         cvcField.getText());
 
+                // Crea l'utente
                 try {
                   Connection.postDataToBacked(newUtente, "utenti/");
-                  try {
-                    UserSession.getInstance()
-                        .setUtente(
-                            Connection.getDataFromBackend(
-                                String.format("utente/%s/", newUtente.getEmail()), Utente.class));
-                  } catch (Exception e) {
-                    Alert alert = new Alert(AlertType.ERROR, e.getMessage());
-                    alert.showAndWait();
-                    stepper.setMouseTransparent(false);
-                    return;
-                  }
+                } catch (Exception e) {
+                  Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+                  alert.showAndWait();
+                  stepper.setMouseTransparent(false);
+                  return;
+                }
+                // recupero l'utente appena creato
+                try {
+                  UserSession.getInstance()
+                      .setUtente(
+                          Connection.getDataFromBackend(
+                              String.format("utente/%s/", newUtente.getEmail()), Utente.class));
                 } catch (Exception e) {
                   Alert alert = new Alert(AlertType.ERROR, e.getMessage());
                   alert.showAndWait();

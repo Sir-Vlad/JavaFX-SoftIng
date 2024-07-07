@@ -69,6 +69,7 @@ public class LoginController extends ValidateForm implements Initializable {
   }
 
   @SneakyThrows
+  @FXML
   public void logIn() {
     List<Constraint> constEmail = emailField.validate();
     List<Constraint> constPassword = passwordField.validate();
@@ -133,6 +134,7 @@ public class LoginController extends ValidateForm implements Initializable {
     }
   }
 
+  @FXML
   public void forgotPassword(@NotNull MouseEvent mouseEvent) {
     NotImplemented.notImplemented();
     mouseEvent.consume();

@@ -29,6 +29,18 @@ public class ImmagineAuto implements Serializable {
     this.immagineBase64 = s;
   }
 
+  public ImmagineAuto(int idAuto, @NotNull File file) {
+    try {
+      this.idAuto = idAuto;
+      this.nomeImmagine = file.getName();
+
+      byte[] imageBytes = Files.readAllBytes(Path.of(file.getPath()));
+      this.immagineBase64 = Base64.getEncoder().encodeToString(imageBytes);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   @Override
   public String toString() {
 
@@ -40,10 +52,5 @@ public class ImmagineAuto implements Serializable {
           immagineBase64='%s'
         }""",
         idAuto, nomeImmagine, immagineBase64.substring(0, 20));
-  }
-
-  public static @NotNull ImmagineAuto create(int idAuto, @NotNull File file) throws IOException {
-    byte[] imageBytes = Files.readAllBytes(Path.of(file.getPath()));
-    return new ImmagineAuto(idAuto, file.getName(), Base64.getEncoder().encodeToString(imageBytes));
   }
 }

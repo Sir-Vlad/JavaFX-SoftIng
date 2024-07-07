@@ -1,9 +1,7 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.scegli_conf_auto;
 
-import static it.prova.javafxsofting.Connection.gson;
 import static it.prova.javafxsofting.util.Util.capitalize;
 
-import com.google.gson.reflect.TypeToken;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXListCell;
 import io.github.palexdev.materialfx.utils.others.FunctionalStringConverter;
@@ -12,14 +10,13 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
-import it.prova.javafxsofting.errori.ErrorResponse;
+import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.*;
 import it.prova.javafxsofting.models.Optional;
 import it.prova.javafxsofting.util.ColoriAuto;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
@@ -53,11 +50,13 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfiguratorController implements Initializable {
-  /** path della cartella dove ci sono i file del configuratore */
+  /** Path della cartella dove ci sono i file del configuratore */
   private static final Path PATH_DIR = Path.of("controller").resolve("part_configurator");
 
-  private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
+  /** Flag per l'aggiunta della detrazione nel preventivo */
+  @Getter @Setter private static boolean detrazione = false;
 
+  private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
   @FXML private VBox vboxOptionals;
   @FXML private VBox infoTecnicheBox;
   @FXML private HBox flagDetrazione;
@@ -76,9 +75,6 @@ public class ConfiguratorController implements Initializable {
   @FXML private Text fieldModelloV;
   @FXML private MFXListView<Concessionario> listConcessionaria;
   @FXML private MFXButton saveConfigurazioneBtn;
-
-  /** Flag per l'aggiunta della detrazione nel preventivo */
-  @Getter @Setter private static boolean detrazione = false;
 
   /** Auto selezionata all'interno del configuratore */
   private ModelloAuto auto;
@@ -122,15 +118,7 @@ public class ConfiguratorController implements Initializable {
 
     createBoxPrezzo(auto);
 
-    String pathImage =
-        "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
-    URL urlImage = App.class.getResource(pathImage);
-    if (urlImage != null) {
-      logoMarca.setStyle(
-          "-fx-background-image: url("
-              + urlImage
-              + "); -fx-background-repeat: no-repeat; -fx-background-position: center center");
-    }
+    setImageMarca();
     scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
     scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
@@ -145,15 +133,7 @@ public class ConfiguratorController implements Initializable {
     createChooseButtonDetrazioneUsato();
 
     // immagine dell'auto a destra
-    String resource =
-        auto.getImmagini().isEmpty()
-            ? "immagini/fake-account.png"
-            : auto.getImmagini().getFirst().toURI().toString();
-
-    ImageView imageView = new ImageView(new Image(resource));
-    imageView.setPreserveRatio(true);
-    imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
-    imageView.fitWidthProperty().bind(modelVisualize.widthProperty());
+    ImageView imageView = setImageAuto();
 
     modelVisualize.getChildren().add(imageView);
   }
@@ -188,31 +168,11 @@ public class ConfiguratorController implements Initializable {
           preventivo,
           String.format("utente/%s/preventivi/", UserSession.getInstance().getUtente().getId()));
     } catch (Exception e) {
-      if (e.getMessage().equals("Errore del server")) {
-        Alert alert = new Alert(AlertType.ERROR, "Errore del server");
-        alert.setTitle("Errore");
-        alert.showAndWait();
-        return;
-      }
-      List<ErrorResponse> errorResponses = new ArrayList<>();
-      Type type = new TypeToken<Map<String, Map<String, List<String>>>>() {}.getType();
-      Map<String, Map<String, List<String>>> errorMap = gson.fromJson(e.getMessage(), type);
-
-      errorMap.forEach(
-          (key, value) -> {
-            ErrorResponse errorResponse = new ErrorResponse();
-            errorResponse.setErrors(value);
-            errorResponses.add(errorResponse);
-          });
-
-      if (errorResponses.stream().anyMatch(r -> r.getErrors().containsKey("non_field_errors"))) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore");
-        alert.setHeaderText("Errore durante l'inserimento del preventivo");
-        alert.setContentText("Il preventivo esiste già");
-        alert.showAndWait();
-        return;
-      }
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Errore");
+      alert.setHeaderText("Errore durante l'inserimento del preventivo");
+      alert.setContentText("Il preventivo esiste già");
+      alert.showAndWait();
       return;
     }
 
@@ -228,6 +188,31 @@ public class ConfiguratorController implements Initializable {
     alert.showAndWait();
 
     actionEvent.consume();
+  }
+
+  private @NotNull ImageView setImageAuto() {
+    String resource =
+        auto.getImmagini().isEmpty()
+            ? "immagini/fake-account.png"
+            : auto.getImmagini().getFirst().toURI().toString();
+
+    ImageView imageView = new ImageView(new Image(resource));
+    imageView.setPreserveRatio(true);
+    imageView.fitHeightProperty().bind(modelVisualize.heightProperty());
+    imageView.fitWidthProperty().bind(modelVisualize.widthProperty());
+    return imageView;
+  }
+
+  private void setImageMarca() {
+    String pathImage =
+        "immagini/loghi_marche/logo-" + auto.getMarca().toString().toLowerCase() + ".png";
+    URL urlImage = App.class.getResource(pathImage);
+    if (urlImage != null) {
+      logoMarca.setStyle(
+          "-fx-background-image: url("
+              + urlImage
+              + "); -fx-background-repeat: no-repeat; -fx-background-position: center center");
+    }
   }
 
   private @NotNull Preventivo createPreventivoSenzaData() {
@@ -468,7 +453,7 @@ public class ConfiguratorController implements Initializable {
   /** Crea la lista delle concessionarie */
   private void createListViewConcessionario() {
     listConcessionaria.setItems(
-        FXCollections.observableArrayList(StaticDataStore.getConcessionari()));
+        FXCollections.observableArrayList(DataManager.getInstance().getConcessionari()));
     listConcessionaria.setConverter(
         FunctionalStringConverter.to(
             concessionario -> {

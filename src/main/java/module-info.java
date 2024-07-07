@@ -42,4 +42,19 @@ module it.prova.javafxsofting {
 
   opens it.prova.javafxsofting.util to
       javafx.fxml;
+
+  exports it.prova.javafxsofting.controller.part_profilo_utente;
+
+  opens it.prova.javafxsofting.controller.part_profilo_utente to
+      javafx.fxml;
+
+  exports it.prova.javafxsofting.controller.scegli_conf_auto;
+
+  opens it.prova.javafxsofting.controller.scegli_conf_auto to
+      javafx.fxml;
+
+  exports it.prova.javafxsofting.component.profile_box;
+
+  opens it.prova.javafxsofting.component.profile_box to
+      javafx.fxml;
 }

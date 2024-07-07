@@ -1,9 +1,9 @@
 package it.prova.javafxsofting.controller;
 
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.Concessionario;
 import it.prova.javafxsofting.models.Indirizzo;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -20,7 +20,7 @@ import javafx.scene.layout.Pane;
 
 public class ConcessionariController implements Initializable {
   private static final ObservableList<Concessionario> concessionari =
-      FXCollections.observableArrayList(StaticDataStore.getConcessionari());
+      FXCollections.observableArrayList(DataManager.getInstance().getConcessionari());
   private static final String INDIRIZZO_LITERAL = "indirizzo";
   @FXML private Pane wrapperRoot;
 

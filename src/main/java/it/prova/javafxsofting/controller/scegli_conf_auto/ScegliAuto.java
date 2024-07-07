@@ -1,9 +1,10 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.scegli_conf_auto;
 
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Auto;
 import it.prova.javafxsofting.util.FilterAuto;
 import java.net.URL;

@@ -1,12 +1,12 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.scegli_conf_auto;
 
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import it.prova.javafxsofting.component.CardAuto;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Optional;
 import it.prova.javafxsofting.util.FilterAuto;
-import it.prova.javafxsofting.util.StaticDataStore;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -32,6 +32,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
   private static ScheduledExecutorService scheduler;
   private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
+  private final DataManager dataManager = DataManager.getInstance();
   @FXML private AnchorPane root;
   @FXML private MFXScrollPane scrollPane;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
@@ -45,7 +46,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   @Contract(" -> new")
   private @NotNull List<String> getTypeAlimentazione() {
     return new ArrayList<>(
-        StaticDataStore.getOptionals().stream()
+        dataManager.getOptionals().stream()
             .filter(optional -> optional.getNome().equals("alimentazione"))
             .map(Optional::getDescrizione)
             .map(String::toUpperCase)
@@ -60,7 +61,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   @Contract(" -> new")
   private @NotNull List<String> getTypeCambio() {
     return new ArrayList<>(
-        StaticDataStore.getOptionals().stream()
+        dataManager.getOptionals().stream()
             .filter(optional -> optional.getNome().equals("cambio"))
             .map(Optional::getDescrizione)
             .map(String::toUpperCase)
@@ -107,7 +108,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
 
   @Override
   public void setCardAuto() {
-    getCardAuto().setAll(StaticDataStore.getModelliAuto());
+    getCardAuto().setAll(dataManager.getModelliAuto());
   }
 
   @Override
@@ -143,7 +144,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
 
   private void updateListFromDatabase() {
     try {
-      StaticDataStore.fetchModelliAuto();
+      //      dataManager.();
     } catch (Exception e) {
       logger.warning("Errore durante l'aggiornamento della lista");
       logger.log(Level.SEVERE, e.getMessage(), e);
@@ -152,7 +153,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     Platform.runLater(
         () -> {
           getFlowPane().getChildren().clear();
-          getCardAuto().setAll(StaticDataStore.getModelliAuto());
+          getCardAuto().setAll(dataManager.getModelliAuto());
           getCardAuto().stream()
               .map(CardAuto::new)
               .forEach(auto -> getFlowPane().getChildren().add(auto));
