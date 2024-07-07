@@ -4,7 +4,6 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
-import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.Utente;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.application.Preloader.StateChangeNotification;
 import javafx.application.Preloader.StateChangeNotification.Type;
@@ -32,9 +32,9 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-public class App extends javafx.application.Application {
-  @Getter private static final Logger log = Logger.getLogger(App.class.getName());
-  private boolean isServerAvailable = true;
+public class App extends Application {
+  @Getter private static final Logger  log               = Logger.getLogger(App.class.getName());
+  private final                boolean isServerAvailable = true;
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -78,11 +78,11 @@ public class App extends javafx.application.Application {
 
   @Override
   public void init() {
-    try {
-      DataManager dataManager = DataManager.getInstance();
-    } catch (Exception e) {
-      isServerAvailable = false;
-    }
+    //    try {
+    //      DataManager dataManager = DataManager.getInstance();
+    //    } catch (Exception e) {
+    //      isServerAvailable = false;
+    //    }
     checkRememberUtente();
   }
 
@@ -164,10 +164,10 @@ public class App extends javafx.application.Application {
         "home",
         new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
-    ScreenController.addScreen(
-        "scegliModello",
-        new FXMLLoader(
-            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    //    ScreenController.addScreen(
+    //        "scegliModello",
+    //        new FXMLLoader(
+    //            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
 
     ScreenController.addScreen(
         "login",
@@ -178,14 +178,14 @@ public class App extends javafx.application.Application {
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
 
-    ScreenController.addScreen(
-        "concessionari",
-        new FXMLLoader(
-            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+    //    ScreenController.addScreen(
+    //        "concessionari",
+    //        new FXMLLoader(
+    //            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
 
-    ScreenController.addScreen(
-        "scegliUsato",
-        new FXMLLoader(
-            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
+    //    ScreenController.addScreen(
+    //        "scegliUsato",
+    //        new FXMLLoader(
+    //            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
   }
 }

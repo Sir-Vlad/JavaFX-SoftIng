@@ -8,7 +8,7 @@
             maxWidth="-Infinity"
             minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
             prefWidth="900.0" xmlns="http://javafx.com/javafx/21"
-            fx:controller="it.prova.javafxsofting.controller.ImpostazioniProfilo">
+            fx:controller="it.prova.javafxsofting.controller.part_profilo_utente.ImpostazioniProfilo">
     <children>
         <VBox prefHeight="800.0" prefWidth="900.0">
             <children>

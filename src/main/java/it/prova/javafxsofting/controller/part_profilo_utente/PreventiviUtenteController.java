@@ -1,4 +1,4 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
@@ -6,7 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
-import it.prova.javafxsofting.controller.ProfileAccountController.TabController;
+import it.prova.javafxsofting.controller.part_profilo_utente.ProfileAccountController.TabController;
 import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Ordine;

@@ -1,4 +1,4 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.scegli_conf_auto;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
@@ -7,6 +7,7 @@ import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.component.Header;
+import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.AutoUsata;
 import java.io.IOException;
 import java.net.MalformedURLException;

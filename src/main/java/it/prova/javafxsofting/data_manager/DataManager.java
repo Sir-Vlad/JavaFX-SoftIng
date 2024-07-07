@@ -32,7 +32,7 @@ public class DataManager {
 
   @Contract(value = " -> new", pure = true)
   @SneakyThrows
-  public static @NotNull DataManager getInstance() {
+  public static synchronized @NotNull DataManager getInstance() {
     if (instance == null) {
       instance = new DataManager();
       instance.fetchAllData();
@@ -41,11 +41,15 @@ public class DataManager {
   }
 
   @Contract(pure = true)
-  public void refreshAllData() throws Exception {
-    fetchAllData();
+  public void refreshAllData() {
+    try {
+      fetchAllData();
+    } catch (Exception e) {
+      throw new RuntimeException("Errore durante l'aggiornamento dei dati");
+    }
   }
 
-  private void fetchAllData() throws Exception {
+  private void fetchAllData() {
     concessionari = concessionariDAO.getAllConcessionari();
     optionals = optionalsDAO.getAllOptionals();
     modelliAuto = modelliAutoDAO.getAllModelliAuto();

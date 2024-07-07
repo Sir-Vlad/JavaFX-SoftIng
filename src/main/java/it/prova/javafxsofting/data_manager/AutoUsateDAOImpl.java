@@ -2,6 +2,7 @@ package it.prova.javafxsofting.data_manager;
 
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.models.AutoUsata;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import lombok.SneakyThrows;
@@ -20,6 +21,6 @@ public class AutoUsateDAOImpl implements AutoUsateDAO {
       newAutoUsate.forEach(AutoUsata::setImmagini);
       return newAutoUsate;
     }
-    return null;
+    return Collections.emptyList();
   }
 }

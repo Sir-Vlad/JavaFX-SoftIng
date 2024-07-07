@@ -2,7 +2,7 @@ package it.prova.javafxsofting.serializzatori;
 
 import com.google.gson.*;
 import it.prova.javafxsofting.UserSession;
-import it.prova.javafxsofting.controller.ConfiguratorController;
+import it.prova.javafxsofting.controller.scegli_conf_auto.ConfiguratorController;
 import it.prova.javafxsofting.models.Preventivo;
 import java.lang.reflect.Type;
 import org.jetbrains.annotations.NotNull;

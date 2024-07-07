@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 public class ModelliAutoDAOImpl implements ModelliAutoDAO {
-  public static Logger logger = Logger.getLogger(ModelliAutoDAOImpl.class.getName());
+  public static final Logger logger = Logger.getLogger(ModelliAutoDAOImpl.class.getName());
 
   @Override
   @SneakyThrows

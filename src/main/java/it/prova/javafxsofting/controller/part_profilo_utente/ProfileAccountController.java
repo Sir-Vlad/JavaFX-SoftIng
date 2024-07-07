@@ -1,8 +1,9 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import it.prova.javafxsofting.App;
 import it.prova.javafxsofting.UserSession;
+import it.prova.javafxsofting.controller.ScreenController;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;

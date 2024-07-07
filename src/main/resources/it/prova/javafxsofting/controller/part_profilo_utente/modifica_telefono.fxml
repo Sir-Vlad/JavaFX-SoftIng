@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="300.0" prefWidth="550.0"
             xmlns="http://javafx.com/javafx/21">
     <children>
@@ -34,14 +32,6 @@
                                         <Insets right="30.0"/>
                                     </padding>
                                 </Label>
-                                <MFXComboBox fx:id="prefissoTelefono" floatMode="BORDER"
-                                             maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                                             minWidth="-Infinity" prefHeight="30.0"
-                                             prefWidth="120.0">
-                                    <padding>
-                                        <Insets left="30.0"/>
-                                    </padding>
-                                </MFXComboBox>
                                 <MFXTextField fx:id="newTelefono" alignment="CENTER"
                                               floatMode="BORDER" maxWidth="1.7976931348623157E308"
                                               minHeight="-Infinity" minWidth="-Infinity"

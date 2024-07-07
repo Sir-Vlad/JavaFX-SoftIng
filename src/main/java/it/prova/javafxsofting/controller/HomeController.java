@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 public class HomeController implements Initializable {

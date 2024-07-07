@@ -1,9 +1,9 @@
 package it.prova.javafxsofting.component;
 
 import it.prova.javafxsofting.App;
-import it.prova.javafxsofting.controller.ScegliModelloController;
-import it.prova.javafxsofting.controller.ScegliUsatoController;
 import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.controller.scegli_conf_auto.ScegliModelloController;
+import it.prova.javafxsofting.controller.scegli_conf_auto.ScegliUsatoController;
 import it.prova.javafxsofting.models.Auto;
 import it.prova.javafxsofting.models.AutoUsata;
 import it.prova.javafxsofting.models.ModelloAuto;

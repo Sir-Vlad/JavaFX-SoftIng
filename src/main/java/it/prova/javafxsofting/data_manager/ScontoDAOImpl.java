@@ -2,6 +2,7 @@ package it.prova.javafxsofting.data_manager;
 
 import it.prova.javafxsofting.Connection;
 import it.prova.javafxsofting.models.Sconto;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,6 +23,6 @@ public class ScontoDAOImpl implements ScontoDAO {
       newSconti.forEach(Sconto::transformIdToObject);
       return newSconti;
     }
-    return null;
+    return Collections.emptyList();
   }
 }

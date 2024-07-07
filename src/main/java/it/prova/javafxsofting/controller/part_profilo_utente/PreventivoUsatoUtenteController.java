@@ -1,4 +1,4 @@
-package it.prova.javafxsofting.controller;
+package it.prova.javafxsofting.controller.part_profilo_utente;
 
 import it.prova.javafxsofting.UserSession;
 import it.prova.javafxsofting.models.*;

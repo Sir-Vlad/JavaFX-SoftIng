@@ -1,5 +1,6 @@
 package it.prova.javafxsofting.component;
 
+import it.prova.javafxsofting.component.profile_box.ProfileBox;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

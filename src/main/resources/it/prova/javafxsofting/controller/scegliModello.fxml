@@ -10,7 +10,7 @@
             minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0"
             stylesheets="@../css/header.css" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.prova.javafxsofting.controller.ScegliModelloController">
+            fx:controller="it.prova.javafxsofting.controller.scegli_conf_auto.ScegliModelloController">
     <children>
         <VBox layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1200.0"
               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
