@@ -1,14 +1,13 @@
 import logging
 import os
 
+import pdfkit
+from Backend.settings import EMAIL_HOST_USER
+from Backend_IngSoft.models import Acquisto, Configurazione
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from jinja2 import Environment, FileSystemLoader
-import pdfkit
 from jinja2.exceptions import TemplateNotFound
-
-from Backend.settings import EMAIL_HOST_USER
-from Backend_IngSoft.models import Acquisto, Configurazione
 
 
 def send_html_email(subject, to_email, context, template_name, pdf=None):
@@ -32,7 +31,12 @@ def create_pdf_file(obj: Acquisto):
     logger = logging.getLogger(__name__)
 
     current_dir = os.getcwd()
-    template_dir = os.path.join(current_dir, "Backend/templates")
+    template_dir = os.path.join(current_dir, "templates")
+
+    # Stampa i percorsi per il debug
+    # logger.error("Current directory: " + current_dir)
+    # logger.error("Template directory: " + template_dir)
+
     try:
         env = Environment(loader=FileSystemLoader(template_dir))
         template = env.get_template("fattura/fattura.html")

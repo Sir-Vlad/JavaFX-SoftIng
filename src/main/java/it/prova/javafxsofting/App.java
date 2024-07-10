@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import it.prova.javafxsofting.controller.ScreenController;
+import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.Utente;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class App extends Application {
   @Getter private static final Logger log = Logger.getLogger(App.class.getName());
-  private final boolean isServerAvailable = true;
+  private boolean isServerAvailable = true;
 
   public static void main(String[] args) {
     Arrays.stream(args)
@@ -85,11 +86,11 @@ public class App extends Application {
 
   @Override
   public void init() {
-    //    try {
-    //      DataManager dataManager = DataManager.getInstance();
-    //    } catch (Exception e) {
-    //      isServerAvailable = false;
-    //    }
+    try {
+      DataManager dataManager = DataManager.getInstance();
+    } catch (Exception e) {
+      isServerAvailable = false;
+    }
     checkRememberUtente();
   }
 
@@ -176,10 +177,10 @@ public class App extends Application {
         "home",
         new FXMLLoader(Objects.requireNonNull(App.class.getResource("controller/home.fxml"))));
 
-    //    ScreenController.addScreen(
-    //        "scegliModello",
-    //        new FXMLLoader(
-    //            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
+    ScreenController.addScreen(
+        "scegliModello",
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/scegliModello.fxml"))));
 
     ScreenController.addScreen(
         "login",
@@ -190,14 +191,14 @@ public class App extends Application {
         new FXMLLoader(
             Objects.requireNonNull(App.class.getResource("controller/registrazione.fxml"))));
 
-    //    ScreenController.addScreen(
-    //        "concessionari",
-    //        new FXMLLoader(
-    //            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
+    ScreenController.addScreen(
+        "concessionari",
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/concessionari.fxml"))));
 
-    //    ScreenController.addScreen(
-    //        "scegliUsato",
-    //        new FXMLLoader(
-    //            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
+    ScreenController.addScreen(
+        "scegliUsato",
+        new FXMLLoader(
+            Objects.requireNonNull(App.class.getResource("controller/scegliUsato.fxml"))));
   }
 }

@@ -28,11 +28,6 @@ module it.prova.javafxsofting {
       javafx.fxml,
       com.google.gson;
 
-  exports it.prova.javafxsofting.errori;
-
-  opens it.prova.javafxsofting.errori to
-      javafx.fxml;
-
   exports it.prova.javafxsofting.serializzatori;
 
   opens it.prova.javafxsofting.serializzatori to
