@@ -1,4 +1,6 @@
 from datetime import datetime
+from typing import Any
+
 from django.contrib import admin
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -7,7 +9,6 @@ from django.db import transaction
 from django.db.models import Model
 from django.forms import Form
 from django.http import HttpRequest
-from typing import Any
 from unfold.admin import ModelAdmin, TabularInline
 
 from .models import (
@@ -19,7 +20,6 @@ from .models import (
     ImmaginiAutoUsate,
     ModelloAuto,
     Optional,
-    Periodo,
     Preventivo,
     Ritiro,
     Sconto,
@@ -48,10 +48,18 @@ class UtenteAdmin(ModelAdmin):
 
 
 class MarcaFilter(admin.SimpleListFilter):
-    title = "marca"
-    parameter_name = "marca"
+    title = "marca"  # valore che viene utilizzato nella pagina di admin
+    parameter_name = (
+        "marca"  # valore che viene utilizzato nell'URL per effettuare il filtro
+    )
 
     def lookups(self, request, model_admin):
+        """
+        Ritorna una lista di tuple che contiene tutti i valori della colonna 'marca'
+        :param request:
+        :param model_admin:
+        :return: list_of_models
+        """
         list_of_models = set()
         queryset = ModelloAuto.objects.all()
         for query in queryset:
@@ -60,6 +68,12 @@ class MarcaFilter(admin.SimpleListFilter):
         return list_of_models
 
     def queryset(self, request, queryset):
+        """
+        Ritorna gli elementi del queryset filtrati per 'marca'
+        :param request:
+        :param queryset:
+        :return:
+        """
         if self.value():
             return queryset.filter(marca=self.value())
 
@@ -114,7 +128,7 @@ class PrezzoAutoUsataFilter(admin.SimpleListFilter):
         queryset = AutoUsata.objects.all()
         for entry in queryset:
             if entry.prezzo == 0:
-                list_of_models.add(("non \te", "non validate"))
+                list_of_models.add(("non validate", "non validate"))
             else:
                 list_of_models.add(("validate", "validate"))
         return list_of_models
@@ -163,7 +177,9 @@ class AutoUsataAdmin(ModelAdmin):
             # creazione)
             if change:
                 old_obj = AutoUsata.objects.get(pk=obj.pk)
-                if old_obj.prezzo != obj.prezzo:  # Controlla se il campo è stato
+                if (
+                        old_obj.prezzo != obj.prezzo
+                ):  # Controlla se il campo è stato modificato
 
                     preventivo = Detrazione.objects.get(auto_usata_id=obj.pk).preventivo
                     if preventivo.data_emissione is None:
@@ -203,7 +219,8 @@ class ScontoAdmin(ModelAdmin):
 
 @admin.register(Ritiro)
 class RitiroAdmin(ModelAdmin):
-    pass
+    list_filter = ("concessionario",)
+    list_display = ("preventivo", "concessionario")
 
 
 @admin.register(Preventivo)
@@ -222,8 +239,3 @@ class PreventivoAdmin(ModelAdmin):
 class AcquistoAdmin(ModelAdmin):
     list_display = ("numero_fattura", "data_ritiro")
     list_filter = ("data_ritiro",)
-
-
-@admin.register(Periodo)
-class PeriodoAdmin(ModelAdmin):
-    pass

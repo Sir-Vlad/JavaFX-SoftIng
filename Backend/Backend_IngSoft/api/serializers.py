@@ -1,4 +1,6 @@
 import base64
+from io import BytesIO
+
 from Backend_IngSoft.models import (
     Acquisto,
     AutoUsata,
@@ -20,7 +22,6 @@ from PIL import Image
 from django.db import IntegrityError, transaction
 from django.db.models import Prefetch
 from drf_extra_fields.fields import Base64ImageField
-from io import BytesIO
 from rest_framework import serializers
 
 
@@ -140,14 +141,25 @@ class ConfigurazioneSerializer(serializers.ModelSerializer):
                 optional_ids_user = [opt.id for opt in optional_ids]
                 for preventivo in preventivi_con_conf:
                     optional_ids_set = set()
+                    # prendo gli id degli opzional del preventivo
                     for configurazione in preventivo.configurazione_set.all():
                         optional_ids_set.update(
                             opt.id for opt in configurazione.optional.all()
                         )
+                    # controllo se esiste un preventivo con le stesse opzionali
                     common_ids = optional_ids_set.intersection(optional_ids_user)
                     if len(common_ids) == len(optional_ids_user):
                         if preventivo.modello == preventivo_data["modello"]:
                             raise IntegrityError("Preventivo esistente")
+
+                # Controllo che gli optional siano quelli del modello selezionato nel
+                # preventivo
+                modello_auto: ModelloAuto = ModelloAuto.objects.get(
+                    id=preventivo_data["modello"].id
+                )
+                for opt in optional_ids:
+                    if not modello_auto.optionals.get(id=opt.id):
+                        raise IntegrityError("Opzionale non presente nel modello")
 
                 # salvataggio dati nel db
                 preventivo = Preventivo.objects.create(**preventivo_data)
@@ -211,21 +223,6 @@ class ImmaginiAutoUsateSerializer(serializers.ModelSerializer):
             image=image_base64, auto=validated_data["auto"]
         )
 
-        return instance
-
-    def update(self, instance, validated_data):
-        # Estrai i campi image_base64 e image_name dai dati validati
-        image_data = validated_data.pop("image_base64", None)
-        image_name = validated_data.pop("image_name", None)
-
-        if image_data:
-            instance.image = image_data
-
-        # Aggiorna gli altri campi dell'istanza
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-
-        instance.save()
         return instance
 
 

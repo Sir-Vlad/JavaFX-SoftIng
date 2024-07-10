@@ -130,6 +130,8 @@ public class LoginController extends ValidateForm implements Initializable {
     switch (ScreenController.getBackPage()) {
       case "config" -> ScreenController.activate("config");
       case "vendiUsato" -> ScreenController.activate("vendiUsato");
+      case "scegliUsato" -> ScreenController.activate("scegliUsato");
+      case "autoUsataDetail" -> ScreenController.activate("autoUsataDetail");
       default -> ScreenController.activate("home");
     }
   }

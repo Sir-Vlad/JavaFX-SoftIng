@@ -104,7 +104,7 @@ class Concessionario(models.Model):
     cap = models.CharField(max_length=20, null=False, blank=False)
 
     class Meta:
-        verbose_name_plural = "Sedi"
+        verbose_name_plural = "Concessionari"
 
     def __str__(self):
         return self.nome
@@ -280,6 +280,7 @@ class AutoUsata(Auto):
         blank=False,
         validators=[validate_targa],
         default="AA000AA",
+        unique=True,
     )
     venduta = models.BooleanField(null=False, blank=False, default=False)
 

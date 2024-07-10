@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +27,7 @@ SECRET_KEY = "RZ3+abTyIyDSVMridEGBTe6Al6PwXsXA9jk9qTNVnJlJHSLUiNE9rjd8/30boQUk"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["sirvlad33.pythonanywhere.com", "localhost"]
 
 # Application definition
 
@@ -129,6 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = "/home/SirVlad33/Backend/static/"
 
 # Path per le immagini
 MEDIA_URL = "media/"

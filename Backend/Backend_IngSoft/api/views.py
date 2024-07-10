@@ -31,7 +31,6 @@ from Backend_IngSoft.models import (
     Sconto,
     Utente,
 )
-from Backend_IngSoft.util.error import raises
 from Backend_IngSoft.util.util import create_pdf_file, send_html_email
 from django.db import transaction
 from django.http import HttpResponseNotFound
@@ -42,7 +41,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class UtenteListCreateAPIView(APIView):
+class UtenteListAPIView(APIView):
     @swagger_auto_schema(
         responses={200: UtenteSerializer},
         operation_description="Ritorna tutti gli utenti",
@@ -65,8 +64,8 @@ class UtenteListCreateAPIView(APIView):
 
 
 class UtenteDetailAPIView(APIView):
-    @raises(Utente.DoesNotExist)
-    def get_object(self, email):
+    @staticmethod
+    def get_object(email):
         return Utente.objects.get(email=email)
 
     @swagger_auto_schema(
@@ -83,7 +82,7 @@ class UtenteDetailAPIView(APIView):
     )
     def get(self, request, email):
         try:
-            utente = self.get_object(email)
+            utente = self.get_object(email=email)
             serializer = UtenteSerializer(utente)
             return Response(serializer.data)
         except Utente.DoesNotExist:
@@ -282,6 +281,7 @@ class PreventiviUtenteListAPIView(APIView):
             data_emissione and auto_usata_id
         ):
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         try:
             with transaction.atomic():
                 serializer = ConfigurazioneSerializer(data=request.data)
@@ -327,6 +327,8 @@ class PreventiviUtenteListAPIView(APIView):
                     return Response(status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+        # fixme: controllare che fa
 
         field_names = ("utente", "modello", "concessionario", "non_field_errors")
 
