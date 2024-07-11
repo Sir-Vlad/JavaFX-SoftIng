@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Any
 
 from django.contrib import admin
+
 # from unfold.contrib.filters.admin import
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
@@ -114,9 +115,12 @@ class OptionalAdmin(ModelAdmin):
     list_filter = (TypeOptionalFilter,)
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.is_superuser:
+        if obj:
+            if request.user.is_superuser:
+                return []
+            return [f.name for f in self.model._meta.fields]
+        else:
             return []
-        return [f.name for f in self.model._meta.fields]
 
 
 class PrezzoAutoUsataFilter(admin.SimpleListFilter):
@@ -153,21 +157,18 @@ class AutoUsataAdmin(ModelAdmin):
     inlines = [ImmaginiInlineAutoUsata]
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.is_superuser:
-            return []
-        return [
-            "modello",
-            "marca",
-            "targa",
-            "anno_immatricolazione",
-            "km_percorsi",
-            "altezza",
-            "lunghezza",
-            "larghezza",
-            "peso",
-            "volume_bagagliaio",
-            "venduta",
+        all_fields = [field.name for field in self.model._meta.fields]
+        all_fields_except_prezzo = [
+            field.name for field in self.model._meta.fields if field.name != "prezzo"
         ]
+        if obj:  # se l'oggetto esiste
+            if request.user.is_superuser:
+                return []
+
+            if obj.prezzo != 0:
+                return all_fields
+            else:
+                return all_fields_except_prezzo
 
     def save_model(
         self, request: HttpRequest, obj: Model, form: Form, change: Any
@@ -178,7 +179,7 @@ class AutoUsataAdmin(ModelAdmin):
             if change:
                 old_obj = AutoUsata.objects.get(pk=obj.pk)
                 if (
-                        old_obj.prezzo != obj.prezzo
+                    old_obj.prezzo != obj.prezzo
                 ):  # Controlla se il campo è stato modificato
 
                     preventivo = Detrazione.objects.get(auto_usata_id=obj.pk).preventivo
