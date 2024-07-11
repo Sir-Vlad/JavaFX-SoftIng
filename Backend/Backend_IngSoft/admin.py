@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Any
-
+from django import forms
 from django.contrib import admin
 
 # from unfold.contrib.filters.admin import
@@ -10,6 +10,7 @@ from django.db import transaction
 from django.db.models import Model
 from django.forms import Form
 from django.http import HttpRequest
+from django.utils.safestring import mark_safe
 from unfold.admin import ModelAdmin, TabularInline
 
 from .models import (
@@ -83,6 +84,26 @@ class ImmaginiInlineModelloAuto(TabularInline):
     model = ImmaginiAutoNuove
     extra = 1
     formfield_overrides = {"image": {"widget": SliderWidget}}
+    readonly_fields = ("image_preview",)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(
+                f'<img src="{obj.image.url}" style="max-width: 200px; max-height: '
+                f'200px;" />'
+            )
+        return "No Image"
+
+    image_preview.short_description = "Image Preview"
+
+
+class AutoAdminForm(forms.ModelForm):
+    class Meta:
+        model = ModelloAuto
+        fields = "__all__"
+        widgets = {
+            "optionals": forms.CheckboxSelectMultiple,
+        }
 
 
 @admin.register(ModelloAuto)
@@ -90,6 +111,7 @@ class ModelloAutoAdmin(ModelAdmin):
     list_display = ("modello", "marca", "prezzo_base")
     list_filter = (MarcaFilter,)
     inlines = [ImmaginiInlineModelloAuto]
+    form = AutoAdminForm
 
 
 class TypeOptionalFilter(admin.SimpleListFilter):
@@ -148,6 +170,17 @@ class ImmaginiInlineAutoUsata(TabularInline):
     model = ImmaginiAutoUsate
     extra = 1
     formfield_overrides = {"image": {"widget": SliderWidget}}
+    readonly_fields = ("image_preview",)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(
+                f'<img src="{obj.image.url}" style="max-width: 200px; max-height: '
+                f'200px;" />'
+            )
+        return "No Image"
+
+    image_preview.short_description = "Image Preview"
 
 
 @admin.register(AutoUsata)

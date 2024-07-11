@@ -348,6 +348,7 @@ class ImmaginiAutoUsate(AbstractImmagini):
     auto = models.ForeignKey(AutoUsata, on_delete=CASCADE)
 
     class Meta:
+        verbose_name_plural = "Immagini Auto Usate"
         unique_together = ("image", "auto")
 
     def upload_to(self, filename):
