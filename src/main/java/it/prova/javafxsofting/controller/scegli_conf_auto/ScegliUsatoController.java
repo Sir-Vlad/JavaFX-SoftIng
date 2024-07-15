@@ -32,7 +32,7 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
   /** Aggiorna la pagina scegli usato */
   public void updatePage() {
     try {
-      DataManager.getInstance().getAutoUsateDAO().getAllAutoUsate();
+      DataManager.getInstance().setAutoUsate();
     } catch (Exception e) {
       logger.warning("Errore durante l'aggiornamento della lista");
       logger.log(Level.SEVERE, e.getMessage(), e);

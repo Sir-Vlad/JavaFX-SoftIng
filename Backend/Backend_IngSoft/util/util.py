@@ -70,7 +70,7 @@ def create_pdf_file(obj: Acquisto):
 
     rendered_html = template.render(data)
 
-    PATH_ROOT_FILE = f"{current_dir}/Backend/media/fatture"
+    PATH_ROOT_FILE = f"{current_dir}/media/fatture"
     if not os.path.exists(PATH_ROOT_FILE):
         os.mkdir(PATH_ROOT_FILE)
         os.mkdir(f"{PATH_ROOT_FILE}/fatture_html")

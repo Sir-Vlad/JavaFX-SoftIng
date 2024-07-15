@@ -144,7 +144,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
 
   private void updateListFromDatabase() {
     try {
-      //      dataManager.();
+      DataManager.getInstance().setModelliAuto();
     } catch (Exception e) {
       logger.warning("Errore durante l'aggiornamento della lista");
       logger.log(Level.SEVERE, e.getMessage(), e);

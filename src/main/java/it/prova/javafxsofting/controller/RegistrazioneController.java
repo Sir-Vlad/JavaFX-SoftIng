@@ -153,7 +153,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .dependsOn(cvcField.getValidator());
 
     MFXStepperToggle step4 =
-        new MFXStepperToggle("Step 3", new MFXFontIcon("fas-check", 16, Color.web("#85CB33")));
+        new MFXStepperToggle("Step 4", new MFXFontIcon("fas-check", 16, Color.web("#85CB33")));
     VBox step4Grid = createGrid();
 
     step4.setContent(step4Grid);
@@ -215,7 +215,7 @@ public class RegistrazioneController extends ValidateForm implements Initializab
         .forEach(annoCombo.getItems()::add);
 
     addConstraintRequired(meseCombo, "Il mese della scadenza è necessario");
-    addConstraintRequired(annoCombo, "Il mese della scadenza è necessario");
+    addConstraintRequired(annoCombo, "L'anno della scadenza è necessario");
   }
 
   /**

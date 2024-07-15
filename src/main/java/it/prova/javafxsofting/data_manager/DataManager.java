@@ -40,6 +40,14 @@ public class DataManager {
     return instance;
   }
 
+  public void setAutoUsate() {
+    this.autoUsate = autoUsateDAO.getAllAutoUsate();
+  }
+
+  public void setModelliAuto() {
+    this.modelliAuto = modelliAutoDAO.getAllModelliAuto();
+  }
+
   @Contract(pure = true)
   public void refreshAllData() {
     try {

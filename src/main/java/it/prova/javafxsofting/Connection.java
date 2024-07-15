@@ -260,7 +260,7 @@ public final class Connection {
 
     // riceve la risposta dal backed
     int responseCode = conn.getResponseCode();
-    if (responseCode == HttpURLConnection.HTTP_OK) {
+    if (responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
       conn.disconnect();
       return;
     }

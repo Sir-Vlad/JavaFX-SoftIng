@@ -24,6 +24,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,6 +54,8 @@ import org.jetbrains.annotations.NotNull;
 public class ConfiguratorController implements Initializable {
   /** Path della cartella dove ci sono i file del configuratore */
   private static final Path PATH_DIR = Path.of("controller").resolve("part_configurator");
+
+  private static final Logger logger = Logger.getLogger(ConfiguratorController.class.getName());
 
   /** Flag per l'aggiunta della detrazione nel preventivo */
   @Getter @Setter private static boolean detrazione = false;
@@ -132,9 +136,8 @@ public class ConfiguratorController implements Initializable {
     createListViewConcessionario();
     createChooseButtonDetrazioneUsato();
 
-    // immagine dell'auto a destra
+    // immagine dell'auto a sinistra
     ImageView imageView = setImageAuto();
-
     modelVisualize.getChildren().add(imageView);
   }
 
@@ -168,10 +171,11 @@ public class ConfiguratorController implements Initializable {
           preventivo,
           String.format("utente/%s/preventivi/", UserSession.getInstance().getUtente().getId()));
     } catch (Exception e) {
+      logger.log(Level.SEVERE, e.getMessage(), e);
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Errore");
       alert.setHeaderText("Errore durante l'inserimento del preventivo");
-      alert.setContentText("Il preventivo esiste già");
+      alert.setContentText("Errore durante l'inserimento del preventivo");
       alert.showAndWait();
       return;
     }

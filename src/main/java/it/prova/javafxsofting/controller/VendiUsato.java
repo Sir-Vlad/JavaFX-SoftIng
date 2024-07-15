@@ -28,6 +28,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -175,7 +176,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
     if (postPreventivo(autoUsata)) return;
     // aggiorno la lista delle auto usate
     try {
-      DataManager.getInstance().getAutoUsateDAO().getAllAutoUsate();
+      DataManager.getInstance().setAutoUsate();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -215,7 +216,7 @@ public class VendiUsato extends ValidateForm implements Initializable {
    * @param mouseEvent l'azione dell'utente che ha generato l'azione del bottone
    */
   @FXML
-  public void scegliFoto(MouseEvent mouseEvent) {
+  public void scegliFoto(ActionEvent mouseEvent) {
     if (immagini.size() > MAX_PHOTO_LIMIT) {
       alertWarning("Limite massimo immagini", "Hai raggiunto il limite massimo di 10 immagini");
       return;
