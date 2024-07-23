@@ -45,12 +45,14 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
    */
   @Contract(" -> new")
   private @NotNull List<String> getTypeAlimentazione() {
-    return new ArrayList<>(
-        dataManager.getOptionals().stream()
-            .filter(optional -> optional.getNome().equals("alimentazione"))
-            .map(Optional::getDescrizione)
-            .map(String::toUpperCase)
-            .toList());
+    if (dataManager.getOptionals() != null)
+      return new ArrayList<>(
+          dataManager.getOptionals().stream()
+              .filter(optional -> optional.getNome().equals("alimentazione"))
+              .map(Optional::getDescrizione)
+              .map(String::toUpperCase)
+              .toList());
+    return Collections.emptyList();
   }
 
   /**
@@ -60,12 +62,14 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
    */
   @Contract(" -> new")
   private @NotNull List<String> getTypeCambio() {
-    return new ArrayList<>(
-        dataManager.getOptionals().stream()
-            .filter(optional -> optional.getNome().equals("cambio"))
-            .map(Optional::getDescrizione)
-            .map(String::toUpperCase)
-            .toList());
+    if (dataManager.getOptionals() != null)
+      return new ArrayList<>(
+          dataManager.getOptionals().stream()
+              .filter(optional -> optional.getNome().equals("cambio"))
+              .map(Optional::getDescrizione)
+              .map(String::toUpperCase)
+              .toList());
+    return Collections.emptyList();
   }
 
   /**
@@ -108,7 +112,11 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
 
   @Override
   public void setCardAuto() {
-    getCardAuto().setAll(dataManager.getModelliAuto());
+    if (dataManager.getModelliAuto() != null) {
+      getCardAuto().setAll(dataManager.getModelliAuto());
+    } else {
+      getCardAuto().setAll(new ArrayList<>());
+    }
   }
 
   @Override
@@ -123,18 +131,20 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
 
   /** Imposta il filtro del cambio */
   private void settingCambioFilter() {
-    List<String> cambio = getTypeCambio();
-    cambio.addFirst(ELEMENT_TUTTI);
-    cambioFilter.setItems(FXCollections.observableList(cambio));
-    setTypeFilter(cambioFilter);
+    settingFilter(getTypeCambio(), cambioFilter);
+  }
+
+  private void settingFilter(
+      @NotNull List<String> valueFilter, @NotNull MFXFilterComboBox<String> filterComboBox) {
+    List<String> valueFilterCopy = new ArrayList<>(valueFilter);
+    valueFilterCopy.addFirst(ELEMENT_TUTTI);
+    filterComboBox.setItems(FXCollections.observableList(valueFilterCopy));
+    setTypeFilter(filterComboBox);
   }
 
   /** Imposta il filtro dell'alimentazione */
   private void settingAlimentazioneFilter() {
-    List<String> alimentazione = getTypeAlimentazione();
-    alimentazione.addFirst(ELEMENT_TUTTI);
-    alimentazioneFilter.setItems(FXCollections.observableList(alimentazione));
-    setTypeFilter(alimentazioneFilter);
+    settingFilter(getTypeAlimentazione(), alimentazioneFilter);
   }
 
   private void startPeriodicUpdate() {
@@ -148,6 +158,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     } catch (Exception e) {
       logger.warning("Errore durante l'aggiornamento della lista");
       logger.log(Level.SEVERE, e.getMessage(), e);
+      return;
     }
 
     Platform.runLater(

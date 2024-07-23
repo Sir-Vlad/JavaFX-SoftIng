@@ -22,11 +22,12 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
 
   @Override
   public void setCardAuto() {
-    getCardAuto()
-        .setAll(
-            DataManager.getInstance().getAutoUsate().stream()
-                .filter(autoUsata -> autoUsata.getPrezzo() > 0 && !autoUsata.isVenduta())
-                .toList());
+    if (DataManager.getInstance().getAutoUsate() != null)
+      getCardAuto()
+          .setAll(
+              DataManager.getInstance().getAutoUsate().stream()
+                  .filter(autoUsata -> autoUsata.getPrezzo() > 0 && !autoUsata.isVenduta())
+                  .toList());
   }
 
   /** Aggiorna la pagina scegli usato */
@@ -36,6 +37,7 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
     } catch (Exception e) {
       logger.warning("Errore durante l'aggiornamento della lista");
       logger.log(Level.SEVERE, e.getMessage(), e);
+      return;
     }
 
     Platform.runLater(

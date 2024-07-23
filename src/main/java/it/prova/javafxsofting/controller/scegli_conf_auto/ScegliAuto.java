@@ -6,9 +6,12 @@ import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
 import it.prova.javafxsofting.controller.ScreenController;
 import it.prova.javafxsofting.models.Auto;
+import it.prova.javafxsofting.skeleton.CardAutoSkeleton;
 import it.prova.javafxsofting.util.FilterAuto;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,7 +35,17 @@ public abstract class ScegliAuto<T extends Auto> implements Initializable, Filte
     header.addTab("Home", event -> ScreenController.activate("home"));
 
     setCardAuto();
-    cardAuto.stream().map(CardAuto::new).forEach(auto -> flowPane.getChildren().addAll(auto));
+    // mi dice che sono in ScegliModelloController
+    boolean isScegliModello =
+        Arrays.asList(this.getClass().getTypeName().split("\\."))
+            .contains("ScegliModelloController");
+    if (isScegliModello && cardAuto.isEmpty()) {
+      IntStream.range(0, 16)
+          .mapToObj(i -> new CardAutoSkeleton())
+          .forEach(card -> flowPane.getChildren().add(card));
+    } else {
+      cardAuto.stream().map(CardAuto::new).forEach(card -> flowPane.getChildren().addAll(card));
+    }
 
     settingMarcaFilter(marcaComboFilter, flowPane, cardAuto);
     settingPrezzoFilter(sliderMaxPrezzo, flowPane, cardAuto);

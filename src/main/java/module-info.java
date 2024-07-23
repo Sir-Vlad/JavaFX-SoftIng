@@ -7,6 +7,7 @@ module it.prova.javafxsofting {
   requires static lombok;
   requires commons.validator;
   requires java.logging;
+  requires kotlin.stdlib;
 
   opens it.prova.javafxsofting to
       javafx.fxml;
@@ -51,5 +52,10 @@ module it.prova.javafxsofting {
   exports it.prova.javafxsofting.component.profile_box;
 
   opens it.prova.javafxsofting.component.profile_box to
+      javafx.fxml;
+
+  exports it.prova.javafxsofting.skeleton;
+
+  opens it.prova.javafxsofting.skeleton to
       javafx.fxml;
 }

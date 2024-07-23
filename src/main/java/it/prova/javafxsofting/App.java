@@ -22,8 +22,6 @@ import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -96,17 +94,18 @@ public class App extends Application {
 
   @Override
   public void start(@NotNull Stage stage) throws IOException {
-    if (!isServerAvailable) {
-      Alert alert = new Alert(AlertType.ERROR);
-      alert.setTitle("Applicazione non disponibile");
-      alert.setHeaderText("Server non raggiungibile");
-      alert.setContentText(
-          "L'applicazione non potrà essere avviata, controllare la connessione al server. Se il problema persiste, contattare l'amministratore.");
-      alert.showAndWait();
-
-      Platform.exit();
-      System.exit(0);
-    }
+    //    if (!isServerAvailable) {
+    //      Alert alert = new Alert(AlertType.ERROR);
+    //      alert.setTitle("Applicazione non disponibile");
+    //      alert.setHeaderText("Server non raggiungibile");
+    //      alert.setContentText(
+    //          "L'applicazione non potrà essere avviata, controllare la connessione al server. Se
+    // il problema persiste, contattare l'amministratore.");
+    //      alert.showAndWait();
+    //
+    //      Platform.exit();
+    //      System.exit(0);
+    //    }
 
     FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/home.fxml"));
     Pane root = new Pane();
