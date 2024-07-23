@@ -3,10 +3,7 @@
 ## Descrizione
 Il progetto è un sistema di ventita online di auto di un gruppo multi-concessionari, sviluppata come parte del corso di Ingegneria del Software 2023/24 presso l'Università di Verona. L'applicazione permette di configurare l'auto nuova da comprare ma anche poter vendere l'usato per ottenere una detrazione sull'auto nuova da comprare. Le auto usate vengono poi messe in vendita.
 
-## Componenti del Team
-- @Sir-Vlad
-- @magnificorettoreertyu
-- @djacoo
+Questa repository è solo per il frontend. Il backend è stato spostato in una sua repository per gestire meglio il progetto, la potete trovare sul mio profilo.
 
 ## Tecnologie usate
 - linguaggio di programmzione: Java
