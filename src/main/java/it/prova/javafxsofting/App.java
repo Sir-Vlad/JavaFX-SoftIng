@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -36,50 +35,25 @@ public class App extends Application {
   private boolean isServerAvailable = true;
 
   public static void main(String[] args) {
-    Arrays.stream(args)
-        .filter(arg -> arg.contains("-Dport"))
-        .forEach(arg -> Connection.setPorta(Integer.parseInt(arg.split("=")[1])));
+    for (String arg : args) {
+      String[] splitted = arg.split("=");
+      switch (splitted[0]) {
+        case "-Dport":
+          Connection.setPorta(Integer.parseInt(splitted[1]));
+          break;
+        case "-DlocalServer":
+          Connection.setLocalServer(Boolean.parseBoolean(splitted[1]));
+          break;
+        default:
+          break;
+      }
+    }
 
     log.log(Level.INFO, "Porta: {0}", Connection.getPorta());
+    log.log(Level.INFO, "Server locale: {0}", Connection.isLocalServer());
 
     System.setProperty("javafx.preloader", SplashScreenPreloader.class.getCanonicalName());
     launch(args);
-  }
-
-  /** Metodo per verificare se esiste un utente precedentemente registrato nella directory data. */
-  private static void checkRememberUtente() {
-    File path = new File("instance/utente/utente.txt");
-    if (!path.exists()) {
-      log.info("Nessun utente registrato");
-      return;
-    }
-    List<String> text = null;
-    try {
-      text = Files.readAllLines(Path.of(path.getPath()));
-      UserSession.getInstance()
-          .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
-    } catch (Exception ignored) {
-      log.info("Utente non trovato");
-    }
-  }
-
-  /**
-   * Metodo per eliminare la directory data se esiste
-   *
-   * @param dirImage la directory da eliminare
-   * @throws IOException eccezione se la directory non esiste
-   */
-  private static void deleteDirectory(@NotNull File dirImage) throws IOException {
-    if (!dirImage.isDirectory()) {
-      return;
-    }
-    File[] files = dirImage.listFiles();
-    if (files == null) {
-      return;
-    }
-    for (File file : files) {
-      Files.delete(Path.of(file.getPath()));
-    }
   }
 
   @Override
@@ -168,6 +142,42 @@ public class App extends Application {
 
     stage.show();
     notifyPreloader(new StateChangeNotification(Type.BEFORE_START));
+  }
+
+  /** Metodo per verificare se esiste un utente precedentemente registrato nella directory data. */
+  private void checkRememberUtente() {
+    File path = new File("instance/utente/utente.txt");
+    if (!path.exists()) {
+      log.info("Nessun utente registrato");
+      return;
+    }
+    List<String> text;
+    try {
+      text = Files.readAllLines(Path.of(path.getPath()));
+      UserSession.getInstance()
+          .setUtente(Connection.getDataFromBackend("utente/" + text.getFirst(), Utente.class));
+    } catch (Exception ignored) {
+      log.info("Utente non trovato");
+    }
+  }
+
+  /**
+   * Metodo per eliminare la directory data se esiste
+   *
+   * @param dirImage la directory da eliminare
+   * @throws IOException eccezione se la directory non esiste
+   */
+  private void deleteDirectory(@NotNull File dirImage) throws IOException {
+    if (!dirImage.isDirectory()) {
+      return;
+    }
+    File[] files = dirImage.listFiles();
+    if (files == null) {
+      return;
+    }
+    for (File file : files) {
+      Files.delete(Path.of(file.getPath()));
+    }
   }
 
   /** Metodo per aggiungere le schermate all'applicazione */

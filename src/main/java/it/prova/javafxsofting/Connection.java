@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class Connection {
-  private static final Logger logger = Logger.getLogger(Connection.class.getName());
   public static final Gson gson =
       new GsonBuilder()
           .registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
@@ -51,7 +50,9 @@ public final class Connection {
                 }
               })
           .create(); // crea gson con la corrente configurazione
+  private static final Logger logger = Logger.getLogger(Connection.class.getName());
   @Getter @Setter private static int porta = -1;
+  @Getter @Setter private static boolean isLocalServer = false;
 
   @Contract(value = " -> fail", pure = true)
   private Connection() {
@@ -290,21 +291,6 @@ public final class Connection {
   }
 
   /**
-   * Invia i dati al backend
-   *
-   * @param conn connessione HTTP
-   * @param jsonInputString dati da inviare
-   */
-  private static void sendData(@NotNull HttpURLConnection conn, @NotNull String jsonInputString) {
-    try (OutputStream os = conn.getOutputStream()) {
-      byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-      os.write(input, 0, input.length);
-    } catch (IOException e) {
-      throw new RuntimeException("Errore nell'invio dei dati");
-    }
-  }
-
-  /**
    * Crea una connessione verso un URL con una dato metodo
    *
    * @param subDirectory URL della directory dove creare la connessione
@@ -314,15 +300,18 @@ public final class Connection {
   @NotNull
   private static HttpURLConnection getHttpURLConnection(String subDirectory, Methods methods) {
     StringBuilder subdirectory = subDirectory == null ? null : new StringBuilder(subDirectory);
-    //    String urlPath =
-    //        String.format(
-    //            "http://localhost:%d/api/%s",
-    //            Connection.porta, subdirectory == null ? "" : subdirectory);
-
-    String urlPath =
-        String.format(
-            "https://SirVlad33.pythonanywhere.com/api/%s",
-            subdirectory == null ? "" : subdirectory);
+    String urlPath;
+    if (isLocalServer) {
+      urlPath =
+          String.format(
+              "http://localhost:%d/api/%s",
+              Connection.porta, subdirectory == null ? "" : subdirectory);
+    } else {
+      urlPath =
+          String.format(
+              "https://SirVlad33.pythonanywhere.com/api/%s",
+              subdirectory == null ? "" : subdirectory);
+    }
 
     HttpURLConnection conn;
     try {
@@ -337,6 +326,21 @@ public final class Connection {
       throw new RuntimeException("Non è stato possibile instaurare una connessione con il Backend");
     }
     return conn;
+  }
+
+  /**
+   * Invia i dati al backend
+   *
+   * @param conn connessione HTTP
+   * @param jsonInputString dati da inviare
+   */
+  private static void sendData(@NotNull HttpURLConnection conn, @NotNull String jsonInputString) {
+    try (OutputStream os = conn.getOutputStream()) {
+      byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+      os.write(input, 0, input.length);
+    } catch (IOException e) {
+      throw new RuntimeException("Errore nell'invio dei dati");
+    }
   }
 
   enum Methods {

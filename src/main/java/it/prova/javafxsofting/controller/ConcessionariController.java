@@ -19,9 +19,18 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Pane;
 
 public class ConcessionariController implements Initializable {
-  private static final ObservableList<Concessionario> concessionari =
-      FXCollections.observableArrayList(DataManager.getInstance().getConcessionari());
+  private static final ObservableList<Concessionario> concessionari;
   private static final String INDIRIZZO_LITERAL = "indirizzo";
+
+  static {
+    if (DataManager.getInstance().getConcessionari() != null) {
+      concessionari =
+          FXCollections.observableArrayList(DataManager.getInstance().getConcessionari());
+    } else {
+      concessionari = FXCollections.observableArrayList();
+    }
+  }
+
   @FXML private Pane wrapperRoot;
 
   @FXML private Header header;
