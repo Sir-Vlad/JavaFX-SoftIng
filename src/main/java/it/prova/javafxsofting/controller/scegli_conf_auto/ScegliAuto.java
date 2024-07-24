@@ -1,6 +1,7 @@
 package it.prova.javafxsofting.controller.scegli_conf_auto;
 
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.component.Header;
@@ -16,16 +17,31 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.FlowPane;
+import javafx.geometry.Insets;
+import javafx.scene.control.Pagination;
+import javafx.scene.layout.*;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 @Data
 public abstract class ScegliAuto<T extends Auto> implements Initializable, FilterAuto {
   private final ObservableList<T> cardAuto = FXCollections.observableArrayList();
-  @FXML private FlowPane flowPane;
+  @FXML protected MFXFilterComboBox<String> marcaComboFilter;
+  @FXML protected MFXSlider sliderMaxPrezzo;
   @FXML private Header header;
-  @FXML private MFXFilterComboBox<String> marcaComboFilter;
-  @FXML private MFXSlider sliderMaxPrezzo;
+  @FXML private VBox cardContent;
+  private MFXScrollPane scrollPane;
+  private Pagination pagination;
+
+  public void setPagination(@NotNull ObservableList<T> cardAuto) {
+    int pageCount = (int) Math.ceil((double) cardAuto.size() / 12);
+    pagination = new Pagination(pageCount == 0 ? 1 : pageCount, 0);
+    pagination.setPageFactory(indexPage -> createPage(indexPage, cardAuto));
+    pagination.setPadding(new Insets(10, 20, 10, 20));
+
+    VBox.setVgrow(pagination, Priority.ALWAYS);
+    cardContent.getChildren().add(pagination);
+  }
 
   /** Metodo che setta automaticamente il card */
   public abstract void setCardAuto();
@@ -35,19 +51,35 @@ public abstract class ScegliAuto<T extends Auto> implements Initializable, Filte
     header.addTab("Home", event -> ScreenController.activate("home"));
 
     setCardAuto();
-    // mi dice che sono in ScegliModelloController
+    setPagination(getCardAuto());
+
+    settingMarcaFilter(marcaComboFilter);
+    settingPrezzoFilter(sliderMaxPrezzo, cardAuto);
+  }
+
+  private @NotNull FlowPane createPage(Integer indexPage, ObservableList<T> cardAuto) {
+    FlowPane flowPane = new FlowPane(20, 20);
     boolean isScegliModello =
         Arrays.asList(this.getClass().getTypeName().split("\\."))
             .contains("ScegliModelloController");
     if (isScegliModello && cardAuto.isEmpty()) {
-      IntStream.range(0, 16)
+      IntStream.range(0, 12)
           .mapToObj(i -> new CardAutoSkeleton())
           .forEach(card -> flowPane.getChildren().add(card));
     } else {
-      cardAuto.stream().map(CardAuto::new).forEach(card -> flowPane.getChildren().addAll(card));
-    }
+      if (indexPage == 0) {
+        cardAuto.stream()
+            .map(CardAuto::new)
+            .limit(12)
+            .forEach(card -> flowPane.getChildren().add(card));
+        return flowPane;
+      }
 
-    settingMarcaFilter(marcaComboFilter, flowPane, cardAuto);
-    settingPrezzoFilter(sliderMaxPrezzo, flowPane, cardAuto);
+      cardAuto.stream()
+          .skip((long) indexPage * 12)
+          .map(CardAuto::new)
+          .forEach(card -> flowPane.getChildren().addAll(card));
+    }
+    return flowPane;
   }
 }

@@ -65,7 +65,7 @@ public class ConcessionariController implements Initializable {
     capColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     capColumn.setCellFactory(
         column ->
-            new TableCell<Concessionario, Indirizzo>() {
+            new TableCell<>() {
               @Override
               protected void updateItem(Indirizzo item, boolean empty) {
                 super.updateItem(item, empty);
@@ -83,7 +83,7 @@ public class ConcessionariController implements Initializable {
     cittaColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     cittaColumn.setCellFactory(
         column ->
-            new TableCell<Concessionario, Indirizzo>() {
+            new TableCell<>() {
               @Override
               protected void updateItem(Indirizzo item, boolean empty) {
                 super.updateItem(item, empty);
@@ -101,7 +101,7 @@ public class ConcessionariController implements Initializable {
     civicoColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     civicoColumn.setCellFactory(
         column ->
-            new TableCell<Concessionario, Indirizzo>() {
+            new TableCell<>() {
               @Override
               protected void updateItem(Indirizzo item, boolean empty) {
                 super.updateItem(item, empty);
@@ -119,7 +119,7 @@ public class ConcessionariController implements Initializable {
     viaColumn.setCellValueFactory(new PropertyValueFactory<>(INDIRIZZO_LITERAL));
     viaColumn.setCellFactory(
         column ->
-            new TableCell<Concessionario, Indirizzo>() {
+            new TableCell<>() {
               @Override
               protected void updateItem(Indirizzo item, boolean empty) {
                 super.updateItem(item, empty);

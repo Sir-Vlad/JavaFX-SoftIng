@@ -30,10 +30,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class PreventivoUsatoUtenteController implements Initializable {
   private static final ObservableList<PreventivoUsato> preventivoUsatoUtente = getPreventiviUsati();
-  private static ScheduledExecutorService scheduler;
+  private static final ScheduledExecutorService scheduler;
 
   static {
     getPreventiviUsati();
+    scheduler = Executors.newScheduledThreadPool(1);
   }
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -208,7 +209,6 @@ public class PreventivoUsatoUtenteController implements Initializable {
   }
 
   private void startPeriodicUpdate() {
-    scheduler = Executors.newScheduledThreadPool(1);
     scheduler.scheduleAtFixedRate(this::updatePreventiviUsati, 5, 30, TimeUnit.MINUTES);
   }
 

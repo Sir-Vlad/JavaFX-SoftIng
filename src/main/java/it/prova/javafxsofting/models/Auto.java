@@ -44,6 +44,8 @@ public abstract class Auto implements Serializable {
   @Expose(deserialize = false)
   private ArrayList<File> immagini;
 
+  protected Auto() {}
+
   protected Auto(
       String modello,
       String marca,

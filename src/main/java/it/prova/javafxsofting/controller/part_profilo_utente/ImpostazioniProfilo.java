@@ -268,8 +268,7 @@ public class ImpostazioniProfilo extends ValidateForm implements Initializable {
 
                 String newEmailValue = newEmail.getText();
 
-                Utente newUtente = null;
-                newUtente = new Utente(UserSession.getInstance().getUtente());
+                Utente newUtente = new Utente(UserSession.getInstance().getUtente());
                 newUtente.setEmail(newEmailValue);
 
                 try {

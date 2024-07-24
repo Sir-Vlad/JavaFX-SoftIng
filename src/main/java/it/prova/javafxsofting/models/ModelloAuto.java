@@ -21,6 +21,10 @@ public class ModelloAuto extends Auto {
   @Expose(deserialize = false)
   private Optional[] optionals;
 
+  public ModelloAuto() {
+    super();
+  }
+
   public ModelloAuto(
       String modello,
       String marca,

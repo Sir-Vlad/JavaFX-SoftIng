@@ -1,8 +1,6 @@
 package it.prova.javafxsofting.controller.scegli_conf_auto;
 
 import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
-import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.ModelloAuto;
 import it.prova.javafxsofting.models.Optional;
@@ -16,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.*;
@@ -29,12 +28,34 @@ import org.jetbrains.annotations.NotNull;
 public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     implements Initializable, FilterAuto {
   private static final String ELEMENT_TUTTI = "Tutti";
+  private static final ObservableList<ModelloAuto> filteredCardAuto =
+      FXCollections.observableArrayList();
   @Getter @Setter private static ModelloAuto autoSelezionata = null;
-  private static ScheduledExecutorService scheduler;
+  private static final ScheduledExecutorService scheduler;
+
+  static {
+    scheduler =
+        Executors.newScheduledThreadPool(
+            1,
+            runnable -> {
+              Thread thread = new Thread(runnable);
+              thread.setDaemon(true);
+              return thread;
+            });
+    //    filteredCardAuto.addListener(
+    //        (ListChangeListener<? super ModelloAuto>)
+    //            change -> {
+    //              while (change.next()) {
+    //                if (change.wasAdded()) {
+    //                  System.out.println("Added: " + change.getAddedSubList());
+    //                }
+    //              }
+    //            });
+  }
+
   private final Logger logger = Logger.getLogger(ScegliModelloController.class.getName());
   private final DataManager dataManager = DataManager.getInstance();
   @FXML private AnchorPane root;
-  @FXML private MFXScrollPane scrollPane;
   @FXML private MFXFilterComboBox<String> alimentazioneFilter;
   @FXML private MFXFilterComboBox<String> cambioFilter;
 
@@ -72,44 +93,6 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     return Collections.emptyList();
   }
 
-  /**
-   * Imposta il filtro
-   *
-   * @param filter campo del filtro da impostare
-   */
-  private void setTypeFilter(@NotNull MFXFilterComboBox<String> filter) {
-    filter.getSelectionModel().selectFirst();
-
-    filter
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue != null) {
-                if (newValue.equals(ELEMENT_TUTTI)) {
-                  getFlowPane().getChildren().clear();
-                  getCardAuto().stream()
-                      .map(CardAuto::new)
-                      .forEach(auto -> getFlowPane().getChildren().add(auto));
-                  return;
-                }
-                List<ModelloAuto> newAutoFiltered =
-                    getCardAuto().stream()
-                        .filter(
-                            auto ->
-                                Arrays.stream(auto.getOptionals())
-                                    .anyMatch(
-                                        optional ->
-                                            optional.getDescrizione().equalsIgnoreCase(newValue)))
-                        .toList();
-                getFlowPane().getChildren().clear();
-                newAutoFiltered.stream()
-                    .map(CardAuto::new)
-                    .forEach(auto -> getFlowPane().getChildren().add(auto));
-              }
-            });
-  }
-
   @Override
   public void setCardAuto() {
     if (dataManager.getModelliAuto() != null) {
@@ -129,6 +112,59 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     startPeriodicUpdate();
   }
 
+  @FXML
+  public void filterCardAuto() {
+    String marca = marcaComboFilter.getValue();
+    double prezzo = sliderMaxPrezzo.getValue();
+    String alimentazione = alimentazioneFilter.getValue();
+    String cambio = cambioFilter.getValue();
+
+    filteredCardAuto.clear(); // clear the list of filtered  previous cards
+
+    getCardAuto().stream()
+        .filter(auto -> filterOptional(auto, alimentazione, cambio, prezzo, marca))
+        .forEach(filteredCardAuto::add);
+
+    getCardContent().getChildren().clear();
+    setPagination(filteredCardAuto);
+  }
+
+  private boolean filterOptional(
+      @NotNull ModelloAuto auto,
+      @NotNull String alimentazione,
+      @NotNull String cambio,
+      double prezzo,
+      @NotNull String marca) {
+    byte flag = 0;
+    if (alimentazione.equals(ELEMENT_TUTTI)
+        || Arrays.stream(auto.getOptionals())
+            .anyMatch(
+                optional ->
+                    optional.getNome().equals("alimentazione")
+                        && optional.getDescrizione().equalsIgnoreCase(alimentazione))) {
+      flag++;
+    }
+
+    if (cambio.equals(ELEMENT_TUTTI)
+        || Arrays.stream(auto.getOptionals())
+            .anyMatch(
+                optional ->
+                    optional.getNome().equals("cambio")
+                        && optional.getDescrizione().equalsIgnoreCase(cambio))) {
+      flag++;
+    }
+
+    if (auto.getPrezzoBase() >= prezzo) {
+      flag++;
+    }
+
+    if (auto.getMarca().name().equalsIgnoreCase(marca) || marca.equals(ELEMENT_TUTTI)) {
+      flag++;
+    }
+
+    return flag == 4;
+  }
+
   /** Imposta il filtro del cambio */
   private void settingCambioFilter() {
     settingFilter(getTypeCambio(), cambioFilter);
@@ -139,7 +175,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
     List<String> valueFilterCopy = new ArrayList<>(valueFilter);
     valueFilterCopy.addFirst(ELEMENT_TUTTI);
     filterComboBox.setItems(FXCollections.observableList(valueFilterCopy));
-    setTypeFilter(filterComboBox);
+    filterComboBox.getSelectionModel().selectFirst();
   }
 
   /** Imposta il filtro dell'alimentazione */
@@ -148,8 +184,7 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
   }
 
   private void startPeriodicUpdate() {
-    scheduler = Executors.newScheduledThreadPool(1);
-    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 5, 5, TimeUnit.MINUTES);
+    scheduler.scheduleAtFixedRate(this::updateListFromDatabase, 0, 30, TimeUnit.SECONDS);
   }
 
   private void updateListFromDatabase() {
@@ -163,11 +198,14 @@ public class ScegliModelloController extends ScegliAuto<ModelloAuto>
 
     Platform.runLater(
         () -> {
-          getFlowPane().getChildren().clear();
-          getCardAuto().setAll(dataManager.getModelliAuto());
-          getCardAuto().stream()
-              .map(CardAuto::new)
-              .forEach(auto -> getFlowPane().getChildren().add(auto));
+          List<ModelloAuto> modelliAuto = dataManager.getModelliAuto();
+          if (modelliAuto != null && modelliAuto.size() > getCardAuto().size()) {
+            logger.info("Aggiornamento della pagina scegli modello");
+            getCardAuto().setAll(dataManager.getModelliAuto());
+            getCardContent().getChildren().clear();
+            setPagination(getCardAuto());
+            filterCardAuto();
+          }
         });
   }
 }

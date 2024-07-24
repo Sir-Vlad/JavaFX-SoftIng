@@ -20,11 +20,11 @@ import javafx.scene.layout.VBox;
 
 public class CardAuto extends VBox {
   private static final String PATH_DIR = "controller/part_configurator/";
-  @FXML VBox rootCardAuto;
-  @FXML Label labelNomeAuto;
-  @FXML Label labelTipoMotore;
-  @FXML Label labelPrezzo;
-  @FXML VBox wrapperImagine;
+  @FXML protected VBox rootCardAuto;
+  @FXML protected Label labelNomeAuto;
+  @FXML protected Label labelTipoMotore;
+  @FXML protected Label labelPrezzo;
+  @FXML protected VBox wrapperImagine;
 
   public CardAuto(Auto auto) {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("cardAuto.fxml"));
@@ -77,6 +77,11 @@ public class CardAuto extends VBox {
 
   private void setTipoMotore(Auto auto) {
     if (auto instanceof ModelloAuto modelloAuto) {
+      if (modelloAuto.getOptionals() == null) {
+        labelTipoMotore.setText("");
+        return;
+      }
+
       Optional tipoMotore =
           Arrays.stream(modelloAuto.getOptionals())
               .filter(optional -> optional.getNome().equals("alimentazione"))
@@ -102,5 +107,10 @@ public class CardAuto extends VBox {
       prezzo = autoUsata.getPrezzo();
     }
     labelPrezzo.setText(decimalFormat.format(prezzo));
+  }
+
+  @Override
+  public String toString() {
+    return "CardAuto [auto=" + labelNomeAuto.getText() + "]";
   }
 }

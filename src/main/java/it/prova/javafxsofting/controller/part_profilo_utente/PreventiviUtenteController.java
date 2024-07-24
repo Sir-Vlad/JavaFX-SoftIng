@@ -48,10 +48,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class PreventiviUtenteController implements Initializable {
   private static final ObservableList<Preventivo> preventiviUtente = getPreventivi();
-  private static ScheduledExecutorService scheduler;
+  private static final ScheduledExecutorService scheduler;
 
   static {
     getPreventivi();
+    scheduler = Executors.newScheduledThreadPool(1);
   }
 
   private final DecimalFormat decimalFormat = new DecimalFormat("###,###");
@@ -359,7 +360,6 @@ public class PreventiviUtenteController implements Initializable {
   }
 
   private void startPeriodicUpdate() {
-    scheduler = Executors.newScheduledThreadPool(1);
     scheduler.scheduleAtFixedRate(this::updatePreventivi, 5, 30, TimeUnit.MINUTES);
   }
 

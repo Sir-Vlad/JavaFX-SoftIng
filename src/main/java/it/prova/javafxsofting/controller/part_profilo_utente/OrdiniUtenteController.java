@@ -27,10 +27,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class OrdiniUtenteController implements Initializable {
   private static final ObservableList<Ordine> ordiniUtente = getOrdini();
-  private static ScheduledExecutorService scheduler = null;
+  private static final ScheduledExecutorService scheduler;
 
   static {
     getOrdini();
+    scheduler = Executors.newScheduledThreadPool(1);
   }
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -181,7 +182,6 @@ public class OrdiniUtenteController implements Initializable {
   }
 
   private void startPeriodicUpdate() {
-    scheduler = Executors.newScheduledThreadPool(1);
     scheduler.scheduleAtFixedRate(this::updateOrdini, 10, 30, TimeUnit.MINUTES);
   }
 

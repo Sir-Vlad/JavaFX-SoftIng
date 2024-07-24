@@ -1,7 +1,5 @@
 package it.prova.javafxsofting.controller.scegli_conf_auto;
 
-import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import it.prova.javafxsofting.component.CardAuto;
 import it.prova.javafxsofting.data_manager.DataManager;
 import it.prova.javafxsofting.models.AutoUsata;
 import java.util.logging.Level;
@@ -18,7 +16,6 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
   private static final Logger logger = Logger.getLogger(ScegliUsatoController.class.getName());
   @Getter @Setter private static AutoUsata autoSelezionata = null;
   @FXML private AnchorPane root;
-  @FXML private MFXScrollPane scrollPane;
 
   @Override
   public void setCardAuto() {
@@ -43,11 +40,9 @@ public class ScegliUsatoController extends ScegliAuto<AutoUsata> {
     Platform.runLater(
         () -> {
           logger.info("Aggiornamento della pagina scegli usato");
-          getFlowPane().getChildren().clear();
           setCardAuto();
-          getCardAuto().stream()
-              .map(CardAuto::new)
-              .forEach(auto -> getFlowPane().getChildren().add(auto));
+          getCardContent().getChildren().clear();
+          setPagination(getCardAuto());
         });
   }
 }
